@@ -1,0 +1,231 @@
+.stc-ticket-tool {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: 1fr 1fr auto auto;
+	width: 100%;
+}
+
+.stc-ticket-tool button:focus-visible,
+.stc-ticket-tool input:focus-visible,
+.stc-ticket-tool select:focus-visible,
+.stc-ticket-tool label:focus-visible {
+	outline: 3px solid rgba(169, 120, 36, .7);
+	outline-offset: 3px;
+}
+
+.stc-ticket-tool label {
+	display: grid;
+	gap: 6px;
+}
+
+.stc-ticket-tool span {
+	color: #6d5d42;
+	font-size: 12px;
+	font-weight: 800;
+}
+
+.stc-ticket-tool select,
+.stc-ticket-tool input {
+	border: 1px solid #e3d2b3;
+	border-radius: 8px;
+	font: inherit;
+	min-height: 46px;
+	padding: 0 12px;
+}
+
+.stc-ticket-tool button {
+	background: #a97824;
+	border: 0;
+	border-radius: 8px;
+	color: #fff;
+	cursor: pointer;
+	font: inherit;
+	font-weight: 800;
+	min-height: 46px;
+	padding: 0 18px;
+}
+
+.stc-ticket-tool button[type="button"] {
+	background: #7c5b20;
+}
+
+.stc-ticket-tool p {
+	color: #6d5d42;
+	font-size: 13px;
+	grid-column: 1 / -1;
+	margin: 0;
+}
+
+.stc-ticket-result {
+	background: #fff7ea;
+	border: 1px solid #ead7b8;
+	border-radius: 8px;
+	color: #3a3125;
+	display: none;
+	gap: 4px;
+	grid-column: 1 / -1;
+	padding: 14px 16px;
+}
+
+.stc-ticket-result.is-visible {
+	display: grid;
+}
+
+.stc-ticket-result strong,
+.stc-ticket-result span {
+	color: inherit;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.stc-ticket-result span {
+	font-weight: 500;
+}
+
+.stc-ticket-status {
+	border-radius: 999px;
+	color: #fff;
+	display: inline-flex;
+	font-size: 12px;
+	font-weight: 800;
+	justify-content: center;
+	min-height: 28px;
+	padding: 6px 10px;
+	width: fit-content;
+}
+
+.stc-ticket-status--book-now {
+	background: #146b54;
+}
+
+.stc-ticket-status--set-reminder {
+	background: #a97824;
+}
+
+.stc-ticket-status--passed {
+	background: #8b3a2e;
+}
+
+.stc-reminder-list {
+	background: #fff;
+	border: 1px solid #ead7b8;
+	border-radius: 8px;
+	display: grid;
+	gap: 10px;
+	grid-column: 1 / -1;
+	padding: 14px;
+}
+
+.stc-reminder-list h3 {
+	font-size: 15px;
+	margin: 0;
+}
+
+.stc-reminder-list__header {
+	align-items: center;
+	display: flex;
+	gap: 12px;
+	justify-content: space-between;
+}
+
+.stc-reminder-list__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	justify-content: end;
+}
+
+.stc-reminder-list__actions button,
+.stc-reminder-list__actions label {
+	align-items: center;
+	background: #a97824;
+	border: 0;
+	border-radius: 8px;
+	color: #fff;
+	cursor: pointer;
+	display: inline-flex;
+	font: inherit;
+	font-weight: 800;
+	min-height: 36px;
+	padding: 0 12px;
+}
+
+.stc-reminder-list__actions label span {
+	color: inherit;
+	font-size: inherit;
+}
+
+.stc-reminder-list__actions input {
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+.stc-tool-local-note {
+	color: #766853;
+	font-size: 13px;
+	margin: -2px 0 0;
+}
+
+.stc-reminder-list [data-stc-reminder-list] {
+	display: grid;
+	gap: 10px;
+}
+
+.stc-reminder-item {
+	align-items: center;
+	border-top: 1px solid #f0dfc5;
+	display: grid;
+	gap: 12px;
+	grid-template-columns: 1fr auto;
+	padding-top: 10px;
+}
+
+.stc-reminder-item div {
+	display: grid;
+	gap: 4px;
+}
+
+.stc-reminder-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	justify-content: end;
+}
+
+.stc-reminder-item button {
+	background: #3a3125;
+	min-height: 38px;
+}
+
+.stc-reminder-item button[data-stc-download-calendar] {
+	background: #a97824;
+}
+
+@media (max-width: 900px) {
+	.stc-ticket-tool {
+		grid-template-columns: 1fr;
+	}
+
+	.stc-reminder-actions {
+		justify-content: start;
+	}
+
+	.stc-reminder-list__header {
+		align-items: start;
+		flex-direction: column;
+	}
+
+	.stc-reminder-list__actions {
+		justify-content: start;
+	}
+
+	.stc-reminder-item {
+		align-items: start;
+		grid-template-columns: 1fr;
+	}
+}

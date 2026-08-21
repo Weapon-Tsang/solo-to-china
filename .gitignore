@@ -1,0 +1,33 @@
+# WordPress core and server-local files
+wp-admin/
+wp-includes/
+wp-config.php
+.env
+*.sql
+*.sql.gz
+*.bak
+*.backup
+*.zip
+*.tar
+*.tar.gz
+exports/*.xml
+
+# Runtime/generated content
+dist/
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/languages/
+wp-content/debug.log
+
+# Local/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+node_modules/
+vendor/
+
+# Keep project-owned directories trackable.
+!wp-content/themes/solo-to-china/
+!wp-content/plugins/solo-to-china-tools/

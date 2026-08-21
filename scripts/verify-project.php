@@ -1,0 +1,523 @@
+<?php
+/**
+ * Lightweight repository verification for the first SoloToChina WordPress phase.
+ */
+
+$root = dirname(__DIR__);
+
+$requiredFiles = [
+    'docs/handoff/current-progress.md',
+    'docs/handoff/new-chat-handoff.md',
+    'docs/deployment/wordpress-install.md',
+    'scripts/package-release.ps1',
+    'wp-content/themes/solo-to-china/style.css',
+    'wp-content/themes/solo-to-china/README.md',
+    'wp-content/themes/solo-to-china/functions.php',
+    'wp-content/themes/solo-to-china/header.php',
+    'wp-content/themes/solo-to-china/footer.php',
+    'wp-content/themes/solo-to-china/index.php',
+    'wp-content/themes/solo-to-china/archive.php',
+    'wp-content/themes/solo-to-china/single.php',
+    'wp-content/themes/solo-to-china/404.php',
+    'wp-content/themes/solo-to-china/search.php',
+    'wp-content/themes/solo-to-china/searchform.php',
+    'wp-content/themes/solo-to-china/page.php',
+    'wp-content/themes/solo-to-china/front-page.php',
+    'wp-content/themes/solo-to-china/screenshot.png',
+    'wp-content/themes/solo-to-china/assets/css/main.css',
+    'wp-content/themes/solo-to-china/assets/js/main.js',
+    'wp-content/themes/solo-to-china/assets/images/hero-home.png',
+    'wp-content/themes/solo-to-china/assets/images/guide-card-bg.png',
+    'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php',
+    'wp-content/plugins/solo-to-china-tools/README.md',
+    'wp-content/plugins/solo-to-china-tools/includes/attractions.php',
+    'wp-content/plugins/solo-to-china-tools/includes/shortcodes.php',
+    'wp-content/plugins/solo-to-china-tools/assets/css/tools.css',
+    'wp-content/plugins/solo-to-china-tools/assets/js/tools.js',
+];
+
+$requiredNavLabels = [
+    'Home',
+    'Survival Kit',
+    'City Guides',
+    'Attraction Guides',
+    'Planner',
+    'Tools',
+    'FAQ',
+];
+
+$bannedNavLabels = [
+    'Hotels',
+    'Tickets',
+    'Flights',
+    'Trains',
+    'Book',
+];
+
+$failures = [];
+
+foreach ($requiredFiles as $relativePath) {
+    $absolutePath = $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
+    if (!is_file($absolutePath)) {
+        $failures[] = "Missing required file: {$relativePath}";
+    }
+}
+
+$gitignorePath = $root . DIRECTORY_SEPARATOR . '.gitignore';
+if (is_file($gitignorePath)) {
+    $gitignore = file_get_contents($gitignorePath);
+    if (strpos($gitignore, 'dist/') === false) {
+        $failures[] = '.gitignore does not ignore generated release artifacts.';
+    }
+    if (strpos($gitignore, '*.zip') === false) {
+        $failures[] = '.gitignore does not ignore generated zip archives.';
+    }
+}
+
+$packageScriptPath = $root . DIRECTORY_SEPARATOR . 'scripts/package-release.ps1';
+if (is_file($packageScriptPath)) {
+    $packageScript = file_get_contents($packageScriptPath);
+    if (strpos($packageScript, 'release-manifest.txt') === false) {
+        $failures[] = 'Package script does not create a release manifest.';
+    }
+    if (strpos($packageScript, 'Get-FileHash') === false) {
+        $failures[] = 'Package script does not record zip checksums.';
+    }
+    if (strpos($packageScript, 'Theme version: 0.2.0') === false || strpos($packageScript, 'Plugin version: 0.2.0') === false) {
+        $failures[] = 'Package script does not write artifact versions to the release manifest.';
+    }
+}
+
+$installDocPath = $root . DIRECTORY_SEPARATOR . 'docs/deployment/wordpress-install.md';
+if (is_file($installDocPath)) {
+    $installDoc = file_get_contents($installDocPath);
+    if (strpos($installDoc, 'Post-Install Check') === false) {
+        $failures[] = 'WordPress install handoff is missing the post-install check list.';
+    }
+    if (strpos($installDoc, 'Do not extract either zip directly inside') === false) {
+        $failures[] = 'WordPress install handoff is missing aaPanel extraction warning.';
+    }
+}
+
+$newChatHandoffPath = $root . DIRECTORY_SEPARATOR . 'docs/handoff/new-chat-handoff.md';
+if (is_file($newChatHandoffPath)) {
+    $newChatHandoff = file_get_contents($newChatHandoffPath);
+    foreach (['Suggested New Chat Opening Message', 'Fixed Information Architecture', 'Do Not Start Without Explicit Approval', 'Development Style For Next Chat'] as $requiredHandoffText) {
+        if (strpos($newChatHandoff, $requiredHandoffText) === false) {
+            $failures[] = "New chat handoff is missing section: {$requiredHandoffText}";
+        }
+    }
+}
+
+$themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
+if (is_file($themeStylePath)) {
+    $themeStyle = file_get_contents($themeStylePath);
+    if (strpos($themeStyle, 'Version: 0.2.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.2.0.';
+    }
+    if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
+        $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
+    }
+    if (strpos($themeStyle, 'Requires PHP: 7.4') === false) {
+        $failures[] = 'Theme stylesheet header is missing the minimum PHP version.';
+    }
+}
+
+$themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
+if (is_file($themeReadmePath)) {
+    $themeReadme = file_get_contents($themeReadmePath);
+    if (strpos($themeReadme, 'Current version: `0.2.0`') === false) {
+        $failures[] = 'Theme README does not document the current theme version.';
+    }
+    if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
+        $failures[] = 'Theme README does not preserve the theme/plugin responsibility boundary.';
+    }
+}
+
+$headerPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/header.php';
+$functionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/functions.php';
+if (is_file($headerPath) && is_file($functionsPath)) {
+    $header = file_get_contents($headerPath);
+    $functions = file_get_contents($functionsPath);
+    $navigationSource = $header . "\n" . $functions;
+    foreach ($requiredNavLabels as $label) {
+        if (strpos($navigationSource, $label) === false) {
+            $failures[] = "Header is missing navigation label: {$label}";
+        }
+    }
+    foreach ($bannedNavLabels as $label) {
+        if (preg_match('/>' . preg_quote($label, '/') . '</', $navigationSource)) {
+            $failures[] = "Header includes banned top-level navigation label: {$label}";
+        }
+    }
+
+    if (strpos($header, 'stc-menu-toggle') === false) {
+        $failures[] = 'Header is missing the mobile navigation toggle button.';
+    }
+    if (strpos($header, 'aria-expanded="false"') === false) {
+        $failures[] = 'Mobile navigation toggle is missing the default collapsed ARIA state.';
+    }
+    if (strpos($header, 'Skip to content') === false) {
+        $failures[] = 'Header is missing a skip-to-content link.';
+    }
+    if (strpos($functions, 'stc_ensure_core_pages') === false) {
+        $failures[] = 'Theme setup does not create missing core IA pages on activation.';
+    }
+    if (strpos($functions, 'automatic-feed-links') === false) {
+        $failures[] = 'Theme setup is missing automatic feed links support.';
+    }
+    if (strpos($functions, 'align-wide') === false) {
+        $failures[] = 'Theme setup is missing wide alignment support.';
+    }
+    if (strpos($functions, 'STC_THEME_VERSION') === false) {
+        $failures[] = 'Theme functions are missing a single theme version constant.';
+    }
+    if (strpos($functions, "'0.2.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.2.0.';
+    }
+}
+
+$themePhpFiles = glob($root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/*.php');
+foreach ($themePhpFiles as $themePhpFile) {
+    $themePhp = file_get_contents($themePhpFile);
+    if (strpos($themePhp, 'the_permalink();') !== false) {
+        $failures[] = 'Theme template uses unescaped the_permalink output: ' . basename($themePhpFile);
+    }
+}
+
+$pageTemplatePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/page.php';
+if (is_file($pageTemplatePath)) {
+    $pageTemplate = file_get_contents($pageTemplatePath);
+    foreach (['survival-kit', 'city-guides', 'attraction-guides', 'planner', 'tools', 'faq'] as $slug) {
+        if (strpos($pageTemplate, $slug) === false) {
+            $failures[] = "Page template does not handle core IA slug: {$slug}";
+        }
+    }
+    if (strpos($pageTemplate, 'solo_to_china_ticket_tool') === false) {
+        $failures[] = 'Tools page template does not render the guest-first ticket tool shortcode.';
+    }
+    if (strpos($pageTemplate, 'data-stc-save-guide') === false) {
+        $failures[] = 'Core page template is missing local guide save actions.';
+    }
+    if (strpos($pageTemplate, 'data-stc-saved-guides') === false) {
+        $failures[] = 'Core page template is missing the local saved guides list.';
+    }
+    if (strpos($pageTemplate, 'data-stc-export-guides') === false) {
+        $failures[] = 'Core page template is missing the local saved guides export action.';
+    }
+    if (strpos($pageTemplate, 'data-stc-clear-guides') === false) {
+        $failures[] = 'Core page template is missing the local saved guides clear action.';
+    }
+    if (strpos($pageTemplate, 'data-stc-import-guides') === false) {
+        $failures[] = 'Core page template is missing the local saved guides import action.';
+    }
+    if (strpos($pageTemplate, 'Stored only on this device') === false) {
+        $failures[] = 'Core page template is missing local-only saved guide privacy copy.';
+    }
+    if (strpos($pageTemplate, 'data-stc-share-page') === false) {
+        $failures[] = 'Core page template is missing no-account page sharing.';
+    }
+}
+
+$pluginPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php';
+if (is_file($pluginPath)) {
+    $plugin = file_get_contents($pluginPath);
+    $shortcodesPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/includes/shortcodes.php';
+    $attractionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/includes/attractions.php';
+    $shortcodes = is_file($shortcodesPath) ? file_get_contents($shortcodesPath) : '';
+    $attractions = is_file($attractionsPath) ? file_get_contents($attractionsPath) : '';
+    $pluginSource = $plugin . "\n" . $shortcodes . "\n" . $attractions;
+
+    $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
+    if (is_file($pluginReadmePath)) {
+        $pluginReadme = file_get_contents($pluginReadmePath);
+        if (strpos($pluginReadme, 'Current version: `0.2.0`') === false) {
+            $failures[] = 'Tools plugin README does not document the current plugin version.';
+        }
+        if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
+            $failures[] = 'Tools plugin README does not preserve the first-tool boundary.';
+        }
+    }
+
+    if (strpos($plugin, 'Version: 0.2.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.2.0.';
+    }
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.2.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.2.0.';
+    }
+    if (strpos($plugin, 'Requires at least: 6.5') === false) {
+        $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
+    }
+    if (strpos($plugin, 'Requires PHP: 7.4') === false) {
+        $failures[] = 'Tools plugin header is missing the minimum PHP version.';
+    }
+    if (strpos($plugin, 'has_shortcode') === false) {
+        $failures[] = 'Tools plugin assets are not conditionally loaded by shortcode presence.';
+    }
+    if (strpos($plugin, "is_page( 'tools' )") === false || strpos($plugin, 'is_front_page()') === false) {
+        $failures[] = 'Tools plugin conditional assets do not cover template-rendered ticket tools.';
+    }
+    if (strpos($plugin, 'solo_to_china_ticket_tool') === false) {
+        $failures[] = 'Tools plugin does not register the solo_to_china_ticket_tool shortcode boundary.';
+    }
+    if (strpos($pluginSource, 'data-stc-ticket-tool') === false) {
+        $failures[] = 'Ticket tool markup is missing the frontend behavior hook.';
+    }
+    if (strpos($pluginSource, 'booking_lead_days') === false) {
+        $failures[] = 'Attraction ticket data is missing booking lead day metadata.';
+    }
+    foreach (['West Lake', 'Shanghai Disney Resort', 'Summer Palace', 'Chengdu Research Base of Giant Panda Breeding'] as $attractionName) {
+        if (strpos($attractions, $attractionName) === false) {
+            $failures[] = "Attraction ticket data is missing planned coverage for: {$attractionName}";
+        }
+    }
+    if (strpos($pluginSource, 'data-stc-save-reminder') === false) {
+        $failures[] = 'Ticket tool markup is missing the guest reminder save action.';
+    }
+    if (strpos($pluginSource, 'data-stc-reminder-list') === false) {
+        $failures[] = 'Ticket tool markup is missing the local saved reminders list.';
+    }
+    if (strpos($pluginSource, 'data-stc-export-reminders') === false) {
+        $failures[] = 'Ticket tool markup is missing the saved reminders export action.';
+    }
+    if (strpos($pluginSource, 'data-stc-clear-reminders') === false) {
+        $failures[] = 'Ticket tool markup is missing the saved reminders clear action.';
+    }
+    if (strpos($pluginSource, 'data-stc-import-reminders') === false) {
+        $failures[] = 'Ticket tool markup is missing the saved reminders import action.';
+    }
+    if (strpos($pluginSource, 'Saved reminders stay in this browser') === false) {
+        $failures[] = 'Ticket tool markup is missing local-only reminder privacy copy.';
+    }
+    if (strpos($shortcodes, 'name="stc_visit_date" required') === false) {
+        $failures[] = 'Ticket tool visit date input is not required.';
+    }
+}
+
+$pluginJsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/assets/js/tools.js';
+if (is_file($pluginJsPath)) {
+    $pluginJs = file_get_contents($pluginJsPath);
+    if (strpos($pluginJs, 'stcTicketTool') === false) {
+        $failures[] = 'Ticket tool JavaScript is missing the submit handler boundary.';
+    }
+    if (strpos($pluginJs, 'localStorage') === false) {
+        $failures[] = 'Ticket reminder JavaScript does not persist reminders locally.';
+    }
+    if (strpos($pluginJs, 'stcRenderReminders') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the saved reminders renderer.';
+    }
+    if (strpos($pluginJs, 'data-stc-delete-reminder') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the delete reminder action.';
+    }
+    if (strpos($pluginJs, 'data-stc-export-reminders') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the reminders export binding.';
+    }
+    if (strpos($pluginJs, 'data-stc-clear-reminders') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the reminders clear binding.';
+    }
+    if (strpos($pluginJs, 'stcExportReminders') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the reminders JSON exporter.';
+    }
+    if (strpos($pluginJs, 'data-stc-import-reminders') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the reminders import binding.';
+    }
+    if (strpos($pluginJs, 'stcImportReminders') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the reminders JSON importer.';
+    }
+    if (strpos($pluginJs, 'stcClampText') === false) {
+        $failures[] = 'Ticket reminder JavaScript does not clamp imported reminder text.';
+    }
+    if (strpos($pluginJs, 'stcDateValue') === false) {
+        $failures[] = 'Ticket reminder JavaScript does not validate imported reminder dates.';
+    }
+    if (strpos($pluginJs, 'data-stc-download-calendar') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the calendar download action.';
+    }
+    if (strpos($pluginJs, 'stcDownloadCalendar') === false) {
+        $failures[] = 'Ticket reminder JavaScript is missing the ICS calendar exporter.';
+    }
+    if (strpos($pluginJs, 'text/calendar') === false) {
+        $failures[] = 'Ticket reminder JavaScript does not create a calendar file download.';
+    }
+    if (strpos($pluginJs, 'stcBookingWindowStatus') === false) {
+        $failures[] = 'Ticket tool JavaScript is missing booking window status logic.';
+    }
+    foreach (['Book now', 'Set reminder', 'Date has passed'] as $statusLabel) {
+        if (strpos($pluginJs, $statusLabel) === false) {
+            $failures[] = "Ticket tool JavaScript is missing booking window label: {$statusLabel}";
+        }
+    }
+    if (strpos($pluginJs, "plan.bookingStatus === 'passed'") === false) {
+        $failures[] = 'Ticket reminder JavaScript allows saving reminders for past visit dates.';
+    }
+}
+
+$pluginCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/assets/css/tools.css';
+if (is_file($pluginCssPath)) {
+    $pluginCss = file_get_contents($pluginCssPath);
+    if (strpos($pluginCss, '.stc-reminder-list') === false) {
+        $failures[] = 'Ticket tool CSS is missing saved reminder list styling.';
+    }
+    if (strpos($pluginCss, '.stc-reminder-actions') === false) {
+        $failures[] = 'Ticket tool CSS is missing reminder action button styling.';
+    }
+    if (strpos($pluginCss, '.stc-reminder-list__actions') === false) {
+        $failures[] = 'Ticket tool CSS is missing saved reminder list action styling.';
+    }
+    if (strpos($pluginCss, '.stc-tool-local-note') === false) {
+        $failures[] = 'Ticket tool CSS is missing local-only reminder note styling.';
+    }
+    if (strpos($pluginCss, '.stc-ticket-status') === false) {
+        $failures[] = 'Ticket tool CSS is missing booking window status styling.';
+    }
+    if (strpos($pluginCss, ':focus-visible') === false) {
+        $failures[] = 'Ticket tool CSS is missing keyboard focus styling.';
+    }
+}
+
+$frontPagePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/front-page.php';
+if (is_file($frontPagePath)) {
+    $frontPage = file_get_contents($frontPagePath);
+    if (strpos($frontPage, 'stc-image-card__media') === false) {
+        $failures[] = 'Homepage image cards are missing a dedicated media layer.';
+    }
+    if (strpos($frontPage, 'stc_render_survival_icon') === false) {
+        $failures[] = 'Survival Kit cards are still missing real icon rendering.';
+    }
+    if (strpos($frontPage, 'data-stc-save-guide') === false) {
+        $failures[] = 'Homepage image cards are missing local guide save actions.';
+    }
+    if (strpos($frontPage, "'City Guide'") === false) {
+        $failures[] = 'Homepage city cards do not save with the City Guide type.';
+    }
+    if (strpos($frontPage, "'Attraction Guide'") === false) {
+        $failures[] = 'Homepage attraction cards do not save with the Attraction Guide type.';
+    }
+    if (strpos($frontPage, 'https://www.trip.com/') === false || strpos($frontPage, 'rel="sponsored noopener"') === false) {
+        $failures[] = 'Homepage Planner CTA is not a sponsored Trip.com external link.';
+    }
+}
+
+$themeCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/assets/css/main.css';
+if (is_file($themeCssPath)) {
+    $themeCss = file_get_contents($themeCssPath);
+    if (strpos($themeCss, '../images/hero-home.png') === false) {
+        $failures[] = 'Homepage hero does not reference the generated hero image asset.';
+    }
+    if (strpos($themeCss, '../images/guide-card-bg.png') === false) {
+        $failures[] = 'Guide cards do not reference the generated card image asset.';
+    }
+    if (strpos($themeCss, 'rgba(0, 0, 0, .72)') !== false) {
+        $failures[] = 'Homepage hero still uses the old heavy left-side black overlay.';
+    }
+    if (strpos($themeCss, '.stc-header.is-menu-open') === false) {
+        $failures[] = 'Theme CSS is missing the mobile navigation open state.';
+    }
+    if (strpos($themeCss, '.stc-saved-guides') === false) {
+        $failures[] = 'Theme CSS is missing local saved guides styling.';
+    }
+    if (strpos($themeCss, '.stc-saved-guides__actions') === false) {
+        $failures[] = 'Theme CSS is missing local saved guides action styling.';
+    }
+    if (strpos($themeCss, '.stc-local-note') === false) {
+        $failures[] = 'Theme CSS is missing local-only saved guide note styling.';
+    }
+    if (strpos($themeCss, '.stc-page-actions') === false) {
+        $failures[] = 'Theme CSS is missing page sharing action styling.';
+    }
+    if (strpos($themeCss, '.stc-feature-panel--gold .stc-ticket-tool') === false) {
+        $failures[] = 'Theme CSS is missing Tools page ticket tool layout containment.';
+    }
+    if (strpos($themeCss, ':focus-visible') === false) {
+        $failures[] = 'Theme CSS is missing keyboard focus styling.';
+    }
+    if (strpos($themeCss, '.stc-skip-link') === false) {
+        $failures[] = 'Theme CSS is missing skip-link styling.';
+    }
+    if (strpos($themeCss, '.search-form') === false) {
+        $failures[] = 'Theme CSS is missing WordPress search form styling.';
+    }
+    if (strpos($themeCss, '.search-submit') === false || strpos($themeCss, 'max-width: none') === false) {
+        $failures[] = 'Theme CSS is missing mobile search form stacking.';
+    }
+}
+
+$themeJsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/assets/js/main.js';
+if (is_file($themeJsPath)) {
+    $themeJs = file_get_contents($themeJsPath);
+    if (strpos($themeJs, 'stcMobileNav') === false) {
+        $failures[] = 'Theme JavaScript is missing the mobile navigation controller.';
+    }
+    if (strpos($themeJs, 'stcSavedGuides') === false) {
+        $failures[] = 'Theme JavaScript is missing the local saved guides controller.';
+    }
+    if (strpos($themeJs, 'localStorage') === false) {
+        $failures[] = 'Theme JavaScript does not persist saved guides locally.';
+    }
+    if (strpos($themeJs, 'data-stc-delete-guide') === false) {
+        $failures[] = 'Theme JavaScript is missing the delete saved guide action.';
+    }
+    if (strpos($themeJs, "document.querySelectorAll('[data-stc-save-guide]')") === false) {
+        $failures[] = 'Theme JavaScript is missing homepage guide save button binding.';
+    }
+    if (strpos($themeJs, 'if (list)') === false) {
+        $failures[] = 'Theme JavaScript does not guard saved guide list-only behavior on the homepage.';
+    }
+    if (strpos($themeJs, 'data-stc-export-guides') === false) {
+        $failures[] = 'Theme JavaScript is missing saved guides export binding.';
+    }
+    if (strpos($themeJs, 'data-stc-clear-guides') === false) {
+        $failures[] = 'Theme JavaScript is missing saved guides clear binding.';
+    }
+    if (strpos($themeJs, 'application/json') === false) {
+        $failures[] = 'Theme JavaScript does not create a saved guides JSON export.';
+    }
+    if (strpos($themeJs, 'data-stc-import-guides') === false) {
+        $failures[] = 'Theme JavaScript is missing saved guides import binding.';
+    }
+    if (strpos($themeJs, 'FileReader') === false) {
+        $failures[] = 'Theme JavaScript does not read saved guides JSON imports.';
+    }
+    if (strpos($themeJs, 'stcImportGuides') === false) {
+        $failures[] = 'Theme JavaScript is missing the saved guides import handler.';
+    }
+    if (strpos($themeJs, 'stcClampText') === false) {
+        $failures[] = 'Theme JavaScript does not clamp imported saved guide text.';
+    }
+    if (strpos($themeJs, 'stcGuideType') === false) {
+        $failures[] = 'Theme JavaScript does not validate imported saved guide types.';
+    }
+    if (strpos($themeJs, 'navigator.share') === false) {
+        $failures[] = 'Theme JavaScript is missing native page share behavior.';
+    }
+    if (strpos($themeJs, 'navigator.clipboard') === false) {
+        $failures[] = 'Theme JavaScript is missing share fallback copy behavior.';
+    }
+}
+
+$phpFiles = [];
+foreach ($requiredFiles as $relativePath) {
+    if (substr($relativePath, -4) === '.php') {
+        $phpFiles[] = $relativePath;
+    }
+}
+
+foreach ($phpFiles as $relativePath) {
+    $absolutePath = $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
+    if (!is_file($absolutePath)) {
+        continue;
+    }
+
+    $command = 'php -l ' . escapeshellarg($absolutePath);
+    exec($command, $output, $exitCode);
+    if ($exitCode !== 0) {
+        $failures[] = "PHP syntax check failed: {$relativePath}";
+    }
+}
+
+if ($failures) {
+    fwrite(STDERR, implode(PHP_EOL, $failures) . PHP_EOL);
+    exit(1);
+}
+
+echo 'SoloToChina project verification passed.' . PHP_EOL;
