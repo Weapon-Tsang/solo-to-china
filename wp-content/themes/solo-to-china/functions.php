@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.15.0' );
+define( 'STC_THEME_VERSION', '0.16.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );

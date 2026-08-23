@@ -99,7 +99,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.15.0') === false || strpos($packageScript, 'Plugin version: 0.15.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.16.0') === false || strpos($packageScript, 'Plugin version: 0.16.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -128,8 +128,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.15.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.15.0.';
+    if (strpos($themeStyle, 'Version: 0.16.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.16.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -142,7 +142,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.15.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.16.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -191,8 +191,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.15.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.15.0.';
+    if (strpos($functions, "'0.16.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.16.0.';
     }
     if (strpos($functions, 'stc_render_article_save_button') === false || strpos($functions, 'data-stc-save-guide') === false || strpos($functions, 'stc-article-save') === false) {
         $failures[] = 'Theme functions are missing the article-only local save renderer.';
@@ -308,9 +308,9 @@ if (is_file($pageTemplatePath)) {
     if (strpos($pageTemplate, 'stc-card-grid--cities') === false || strpos($pageTemplate, 'stc-card-grid--attractions') === false) {
         $failures[] = 'City Guides and Attraction Guides landing pages do not use the homepage-reference image card grids.';
     }
-    foreach (['stc-city-grid-shell', 'data-stc-city-grid', 'data-stc-city-reveal'] as $cityLandingToken) {
-        if (strpos($pageTemplate, $cityLandingToken) === false) {
-            $failures[] = "City Guides landing page is missing mobile gradient-fold markup: {$cityLandingToken}";
+    foreach (['stc-guide-grid-shell', 'data-stc-guide-grid-shell', 'data-stc-guide-grid', 'data-stc-guide-reveal', 'data-stc-guide-label'] as $guideLandingToken) {
+        if (strpos($pageTemplate, $guideLandingToken) === false) {
+            $failures[] = "Guide landing pages are missing shared four-card fold markup: {$guideLandingToken}";
         }
     }
     foreach (['$guide_landing_slugs', 'stc-planner--page', 'stc-planner__icon', 'stc-planner__art', 'stc-faq--page', 'stc-faq__answer-link'] as $utilityPageToken) {
@@ -416,7 +416,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.15.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.16.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -424,11 +424,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.15.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.15.0.';
+    if (strpos($plugin, 'Version: 0.16.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.16.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.15.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.15.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.16.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.16.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -608,7 +608,7 @@ if (is_file($frontPagePath)) {
         }
         $previousHomepageIndex = $homepageIndex === false ? $previousHomepageIndex : $homepageIndex;
     }
-    foreach (['stc-planner__icon', 'stc-ticket-band__icon', 'stc-ticket-band__step-icon', 'stc-city-grid-shell', 'data-stc-city-grid', 'data-stc-city-reveal'] as $homepageMarkupToken) {
+    foreach (['stc-planner__icon', 'stc-ticket-band__icon', 'stc-ticket-band__step-icon', 'stc-guide-grid-shell', 'data-stc-guide-grid-shell', 'data-stc-guide-grid', 'data-stc-guide-reveal', 'stc-guide-grid-reveal__chevron'] as $homepageMarkupToken) {
         if (strpos($frontPage, $homepageMarkupToken) === false) {
             $failures[] = "Homepage is missing responsive reference markup: {$homepageMarkupToken}";
         }
@@ -701,9 +701,27 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing secondary-page responsive style: {$secondaryPageStyleToken}";
         }
     }
-    foreach (['grid-auto-columns: 75vw', 'grid-auto-columns: 42vw', '-webkit-overflow-scrolling: touch', 'overscroll-behavior-inline: contain', '.stc-survival-card::after', '.stc-article-save', '.stc-city-grid-shell', '.stc-city-grid-reveal', 'backdrop-filter: blur', 'linear-gradient(to bottom, transparent', 'grid-template-columns: repeat(2'] as $mobileRailStyleToken) {
-        if (strpos($themeCss, $mobileRailStyleToken) === false) {
-            $failures[] = "Theme CSS is missing requested mobile rail or article-save style: {$mobileRailStyleToken}";
+    foreach (['.stc-survival-card::after', '.stc-article-save', '.stc-guide-grid-shell', '.stc-guide-grid-reveal', 'grid-template-columns: repeat(2', 'max-height: var(--stc-guide-collapsed-height)', 'max-height: var(--stc-guide-expanded-height)', 'backdrop-filter: blur'] as $mobileGridStyleToken) {
+        if (strpos($themeCss, $mobileGridStyleToken) === false) {
+            $failures[] = "Theme CSS is missing requested four-card fold or article-save style: {$mobileGridStyleToken}";
+        }
+    }
+    foreach (['.stc-planner__intro p', '.stc-ticket-band__intro p', '.stc-ticket-band__steps strong', '.stc-ticket-band__action p'] as $mobileToolTypographyToken) {
+        if (strpos($themeCss, $mobileToolTypographyToken) === false) {
+            $failures[] = "Theme CSS is missing mobile tool typography tuning: {$mobileToolTypographyToken}";
+        }
+    }
+    foreach (['.home .stc-survival__grid', '.home .stc-survival-card:nth-child(even)::after', '.home .stc-survival-card:last-child'] as $survivalResponsiveToken) {
+        if (strpos($themeCss, $survivalResponsiveToken) === false) {
+            $failures[] = "Theme CSS is missing responsive Survival Kit layout behavior: {$survivalResponsiveToken}";
+        }
+    }
+    if (strpos($themeCss, 'grid-template-columns: repeat(5, 142px)') !== false) {
+        $failures[] = 'Mobile Survival Kit still uses the clipped fixed-width rail.';
+    }
+    foreach (['grid-auto-columns: 75vw', 'grid-auto-columns: 42vw', '.stc-city-grid-shell', '.stc-city-grid-reveal'] as $removedGuideRailStyle) {
+        if (strpos($themeCss, $removedGuideRailStyle) !== false) {
+            $failures[] = "Theme CSS still includes a removed guide rail or gradient-overlay style: {$removedGuideRailStyle}";
         }
     }
     foreach (['.stc-grid-toggle', '.stc-save-guide--image-card', '.is-collapsible'] as $removedCardControlStyle) {
@@ -762,10 +780,13 @@ if (is_file($themeJsPath)) {
     if (strpos($themeJs, 'stcCollapsibleGuideGrid') !== false || strpos($themeJs, 'data-stc-grid-toggle') !== false) {
         $failures[] = 'Theme JavaScript still includes the removed mobile city grid collapse controller.';
     }
-    foreach (['stcCityGridReveal', 'data-stc-city-grid', 'data-stc-city-reveal', 'More Cities', '--stc-city-collapsed-height', '--stc-city-expanded-height'] as $cityRevealScriptToken) {
-        if (strpos($themeJs, $cityRevealScriptToken) === false) {
-            $failures[] = "Theme JavaScript is missing the gradient city-grid reveal behavior: {$cityRevealScriptToken}";
+    foreach (['stcGuideGridReveal', 'data-stc-guide-grid', 'data-stc-guide-reveal', 'data-stc-guide-label', 'More ', '--stc-guide-collapsed-height', '--stc-guide-expanded-height'] as $guideRevealScriptToken) {
+        if (strpos($themeJs, $guideRevealScriptToken) === false) {
+            $failures[] = "Theme JavaScript is missing the shared four-card reveal behavior: {$guideRevealScriptToken}";
         }
+    }
+    if (strpos($themeJs, 'stcCityGridReveal') !== false || strpos($themeJs, 'data-stc-city-grid') !== false) {
+        $failures[] = 'Theme JavaScript still includes the removed City-only reveal controller.';
     }
     if (strpos($themeJs, 'localStorage') === false) {
         $failures[] = 'Theme JavaScript does not persist saved guides locally.';

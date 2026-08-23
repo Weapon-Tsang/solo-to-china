@@ -101,11 +101,14 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 				</div>
 			</section>
 		<?php elseif ( in_array( $slug, [ 'city-guides', 'attraction-guides' ], true ) ) : ?>
+			<?php
+			$guide_grid_id    = 'city-guides' === $slug ? 'stc-city-guide-grid' : 'stc-attraction-guide-grid';
+			$guide_grid_label = 'city-guides' === $slug ? 'Cities' : 'Attractions';
+			$remaining_guides = max( 0, count( $page['items'] ) - 4 );
+			?>
 			<section class="stc-page-section">
-				<?php if ( 'city-guides' === $slug ) : ?>
-					<div class="stc-city-grid-shell" data-stc-city-grid-shell>
-				<?php endif; ?>
-				<div<?php echo 'city-guides' === $slug ? ' id="stc-city-guide-grid" data-stc-city-grid' : ''; ?> class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>">
+				<div class="stc-guide-grid-shell" data-stc-guide-grid-shell data-stc-guide-label="<?php echo esc_attr( $guide_grid_label ); ?>">
+				<div id="<?php echo esc_attr( $guide_grid_id ); ?>" class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>" data-stc-guide-grid>
 					<?php foreach ( $page['items'] as $item ) : ?>
 						<article class="stc-image-card stc-image-card--<?php echo esc_attr( $item['class'] ); ?>">
 							<span class="stc-image-card__media" aria-hidden="true"></span>
@@ -121,14 +124,13 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 						</article>
 					<?php endforeach; ?>
 				</div>
-				<?php if ( 'city-guides' === $slug ) : ?>
-						<div class="stc-city-grid-reveal">
-							<button type="button" data-stc-city-reveal aria-controls="stc-city-guide-grid" aria-expanded="false">
-								<span data-stc-city-reveal-label>+4 More Cities</span>
-							</button>
-						</div>
+					<div class="stc-guide-grid-reveal">
+						<button type="button" data-stc-guide-reveal aria-controls="<?php echo esc_attr( $guide_grid_id ); ?>" aria-expanded="false">
+							<span data-stc-guide-reveal-label><?php echo esc_html( sprintf( '+%d More %s', $remaining_guides, $guide_grid_label ) ); ?></span>
+							<svg class="stc-guide-grid-reveal__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
+						</button>
 					</div>
-				<?php endif; ?>
+				</div>
 			</section>
 		<?php elseif ( 'planner' === $slug ) : ?>
 			<section class="stc-planner stc-planner--page" aria-labelledby="stc-planner-page-title">

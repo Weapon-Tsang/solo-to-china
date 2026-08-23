@@ -19,14 +19,15 @@
 		return String(value || '').trim().slice(0, maxLength);
 	}
 
-	function stcCityGridReveal() {
+	function stcGuideGridReveal() {
 		var media = window.matchMedia('(max-width: 840px)');
-		var shells = document.querySelectorAll('[data-stc-city-grid-shell]');
+		var shells = document.querySelectorAll('[data-stc-guide-grid-shell]');
 
 		shells.forEach(function (shell) {
-			var grid = shell.querySelector('[data-stc-city-grid]');
-			var button = shell.querySelector('[data-stc-city-reveal]');
-			var label = shell.querySelector('[data-stc-city-reveal-label]');
+			var grid = shell.querySelector('[data-stc-guide-grid]');
+			var button = shell.querySelector('[data-stc-guide-reveal]');
+			var label = shell.querySelector('[data-stc-guide-reveal-label]');
+			var guideLabel = shell.getAttribute('data-stc-guide-label') || 'Guides';
 			var cards = grid ? Array.from(grid.querySelectorAll('.stc-image-card')) : [];
 
 			if (!grid || !button || !label || cards.length <= 4) {
@@ -36,8 +37,8 @@
 			function syncCollapsedHeight() {
 				if (!media.matches) {
 					shell.classList.remove('is-ready');
-					grid.style.removeProperty('--stc-city-collapsed-height');
-					grid.style.removeProperty('--stc-city-expanded-height');
+					grid.style.removeProperty('--stc-guide-collapsed-height');
+					grid.style.removeProperty('--stc-guide-expanded-height');
 					button.hidden = true;
 					return;
 				}
@@ -48,16 +49,22 @@
 				var collapsedHeight = Math.ceil(fourthCard.bottom - firstCard.top);
 				var expandedHeight = Math.ceil(lastCard.bottom - firstCard.top);
 
-				grid.style.setProperty('--stc-city-collapsed-height', collapsedHeight + 'px');
-				grid.style.setProperty('--stc-city-expanded-height', expandedHeight + 'px');
-				label.textContent = '+' + (cards.length - 4) + ' More Cities';
+				grid.style.setProperty('--stc-guide-collapsed-height', collapsedHeight + 'px');
+				grid.style.setProperty('--stc-guide-expanded-height', expandedHeight + 'px');
+				label.textContent = '+' + (cards.length - 4) + ' More ' + guideLabel;
 				button.hidden = false;
 				shell.classList.add('is-ready');
 			}
 
 			button.addEventListener('click', function () {
+				var firstRevealedLink = cards[4].querySelector('a');
+
 				shell.classList.add('is-expanded');
 				button.setAttribute('aria-expanded', 'true');
+
+				if (firstRevealedLink) {
+					firstRevealedLink.focus({ preventScroll: true });
+				}
 			});
 
 			syncCollapsedHeight();
@@ -406,7 +413,7 @@
 	}
 
 	stcMobileNav();
-	stcCityGridReveal();
+	stcGuideGridReveal();
 	stcSavedGuides();
 	stcPageShare();
 	stcGuideToc();

@@ -376,11 +376,11 @@ label:focus-visible {
 	gap: 14px;
 }
 
-.stc-city-grid-shell {
+.stc-guide-grid-shell {
 	position: relative;
 }
 
-.stc-city-grid-reveal {
+.stc-guide-grid-reveal {
 	display: none;
 }
 
@@ -1864,16 +1864,8 @@ label:focus-visible {
 	}
 
 	.home .stc-survival__grid {
-		grid-template-columns: repeat(5, 142px);
-		overflow-x: auto;
-		overflow-y: hidden;
-		scroll-snap-type: x mandatory;
-		scrollbar-width: none;
-	}
-
-	.home .stc-survival__grid::-webkit-scrollbar,
-	.stc-card-grid--attractions::-webkit-scrollbar {
-		display: none;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		overflow: visible;
 	}
 
 	.home .stc-survival-card {
@@ -1881,7 +1873,14 @@ label:focus-visible {
 		gap: 5px;
 		min-height: 110px;
 		padding: 13px 8px;
-		scroll-snap-align: start;
+	}
+
+	.home .stc-survival-card:nth-child(even)::after {
+		display: none;
+	}
+
+	.home .stc-survival-card:last-child {
+		grid-column: 1 / -1;
 	}
 
 	.home .stc-survival-card__icon {
@@ -1900,31 +1899,14 @@ label:focus-visible {
 
 	.home .stc-survival-card span:last-child {
 		font-size: 9px;
-	}
-
-	.stc-card-grid--attractions,
-	.stc-page-primary .stc-card-grid--attractions {
-		-webkit-overflow-scrolling: touch;
-		grid-auto-columns: 75vw;
-		grid-auto-flow: column;
-		grid-template-columns: none;
-		overscroll-behavior-inline: contain;
-		overflow-x: auto;
-		overflow-y: hidden;
-		padding-bottom: 10px;
-		scroll-snap-type: x mandatory;
-		scrollbar-width: none;
-		touch-action: pan-x;
-	}
-
-	.stc-card-grid--attractions .stc-image-card {
-		aspect-ratio: 2 / 3;
-		scroll-snap-align: start;
-		scroll-snap-stop: always;
+		line-height: 1.3;
+		white-space: normal;
 	}
 
 	.stc-card-grid--cities,
-	.stc-page-primary .stc-card-grid--cities {
+	.stc-card-grid--attractions,
+	.stc-page-primary .stc-card-grid--cities,
+	.stc-page-primary .stc-card-grid--attractions {
 		grid-auto-flow: row;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		overflow: visible;
@@ -1936,57 +1918,66 @@ label:focus-visible {
 		aspect-ratio: 1 / 1.08;
 	}
 
-	.stc-js .stc-city-grid-shell.is-ready .stc-card-grid--cities {
-		max-height: var(--stc-city-collapsed-height);
+	.stc-card-grid--attractions .stc-image-card {
+		aspect-ratio: 2 / 3;
+	}
+
+	.stc-js .stc-guide-grid-shell.is-ready .stc-card-grid {
+		max-height: var(--stc-guide-collapsed-height);
 		overflow: hidden;
 	}
 
-	.stc-js .stc-city-grid-shell.is-ready.is-expanded .stc-card-grid--cities {
-		max-height: var(--stc-city-expanded-height);
+	.stc-js .stc-guide-grid-shell.is-ready.is-expanded .stc-card-grid {
+		max-height: var(--stc-guide-expanded-height);
 	}
 
-	.stc-js .stc-city-grid-shell.is-ready .stc-city-grid-reveal {
-		-webkit-backdrop-filter: blur(3px);
-		align-items: end;
-		backdrop-filter: blur(3px);
-		background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .98));
-		bottom: 0;
-		display: grid;
-		height: 46%;
-		justify-items: center;
+	.stc-js .stc-guide-grid-shell.is-ready .stc-guide-grid-reveal {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		margin-top: 12px;
+		max-height: 44px;
 		opacity: 1;
-		padding-bottom: 18px;
-		pointer-events: none;
-		position: absolute;
-		transition: opacity .3s ease, visibility .3s ease;
+		overflow: hidden;
+		transition: margin .3s ease, max-height .3s ease, opacity .24s ease, visibility .24s ease;
 		visibility: visible;
-		width: 100%;
-		z-index: 5;
 	}
 
-	.stc-js .stc-city-grid-shell.is-ready.is-expanded .stc-city-grid-reveal {
+	.stc-js .stc-guide-grid-shell.is-ready.is-expanded .stc-guide-grid-reveal {
+		margin-top: 0;
+		max-height: 0;
 		opacity: 0;
 		visibility: hidden;
 	}
 
-	.stc-city-grid-reveal button {
-		-webkit-backdrop-filter: blur(12px);
+	.stc-guide-grid-reveal button {
+		-webkit-backdrop-filter: blur(10px);
 		align-items: center;
-		backdrop-filter: blur(12px);
-		background: rgba(255, 255, 255, .88);
+		backdrop-filter: blur(10px);
+		background: rgba(255, 255, 255, .82);
 		border: 1px solid rgba(17, 111, 83, .2);
 		border-radius: 999px;
-		box-shadow: 0 8px 24px rgba(11, 43, 34, .14);
+		box-shadow: 0 6px 18px rgba(11, 43, 34, .12);
 		color: var(--stc-green);
 		cursor: pointer;
 		display: inline-flex;
 		font: inherit;
 		font-size: 12px;
 		font-weight: 800;
+		gap: 5px;
 		justify-content: center;
-		min-height: 40px;
-		padding: 0 18px;
-		pointer-events: auto;
+		min-height: 38px;
+		padding: 0 16px;
+	}
+
+	.stc-guide-grid-reveal__chevron {
+		fill: none;
+		height: 16px;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 2;
+		width: 16px;
 	}
 
 	.stc-page-hero--visual {
@@ -2018,6 +2009,18 @@ label:focus-visible {
 		grid-template-columns: 58px 1fr;
 	}
 
+	.stc-planner__intro h2 {
+		font-size: 18px;
+		line-height: 1.2;
+		margin-bottom: 6px;
+	}
+
+	.stc-planner__intro p {
+		font-size: 13px;
+		line-height: 1.35;
+		margin: 0;
+	}
+
 	.stc-planner__icon {
 		height: 54px;
 		width: 54px;
@@ -2031,7 +2034,22 @@ label:focus-visible {
 	.stc-planner__partner {
 		border-left: 0;
 		border-top: 1px solid rgba(20, 107, 84, .18);
+		gap: 3px;
 		padding: 14px 0 0;
+	}
+
+	.stc-planner__partner > span {
+		font-size: 11px;
+		line-height: 1.3;
+	}
+
+	.stc-planner__partner strong {
+		line-height: 1.05;
+	}
+
+	.stc-planner__partner p {
+		line-height: 1.4;
+		margin: 6px 0 0;
 	}
 
 	.stc-planner strong {
@@ -2058,29 +2076,49 @@ label:focus-visible {
 	}
 
 	.stc-ticket-band__intro {
-		gap: 14px;
-		grid-template-columns: 76px 1fr;
+		gap: 12px;
+		grid-template-columns: 62px 1fr;
 	}
 
 	.stc-ticket-band__icon {
-		height: 58px;
-		width: 76px;
+		height: 54px;
+		width: 62px;
 	}
 
 	.stc-ticket-band h2 {
-		font-size: 17px;
+		font-size: 16px;
+		line-height: 1.15;
+		margin-bottom: 6px;
 		white-space: normal;
+	}
+
+	.stc-ticket-band__intro p {
+		font-size: 13px;
+		line-height: 1.35;
+		margin: 0;
 	}
 
 	.stc-ticket-band__steps {
 		border-left: 0;
 		border-top: 1px solid rgba(169, 120, 36, .22);
+		gap: 14px;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		padding: 14px 0 0;
 	}
 
+	.stc-ticket-band__steps strong {
+		display: block;
+		line-height: 1.25;
+		margin-bottom: 3px;
+	}
+
 	.stc-ticket-band__action {
 		justify-items: stretch;
+	}
+
+	.stc-ticket-band__action p {
+		line-height: 1.4;
+		margin: 6px 0 0;
 	}
 
 	.stc-ticket-band__action .stc-button {
@@ -2205,9 +2243,12 @@ label:focus-visible {
 		overflow: visible;
 	}
 
-	.stc-card-grid--attractions,
-	.stc-page-primary .stc-card-grid--attractions {
-		grid-auto-columns: 42vw;
+	.home .stc-survival-card:nth-child(even)::after {
+		display: block;
+	}
+
+	.home .stc-survival-card:last-child {
+		grid-column: auto;
 	}
 
 	.stc-footer__inner {

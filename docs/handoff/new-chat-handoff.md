@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.15.0`
+Version: `0.16.0`
 
 Location:
 
@@ -140,8 +140,10 @@ Implemented:
 - City Guides image cards.
 - Attraction Guides image cards.
 - Homepage order strictly follows the approved reference and does not insert Latest Guides before Planner.
-- Mobile Survival Kit is horizontally scrollable; City Guides uses a two-column grid that initially shows four cards under a centered frosted-gradient reveal.
-- The City Guides reveal expands and fades smoothly. Attraction Guides uses 75vw phone cards and 42vw tablet cards in a momentum-driven horizontal rail with mandatory scroll snap and next-card peeks.
+- Mobile Survival Kit uses a responsive two-column narrow-screen grid and restores five columns when space allows.
+- City Guides and Attraction Guides use matching two-column mobile grids that show four complete cards before a compact frosted capsule button below the second row.
+- Both reveal buttons show the remaining count, expand smoothly, fade away, and move focus to the first newly revealed card.
+- Mobile Planner and Ticket Tool bands use tuned line heights, text-column widths, and paragraph spacing.
 - Guide-list cards do not expose save controls. Local Save Guide appears only after a guide article is opened.
 - Survival Kit subtitles remain one line with centered 60%-height dividers, and attraction badges use compact type.
 - Planner and Ticket homepage bands use dedicated reference-style icons and non-overlapping content columns.
@@ -163,7 +165,7 @@ Implemented:
 - Shared Guide card rendering for archive, search, and default post lists.
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
 - Core landing pages keep primary guide content before Saved Guides and category-matched latest posts.
-- Attraction Guides uses a horizontal phone/tablet rail so cards retain readable image, title, subtitle, and badge space.
+- Attraction Guides uses the same complete four-card phone/tablet fold as City Guides so image, title, subtitle, and badge space remains readable.
 - Guide articles use a horizontal pre-content table of contents on mobile and the sidebar table of contents on desktop.
 - Planner uses the approved homepage calendar icon, partner disclosure, and watercolor artwork.
 - FAQ uses responsive accordions with related internal links.
@@ -191,7 +193,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.15.0`
+Version: `0.16.0`
 
 Location:
 
@@ -287,11 +289,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 23:30:40 +08:00
-Theme version: 0.15.0
-Theme SHA256: B0D85B9929E2577B818F26E12BCEC9267FE92F938DF95012C6EAC8992261C34E
-Plugin version: 0.15.0
-Plugin SHA256: 586A0AAB45D9360FBCD307E2A54600653E669CA5F37E5F8CE4E77F829658028A
+Generated: 2026-08-23 23:53:56 +08:00
+Theme version: 0.16.0
+Theme SHA256: 23BF6853BEE3E068DE2AE8BEAC28D2B94C016DDC2F04C81FFDB3CA7F1B709FEE
+Plugin version: 0.16.0
+Plugin SHA256: 2471FE63855A53F983D82D225D07C89C5892C6EF7D025E4A540FD9AB0A6B1C6D
 ```
 
 Regenerate artifacts with:
@@ -359,7 +361,7 @@ The verification scripts protect:
 - content-first landing-page order and responsive attraction-card widths
 - mobile-before-content and desktop-sidebar table-of-contents states
 - utility-page Saved Guides boundaries, Planner visual continuity, and FAQ accordion styling
-- the City Guides two-column gradient fold, the Attraction Guides momentum rail and peek cues, article-only save actions, compact subtitles, and centered Survival Kit dividers
+- matching City/Attraction two-column four-card folds, compact frosted reveal buttons, responsive Survival Kit columns, mobile tool typography, article-only save actions, compact subtitles, and centered Survival Kit dividers
 - shared Guide card rendering for archives and search
 - latest guide rendering on the three core content landing pages
 - latest guide rendering on the homepage
@@ -392,8 +394,8 @@ After installing on WordPress, check:
 - Mobile menu opens and closes.
 - Header does not obscure content on mobile.
 - Survival Kit page renders without list-card save controls.
-- City Guides page renders its mobile four-card gradient fold without list-card save controls.
-- Attraction Guides page renders its mobile horizontal rail without list-card save controls.
+- City Guides page renders its complete mobile four-card fold without list-card save controls.
+- Attraction Guides page renders the same complete mobile four-card fold without list-card save controls.
 - Saved Guides export/import/clear works in current browser.
 - Share page works or copies link.
 - Planner page Trip.com CTA opens in a new tab.

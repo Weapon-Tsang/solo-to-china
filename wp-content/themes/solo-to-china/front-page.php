@@ -64,8 +64,8 @@ $attractions = [
 			<h2 id="cities-title">City Guides</h2>
 			<a href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">View all city guides</a>
 		</div>
-		<div class="stc-city-grid-shell" data-stc-city-grid-shell>
-			<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-city-grid>
+		<div class="stc-guide-grid-shell" data-stc-guide-grid-shell data-stc-guide-label="Cities">
+			<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-guide-grid>
 				<?php foreach ( $cities as $city ) : ?>
 					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $city['class'] ); ?>">
 						<span class="stc-image-card__media" aria-hidden="true"></span>
@@ -78,9 +78,10 @@ $attractions = [
 					</article>
 				<?php endforeach; ?>
 			</div>
-			<div class="stc-city-grid-reveal">
-				<button type="button" data-stc-city-reveal aria-controls="home-city-grid" aria-expanded="false">
-					<span data-stc-city-reveal-label>+4 More Cities</span>
+			<div class="stc-guide-grid-reveal">
+				<button type="button" data-stc-guide-reveal aria-controls="home-city-grid" aria-expanded="false">
+					<span data-stc-guide-reveal-label>+4 More Cities</span>
+					<svg class="stc-guide-grid-reveal__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
 				</button>
 			</div>
 		</div>
@@ -91,19 +92,27 @@ $attractions = [
 			<h2 id="attractions-title">Attraction Guides</h2>
 			<a href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">View all attractions</a>
 		</div>
-		<div class="stc-card-grid stc-card-grid--attractions">
-			<?php foreach ( $attractions as $attraction ) : ?>
-				<article class="stc-image-card stc-image-card--<?php echo esc_attr( $attraction['class'] ); ?>">
-					<span class="stc-image-card__media" aria-hidden="true"></span>
-					<span class="stc-image-card__tag"><?php echo esc_html( $attraction['tag'] ); ?></span>
-					<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">
-						<span class="stc-image-card__content">
-							<strong><?php echo esc_html( $attraction['name'] ); ?></strong>
-							<span><?php echo esc_html( $attraction['city'] ); ?></span>
-						</span>
-					</a>
-				</article>
-			<?php endforeach; ?>
+		<div class="stc-guide-grid-shell" data-stc-guide-grid-shell data-stc-guide-label="Attractions">
+			<div id="home-attraction-grid" class="stc-card-grid stc-card-grid--attractions" data-stc-guide-grid>
+				<?php foreach ( $attractions as $attraction ) : ?>
+					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $attraction['class'] ); ?>">
+						<span class="stc-image-card__media" aria-hidden="true"></span>
+						<span class="stc-image-card__tag"><?php echo esc_html( $attraction['tag'] ); ?></span>
+						<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">
+							<span class="stc-image-card__content">
+								<strong><?php echo esc_html( $attraction['name'] ); ?></strong>
+								<span><?php echo esc_html( $attraction['city'] ); ?></span>
+							</span>
+						</a>
+					</article>
+				<?php endforeach; ?>
+			</div>
+			<div class="stc-guide-grid-reveal">
+				<button type="button" data-stc-guide-reveal aria-controls="home-attraction-grid" aria-expanded="false">
+					<span data-stc-guide-reveal-label>+2 More Attractions</span>
+					<svg class="stc-guide-grid-reveal__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
+				</button>
+			</div>
 		</div>
 	</section>
 
