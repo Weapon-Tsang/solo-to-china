@@ -322,11 +322,10 @@
 	}
 
 	function stcGuideToc() {
-		var toc = document.querySelector('[data-stc-guide-toc]');
-		var list = document.querySelector('[data-stc-guide-toc-list]');
+		var tocs = document.querySelectorAll('[data-stc-guide-toc]');
 		var content = document.querySelector('.stc-entry-content--guide');
 
-		if (!toc || !list || !content) {
+		if (!tocs.length || !content) {
 			return;
 		}
 
@@ -335,14 +334,14 @@
 		});
 
 		if (!headings.length) {
-			toc.hidden = true;
+			tocs.forEach(function (toc) {
+				toc.hidden = true;
+			});
 			return;
 		}
 
 		var usedIds = {};
-		var fragment = document.createDocumentFragment();
-
-		headings.forEach(function (heading, index) {
+		var tocItems = headings.map(function (heading, index) {
 			var baseId = heading.id || stcTocSlug(heading.textContent, index);
 			var id = baseId;
 			var count = 2;
@@ -357,15 +356,31 @@
 			usedIds[id] = true;
 			heading.id = id;
 
-			var item = document.createElement('li');
-			var link = document.createElement('a');
-			link.href = '#' + id;
-			link.textContent = stcClampText(heading.textContent, 80);
-			item.append(link);
-			fragment.append(item);
+			return {
+				id: id,
+				text: stcClampText(heading.textContent, 80)
+			};
 		});
 
-		list.replaceChildren(fragment);
+		tocs.forEach(function (toc) {
+			var list = toc.querySelector('[data-stc-guide-toc-list]');
+			var fragment = document.createDocumentFragment();
+
+			if (!list) {
+				return;
+			}
+
+			tocItems.forEach(function (tocItem) {
+				var item = document.createElement('li');
+				var link = document.createElement('a');
+				link.href = '#' + tocItem.id;
+				link.textContent = tocItem.text;
+				item.append(link);
+				fragment.append(item);
+			});
+
+			list.replaceChildren(fragment);
+		});
 	}
 
 	stcMobileNav();

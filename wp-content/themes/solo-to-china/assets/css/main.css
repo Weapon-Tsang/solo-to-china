@@ -910,6 +910,10 @@ label:focus-visible {
 	padding-top: 24px;
 }
 
+.stc-page-primary + .stc-saved-guides {
+	padding-top: 20px;
+}
+
 .stc-saved-guides {
 	margin: 0 auto;
 	max-width: var(--stc-max);
@@ -1287,6 +1291,10 @@ label:focus-visible {
 	display: grid;
 	gap: 12px;
 	padding: 18px;
+}
+
+.stc-guide-toc--mobile {
+	display: none;
 }
 
 .stc-guide-toc h2 {
@@ -1848,8 +1856,16 @@ label:focus-visible {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
+	.stc-page-primary .stc-card-grid--attractions {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
 	.stc-card-grid--cities .stc-image-card {
 		aspect-ratio: 1 / 1.08;
+	}
+
+	.stc-page-primary .stc-card-grid--attractions .stc-image-card {
+		aspect-ratio: 2 / 3;
 	}
 
 	.stc-js .home .stc-card-grid--cities.is-collapsible {
@@ -2047,6 +2063,45 @@ label:focus-visible {
 		grid-template-columns: 1fr;
 	}
 
+	.stc-guide-toc--desktop {
+		display: none;
+	}
+
+	.stc-guide-toc--mobile {
+		display: grid;
+		gap: 10px;
+		padding: 14px 16px;
+	}
+
+	.stc-guide-toc--mobile ol {
+		display: flex;
+		gap: 8px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-bottom: 4px;
+		scroll-snap-type: x proximity;
+		scrollbar-width: none;
+	}
+
+	.stc-guide-toc--mobile ol::-webkit-scrollbar {
+		display: none;
+	}
+
+	.stc-guide-toc--mobile li {
+		flex: 0 0 auto;
+		scroll-snap-align: start;
+	}
+
+	.stc-guide-toc--mobile a {
+		background: #f3f8f5;
+		border: 1px solid #dce8e1;
+		border-radius: 6px;
+		color: var(--stc-green);
+		font-size: 12px;
+		padding: 8px 10px;
+		white-space: nowrap;
+	}
+
 	.stc-attraction-guide__hero,
 	.stc-city-guide__hero,
 	.stc-survival-kit__hero,
@@ -2100,6 +2155,14 @@ label:focus-visible {
 
 	.home .stc-card-grid--attractions {
 		grid-auto-columns: 24vw;
+	}
+
+	.stc-page-primary .stc-card-grid--cities {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	.stc-page-primary .stc-card-grid--attractions {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 
 	.stc-footer__inner {

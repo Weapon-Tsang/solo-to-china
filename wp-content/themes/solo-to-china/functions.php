@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.12.0' );
+define( 'STC_THEME_VERSION', '0.13.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -219,8 +219,10 @@ function stc_render_guide_card( $post_id = null ) {
 	echo '</article>';
 }
 
-function stc_render_guide_toc() {
-	echo '<nav class="stc-guide-toc" aria-label="' . esc_attr__( 'On this page', 'solo-to-china' ) . '" data-stc-guide-toc>';
+function stc_render_guide_toc( $modifier_class = '' ) {
+	$classes = trim( 'stc-guide-toc ' . sanitize_html_class( $modifier_class ) );
+
+	echo '<nav class="' . esc_attr( $classes ) . '" aria-label="' . esc_attr__( 'On this page', 'solo-to-china' ) . '" data-stc-guide-toc>';
 	echo '<h2>' . esc_html__( 'On this page', 'solo-to-china' ) . '</h2>';
 	echo '<ol data-stc-guide-toc-list></ol>';
 	echo '</nav>';

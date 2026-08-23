@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.12.0`.
+Current theme version: `0.13.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -51,6 +51,8 @@ The custom theme implements the approved image-led homepage direction:
 - City subtitles stay on one line, image-card save actions use compact bookmark controls, and Planner/Ticket content columns include dedicated icons without overlap.
 - Homepage-reference visual assets now provide distinct city and attraction card images, plus Planner and Ticket band art.
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
+- Core landing pages render their primary guide content before Saved Guides and category-matched latest posts.
+- Attraction Guides uses a readable two-column grid on phones and three-column grid on tablets instead of shrinking six cards into one row.
 - Planner band.
 - Homepage Planner CTA opens Trip.com as a sponsored external link.
 - Ticket Tool / Reminder band.
@@ -65,7 +67,7 @@ The custom theme implements the approved image-led homepage direction:
 - City Guide editor content pattern covering where to stay, getting around, first-time itineraries, food, neighborhoods, day trips, and common city mistakes.
 - Survival Kit article layout for practical setup and troubleshooting pages.
 - Survival Kit editor content pattern covering quick answers, pre-arrival setup, step-by-step setup, failure cases, backup plans, and FAQ.
-- Guide article sidebars automatically show an On this page table of contents generated from H2 sections.
+- Guide articles automatically show an On this page table of contents generated from H2 sections: a compact horizontal navigator before content on mobile and the existing sidebar navigator on desktop.
 - Shared Guide card rendering for archive, search, and default post lists, with guide type badges and consistent CTAs.
 - Survival Kit, City Guides, and Attraction Guides landing pages automatically show latest published posts from their matching categories.
 - Core guide categories are created on theme activation if missing.
@@ -107,7 +109,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.12.0`.
+Current tools plugin version: `0.13.0`.
 
 The custom plugin owns the first tool only:
 
@@ -191,6 +193,7 @@ Current environment note:
 - PHP CLI is installed locally in `.tools/php/`.
 - The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
 - Static project checks and PHP syntax checks pass before packaging.
+- Browser preview checks protect homepage reference alignment, landing-page content order and mobile card widths, article table-of-contents breakpoints, and horizontal overflow.
 
 ## GitHub / Source Control Status
 

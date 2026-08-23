@@ -26,14 +26,14 @@ $core_pages = [
 		'title' => 'City Guides',
 		'copy'  => 'City hubs for planning where to stay, how to move, and what to do.',
 		'items' => [
-			[ 'title' => 'Beijing', 'copy' => 'History, culture, and classic first-trip routes.', 'class' => 'beijing' ],
-			[ 'title' => 'Shanghai', 'copy' => 'Modern China, neighborhoods, food, and day trips.', 'class' => 'shanghai' ],
-			[ 'title' => 'Guangzhou', 'copy' => 'Food, trade culture, transit, and south China access.', 'class' => 'guangzhou' ],
-			[ 'title' => 'Chengdu', 'copy' => 'Pandas, teahouses, Sichuan food, and slow travel.', 'class' => 'chengdu' ],
-			[ 'title' => 'Chongqing', 'copy' => 'River views, hotpot, hills, and night scenes.', 'class' => 'chongqing' ],
-			[ 'title' => "Xi'an", 'copy' => 'Ancient capital routes and Terracotta Warriors planning.', 'class' => 'xian' ],
-			[ 'title' => 'Hangzhou', 'copy' => 'West Lake, tea villages, and relaxed city breaks.', 'class' => 'hangzhou' ],
-			[ 'title' => 'Zhangjiajie', 'copy' => 'Mountain routes, tickets, weather, and transport.', 'class' => 'zhangjiajie' ],
+			[ 'title' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing' ],
+			[ 'title' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai' ],
+			[ 'title' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou' ],
+			[ 'title' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu' ],
+			[ 'title' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing' ],
+			[ 'title' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian' ],
+			[ 'title' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou' ],
+			[ 'title' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie' ],
 		],
 	],
 	'attraction-guides' => [
@@ -98,24 +98,7 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 			</div>
 		</section>
 
-		<section class="stc-saved-guides" aria-labelledby="stc-saved-guides-title">
-			<div>
-				<div class="stc-saved-guides__header">
-					<h2 id="stc-saved-guides-title"><?php esc_html_e( 'Saved on this device', 'solo-to-china' ); ?></h2>
-					<div class="stc-saved-guides__actions">
-						<button type="button" data-stc-export-guides><?php esc_html_e( 'Export', 'solo-to-china' ); ?></button>
-						<label>
-							<span><?php esc_html_e( 'Import', 'solo-to-china' ); ?></span>
-							<input type="file" accept="application/json,.json" data-stc-import-guides>
-						</label>
-						<button type="button" data-stc-clear-guides><?php esc_html_e( 'Clear all', 'solo-to-china' ); ?></button>
-					</div>
-				</div>
-				<p class="stc-local-note"><?php esc_html_e( 'Stored only on this device. Export or clear it anytime.', 'solo-to-china' ); ?></p>
-				<div data-stc-saved-guides></div>
-			</div>
-		</section>
-
+		<div class="stc-page-primary">
 		<?php if ( 'survival-kit' === $slug ) : ?>
 			<section class="stc-page-section">
 				<div class="stc-link-grid stc-link-grid--five">
@@ -187,6 +170,25 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 				</div>
 			</section>
 		<?php endif; ?>
+		</div>
+
+		<section class="stc-saved-guides" aria-labelledby="stc-saved-guides-title">
+			<div>
+				<div class="stc-saved-guides__header">
+					<h2 id="stc-saved-guides-title"><?php esc_html_e( 'Saved on this device', 'solo-to-china' ); ?></h2>
+					<div class="stc-saved-guides__actions">
+						<button type="button" data-stc-export-guides><?php esc_html_e( 'Export', 'solo-to-china' ); ?></button>
+						<label>
+							<span><?php esc_html_e( 'Import', 'solo-to-china' ); ?></span>
+							<input type="file" accept="application/json,.json" data-stc-import-guides>
+						</label>
+						<button type="button" data-stc-clear-guides><?php esc_html_e( 'Clear all', 'solo-to-china' ); ?></button>
+					</div>
+				</div>
+				<p class="stc-local-note"><?php esc_html_e( 'Stored only on this device. Export or clear it anytime.', 'solo-to-china' ); ?></p>
+				<div data-stc-saved-guides></div>
+			</div>
+		</section>
 
 		<?php stc_render_core_page_latest_guides( $slug ); ?>
 	<?php else : ?>

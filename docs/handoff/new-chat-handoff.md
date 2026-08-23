@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.12.0`
+Version: `0.13.0`
 
 Location:
 
@@ -159,6 +159,9 @@ Implemented:
 - Automatic table of contents for guide articles based on H2 sections.
 - Shared Guide card rendering for archive, search, and default post lists.
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
+- Core landing pages keep primary guide content before Saved Guides and category-matched latest posts.
+- Attraction Guides uses two columns on phones and three columns on tablets so cards remain readable.
+- Guide articles use a horizontal pre-content table of contents on mobile and the sidebar table of contents on desktop.
 - Core guide category setup on theme activation.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
@@ -182,7 +185,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.12.0`
+Version: `0.13.0`
 
 Location:
 
@@ -278,11 +281,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 21:55:26 +08:00
-Theme version: 0.12.0
-Theme SHA256: BDDD5A9A023A015CBDECBD56446C069EEAB3B5AC8F628557573B40517FC460B4
-Plugin version: 0.12.0
-Plugin SHA256: 79FA80737D87994DFE2AB5C6CE9AD1AB2CC1481CA7BAA86851DD06DF3CCC3CE3
+Generated: 2026-08-23 22:18:31 +08:00
+Theme version: 0.13.0
+Theme SHA256: 530A707F420B82D01919D1F931166CADA3289B7E9C23A9AFC827091020EA4F46
+Plugin version: 0.13.0
+Plugin SHA256: 9532E9FBAE842D1D7A640B0656221B7DB2F3D9265E1B0F16D4375C4AE314C07F
 ```
 
 Regenerate artifacts with:
@@ -347,6 +350,8 @@ The verification scripts protect:
 - selected homepage visual style assets and header states
 - structured Attraction Guide content modules
 - automatic guide article table of contents
+- content-first landing-page order and responsive attraction-card widths
+- mobile-before-content and desktop-sidebar table-of-contents states
 - shared Guide card rendering for archives and search
 - latest guide rendering on the three core content landing pages
 - latest guide rendering on the homepage

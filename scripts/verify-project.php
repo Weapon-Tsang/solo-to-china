@@ -99,7 +99,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.12.0') === false || strpos($packageScript, 'Plugin version: 0.12.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.13.0') === false || strpos($packageScript, 'Plugin version: 0.13.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -128,8 +128,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.12.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.12.0.';
+    if (strpos($themeStyle, 'Version: 0.13.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.13.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -142,7 +142,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.12.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.13.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -191,8 +191,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.12.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.12.0.';
+    if (strpos($functions, "'0.13.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.13.0.';
     }
     if (strpos($functions, 'stc_is_attraction_guide_post') === false) {
         $failures[] = 'Theme functions are missing the Attraction Guide post detector.';
@@ -308,6 +308,17 @@ if (is_file($pageTemplatePath)) {
     if (strpos($pageTemplate, 'stc-save-guide--image-card') === false) {
         $failures[] = 'Guide landing image cards do not keep the local save action.';
     }
+    foreach (['stc-page-primary', 'stc-saved-guides', 'stc_render_core_page_latest_guides'] as $landingToken) {
+        if (strpos($pageTemplate, $landingToken) === false) {
+            $failures[] = "Core landing page is missing content-first structure token: {$landingToken}";
+        }
+    }
+    $primaryContentIndex = strpos($pageTemplate, 'stc-page-primary');
+    $savedGuidesIndex = strpos($pageTemplate, '<section class="stc-saved-guides"');
+    $latestGuidesIndex = strpos($pageTemplate, 'stc_render_core_page_latest_guides');
+    if ($primaryContentIndex === false || $savedGuidesIndex === false || $latestGuidesIndex === false || $savedGuidesIndex <= $primaryContentIndex || $latestGuidesIndex <= $savedGuidesIndex) {
+        $failures[] = 'Core landing page does not keep primary content before Saved Guides and latest posts.';
+    }
 }
 
 $singleTemplatePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/single.php';
@@ -333,6 +344,9 @@ if (is_file($singleTemplatePath)) {
     }
     if (strpos($singleTemplate, 'stc-city-guide__checklist') === false) {
         $failures[] = 'Single template is missing the City Guide planning checklist.';
+    }
+    if (strpos($singleTemplate, 'stc-guide-toc--mobile') === false || strpos($singleTemplate, 'stc-guide-toc--desktop') === false) {
+        $failures[] = 'Guide article templates do not provide separate mobile and desktop table-of-contents positions.';
     }
     if (strpos($singleTemplate, 'stc-single--survival-kit') === false) {
         $failures[] = 'Single template is missing the Survival Kit article layout class.';
@@ -386,7 +400,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.12.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.13.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -394,11 +408,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.12.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.12.0.';
+    if (strpos($plugin, 'Version: 0.13.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.13.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.12.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.12.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.13.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.13.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -669,6 +683,11 @@ if (is_file($themeCssPath)) {
     if (strpos($themeCss, '.stc-guide-toc') === false) {
         $failures[] = 'Theme CSS is missing Guide table of contents styling.';
     }
+    foreach (['.stc-page-primary .stc-card-grid--attractions', '.stc-guide-toc--mobile', '.stc-guide-toc--desktop'] as $secondaryPageStyleToken) {
+        if (strpos($themeCss, $secondaryPageStyleToken) === false) {
+            $failures[] = "Theme CSS is missing secondary-page responsive style: {$secondaryPageStyleToken}";
+        }
+    }
     foreach (['.stc-guide-quick-facts', '.stc-guide-fact', '.stc-guide-warning', '.stc-guide-route'] as $guideClass) {
         if (strpos($themeCss, $guideClass) === false) {
             $failures[] = "Theme CSS is missing structured Attraction Guide content styling: {$guideClass}";
@@ -756,6 +775,9 @@ if (is_file($themeJsPath)) {
     }
     if (strpos($themeJs, 'data-stc-guide-toc-list') === false) {
         $failures[] = 'Theme JavaScript is missing the Guide table of contents list target.';
+    }
+    if (strpos($themeJs, "querySelectorAll('[data-stc-guide-toc]')") === false) {
+        $failures[] = 'Theme JavaScript does not populate both desktop and mobile Guide tables of contents.';
     }
     if (strpos($themeJs, 'navigator.share') === false) {
         $failures[] = 'Theme JavaScript is missing native page share behavior.';
