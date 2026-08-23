@@ -771,6 +771,95 @@ label:focus-visible {
 	line-height: 1.7;
 }
 
+.stc-guide-quick-facts {
+	background: #f3f8f5;
+	border-bottom: 1px solid #dce8e1;
+	border-top: 1px solid #dce8e1;
+	display: grid;
+	gap: 18px;
+	margin: 28px -32px 30px;
+	padding: 24px 32px;
+}
+
+.stc-guide-quick-facts h2,
+.stc-guide-warning h2,
+.stc-guide-route h2 {
+	margin-top: 0;
+}
+
+.stc-guide-facts-grid {
+	display: grid;
+	gap: 18px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stc-guide-fact {
+	border-top: 1px solid rgba(20, 107, 84, .18);
+	display: grid;
+	gap: 5px;
+	padding-top: 12px;
+}
+
+.stc-guide-fact p {
+	margin: 0;
+}
+
+.stc-guide-fact strong {
+	color: var(--stc-ink);
+	font-size: 14px;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.stc-guide-warning {
+	background: #fff9ee;
+	border-left: 4px solid var(--stc-gold);
+	margin: 28px 0;
+	padding: 18px 20px;
+}
+
+.stc-guide-warning p:last-child,
+.stc-guide-route ol:last-child {
+	margin-bottom: 0;
+}
+
+.stc-guide-route {
+	border-top: 1px solid var(--stc-line);
+	margin-top: 34px;
+	padding-top: 26px;
+}
+
+.stc-guide-route ol {
+	counter-reset: stc-route-step;
+	display: grid;
+	gap: 12px;
+	list-style: none;
+	padding-left: 0;
+}
+
+.stc-guide-route li {
+	align-items: start;
+	counter-increment: stc-route-step;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 32px 1fr;
+}
+
+.stc-guide-route li::before {
+	align-items: center;
+	background: var(--stc-green);
+	border-radius: 999px;
+	color: #fff;
+	content: counter(stc-route-step);
+	display: inline-flex;
+	font-size: 14px;
+	font-weight: 800;
+	height: 32px;
+	justify-content: center;
+	line-height: 1;
+	width: 32px;
+}
+
 .stc-attraction-guide__sidebar,
 .stc-city-guide__sidebar,
 .stc-survival-kit__sidebar {
@@ -1216,6 +1305,16 @@ label:focus-visible {
 	.stc-survival-kit__hero,
 	.stc-entry-content--guide {
 		padding: 24px;
+	}
+
+	.stc-guide-quick-facts {
+		margin-left: -24px;
+		margin-right: -24px;
+		padding: 22px 24px;
+	}
+
+	.stc-guide-facts-grid {
+		grid-template-columns: 1fr;
 	}
 
 	.stc-attraction-guide__sidebar,

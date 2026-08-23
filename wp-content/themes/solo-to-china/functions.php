@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.9.0' );
+define( 'STC_THEME_VERSION', '0.10.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -361,6 +361,19 @@ function stc_register_block_patterns() {
 	}
 
 	$attraction_guide_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the practical answer: who should visit, how much time to allow, and what travelers should decide before they go.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:group {"className":"stc-guide-quick-facts"} --><div class="wp-block-group stc-guide-quick-facts">'
+		. '<!-- wp:heading {"level":2} --><h2>At a glance</h2><!-- /wp:heading -->'
+		. '<!-- wp:group {"className":"stc-guide-facts-grid"} --><div class="wp-block-group stc-guide-facts-grid">'
+		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Best time</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Example: April-May or September-October for calmer weather and lighter crowds.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
+		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Time needed</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Example: 3-4 hours, half day, or full day depending on route and queues.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
+		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Reservation window</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Example: check tickets 7 days ahead, earlier during Chinese public holidays.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
+		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Passport note</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Explain whether foreign visitors need passport details, real-name booking, or ID checks at entry.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
+		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Best base area</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Name the easiest nearby district, metro area, or city base for first-time visitors.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
+		. '</div><!-- /wp:group --></div><!-- /wp:group -->'
+		. '<!-- wp:group {"className":"stc-guide-warning"} --><div class="wp-block-group stc-guide-warning">'
+		. '<!-- wp:heading {"level":2} --><h2>Before you book</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Call out the one or two decisions travelers should make before paying: ticket type, entry time, passport requirement, transport home, or weather risk.</p><!-- /wp:paragraph -->'
+		. '</div><!-- /wp:group -->'
 		. '<!-- wp:heading {"level":2} --><h2>Best time to visit</h2><!-- /wp:heading -->'
 		. '<!-- wp:paragraph --><p>Cover seasons, weather, crowd levels, photography windows, and when solo or first-time visitors should avoid peak pressure.</p><!-- /wp:paragraph -->'
 		. '<!-- wp:heading {"level":2} --><h2>How to get there</h2><!-- /wp:heading -->'
@@ -373,8 +386,10 @@ function stc_register_block_patterns() {
 		. '<!-- wp:paragraph --><p>Recommend the best nearby or connected areas for first-time visitors, with tradeoffs for price, transit, and late arrivals.</p><!-- /wp:paragraph -->'
 		. '<!-- wp:heading {"level":2} --><h2>Common mistakes</h2><!-- /wp:heading -->'
 		. '<!-- wp:paragraph --><p>Call out traps, confusing entrances, timing mistakes, overpacked routes, taxi issues, and holiday crowd risks.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:group {"className":"stc-guide-route"} --><div class="wp-block-group stc-guide-route">'
 		. '<!-- wp:heading {"level":2} --><h2>Suggested route</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Give a simple route order for a calm first visit, including where to start, where to pause, and how to exit.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:list {"ordered":true} --><ol><!-- wp:list-item --><li>Start with the easiest gate, metro exit, or visitor center for foreign travelers.</li><!-- /wp:list-item --><!-- wp:list-item --><li>Visit the must-see section before peak crowds or harsh weather.</li><!-- /wp:list-item --><!-- wp:list-item --><li>Add one slower stop for food, shade, views, or a clean restroom break.</li><!-- /wp:list-item --><!-- wp:list-item --><li>Exit through the transport-friendly side and avoid a late taxi bottleneck.</li><!-- /wp:list-item --></ol><!-- /wp:list -->'
+		. '</div><!-- /wp:group -->'
 		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
 		. '<!-- wp:paragraph --><p>Answer the most likely first-time visitor questions in short, direct blocks.</p><!-- /wp:paragraph -->';
 
