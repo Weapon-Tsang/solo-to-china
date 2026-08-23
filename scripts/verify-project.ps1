@@ -25,6 +25,22 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/assets/js/main.js",
     "wp-content/themes/solo-to-china/assets/images/hero-home.png",
     "wp-content/themes/solo-to-china/assets/images/guide-card-bg.png",
+    "wp-content/themes/solo-to-china/assets/images/card-beijing.png",
+    "wp-content/themes/solo-to-china/assets/images/card-shanghai.png",
+    "wp-content/themes/solo-to-china/assets/images/card-guangzhou.png",
+    "wp-content/themes/solo-to-china/assets/images/card-chengdu.png",
+    "wp-content/themes/solo-to-china/assets/images/card-chongqing.png",
+    "wp-content/themes/solo-to-china/assets/images/card-xian.png",
+    "wp-content/themes/solo-to-china/assets/images/card-hangzhou.png",
+    "wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-city.png",
+    "wp-content/themes/solo-to-china/assets/images/card-forbidden-city.png",
+    "wp-content/themes/solo-to-china/assets/images/card-great-wall.png",
+    "wp-content/themes/solo-to-china/assets/images/card-terracotta.png",
+    "wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-attraction.png",
+    "wp-content/themes/solo-to-china/assets/images/card-west-lake.png",
+    "wp-content/themes/solo-to-china/assets/images/card-disney.png",
+    "wp-content/themes/solo-to-china/assets/images/planner-art.png",
+    "wp-content/themes/solo-to-china/assets/images/ticket-art.png",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
     "wp-content/plugins/solo-to-china-tools/README.md",
     "wp-content/plugins/solo-to-china-tools/includes/attractions.php",
@@ -80,7 +96,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.10.0") -or (-not $PackageScript.Contains("Plugin version: 0.10.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.11.0") -or (-not $PackageScript.Contains("Plugin version: 0.11.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -109,8 +125,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.10.0")) {
-        $Failures.Add("Theme stylesheet header version is not 0.10.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.11.0")) {
+        $Failures.Add("Theme stylesheet header version is not 0.11.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -123,7 +139,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.10.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.11.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -174,8 +190,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.10.0'")) {
-        $Failures.Add("Theme asset version is not 0.10.0.")
+    if (-not $Functions.Contains("'0.11.0'")) {
+        $Failures.Add("Theme asset version is not 0.11.0.")
     }
     if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
         $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
@@ -240,6 +256,16 @@ foreach ($ThemePhpFile in $ThemePhpFiles) {
     }
 }
 
+$FooterPath = Join-Path $Root "wp-content/themes/solo-to-china/footer.php"
+if (Test-Path -LiteralPath $FooterPath -PathType Leaf) {
+    $Footer = Get-Content -LiteralPath $FooterPath -Raw
+    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__socials", "stc-footer__bottom", "Guest-first. Practical. Independent.")) {
+        if (-not $Footer.Contains($FooterToken)) {
+            $Failures.Add("Footer does not preserve the selected homepage-reference footer token: $FooterToken")
+        }
+    }
+}
+
 $PageTemplatePath = Join-Path $Root "wp-content/themes/solo-to-china/page.php"
 if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     $PageTemplate = Get-Content -LiteralPath $PageTemplatePath -Raw
@@ -274,6 +300,12 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     }
     if (-not $PageTemplate.Contains("stc_render_core_page_latest_guides")) {
         $Failures.Add("Core guide pages do not render latest published guide posts.")
+    }
+    if (-not $PageTemplate.Contains("stc-card-grid--cities") -or (-not $PageTemplate.Contains("stc-card-grid--attractions"))) {
+        $Failures.Add("City Guides and Attraction Guides landing pages do not use the homepage-reference image card grids.")
+    }
+    if (-not $PageTemplate.Contains("stc-save-guide--image-card")) {
+        $Failures.Add("Guide landing image cards do not keep the local save action.")
     }
 }
 
@@ -353,7 +385,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.10.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.11.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -361,11 +393,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.10.0")) {
-        $Failures.Add("Tools plugin header version is not 0.10.0.")
+    if (-not $Plugin.Contains("Version: 0.11.0")) {
+        $Failures.Add("Tools plugin header version is not 0.11.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.10.0'")) {
-        $Failures.Add("Tools plugin version constant is not 0.10.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.11.0'")) {
+        $Failures.Add("Tools plugin version constant is not 0.11.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -550,6 +582,21 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     }
     if (-not $ThemeCss.Contains("../images/guide-card-bg.png")) {
         $Failures.Add("Guide cards do not reference the generated card image asset.")
+    }
+    foreach ($ImageReference in @("card-beijing.png", "card-shanghai.png", "card-guangzhou.png", "card-chengdu.png", "card-forbidden-city.png", "card-great-wall.png", "card-disney.png", "planner-art.png", "ticket-art.png")) {
+        if (-not $ThemeCss.Contains($ImageReference)) {
+            $Failures.Add("Theme CSS is missing reference-style visual asset: $ImageReference")
+        }
+    }
+    foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner::after", ".stc-ticket-band::before")) {
+        if (-not $ThemeCss.Contains($StyleToken)) {
+            $Failures.Add("Theme CSS is missing selected homepage visual style token: $StyleToken")
+        }
+    }
+    foreach ($FooterStyleToken in @(".stc-footer__inner", ".stc-footer__socials", ".stc-footer__bottom")) {
+        if (-not $ThemeCss.Contains($FooterStyleToken)) {
+            $Failures.Add("Theme CSS is missing selected homepage-reference footer style token: $FooterStyleToken")
+        }
     }
     if ($ThemeCss.Contains("rgba(0, 0, 0, .72)")) {
         $Failures.Add("Homepage hero still uses the old heavy left-side black overlay.")

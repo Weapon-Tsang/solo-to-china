@@ -2,11 +2,12 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.10.0`.
+Current version: `0.11.0`.
 
 The theme owns:
 
 - Approved image-led homepage layout.
+- Homepage-reference visual system for landing pages, guide articles, image cards, header states, and CTA bands.
 - Fixed top-level IA navigation.
 - Survival Kit, City Guides, Attraction Guides, Planner, Tools, and FAQ landing-page presentation.
 - Local Saved Guides browser UI.

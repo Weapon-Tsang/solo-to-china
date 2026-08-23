@@ -36,14 +36,17 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.10.0`.
+Current theme version: `0.11.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
 - Transparent header over the hero image.
+- Non-home header uses the same brand/navigation language with readable dark text on a white surface.
 - Reduced hero copy density.
 - Survival Kit strip.
 - City Guides and Attraction Guides image cards.
+- Homepage-reference visual assets now provide distinct city and attraction card images, plus Planner and Ticket band art.
+- Core landing pages and guide article heroes now inherit the selected homepage visual style.
 - Planner band.
 - Homepage Planner CTA opens Trip.com as a sponsored external link.
 - Ticket Tool / Reminder band.
@@ -101,7 +104,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.10.0`.
+Current tools plugin version: `0.11.0`.
 
 The custom plugin owns the first tool only:
 

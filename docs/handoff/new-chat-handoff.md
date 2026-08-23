@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.10.0`
+Version: `0.11.0`
 
 Location:
 
@@ -132,7 +132,9 @@ wp-content/themes/solo-to-china/
 Implemented:
 
 - Approved image-led homepage direction.
+- Homepage-reference visual system applied across core landing pages, guide article heroes, image cards, header states, and CTA bands.
 - Transparent header over selected banner image.
+- Readable white-surface header on non-home pages.
 - Reduced hero text density.
 - Survival Kit strip.
 - City Guides image cards.
@@ -178,7 +180,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.10.0`
+Version: `0.11.0`
 
 Location:
 
@@ -274,11 +276,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 19:07:00 +08:00
-Theme version: 0.10.0
-Theme SHA256: 45C8912CD1CCD4B47E02B6EFB8E173F9CD79839354C9F6220BF6E836E75F8CE8
-Plugin version: 0.10.0
-Plugin SHA256: 18C630B7A11AEF3F8E5EE931417CB5E5187A4AE9979E110044203FA1133522D1
+Generated: 2026-08-23 20:33:06 +08:00
+Theme version: 0.11.0
+Theme SHA256: 478E3D66EF5C326B78B1E4CA425F0766D4A4E8FB49F07D7228E7722FA8344E18
+Plugin version: 0.11.0
+Plugin SHA256: 795720733E5BB0A6CCE5FDA0A3582CA30B734699A47E1DD1F89C8832048C220D
 ```
 
 Regenerate artifacts with:
@@ -340,6 +342,7 @@ The verification scripts protect:
 - fixed IA labels
 - banned transaction-first nav labels
 - theme/plugin version consistency
+- selected homepage visual style assets and header states
 - structured Attraction Guide content modules
 - automatic guide article table of contents
 - shared Guide card rendering for archives and search

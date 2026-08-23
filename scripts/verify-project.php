@@ -28,6 +28,22 @@ $requiredFiles = [
     'wp-content/themes/solo-to-china/assets/js/main.js',
     'wp-content/themes/solo-to-china/assets/images/hero-home.png',
     'wp-content/themes/solo-to-china/assets/images/guide-card-bg.png',
+    'wp-content/themes/solo-to-china/assets/images/card-beijing.png',
+    'wp-content/themes/solo-to-china/assets/images/card-shanghai.png',
+    'wp-content/themes/solo-to-china/assets/images/card-guangzhou.png',
+    'wp-content/themes/solo-to-china/assets/images/card-chengdu.png',
+    'wp-content/themes/solo-to-china/assets/images/card-chongqing.png',
+    'wp-content/themes/solo-to-china/assets/images/card-xian.png',
+    'wp-content/themes/solo-to-china/assets/images/card-hangzhou.png',
+    'wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-city.png',
+    'wp-content/themes/solo-to-china/assets/images/card-forbidden-city.png',
+    'wp-content/themes/solo-to-china/assets/images/card-great-wall.png',
+    'wp-content/themes/solo-to-china/assets/images/card-terracotta.png',
+    'wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-attraction.png',
+    'wp-content/themes/solo-to-china/assets/images/card-west-lake.png',
+    'wp-content/themes/solo-to-china/assets/images/card-disney.png',
+    'wp-content/themes/solo-to-china/assets/images/planner-art.png',
+    'wp-content/themes/solo-to-china/assets/images/ticket-art.png',
     'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php',
     'wp-content/plugins/solo-to-china-tools/README.md',
     'wp-content/plugins/solo-to-china-tools/includes/attractions.php',
@@ -83,7 +99,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.10.0') === false || strpos($packageScript, 'Plugin version: 0.10.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.11.0') === false || strpos($packageScript, 'Plugin version: 0.11.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -112,8 +128,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.10.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.10.0.';
+    if (strpos($themeStyle, 'Version: 0.11.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.11.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -126,7 +142,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.10.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.11.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -175,8 +191,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.10.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.10.0.';
+    if (strpos($functions, "'0.11.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.11.0.';
     }
     if (strpos($functions, 'stc_is_attraction_guide_post') === false) {
         $failures[] = 'Theme functions are missing the Attraction Guide post detector.';
@@ -241,6 +257,16 @@ foreach ($themePhpFiles as $themePhpFile) {
     }
 }
 
+$footerPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/footer.php';
+if (is_file($footerPath)) {
+    $footer = file_get_contents($footerPath);
+    foreach (['stc-footer__inner', 'stc-footer__socials', 'stc-footer__bottom', 'Guest-first. Practical. Independent.'] as $footerToken) {
+        if (strpos($footer, $footerToken) === false) {
+            $failures[] = "Footer does not preserve the selected homepage-reference footer token: {$footerToken}";
+        }
+    }
+}
+
 $pageTemplatePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/page.php';
 if (is_file($pageTemplatePath)) {
     $pageTemplate = file_get_contents($pageTemplatePath);
@@ -275,6 +301,12 @@ if (is_file($pageTemplatePath)) {
     }
     if (strpos($pageTemplate, 'stc_render_core_page_latest_guides') === false) {
         $failures[] = 'Core guide pages do not render latest published guide posts.';
+    }
+    if (strpos($pageTemplate, 'stc-card-grid--cities') === false || strpos($pageTemplate, 'stc-card-grid--attractions') === false) {
+        $failures[] = 'City Guides and Attraction Guides landing pages do not use the homepage-reference image card grids.';
+    }
+    if (strpos($pageTemplate, 'stc-save-guide--image-card') === false) {
+        $failures[] = 'Guide landing image cards do not keep the local save action.';
     }
 }
 
@@ -354,7 +386,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.10.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.11.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -362,11 +394,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.10.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.10.0.';
+    if (strpos($plugin, 'Version: 0.11.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.11.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.10.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.10.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.11.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.11.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -551,6 +583,21 @@ if (is_file($themeCssPath)) {
     }
     if (strpos($themeCss, '../images/guide-card-bg.png') === false) {
         $failures[] = 'Guide cards do not reference the generated card image asset.';
+    }
+    foreach (['card-beijing.png', 'card-shanghai.png', 'card-guangzhou.png', 'card-chengdu.png', 'card-forbidden-city.png', 'card-great-wall.png', 'card-disney.png', 'planner-art.png', 'ticket-art.png'] as $imageReference) {
+        if (strpos($themeCss, $imageReference) === false) {
+            $failures[] = "Theme CSS is missing reference-style visual asset: {$imageReference}";
+        }
+    }
+    foreach (['.home .stc-header', '.stc-header', 'box-shadow', '.stc-page-hero--visual', '.stc-planner::after', '.stc-ticket-band::before'] as $styleToken) {
+        if (strpos($themeCss, $styleToken) === false) {
+            $failures[] = "Theme CSS is missing selected homepage visual style token: {$styleToken}";
+        }
+    }
+    foreach (['.stc-footer__inner', '.stc-footer__socials', '.stc-footer__bottom'] as $footerStyleToken) {
+        if (strpos($themeCss, $footerStyleToken) === false) {
+            $failures[] = "Theme CSS is missing selected homepage-reference footer style token: {$footerStyleToken}";
+        }
     }
     if (strpos($themeCss, 'rgba(0, 0, 0, .72)') !== false) {
         $failures[] = 'Homepage hero still uses the old heavy left-side black overlay.';

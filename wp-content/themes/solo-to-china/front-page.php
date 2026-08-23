@@ -45,7 +45,7 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 <main id="main">
 	<section class="stc-hero">
 		<div class="stc-hero__content">
-			<h1>China, clearly planned</h1>
+			<h1>China,<br>clearly planned</h1>
 			<p>Practical tips for independent travel.</p>
 			<a class="stc-button stc-button--primary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Start your China journey</a>
 		</div>
@@ -127,13 +127,14 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 			<h2 id="ticket-title">Ticket Tool / Reminder</h2>
 			<p>Check attraction ticket dates and set a free reminder.</p>
 		</div>
-		<?php
-		if ( shortcode_exists( 'solo_to_china_ticket_tool' ) ) {
-			echo do_shortcode( '[solo_to_china_ticket_tool]' );
-		} else {
-			echo '<a class="stc-button stc-button--gold" href="' . esc_url( home_url( '/tools/' ) ) . '">Check ticket date / Set reminder</a>';
-		}
-		?>
+		<div class="stc-ticket-band__steps">
+			<p><strong>Check ticket date</strong><span>See availability and important notes.</span></p>
+			<p><strong>Set free reminder</strong><span>Get notified before your visit.</span></p>
+		</div>
+		<div class="stc-ticket-band__action">
+			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check ticket date / Set reminder</a>
+			<p>No login required. Free to use.</p>
+		</div>
 	</section>
 
 	<section class="stc-faq" aria-labelledby="faq-title">

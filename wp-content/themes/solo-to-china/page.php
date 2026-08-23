@@ -26,26 +26,26 @@ $core_pages = [
 		'title' => 'City Guides',
 		'copy'  => 'City hubs for planning where to stay, how to move, and what to do.',
 		'items' => [
-			[ 'title' => 'Beijing', 'copy' => 'History, culture, and classic first-trip routes.' ],
-			[ 'title' => 'Shanghai', 'copy' => 'Modern China, neighborhoods, food, and day trips.' ],
-			[ 'title' => 'Guangzhou', 'copy' => 'Food, trade culture, transit, and south China access.' ],
-			[ 'title' => 'Chengdu', 'copy' => 'Pandas, teahouses, Sichuan food, and slow travel.' ],
-			[ 'title' => 'Chongqing', 'copy' => 'River views, hotpot, hills, and night scenes.' ],
-			[ 'title' => "Xi'an", 'copy' => 'Ancient capital routes and Terracotta Warriors planning.' ],
-			[ 'title' => 'Hangzhou', 'copy' => 'West Lake, tea villages, and relaxed city breaks.' ],
-			[ 'title' => 'Zhangjiajie', 'copy' => 'Mountain routes, tickets, weather, and transport.' ],
+			[ 'title' => 'Beijing', 'copy' => 'History, culture, and classic first-trip routes.', 'class' => 'beijing' ],
+			[ 'title' => 'Shanghai', 'copy' => 'Modern China, neighborhoods, food, and day trips.', 'class' => 'shanghai' ],
+			[ 'title' => 'Guangzhou', 'copy' => 'Food, trade culture, transit, and south China access.', 'class' => 'guangzhou' ],
+			[ 'title' => 'Chengdu', 'copy' => 'Pandas, teahouses, Sichuan food, and slow travel.', 'class' => 'chengdu' ],
+			[ 'title' => 'Chongqing', 'copy' => 'River views, hotpot, hills, and night scenes.', 'class' => 'chongqing' ],
+			[ 'title' => "Xi'an", 'copy' => 'Ancient capital routes and Terracotta Warriors planning.', 'class' => 'xian' ],
+			[ 'title' => 'Hangzhou', 'copy' => 'West Lake, tea villages, and relaxed city breaks.', 'class' => 'hangzhou' ],
+			[ 'title' => 'Zhangjiajie', 'copy' => 'Mountain routes, tickets, weather, and transport.', 'class' => 'zhangjiajie' ],
 		],
 	],
 	'attraction-guides' => [
 		'title' => 'Attraction Guides',
 		'copy'  => 'Ticket timing, passport notes, best seasons, and practical visit planning.',
 		'items' => [
-			[ 'title' => 'Forbidden City', 'copy' => 'Booking required. Passport details matter.' ],
-			[ 'title' => 'Great Wall', 'copy' => 'Choose the right section and transport plan.' ],
-			[ 'title' => 'Terracotta Warriors', 'copy' => 'Plan museum time, city transfer, and ID checks.' ],
-			[ 'title' => 'Zhangjiajie', 'copy' => 'Weather, cable cars, route order, and ticket windows.' ],
-			[ 'title' => 'West Lake', 'copy' => 'Easy walks, boat options, and best viewing seasons.' ],
-			[ 'title' => 'Shanghai Disney Resort', 'copy' => 'Peak dates, passport notes, and booking timing.' ],
+			[ 'title' => 'Forbidden City', 'copy' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city' ],
+			[ 'title' => 'Great Wall', 'copy' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall' ],
+			[ 'title' => 'Terracotta Warriors', 'copy' => "Xi'an", 'tag' => 'Passport', 'class' => 'terracotta' ],
+			[ 'title' => 'Zhangjiajie', 'copy' => 'Hunan', 'tag' => 'Best time: Apr-Nov', 'class' => 'zhangjiajie' ],
+			[ 'title' => 'West Lake', 'copy' => 'Hangzhou', 'tag' => 'Best time: Mar-May', 'class' => 'west-lake' ],
+			[ 'title' => 'Shanghai Disney Resort', 'copy' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney' ],
 		],
 	],
 	'planner'           => [
@@ -73,15 +73,17 @@ $core_pages = [
 $page = $core_pages[ $slug ] ?? null;
 
 if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
-	function stc_render_save_guide_button( $item, $type ) {
-		echo '<button class="stc-save-guide" type="button" data-stc-save-guide data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $item['title'] ) ) . '" data-guide-type="' . esc_attr( $type ) . '" data-guide-title="' . esc_attr( $item['title'] ) . '" data-guide-copy="' . esc_attr( $item['copy'] ) . '">' . esc_html__( 'Save', 'solo-to-china' ) . '</button>';
+	function stc_render_save_guide_button( $item, $type, $is_image_card = false ) {
+		$button_class = $is_image_card ? 'stc-save-guide stc-save-guide--image-card' : 'stc-save-guide';
+
+		echo '<button class="' . esc_attr( $button_class ) . '" type="button" data-stc-save-guide data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $item['title'] ) ) . '" data-guide-type="' . esc_attr( $type ) . '" data-guide-title="' . esc_attr( $item['title'] ) . '" data-guide-copy="' . esc_attr( $item['copy'] ) . '">' . esc_html__( 'Save', 'solo-to-china' ) . '</button>';
 	}
 }
 ?>
 
 <main id="main" class="stc-main">
 	<?php if ( $page ) : ?>
-		<section class="stc-page-hero">
+		<section class="stc-page-hero stc-page-hero--visual stc-page-hero--<?php echo esc_attr( $slug ); ?>">
 			<p><?php esc_html_e( 'SoloToChina', 'solo-to-china' ); ?></p>
 			<h1><?php echo esc_html( $page['title'] ); ?></h1>
 			<span><?php echo esc_html( $page['copy'] ); ?></span>
@@ -125,12 +127,20 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 			</section>
 		<?php elseif ( in_array( $slug, [ 'city-guides', 'attraction-guides' ], true ) ) : ?>
 			<section class="stc-page-section">
-				<div class="stc-link-grid">
+				<div class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>">
 					<?php foreach ( $page['items'] as $item ) : ?>
-						<article class="stc-info-card">
-							<h2><?php echo esc_html( $item['title'] ); ?></h2>
-							<p><?php echo esc_html( $item['copy'] ); ?></p>
-							<?php stc_render_save_guide_button( $item, 'city-guides' === $slug ? 'City Guide' : 'Attraction Guide' ); ?>
+						<article class="stc-image-card stc-image-card--<?php echo esc_attr( $item['class'] ); ?>">
+							<span class="stc-image-card__media" aria-hidden="true"></span>
+							<?php if ( ! empty( $item['tag'] ) ) : ?>
+								<span class="stc-image-card__tag"><?php echo esc_html( $item['tag'] ); ?></span>
+							<?php endif; ?>
+							<a class="stc-image-card__link" href="<?php echo esc_url( get_permalink() ); ?>">
+								<span class="stc-image-card__content">
+									<strong><?php echo esc_html( $item['title'] ); ?></strong>
+									<span><?php echo esc_html( $item['copy'] ); ?></span>
+								</span>
+							</a>
+							<?php stc_render_save_guide_button( $item, 'city-guides' === $slug ? 'City Guide' : 'Attraction Guide', true ); ?>
 						</article>
 					<?php endforeach; ?>
 				</div>

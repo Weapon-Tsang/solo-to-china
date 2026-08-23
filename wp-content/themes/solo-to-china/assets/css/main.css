@@ -8,6 +8,8 @@
 	--stc-gold: #a97824;
 	--stc-radius: 8px;
 	--stc-max: 1240px;
+	--stc-card-shadow: 0 14px 34px rgba(17, 23, 20, .12);
+	--stc-soft-shadow: 0 18px 50px rgba(17, 23, 20, .08);
 }
 
 * {
@@ -16,7 +18,7 @@
 
 body {
 	margin: 0;
-	background: var(--stc-paper);
+	background: #fff;
 	color: var(--stc-ink);
 	font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -53,17 +55,32 @@ label:focus-visible {
 
 .stc-header {
 	align-items: center;
-	color: #fff;
+	background: rgba(255, 255, 255, .96);
+	border-bottom: 1px solid rgba(230, 235, 231, .9);
+	box-shadow: 0 12px 28px rgba(17, 23, 20, .06);
+	color: var(--stc-ink);
 	display: flex;
 	justify-content: space-between;
+	left: 0;
+	max-width: none;
+	padding: 18px max(32px, calc((100vw - var(--stc-max)) / 2 + 32px));
+	position: sticky;
+	top: 0;
+	transform: none;
+	width: 100%;
+	z-index: 10;
+}
+
+.home .stc-header {
+	background: transparent;
+	border-bottom: 0;
+	box-shadow: none;
+	color: #fff;
 	left: 50%;
 	max-width: var(--stc-max);
 	padding: 24px 32px;
 	position: absolute;
-	top: 0;
 	transform: translateX(-50%);
-	width: 100%;
-	z-index: 10;
 }
 
 .stc-brand {
@@ -76,13 +93,13 @@ label:focus-visible {
 .stc-brand__mark {
 	align-items: center;
 	background: var(--stc-red);
-	border-radius: 5px;
+	border-radius: 4px;
 	display: inline-flex;
 	font-size: 10px;
-	height: 28px;
+	height: 22px;
 	justify-content: center;
 	letter-spacing: .06em;
-	width: 28px;
+	width: 22px;
 }
 
 .stc-brand__name {
@@ -99,20 +116,39 @@ label:focus-visible {
 .stc-nav__link {
 	font-size: 14px;
 	font-weight: 700;
+	position: relative;
+}
+
+.stc-nav__link:hover::after,
+.stc-nav__link:focus-visible::after,
+.home .stc-nav__link:first-child::after {
+	background: currentColor;
+	bottom: -6px;
+	content: "";
+	height: 2px;
+	left: 0;
+	position: absolute;
+	width: 100%;
 }
 
 .stc-menu-toggle {
 	align-items: center;
-	background: rgba(255, 255, 255, .12);
-	border: 1px solid rgba(255, 255, 255, .34);
+	background: #fff;
+	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
-	color: #fff;
+	color: var(--stc-ink);
 	cursor: pointer;
 	display: none;
 	height: 42px;
 	justify-content: center;
 	padding: 0;
 	width: 42px;
+}
+
+.home .stc-menu-toggle {
+	background: rgba(255, 255, 255, .12);
+	border-color: rgba(255, 255, 255, .34);
+	color: #fff;
 }
 
 .stc-menu-toggle__line {
@@ -144,36 +180,32 @@ label:focus-visible {
 
 .stc-hero {
 	background:
-		linear-gradient(180deg, rgba(5, 15, 18, .34), rgba(5, 15, 18, .08) 36%, rgba(5, 15, 18, .22)),
-		linear-gradient(90deg, rgba(5, 15, 18, .34), rgba(5, 15, 18, .05) 48%, transparent),
+		linear-gradient(180deg, rgba(5, 15, 18, .28), rgba(5, 15, 18, .03) 40%, rgba(5, 15, 18, .08)),
+		linear-gradient(90deg, rgba(5, 15, 18, .56), rgba(5, 15, 18, .16) 48%, transparent),
 		url("../images/hero-home.png") center / cover no-repeat,
 		linear-gradient(135deg, #12392f, #b76a35 48%, #d9e6ef);
-	min-height: 720px;
+	min-height: clamp(460px, 53vw, 720px);
 	position: relative;
 }
 
 .stc-hero::after {
-	background:
-		radial-gradient(circle at 73% 47%, rgba(255,255,255,.32) 0 8%, transparent 9%),
-		linear-gradient(145deg, transparent 0 55%, rgba(255,255,255,.16) 56% 57%, transparent 58%),
-		linear-gradient(25deg, transparent 0 42%, rgba(44, 20, 8, .42) 43% 50%, transparent 51%);
 	content: "";
-	inset: 0;
+	display: none;
 	position: absolute;
 }
 
 .stc-hero__content {
 	color: #fff;
 	left: calc((100vw - min(var(--stc-max), 100vw)) / 2 + 32px);
-	max-width: 560px;
+	max-width: 720px;
 	position: absolute;
-	top: 190px;
+	top: clamp(132px, 14vw, 190px);
 	z-index: 1;
 }
 
 .stc-hero h1 {
 	font-family: Georgia, "Times New Roman", serif;
-	font-size: clamp(54px, 7vw, 92px);
+	font-size: clamp(54px, 7.2vw, 92px);
 	letter-spacing: 0;
 	line-height: .96;
 	margin: 0 0 20px;
@@ -190,6 +222,7 @@ label:focus-visible {
 	border-radius: var(--stc-radius);
 	display: inline-flex;
 	font-weight: 800;
+	gap: 9px;
 	justify-content: center;
 	min-height: 48px;
 	padding: 0 22px;
@@ -221,6 +254,24 @@ label:focus-visible {
 	padding: 54px 32px;
 }
 
+.home .stc-survival {
+	background: #fff;
+	border-bottom: 1px solid rgba(230, 235, 231, .85);
+	box-shadow: var(--stc-soft-shadow);
+	max-width: none;
+	padding: 0 32px;
+}
+
+.home .stc-survival h2 {
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
 .stc-survival__grid {
 	background: #fff;
 	border: 1px solid var(--stc-line);
@@ -229,13 +280,20 @@ label:focus-visible {
 	grid-template-columns: repeat(5, 1fr);
 }
 
+.home .stc-survival__grid {
+	border: 0;
+	border-radius: 0;
+	margin: 0 auto;
+	max-width: var(--stc-max);
+}
+
 .stc-survival-card {
 	align-items: center;
 	border-right: 1px solid var(--stc-line);
 	display: grid;
 	gap: 8px;
 	justify-items: center;
-	min-height: 150px;
+	min-height: 138px;
 	padding: 24px;
 	text-align: center;
 }
@@ -267,13 +325,17 @@ label:focus-visible {
 
 .stc-survival-card span:last-child,
 .stc-section__header a,
-.stc-image-card span,
 .stc-planner p,
 .stc-ticket-band p,
 .stc-footer p,
 .stc-footer a {
 	color: var(--stc-muted);
 	font-size: 14px;
+}
+
+.stc-survival-card strong {
+	font-size: 14px;
+	white-space: nowrap;
 }
 
 .stc-section__header {
@@ -296,7 +358,7 @@ label:focus-visible {
 
 .stc-card-grid {
 	display: grid;
-	gap: 18px;
+	gap: 20px;
 }
 
 .stc-card-grid--cities {
@@ -309,26 +371,34 @@ label:focus-visible {
 
 .stc-image-card {
 	border-radius: var(--stc-radius);
+	box-shadow: var(--stc-card-shadow);
 	color: #fff;
 	display: block;
-	min-height: 250px;
+	min-height: 0;
 	overflow: hidden;
 	padding: 16px;
 	position: relative;
 }
 
+.stc-card-grid--cities .stc-image-card {
+	aspect-ratio: 1 / 1.04;
+}
+
 .stc-card-grid--attractions .stc-image-card {
-	min-height: 280px;
+	aspect-ratio: 2 / 3;
+	min-height: 0;
 }
 
 .stc-image-card__media {
 	background:
-		linear-gradient(180deg, rgba(0, 0, 0, .02), rgba(0, 0, 0, .76)),
-		url("../images/guide-card-bg.png") center / cover no-repeat,
+		linear-gradient(180deg, rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .76)),
+		var(--stc-card-image, url("../images/guide-card-bg.png")) center / cover no-repeat,
 		linear-gradient(135deg, #a14937, #2f6f68);
 	inset: 0;
+	pointer-events: none;
 	position: absolute;
 	transition: transform .35s ease;
+	z-index: 0;
 }
 
 .stc-image-card:hover .stc-image-card__media {
@@ -340,61 +410,119 @@ label:focus-visible {
 	display: block;
 	inset: 0;
 	position: absolute;
-	z-index: 1;
+	text-decoration: none;
+	z-index: 2;
 }
 
-.stc-image-card--shanghai .stc-image-card__media,
-.stc-image-card--chongqing .stc-image-card__media,
-.stc-image-card--disney .stc-image-card__media {
-	background-image: linear-gradient(180deg, rgba(0, 0, 0, .02), rgba(0, 0, 0, .82)), url("../images/guide-card-bg.png"), linear-gradient(135deg, #284e6a, #111714);
-	background-position: center;
-	background-size: cover;
+.stc-image-card--beijing {
+	--stc-card-image: url("../images/card-beijing.png");
 }
 
-.stc-image-card--chengdu .stc-image-card__media,
-.stc-image-card--hangzhou .stc-image-card__media,
-.stc-image-card--west-lake .stc-image-card__media {
-	background-image: linear-gradient(180deg, rgba(0, 0, 0, .02), rgba(0, 0, 0, .76)), url("../images/guide-card-bg.png"), linear-gradient(135deg, #214f39, #8fb092);
-	background-position: center;
-	background-size: cover;
+.stc-image-card--shanghai {
+	--stc-card-image: url("../images/card-shanghai.png");
 }
 
-.stc-image-card--great-wall .stc-image-card__media,
-.stc-image-card--zhangjiajie .stc-image-card__media {
-	background-image: linear-gradient(180deg, rgba(0, 0, 0, .02), rgba(0, 0, 0, .8)), url("../images/guide-card-bg.png"), linear-gradient(135deg, #38583c, #b5c7d8);
-	background-position: center;
-	background-size: cover;
+.stc-image-card--guangzhou {
+	--stc-card-image: url("../images/card-guangzhou.png");
+}
+
+.stc-image-card--chengdu {
+	--stc-card-image: url("../images/card-chengdu.png");
+}
+
+.stc-image-card--chongqing {
+	--stc-card-image: url("../images/card-chongqing.png");
+}
+
+.stc-image-card--xian {
+	--stc-card-image: url("../images/card-xian.png");
+}
+
+.stc-image-card--hangzhou {
+	--stc-card-image: url("../images/card-hangzhou.png");
+}
+
+.stc-card-grid--cities .stc-image-card--zhangjiajie {
+	--stc-card-image: url("../images/card-zhangjiajie-city.png");
+}
+
+.stc-image-card--forbidden-city {
+	--stc-card-image: url("../images/card-forbidden-city.png");
+}
+
+.stc-image-card--great-wall {
+	--stc-card-image: url("../images/card-great-wall.png");
+}
+
+.stc-image-card--terracotta {
+	--stc-card-image: url("../images/card-terracotta.png");
+}
+
+.stc-card-grid--attractions .stc-image-card--zhangjiajie {
+	--stc-card-image: url("../images/card-zhangjiajie-attraction.png");
+}
+
+.stc-image-card--west-lake {
+	--stc-card-image: url("../images/card-west-lake.png");
+}
+
+.stc-image-card--disney {
+	--stc-card-image: url("../images/card-disney.png");
 }
 
 .stc-image-card__content {
 	bottom: 16px;
+	color: #fff;
 	display: grid;
 	gap: 4px;
 	left: 16px;
 	position: absolute;
 	right: 16px;
-	z-index: 1;
+	text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+	z-index: 2;
 }
 
 .stc-image-card__content strong {
+	color: #fff;
 	font-family: Georgia, "Times New Roman", serif;
-	font-size: 24px;
+	font-size: clamp(20px, 1.8vw, 24px);
+	line-height: 1.05;
 }
 
 .stc-image-card__content span {
 	color: rgba(255, 255, 255, .86);
+	font-size: 13px;
+	line-height: 1.2;
+}
+
+.stc-card-grid--attractions .stc-image-card__content {
+	bottom: 14px;
+	gap: 3px;
+	left: 12px;
+	right: 12px;
+}
+
+.stc-card-grid--attractions .stc-image-card__content strong {
+	font-size: clamp(16px, 1.3vw, 18px);
+	line-height: 1.08;
+}
+
+.stc-card-grid--attractions .stc-image-card__content span {
+	font-size: 12px;
 }
 
 .stc-image-card__tag {
-	background: rgba(255,255,255,.82);
+	background: rgba(15, 21, 19, .58);
 	border-radius: 5px;
-	color: var(--stc-ink);
-	font-size: 12px;
+	color: #fff;
+	font-size: 11px;
 	font-weight: 800;
-	padding: 6px 8px;
+	left: 10px;
+	line-height: 1;
+	padding: 6px 7px;
 	position: absolute;
-	top: 12px;
-	z-index: 2;
+	top: 10px;
+	z-index: 3;
 }
 
 .stc-save-guide--image-card {
@@ -402,10 +530,17 @@ label:focus-visible {
 	border-color: rgba(255, 255, 255, .7);
 	box-shadow: 0 10px 26px rgba(0, 0, 0, .16);
 	color: var(--stc-ink);
+	opacity: 0;
 	position: absolute;
 	right: 12px;
 	top: 12px;
-	z-index: 3;
+	transition: opacity .2s ease;
+	z-index: 4;
+}
+
+.stc-image-card:hover .stc-save-guide--image-card,
+.stc-save-guide--image-card:focus-visible {
+	opacity: 1;
 }
 
 .stc-image-card__tag + .stc-image-card__link + .stc-save-guide--image-card {
@@ -419,14 +554,108 @@ label:focus-visible {
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
 	display: grid;
-	grid-template-columns: 1fr 1.3fr;
+	gap: 28px;
+	grid-template-columns: .9fr 1fr;
 	margin-bottom: 24px;
 	margin-top: 24px;
+	min-height: 148px;
+	overflow: hidden;
+	padding: 28px 42px;
+	position: relative;
+}
+
+.stc-planner::after {
+	background: url("../images/planner-art.png") center / contain no-repeat;
+	content: "";
+	inset: 24px 28px 24px auto;
+	opacity: .68;
+	position: absolute;
+	width: 220px;
+}
+
+.stc-planner > * {
+	position: relative;
+	z-index: 1;
+}
+
+.stc-planner > div:last-child {
+	border-left: 1px solid rgba(20, 107, 84, .18);
+	display: grid;
+	gap: 8px;
+	padding-left: 40px;
+	padding-right: 220px;
+}
+
+.stc-planner span {
+	color: var(--stc-muted);
+	font-size: 14px;
+}
+
+.stc-planner strong {
+	color: #2474e8;
+	font-size: 42px;
+	line-height: 1;
 }
 
 .stc-ticket-band {
 	background: #fff6e8;
-	grid-template-columns: 1fr 2fr;
+	border-color: #efd8b4;
+	grid-template-columns: 1fr 1fr auto;
+}
+
+.stc-ticket-band::before {
+	background: url("../images/ticket-art.png") center / contain no-repeat;
+	content: "";
+	height: 88px;
+	left: 42px;
+	opacity: .88;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 124px;
+}
+
+.stc-ticket-band > * {
+	position: relative;
+	z-index: 1;
+}
+
+.stc-ticket-band > div:first-child {
+	padding-left: 140px;
+}
+
+.stc-ticket-band h2 {
+	color: var(--stc-gold);
+	font-size: 28px;
+	line-height: 1.05;
+	text-transform: uppercase;
+}
+
+.stc-ticket-band__steps {
+	border-left: 1px solid rgba(169, 120, 36, .22);
+	display: grid;
+	gap: 14px;
+	padding-left: 36px;
+}
+
+.stc-ticket-band__steps p,
+.stc-ticket-band__action {
+	display: grid;
+	gap: 4px;
+}
+
+.stc-ticket-band__steps strong {
+	color: var(--stc-ink);
+	font-size: 14px;
+}
+
+.stc-ticket-band__steps span {
+	color: var(--stc-muted);
+	font-size: 13px;
+}
+
+.stc-ticket-band__action {
+	justify-items: end;
 }
 
 .stc-faq__grid {
@@ -443,7 +672,7 @@ label:focus-visible {
 }
 
 .stc-main {
-	padding-top: 92px;
+	padding-top: 0;
 }
 
 .stc-content {
@@ -474,6 +703,41 @@ label:focus-visible {
 	display: grid;
 	gap: 14px;
 	padding-bottom: 40px;
+}
+
+.stc-page-hero--visual {
+	background:
+		linear-gradient(90deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .88) 55%, rgba(255, 255, 255, .56)),
+		var(--stc-page-hero-image, url("../images/guide-card-bg.png")) right center / auto 100% no-repeat;
+	border-bottom: 1px solid var(--stc-line);
+	max-width: none;
+	padding: 86px max(32px, calc((100vw - var(--stc-max)) / 2 + 32px)) 52px;
+}
+
+.stc-page-hero--survival-kit {
+	--stc-page-hero-image: url("../images/card-beijing.png");
+}
+
+.stc-page-hero--city-guides {
+	--stc-page-hero-image: url("../images/card-shanghai.png");
+}
+
+.stc-page-hero--attraction-guides {
+	--stc-page-hero-image: url("../images/card-forbidden-city.png");
+}
+
+.stc-page-hero--planner {
+	--stc-page-hero-image: url("../images/planner-art.png");
+	background-color: #eef6f2;
+}
+
+.stc-page-hero--tools {
+	--stc-page-hero-image: url("../images/ticket-art.png");
+	background-color: #fff6e8;
+}
+
+.stc-page-hero--faq {
+	--stc-page-hero-image: url("../images/card-hangzhou.png");
 }
 
 .stc-page-hero p {
@@ -533,6 +797,7 @@ label:focus-visible {
 	background: #fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
+	box-shadow: 0 10px 24px rgba(17, 23, 20, .04);
 	display: grid;
 	gap: 12px;
 	padding: 18px;
@@ -662,6 +927,7 @@ label:focus-visible {
 	background: #fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
+	box-shadow: 0 10px 28px rgba(17, 23, 20, .05);
 	display: grid;
 	gap: 12px;
 	min-height: 190px;
@@ -692,12 +958,28 @@ label:focus-visible {
 .stc-attraction-guide__hero,
 .stc-city-guide__hero,
 .stc-survival-kit__hero {
-	background: #fff;
+	background:
+		linear-gradient(90deg, rgba(255,255,255,.98), rgba(255,255,255,.9) 58%, rgba(255,255,255,.64)),
+		var(--stc-article-hero-image, url("../images/guide-card-bg.png")) right center / auto 100% no-repeat,
+		#fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
+	box-shadow: var(--stc-soft-shadow);
 	display: grid;
 	gap: 12px;
 	padding: 30px;
+}
+
+.stc-single--attraction-guide {
+	--stc-article-hero-image: url("../images/card-forbidden-city.png");
+}
+
+.stc-single--city-guide {
+	--stc-article-hero-image: url("../images/card-beijing.png");
+}
+
+.stc-single--survival-kit {
+	--stc-article-hero-image: url("../images/card-hangzhou.png");
 }
 
 .stc-attraction-guide__eyebrow,
@@ -747,6 +1029,7 @@ label:focus-visible {
 	background: #fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
+	box-shadow: 0 10px 30px rgba(17, 23, 20, .05);
 	color: var(--stc-ink);
 	padding: 32px;
 }
@@ -1191,12 +1474,21 @@ label:focus-visible {
 }
 
 .stc-footer {
-	background: #0f1513;
+	background: radial-gradient(circle at 100% 0, rgba(255, 255, 255, .08), transparent 34%), #0f1513;
 	color: #fff;
+	padding: 0 max(32px, calc((100vw - var(--stc-max)) / 2 + 32px));
+}
+
+.stc-footer__inner {
 	display: grid;
-	gap: 36px;
-	grid-template-columns: 2fr 1fr 1fr 1fr;
-	padding: 56px max(32px, calc((100vw - var(--stc-max)) / 2 + 32px));
+	gap: 48px;
+	grid-template-columns: 2.15fr 1fr 1fr 1fr 1.25fr;
+	padding: 48px 0 34px;
+}
+
+.stc-footer__brand p {
+	line-height: 1.55;
+	max-width: 260px;
 }
 
 .stc-footer h2 {
@@ -1209,7 +1501,70 @@ label:focus-visible {
 	margin: 8px 0;
 }
 
-@media (max-width: 900px) {
+.stc-footer__column a {
+	text-decoration: none;
+}
+
+.stc-footer__column a:hover,
+.stc-footer__column a:focus-visible {
+	color: #fff;
+}
+
+.stc-footer__socials {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 22px;
+}
+
+.stc-footer__social {
+	align-items: center;
+	color: #fff;
+	display: inline-flex;
+	height: 22px;
+	justify-content: center;
+	opacity: .92;
+	width: 22px;
+}
+
+.stc-footer__social svg {
+	fill: none;
+	height: 20px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 20px;
+}
+
+.stc-footer__bottom {
+	align-items: center;
+	border-top: 1px solid rgba(255, 255, 255, .1);
+	display: grid;
+	gap: 16px;
+	grid-template-columns: 1fr auto auto;
+	padding: 18px 0 22px;
+}
+
+.stc-footer__bottom p {
+	margin: 0;
+}
+
+.stc-footer__seal {
+	align-items: center;
+	background: var(--stc-red);
+	border-radius: 4px;
+	color: #fff;
+	display: inline-flex;
+	font-size: 10px;
+	font-weight: 800;
+	height: 28px;
+	justify-content: center;
+	letter-spacing: .06em;
+	width: 28px;
+}
+
+@media (max-width: 760px) {
 	.stc-section__header {
 		align-items: flex-start;
 		flex-direction: column;
@@ -1227,15 +1582,24 @@ label:focus-visible {
 		padding: 18px 20px;
 	}
 
+	.home .stc-header {
+		left: 0;
+		max-width: none;
+		padding: 18px 20px;
+		transform: none;
+	}
+
 	.stc-menu-toggle {
 		display: inline-flex;
 		position: relative;
 	}
 
 	.stc-nav {
-		background: rgba(15, 21, 19, .94);
-		border: 1px solid rgba(255, 255, 255, .14);
+		background: rgba(255, 255, 255, .98);
+		border: 1px solid var(--stc-line);
 		border-radius: var(--stc-radius);
+		box-shadow: var(--stc-soft-shadow);
+		color: var(--stc-ink);
 		display: none;
 		grid-column: 1 / -1;
 		grid-template-columns: 1fr;
@@ -1243,6 +1607,12 @@ label:focus-visible {
 		margin-top: 14px;
 		padding: 16px;
 		width: 100%;
+	}
+
+	.home .stc-nav {
+		background: rgba(15, 21, 19, .94);
+		border-color: rgba(255, 255, 255, .14);
+		color: #fff;
 	}
 
 	.stc-header.is-menu-open .stc-nav {
@@ -1262,8 +1632,6 @@ label:focus-visible {
 	}
 
 	.stc-survival__grid,
-	.stc-card-grid--cities,
-	.stc-card-grid--attractions,
 	.stc-link-grid,
 	.stc-link-grid--five,
 	.stc-feature-panel,
@@ -1271,13 +1639,99 @@ label:focus-visible {
 	.stc-planner,
 	.stc-ticket-band,
 	.stc-faq__grid,
-	.stc-footer {
+	.stc-footer__inner {
 		grid-template-columns: 1fr;
+	}
+
+	.stc-card-grid--cities,
+	.stc-card-grid--attractions {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.stc-card-grid--cities .stc-image-card,
+	.stc-card-grid--attractions .stc-image-card {
+		aspect-ratio: 1 / 1.16;
 	}
 
 	.stc-survival-card {
 		border-bottom: 1px solid var(--stc-line);
 		border-right: 0;
+	}
+
+	.home .stc-survival {
+		padding: 0 20px;
+	}
+
+	.stc-page-hero--visual {
+		background:
+			linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .94)),
+			var(--stc-page-hero-image, url("../images/guide-card-bg.png")) right top / 220px auto no-repeat;
+		padding: 62px 24px 38px;
+	}
+
+	.stc-planner,
+	.stc-ticket-band {
+		gap: 18px;
+		padding: 28px 24px;
+	}
+
+	.stc-planner::after {
+		inset: auto 16px 16px auto;
+		opacity: .22;
+		width: 160px;
+	}
+
+	.stc-planner > div:last-child {
+		border-left: 0;
+		border-top: 1px solid rgba(20, 107, 84, .18);
+		padding: 18px 0 0;
+	}
+
+	.stc-planner strong {
+		font-size: 34px;
+	}
+
+	.stc-ticket-band::before {
+		height: 68px;
+		left: auto;
+		opacity: .16;
+		right: 18px;
+		top: 24px;
+		transform: none;
+		width: 96px;
+	}
+
+	.stc-ticket-band > div:first-child {
+		padding-left: 0;
+	}
+
+	.stc-ticket-band__steps {
+		border-left: 0;
+		border-top: 1px solid rgba(169, 120, 36, .22);
+		padding: 18px 0 0;
+	}
+
+	.stc-ticket-band__action {
+		justify-items: start;
+	}
+
+	.stc-save-guide--image-card {
+		opacity: 1;
+	}
+
+	.stc-footer {
+		padding: 0 20px;
+	}
+
+	.stc-footer__inner {
+		gap: 26px;
+		padding: 38px 0 28px;
+	}
+
+	.stc-footer__bottom {
+		align-items: start;
+		grid-template-columns: 1fr;
+		justify-items: start;
 	}
 
 	.stc-saved-guides__header {
