@@ -285,7 +285,64 @@
 		});
 	}
 
+	function stcTocSlug(text, index) {
+		var slug = String(text || '')
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-|-$/g, '');
+
+		return slug || 'section-' + (index + 1);
+	}
+
+	function stcGuideToc() {
+		var toc = document.querySelector('[data-stc-guide-toc]');
+		var list = document.querySelector('[data-stc-guide-toc-list]');
+		var content = document.querySelector('.stc-entry-content--guide');
+
+		if (!toc || !list || !content) {
+			return;
+		}
+
+		var headings = Array.prototype.slice.call(content.querySelectorAll('h2')).filter(function (heading) {
+			return stcClampText(heading.textContent, 80);
+		});
+
+		if (!headings.length) {
+			toc.hidden = true;
+			return;
+		}
+
+		var usedIds = {};
+		var fragment = document.createDocumentFragment();
+
+		headings.forEach(function (heading, index) {
+			var baseId = heading.id || stcTocSlug(heading.textContent, index);
+			var id = baseId;
+			var count = 2;
+			var existing = document.getElementById(id);
+
+			while (usedIds[id] || (existing && existing !== heading)) {
+				id = baseId + '-' + count;
+				count += 1;
+				existing = document.getElementById(id);
+			}
+
+			usedIds[id] = true;
+			heading.id = id;
+
+			var item = document.createElement('li');
+			var link = document.createElement('a');
+			link.href = '#' + id;
+			link.textContent = stcClampText(heading.textContent, 80);
+			item.append(link);
+			fragment.append(item);
+		});
+
+		list.replaceChildren(fragment);
+	}
+
 	stcMobileNav();
 	stcSavedGuides();
 	stcPageShare();
+	stcGuideToc();
 })();

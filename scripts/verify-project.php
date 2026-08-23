@@ -83,7 +83,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.8.0') === false || strpos($packageScript, 'Plugin version: 0.8.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.9.0') === false || strpos($packageScript, 'Plugin version: 0.9.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -112,8 +112,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.8.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.8.0.';
+    if (strpos($themeStyle, 'Version: 0.9.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.9.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -126,7 +126,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.8.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.9.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -175,8 +175,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.8.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.8.0.';
+    if (strpos($functions, "'0.9.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.9.0.';
     }
     if (strpos($functions, 'stc_is_attraction_guide_post') === false) {
         $failures[] = 'Theme functions are missing the Attraction Guide post detector.';
@@ -192,6 +192,9 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     }
     if (strpos($functions, 'stc_render_guide_card') === false) {
         $failures[] = 'Theme functions are missing the shared Guide card renderer.';
+    }
+    if (strpos($functions, 'stc_render_guide_toc') === false) {
+        $failures[] = 'Theme functions are missing the shared Guide table of contents renderer.';
     }
     if (strpos($functions, 'stc_render_core_page_latest_guides') === false) {
         $failures[] = 'Theme functions are missing the core page latest guides renderer.';
@@ -300,6 +303,9 @@ if (is_file($singleTemplatePath)) {
     if (strpos($singleTemplate, 'stc-survival-kit__checklist') === false) {
         $failures[] = 'Single template is missing the Survival Kit planning checklist.';
     }
+    if (strpos($singleTemplate, 'stc_render_guide_toc') === false) {
+        $failures[] = 'Single guide templates do not render the automatic table of contents.';
+    }
     foreach (['Best time', 'Transport', 'Ticket price', 'Booking window', 'Where to stay', 'Common mistakes'] as $guideTopic) {
         if (strpos($singleTemplate, $guideTopic) === false) {
             $failures[] = "Attraction Guide template is missing planning topic: {$guideTopic}";
@@ -343,7 +349,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.8.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.9.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -351,11 +357,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.8.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.8.0.';
+    if (strpos($plugin, 'Version: 0.9.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.9.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.8.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.8.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.9.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.9.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -589,6 +595,9 @@ if (is_file($themeCssPath)) {
     if (strpos($themeCss, '.stc-home-latest') === false) {
         $failures[] = 'Theme CSS is missing homepage latest guides styling.';
     }
+    if (strpos($themeCss, '.stc-guide-toc') === false) {
+        $failures[] = 'Theme CSS is missing Guide table of contents styling.';
+    }
     if (strpos($themeCss, '.stc-single--attraction-guide') === false) {
         $failures[] = 'Theme CSS is missing the Attraction Guide single layout.';
     }
@@ -662,6 +671,12 @@ if (is_file($themeJsPath)) {
     }
     if (strpos($themeJs, 'stcGuideType') === false) {
         $failures[] = 'Theme JavaScript does not validate imported saved guide types.';
+    }
+    if (strpos($themeJs, 'stcGuideToc') === false) {
+        $failures[] = 'Theme JavaScript is missing the automatic Guide table of contents controller.';
+    }
+    if (strpos($themeJs, 'data-stc-guide-toc-list') === false) {
+        $failures[] = 'Theme JavaScript is missing the Guide table of contents list target.';
     }
     if (strpos($themeJs, 'navigator.share') === false) {
         $failures[] = 'Theme JavaScript is missing native page share behavior.';

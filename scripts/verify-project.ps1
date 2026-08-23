@@ -80,7 +80,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.8.0") -or (-not $PackageScript.Contains("Plugin version: 0.8.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.9.0") -or (-not $PackageScript.Contains("Plugin version: 0.9.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -109,8 +109,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.8.0")) {
-        $Failures.Add("Theme stylesheet header version is not 0.8.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.9.0")) {
+        $Failures.Add("Theme stylesheet header version is not 0.9.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -123,7 +123,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.8.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.9.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -174,8 +174,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.8.0'")) {
-        $Failures.Add("Theme asset version is not 0.8.0.")
+    if (-not $Functions.Contains("'0.9.0'")) {
+        $Failures.Add("Theme asset version is not 0.9.0.")
     }
     if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
         $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
@@ -191,6 +191,9 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     }
     if (-not $Functions.Contains("stc_render_guide_card")) {
         $Failures.Add("Theme functions are missing the shared Guide card renderer.")
+    }
+    if (-not $Functions.Contains("stc_render_guide_toc")) {
+        $Failures.Add("Theme functions are missing the shared Guide table of contents renderer.")
     }
     if (-not $Functions.Contains("stc_render_core_page_latest_guides")) {
         $Failures.Add("Theme functions are missing the core page latest guides renderer.")
@@ -299,6 +302,9 @@ if (Test-Path -LiteralPath $SingleTemplatePath -PathType Leaf) {
     if (-not $SingleTemplate.Contains("stc-survival-kit__checklist")) {
         $Failures.Add("Single template is missing the Survival Kit planning checklist.")
     }
+    if (-not $SingleTemplate.Contains("stc_render_guide_toc")) {
+        $Failures.Add("Single guide templates do not render the automatic table of contents.")
+    }
     foreach ($GuideTopic in @("Best time", "Transport", "Ticket price", "Booking window", "Where to stay", "Common mistakes")) {
         if (-not $SingleTemplate.Contains($GuideTopic)) {
             $Failures.Add("Attraction Guide template is missing planning topic: $GuideTopic")
@@ -342,7 +348,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.8.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.9.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -350,11 +356,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.8.0")) {
-        $Failures.Add("Tools plugin header version is not 0.8.0.")
+    if (-not $Plugin.Contains("Version: 0.9.0")) {
+        $Failures.Add("Tools plugin header version is not 0.9.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.8.0'")) {
-        $Failures.Add("Tools plugin version constant is not 0.8.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.9.0'")) {
+        $Failures.Add("Tools plugin version constant is not 0.9.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -588,6 +594,9 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if (-not $ThemeCss.Contains(".stc-home-latest")) {
         $Failures.Add("Theme CSS is missing homepage latest guides styling.")
     }
+    if (-not $ThemeCss.Contains(".stc-guide-toc")) {
+        $Failures.Add("Theme CSS is missing Guide table of contents styling.")
+    }
     if (-not $ThemeCss.Contains(".stc-single--attraction-guide")) {
         $Failures.Add("Theme CSS is missing the Attraction Guide single layout.")
     }
@@ -661,6 +670,12 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     }
     if (-not $ThemeJs.Contains("stcGuideType")) {
         $Failures.Add("Theme JavaScript does not validate imported saved guide types.")
+    }
+    if (-not $ThemeJs.Contains("stcGuideToc")) {
+        $Failures.Add("Theme JavaScript is missing the automatic Guide table of contents controller.")
+    }
+    if (-not $ThemeJs.Contains("data-stc-guide-toc-list")) {
+        $Failures.Add("Theme JavaScript is missing the Guide table of contents list target.")
     }
     if (-not $ThemeJs.Contains("navigator.share")) {
         $Failures.Add("Theme JavaScript is missing native page share behavior.")

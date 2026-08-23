@@ -774,8 +774,46 @@ label:focus-visible {
 .stc-attraction-guide__sidebar,
 .stc-city-guide__sidebar,
 .stc-survival-kit__sidebar {
+	display: grid;
+	gap: 16px;
 	position: sticky;
 	top: 110px;
+}
+
+.stc-guide-toc {
+	background: #fff;
+	border: 1px solid var(--stc-line);
+	border-radius: var(--stc-radius);
+	display: grid;
+	gap: 12px;
+	padding: 18px;
+}
+
+.stc-guide-toc h2 {
+	font-size: 16px;
+	letter-spacing: 0;
+	margin: 0;
+}
+
+.stc-guide-toc ol {
+	display: grid;
+	gap: 8px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.stc-guide-toc a {
+	color: var(--stc-muted);
+	display: block;
+	font-size: 14px;
+	font-weight: 750;
+	line-height: 1.4;
+}
+
+.stc-guide-toc a:hover,
+.stc-guide-toc a:focus-visible {
+	color: var(--stc-red);
 }
 
 .stc-attraction-guide__checklist {

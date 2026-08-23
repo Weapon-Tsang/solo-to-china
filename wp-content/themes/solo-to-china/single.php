@@ -42,6 +42,7 @@ get_header();
 							<?php the_content(); ?>
 						</div>
 						<aside class="stc-attraction-guide__sidebar" aria-label="Attraction guide planning topics">
+							<?php stc_render_guide_toc(); ?>
 							<section class="stc-attraction-guide__checklist">
 								<h2>Planning checklist</h2>
 								<ul>
@@ -75,6 +76,7 @@ get_header();
 							<?php the_content(); ?>
 						</div>
 						<aside class="stc-city-guide__sidebar" aria-label="City guide planning topics">
+							<?php stc_render_guide_toc(); ?>
 							<section class="stc-city-guide__checklist">
 								<h2>City planning checklist</h2>
 								<ul>
@@ -108,6 +110,7 @@ get_header();
 							<?php the_content(); ?>
 						</div>
 						<aside class="stc-survival-kit__sidebar" aria-label="Survival kit setup topics">
+							<?php stc_render_guide_toc(); ?>
 							<section class="stc-survival-kit__checklist">
 								<h2>Setup checklist</h2>
 								<ul>

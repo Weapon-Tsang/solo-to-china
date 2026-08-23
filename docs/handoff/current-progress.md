@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.8.0`.
+Current theme version: `0.9.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -57,6 +57,7 @@ The custom theme implements the approved image-led homepage direction:
 - City Guide editor content pattern covering where to stay, getting around, first-time itineraries, food, neighborhoods, day trips, and common city mistakes.
 - Survival Kit article layout for practical setup and troubleshooting pages.
 - Survival Kit editor content pattern covering quick answers, pre-arrival setup, step-by-step setup, failure cases, backup plans, and FAQ.
+- Guide article sidebars automatically show an On this page table of contents generated from H2 sections.
 - Shared Guide card rendering for archive, search, and default post lists, with guide type badges and consistent CTAs.
 - Survival Kit, City Guides, and Attraction Guides landing pages automatically show latest published posts from their matching categories.
 - Homepage automatically shows the latest published guide posts from the three core guide categories.
@@ -99,7 +100,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.8.0`.
+Current tools plugin version: `0.9.0`.
 
 The custom plugin owns the first tool only:
 
