@@ -288,17 +288,27 @@ label:focus-visible {
 
 .stc-survival-card {
 	align-items: center;
-	border-right: 1px solid var(--stc-line);
 	display: grid;
 	gap: 8px;
 	justify-items: center;
 	min-height: 126px;
 	padding: 18px 12px;
+	position: relative;
 	text-align: center;
 }
 
-.stc-survival-card:last-child {
-	border-right: 0;
+.stc-survival-card::after {
+	background: var(--stc-line);
+	content: "";
+	height: 60%;
+	position: absolute;
+	right: 0;
+	top: 20%;
+	width: 1px;
+}
+
+.stc-survival-card:last-child::after {
+	display: none;
 }
 
 .stc-survival-card__icon {
@@ -338,8 +348,9 @@ label:focus-visible {
 }
 
 .home .stc-survival-card span:last-child {
-	font-size: 11px;
-	line-height: 1.3;
+	font-size: 9px;
+	line-height: 1.2;
+	white-space: nowrap;
 }
 
 .stc-section__header {
@@ -363,6 +374,14 @@ label:focus-visible {
 .stc-card-grid {
 	display: grid;
 	gap: 14px;
+}
+
+.stc-city-grid-shell {
+	position: relative;
+}
+
+.stc-city-grid-reveal {
+	display: none;
 }
 
 .stc-card-grid--cities {
@@ -495,7 +514,7 @@ label:focus-visible {
 
 .stc-image-card__content span {
 	color: rgba(255, 255, 255, .86);
-	font-size: 13px;
+	font-size: 11px;
 	line-height: 1.2;
 }
 
@@ -518,74 +537,21 @@ label:focus-visible {
 }
 
 .stc-card-grid--attractions .stc-image-card__content span {
-	font-size: 12px;
+	font-size: 10px;
 }
 
 .stc-image-card__tag {
 	background: rgba(15, 21, 19, .58);
 	border-radius: 5px;
 	color: #fff;
-	font-size: 11px;
+	font-size: 10px;
 	font-weight: 800;
 	left: 10px;
 	line-height: 1;
-	padding: 6px 7px;
+	padding: 5px 6px;
 	position: absolute;
 	top: 10px;
 	z-index: 3;
-}
-
-.stc-save-guide--image-card {
-	align-items: center;
-	background: rgba(255, 255, 255, .9);
-	border-color: rgba(255, 255, 255, .7);
-	border-radius: 50%;
-	box-shadow: 0 10px 26px rgba(0, 0, 0, .16);
-	color: var(--stc-ink);
-	display: inline-flex;
-	height: 34px;
-	justify-content: center;
-	opacity: 0;
-	padding: 0;
-	position: absolute;
-	right: 12px;
-	top: 12px;
-	transition: opacity .2s ease;
-	width: 34px;
-	z-index: 4;
-}
-
-.stc-save-guide--image-card svg {
-	fill: none;
-	height: 18px;
-	stroke: currentColor;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	stroke-width: 1.8;
-	width: 18px;
-}
-
-.stc-save-guide--image-card.is-saved {
-	background: var(--stc-green);
-	color: #fff;
-	opacity: 1;
-}
-
-.stc-save-guide--image-card.is-saved svg {
-	fill: currentColor;
-}
-
-.stc-image-card:hover .stc-save-guide--image-card,
-.stc-save-guide--image-card:focus-visible {
-	opacity: 1;
-}
-
-.stc-image-card__tag + .stc-image-card__link + .stc-save-guide--image-card {
-	top: 46px;
-}
-
-.stc-grid-toggle {
-	display: none;
 }
 
 .stc-planner,
@@ -1104,6 +1070,21 @@ label:focus-visible {
 	min-height: 38px;
 	padding: 0 14px;
 	width: fit-content;
+}
+
+.stc-article-save {
+	background: var(--stc-green);
+	border-color: var(--stc-green);
+	color: #fff;
+	margin-top: 4px;
+	min-height: 42px;
+	padding: 0 18px;
+}
+
+.stc-article-save[aria-pressed="true"] {
+	background: #eaf4ef;
+	border-color: #c8ddd3;
+	color: var(--stc-green);
 }
 
 .stc-saved-guide-item button {
@@ -1883,7 +1864,7 @@ label:focus-visible {
 	}
 
 	.home .stc-survival__grid {
-		grid-template-columns: repeat(5, 118px);
+		grid-template-columns: repeat(5, 142px);
 		overflow-x: auto;
 		overflow-y: hidden;
 		scroll-snap-type: x mandatory;
@@ -1891,13 +1872,12 @@ label:focus-visible {
 	}
 
 	.home .stc-survival__grid::-webkit-scrollbar,
-	.home .stc-card-grid--attractions::-webkit-scrollbar {
+	.stc-card-grid--attractions::-webkit-scrollbar {
 		display: none;
 	}
 
 	.home .stc-survival-card {
 		border-bottom: 0;
-		border-right: 1px solid var(--stc-line);
 		gap: 5px;
 		min-height: 110px;
 		padding: 13px 8px;
@@ -1922,82 +1902,91 @@ label:focus-visible {
 		font-size: 9px;
 	}
 
-	.stc-card-grid--cities {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+	.stc-card-grid--attractions,
+	.stc-page-primary .stc-card-grid--attractions {
+		-webkit-overflow-scrolling: touch;
+		grid-auto-columns: 75vw;
+		grid-auto-flow: column;
+		grid-template-columns: none;
+		overscroll-behavior-inline: contain;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-bottom: 10px;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		touch-action: pan-x;
 	}
 
-	.stc-page-primary .stc-card-grid--attractions {
+	.stc-card-grid--attractions .stc-image-card {
+		aspect-ratio: 2 / 3;
+		scroll-snap-align: start;
+		scroll-snap-stop: always;
+	}
+
+	.stc-card-grid--cities,
+	.stc-page-primary .stc-card-grid--cities {
+		grid-auto-flow: row;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
+		overflow: visible;
+		padding-bottom: 0;
+		transition: max-height .5s ease;
 	}
 
 	.stc-card-grid--cities .stc-image-card {
 		aspect-ratio: 1 / 1.08;
 	}
 
-	.stc-page-primary .stc-card-grid--attractions .stc-image-card {
-		aspect-ratio: 2 / 3;
-	}
-
-	.stc-js .home .stc-card-grid--cities.is-collapsible {
-		max-height: calc((100vw - 50px) * 1.08 + 10px);
+	.stc-js .stc-city-grid-shell.is-ready .stc-card-grid--cities {
+		max-height: var(--stc-city-collapsed-height);
 		overflow: hidden;
-		transition: max-height .45s ease;
 	}
 
-	.stc-js .home .stc-card-grid--cities.is-collapsible.is-expanded {
-		max-height: 1000px;
+	.stc-js .stc-city-grid-shell.is-ready.is-expanded .stc-card-grid--cities {
+		max-height: var(--stc-city-expanded-height);
 	}
 
-	.home .stc-card-grid--attractions {
-		grid-auto-columns: 40vw;
-		grid-auto-flow: column;
-		grid-template-columns: none;
-		overflow-x: auto;
-		overflow-y: hidden;
-		padding-bottom: 10px;
-		scroll-snap-type: x mandatory;
-		scrollbar-width: none;
+	.stc-js .stc-city-grid-shell.is-ready .stc-city-grid-reveal {
+		-webkit-backdrop-filter: blur(3px);
+		align-items: end;
+		backdrop-filter: blur(3px);
+		background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .98));
+		bottom: 0;
+		display: grid;
+		height: 46%;
+		justify-items: center;
+		opacity: 1;
+		padding-bottom: 18px;
+		pointer-events: none;
+		position: absolute;
+		transition: opacity .3s ease, visibility .3s ease;
+		visibility: visible;
+		width: 100%;
+		z-index: 5;
 	}
 
-	.home .stc-card-grid--attractions .stc-image-card {
-		aspect-ratio: 2 / 3;
-		scroll-snap-align: start;
+	.stc-js .stc-city-grid-shell.is-ready.is-expanded .stc-city-grid-reveal {
+		opacity: 0;
+		visibility: hidden;
 	}
 
-	.stc-grid-toggle {
+	.stc-city-grid-reveal button {
+		-webkit-backdrop-filter: blur(12px);
 		align-items: center;
-		background: transparent;
-		border: 0;
+		backdrop-filter: blur(12px);
+		background: rgba(255, 255, 255, .88);
+		border: 1px solid rgba(17, 111, 83, .2);
+		border-radius: 999px;
+		box-shadow: 0 8px 24px rgba(11, 43, 34, .14);
 		color: var(--stc-green);
 		cursor: pointer;
 		display: inline-flex;
 		font: inherit;
 		font-size: 12px;
 		font-weight: 800;
-		gap: 5px;
 		justify-content: center;
-		margin: 14px auto 0;
-		min-height: 38px;
-		padding: 0 12px;
-	}
-
-	.stc-grid-toggle[hidden] {
-		display: none;
-	}
-
-	.stc-grid-toggle svg {
-		fill: none;
-		height: 18px;
-		stroke: currentColor;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		stroke-width: 2;
-		transition: transform .25s ease;
-		width: 18px;
-	}
-
-	.stc-grid-toggle[aria-expanded="true"] svg {
-		transform: rotate(180deg);
+		min-height: 40px;
+		padding: 0 18px;
+		pointer-events: auto;
 	}
 
 	.stc-page-hero--visual {
@@ -2096,10 +2085,6 @@ label:focus-visible {
 
 	.stc-ticket-band__action .stc-button {
 		width: 100%;
-	}
-
-	.stc-save-guide--image-card {
-		opacity: 1;
 	}
 
 	.stc-footer {
@@ -2220,28 +2205,9 @@ label:focus-visible {
 		overflow: visible;
 	}
 
-	.home .stc-card-grid--cities {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-	}
-
-	.stc-js .home .stc-card-grid--cities.is-collapsible {
-		max-height: calc(27vw - 22px);
-	}
-
-	.stc-js .home .stc-card-grid--cities.is-collapsible.is-expanded {
-		max-height: calc(54vw - 30px);
-	}
-
-	.home .stc-card-grid--attractions {
-		grid-auto-columns: 24vw;
-	}
-
-	.stc-page-primary .stc-card-grid--cities {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-	}
-
+	.stc-card-grid--attractions,
 	.stc-page-primary .stc-card-grid--attractions {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-auto-columns: 42vw;
 	}
 
 	.stc-footer__inner {

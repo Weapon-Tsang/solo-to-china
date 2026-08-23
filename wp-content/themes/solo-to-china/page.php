@@ -72,18 +72,6 @@ $core_pages = [
 
 $page                = $core_pages[ $slug ] ?? null;
 $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
-
-if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
-	function stc_render_save_guide_button( $item, $type, $is_image_card = false ) {
-		$button_class = $is_image_card ? 'stc-save-guide stc-save-guide--image-card' : 'stc-save-guide';
-
-		$button_content = $is_image_card
-			? '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.75L6 21V4.75Z"/></svg>'
-			: esc_html__( 'Save', 'solo-to-china' );
-		$button_label = $is_image_card ? ' aria-label="' . esc_attr__( 'Save guide', 'solo-to-china' ) . '"' : '';
-		echo '<button class="' . esc_attr( $button_class ) . '" type="button"' . $button_label . ' data-stc-save-guide data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $item['title'] ) ) . '" data-guide-type="' . esc_attr( $type ) . '" data-guide-title="' . esc_attr( $item['title'] ) . '" data-guide-copy="' . esc_attr( $item['copy'] ) . '">' . $button_content . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
-}
 ?>
 
 <main id="main" class="stc-main">
@@ -108,14 +96,16 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 							<?php stc_render_survival_icon( $item['icon'] ); ?>
 							<h2><?php echo esc_html( $item['title'] ); ?></h2>
 							<p><?php echo esc_html( $item['copy'] ); ?></p>
-							<?php stc_render_save_guide_button( $item, 'Survival Kit' ); ?>
 						</article>
 					<?php endforeach; ?>
 				</div>
 			</section>
 		<?php elseif ( in_array( $slug, [ 'city-guides', 'attraction-guides' ], true ) ) : ?>
 			<section class="stc-page-section">
-				<div class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>">
+				<?php if ( 'city-guides' === $slug ) : ?>
+					<div class="stc-city-grid-shell" data-stc-city-grid-shell>
+				<?php endif; ?>
+				<div<?php echo 'city-guides' === $slug ? ' id="stc-city-guide-grid" data-stc-city-grid' : ''; ?> class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>">
 					<?php foreach ( $page['items'] as $item ) : ?>
 						<article class="stc-image-card stc-image-card--<?php echo esc_attr( $item['class'] ); ?>">
 							<span class="stc-image-card__media" aria-hidden="true"></span>
@@ -128,10 +118,17 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 									<span><?php echo esc_html( $item['copy'] ); ?></span>
 								</span>
 							</a>
-							<?php stc_render_save_guide_button( $item, 'city-guides' === $slug ? 'City Guide' : 'Attraction Guide', true ); ?>
 						</article>
 					<?php endforeach; ?>
 				</div>
+				<?php if ( 'city-guides' === $slug ) : ?>
+						<div class="stc-city-grid-reveal">
+							<button type="button" data-stc-city-reveal aria-controls="stc-city-guide-grid" aria-expanded="false">
+								<span data-stc-city-reveal-label>+4 More Cities</span>
+							</button>
+						</div>
+					</div>
+				<?php endif; ?>
 			</section>
 		<?php elseif ( 'planner' === $slug ) : ?>
 			<section class="stc-planner stc-planner--page" aria-labelledby="stc-planner-page-title">

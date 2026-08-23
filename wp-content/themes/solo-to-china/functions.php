@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.14.0' );
+define( 'STC_THEME_VERSION', '0.15.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -226,6 +226,21 @@ function stc_render_guide_toc( $modifier_class = '' ) {
 	echo '<h2>' . esc_html__( 'On this page', 'solo-to-china' ) . '</h2>';
 	echo '<ol data-stc-guide-toc-list></ol>';
 	echo '</nav>';
+}
+
+function stc_render_article_save_button( $guide_type ) {
+	$post_id = get_the_ID();
+
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$title   = get_the_title( $post_id );
+	$excerpt = get_the_excerpt( $post_id );
+	$copy    = $excerpt ? wp_trim_words( $excerpt, 24 ) : __( 'Saved for practical trip planning.', 'solo-to-china' );
+	$id      = sanitize_title( $guide_type . '-' . $title );
+
+	echo '<button class="stc-save-guide stc-article-save" type="button" aria-pressed="false" data-stc-save-guide data-guide-id="' . esc_attr( $id ) . '" data-guide-type="' . esc_attr( $guide_type ) . '" data-guide-title="' . esc_attr( $title ) . '" data-guide-copy="' . esc_attr( $copy ) . '">' . esc_html__( 'Save guide', 'solo-to-china' ) . '</button>';
 }
 
 function stc_core_page_latest_guides_config( $slug ) {

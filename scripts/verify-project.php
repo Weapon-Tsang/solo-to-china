@@ -99,7 +99,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.14.0') === false || strpos($packageScript, 'Plugin version: 0.14.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.15.0') === false || strpos($packageScript, 'Plugin version: 0.15.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -128,8 +128,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.14.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.14.0.';
+    if (strpos($themeStyle, 'Version: 0.15.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.15.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -142,7 +142,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.14.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.15.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -191,8 +191,11 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.14.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.14.0.';
+    if (strpos($functions, "'0.15.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.15.0.';
+    }
+    if (strpos($functions, 'stc_render_article_save_button') === false || strpos($functions, 'data-stc-save-guide') === false || strpos($functions, 'stc-article-save') === false) {
+        $failures[] = 'Theme functions are missing the article-only local save renderer.';
     }
     if (strpos($functions, 'stc_is_attraction_guide_post') === false) {
         $failures[] = 'Theme functions are missing the Attraction Guide post detector.';
@@ -278,8 +281,8 @@ if (is_file($pageTemplatePath)) {
     if (strpos($pageTemplate, 'solo_to_china_ticket_tool') === false) {
         $failures[] = 'Tools page template does not render the guest-first ticket tool shortcode.';
     }
-    if (strpos($pageTemplate, 'data-stc-save-guide') === false) {
-        $failures[] = 'Core page template is missing local guide save actions.';
+    if (strpos($pageTemplate, 'data-stc-save-guide') !== false || strpos($pageTemplate, 'stc-save-guide--image-card') !== false) {
+        $failures[] = 'Core landing cards still expose save actions before the guide is opened.';
     }
     if (strpos($pageTemplate, 'data-stc-saved-guides') === false) {
         $failures[] = 'Core page template is missing the local saved guides list.';
@@ -305,8 +308,10 @@ if (is_file($pageTemplatePath)) {
     if (strpos($pageTemplate, 'stc-card-grid--cities') === false || strpos($pageTemplate, 'stc-card-grid--attractions') === false) {
         $failures[] = 'City Guides and Attraction Guides landing pages do not use the homepage-reference image card grids.';
     }
-    if (strpos($pageTemplate, 'stc-save-guide--image-card') === false) {
-        $failures[] = 'Guide landing image cards do not keep the local save action.';
+    foreach (['stc-city-grid-shell', 'data-stc-city-grid', 'data-stc-city-reveal'] as $cityLandingToken) {
+        if (strpos($pageTemplate, $cityLandingToken) === false) {
+            $failures[] = "City Guides landing page is missing mobile gradient-fold markup: {$cityLandingToken}";
+        }
     }
     foreach (['$guide_landing_slugs', 'stc-planner--page', 'stc-planner__icon', 'stc-planner__art', 'stc-faq--page', 'stc-faq__answer-link'] as $utilityPageToken) {
         if (strpos($pageTemplate, $utilityPageToken) === false) {
@@ -352,6 +357,9 @@ if (is_file($singleTemplatePath)) {
     }
     if (strpos($singleTemplate, 'stc-city-guide__checklist') === false) {
         $failures[] = 'Single template is missing the City Guide planning checklist.';
+    }
+    if (strpos($singleTemplate, 'stc_render_article_save_button') === false) {
+        $failures[] = 'Guide articles do not provide the post-open local save action.';
     }
     if (strpos($singleTemplate, 'stc-guide-toc--mobile') === false || strpos($singleTemplate, 'stc-guide-toc--desktop') === false) {
         $failures[] = 'Guide article templates do not provide separate mobile and desktop table-of-contents positions.';
@@ -408,7 +416,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.14.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.15.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -416,11 +424,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.14.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.14.0.';
+    if (strpos($plugin, 'Version: 0.15.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.15.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.14.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.14.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.15.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.15.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -580,8 +588,8 @@ if (is_file($frontPagePath)) {
     if (strpos($frontPage, 'stc_render_survival_icon') === false) {
         $failures[] = 'Survival Kit cards are still missing real icon rendering.';
     }
-    if (strpos($frontPage, 'data-stc-save-guide') === false) {
-        $failures[] = 'Homepage image cards are missing local guide save actions.';
+    if (strpos($frontPage, 'data-stc-save-guide') !== false || strpos($frontPage, 'stc-save-guide--image-card') !== false) {
+        $failures[] = 'Homepage cards still expose save actions before the guide is opened.';
     }
     if (strpos($frontPage, 'stc_render_home_latest_guides') !== false) {
         $failures[] = 'Homepage still inserts Latest Guides outside the approved reference layout.';
@@ -600,16 +608,13 @@ if (is_file($frontPagePath)) {
         }
         $previousHomepageIndex = $homepageIndex === false ? $previousHomepageIndex : $homepageIndex;
     }
-    foreach (['stc-planner__icon', 'stc-ticket-band__icon', 'stc-ticket-band__step-icon', 'data-stc-collapsible-grid', 'data-stc-grid-toggle'] as $homepageMarkupToken) {
+    foreach (['stc-planner__icon', 'stc-ticket-band__icon', 'stc-ticket-band__step-icon', 'stc-city-grid-shell', 'data-stc-city-grid', 'data-stc-city-reveal'] as $homepageMarkupToken) {
         if (strpos($frontPage, $homepageMarkupToken) === false) {
             $failures[] = "Homepage is missing responsive reference markup: {$homepageMarkupToken}";
         }
     }
-    if (strpos($frontPage, "'City Guide'") === false) {
-        $failures[] = 'Homepage city cards do not save with the City Guide type.';
-    }
-    if (strpos($frontPage, "'Attraction Guide'") === false) {
-        $failures[] = 'Homepage attraction cards do not save with the Attraction Guide type.';
+    if (strpos($frontPage, 'data-stc-collapsible-grid') !== false || strpos($frontPage, 'data-stc-grid-toggle') !== false) {
+        $failures[] = 'Homepage still includes the removed vertical city-card expansion control.';
     }
     if (strpos($frontPage, 'https://www.trip.com/') === false || strpos($frontPage, 'rel="sponsored noopener"') === false) {
         $failures[] = 'Homepage Planner CTA is not a sponsored Trip.com external link.';
@@ -630,7 +635,7 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing reference-style visual asset: {$imageReference}";
         }
     }
-    foreach (['.home .stc-header', '.stc-header', 'box-shadow', '.stc-page-hero--visual', '.stc-planner__icon', '.stc-ticket-band__icon', '.stc-grid-toggle', 'scroll-snap-type'] as $styleToken) {
+    foreach (['.home .stc-header', '.stc-header', 'box-shadow', '.stc-page-hero--visual', '.stc-planner__icon', '.stc-ticket-band__icon', 'scroll-snap-type'] as $styleToken) {
         if (strpos($themeCss, $styleToken) === false) {
             $failures[] = "Theme CSS is missing selected homepage visual style token: {$styleToken}";
         }
@@ -696,6 +701,16 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing secondary-page responsive style: {$secondaryPageStyleToken}";
         }
     }
+    foreach (['grid-auto-columns: 75vw', 'grid-auto-columns: 42vw', '-webkit-overflow-scrolling: touch', 'overscroll-behavior-inline: contain', '.stc-survival-card::after', '.stc-article-save', '.stc-city-grid-shell', '.stc-city-grid-reveal', 'backdrop-filter: blur', 'linear-gradient(to bottom, transparent', 'grid-template-columns: repeat(2'] as $mobileRailStyleToken) {
+        if (strpos($themeCss, $mobileRailStyleToken) === false) {
+            $failures[] = "Theme CSS is missing requested mobile rail or article-save style: {$mobileRailStyleToken}";
+        }
+    }
+    foreach (['.stc-grid-toggle', '.stc-save-guide--image-card', '.is-collapsible'] as $removedCardControlStyle) {
+        if (strpos($themeCss, $removedCardControlStyle) !== false) {
+            $failures[] = "Theme CSS still includes removed card control style: {$removedCardControlStyle}";
+        }
+    }
     foreach (['.stc-planner--page', '.stc-faq--page', '.stc-faq summary::after', '.stc-faq__answer-link'] as $utilityPageStyleToken) {
         if (strpos($themeCss, $utilityPageStyleToken) === false) {
             $failures[] = "Theme CSS is missing utility-page responsive style: {$utilityPageStyleToken}";
@@ -744,8 +759,13 @@ if (is_file($themeJsPath)) {
     if (strpos($themeJs, 'stcSavedGuides') === false) {
         $failures[] = 'Theme JavaScript is missing the local saved guides controller.';
     }
-    if (strpos($themeJs, 'stcCollapsibleGuideGrid') === false || strpos($themeJs, 'data-stc-grid-toggle') === false) {
-        $failures[] = 'Theme JavaScript is missing the mobile city grid collapse controller.';
+    if (strpos($themeJs, 'stcCollapsibleGuideGrid') !== false || strpos($themeJs, 'data-stc-grid-toggle') !== false) {
+        $failures[] = 'Theme JavaScript still includes the removed mobile city grid collapse controller.';
+    }
+    foreach (['stcCityGridReveal', 'data-stc-city-grid', 'data-stc-city-reveal', 'More Cities', '--stc-city-collapsed-height', '--stc-city-expanded-height'] as $cityRevealScriptToken) {
+        if (strpos($themeJs, $cityRevealScriptToken) === false) {
+            $failures[] = "Theme JavaScript is missing the gradient city-grid reveal behavior: {$cityRevealScriptToken}";
+        }
     }
     if (strpos($themeJs, 'localStorage') === false) {
         $failures[] = 'Theme JavaScript does not persist saved guides locally.';
@@ -754,7 +774,7 @@ if (is_file($themeJsPath)) {
         $failures[] = 'Theme JavaScript is missing the delete saved guide action.';
     }
     if (strpos($themeJs, "document.querySelectorAll('[data-stc-save-guide]')") === false) {
-        $failures[] = 'Theme JavaScript is missing homepage guide save button binding.';
+        $failures[] = 'Theme JavaScript is missing article guide save button binding.';
     }
     if (strpos($themeJs, 'if (list)') === false) {
         $failures[] = 'Theme JavaScript does not guard saved guide list-only behavior on the homepage.';

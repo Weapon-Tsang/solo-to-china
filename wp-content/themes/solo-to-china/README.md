@@ -2,7 +2,7 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.14.0`.
+Current version: `0.15.0`.
 
 The theme owns:
 
@@ -21,13 +21,15 @@ The theme owns:
 - Shared Guide card rendering for archive, search, and default post lists.
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
 - Core landing pages keep their primary guide content before Saved Guides and category-matched latest posts.
-- Attraction landing cards use readable two-column mobile and three-column tablet grids.
+- City landing cards use a two-column mobile grid with a four-card gradient reveal; Attraction cards use a horizontal mobile rail.
 - Guide articles place a compact horizontal table of contents before mobile content while retaining the desktop sidebar table of contents.
 - Planner reuses the approved homepage icon, partner disclosure, and watercolor artwork across desktop and mobile.
 - FAQ uses responsive two-column/one-column accordions with related internal links.
 - Saved Guides remain limited to Survival Kit, City Guides, and Attraction Guides instead of appearing on Planner, Tools, or FAQ.
 - Reference-locked homepage order from Survival Kit through FAQ, without an inserted latest-post section.
-- Compact mobile Survival Kit rail, collapsible City Guides grid, and horizontally scrollable Attraction Guides rail.
+- Compact mobile Survival Kit rail, a two-column City Guides grid with a frosted gradient four-card fold, and a momentum-driven Attraction Guides rail with 75vw phone cards, 42vw tablet cards, peek cues, and mandatory scroll snap.
+- Guide-list cards stay focused on opening content; local save actions appear only after a guide article is opened.
+- Survival Kit subtitles stay on one line with centered 60%-height dividers, while attraction badges use quieter compact type.
 - Reference-style Planner and Ticket bands with dedicated icons and non-overlapping content columns.
 - Core guide category setup on theme activation.
 - Theme design system, responsive layout, keyboard focus, and skip-to-content behavior.

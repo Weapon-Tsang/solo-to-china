@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.14.0`.
+Current theme version: `0.15.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -47,12 +47,14 @@ The custom theme implements the approved image-led homepage direction:
 - City Guides and Attraction Guides image cards.
 - Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Tool / Reminder, FAQ, and Footer.
 - The homepage no longer inserts Latest Guides between Attraction Guides and Planner; current posts remain available on their matching landing pages and archives.
-- Mobile Survival Kit uses a compact horizontal rail, City Guides shows four cards with an animated expand/collapse control, and Attraction Guides uses a horizontal snap rail.
-- City subtitles stay on one line, image-card save actions use compact bookmark controls, and Planner/Ticket content columns include dedicated icons without overlap.
+- Mobile Survival Kit uses a compact horizontal rail; City Guides uses a standard two-column grid that defaults to four cards beneath a centered frosted-gradient reveal.
+- The City Guides reveal expands the remaining cards smoothly and fades away. Attraction Guides retains a momentum-driven horizontal rail with 75vw phone cards, 42vw tablet cards, mandatory scroll snap, and visible next-card peeks.
+- Survival Kit and city subtitles stay on one line, Survival Kit dividers are centered at 60% height, and attraction badges use smaller type.
+- Guide-list cards do not show save controls; the local Save Guide action appears only after a guide article is opened.
 - Homepage-reference visual assets now provide distinct city and attraction card images, plus Planner and Ticket band art.
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
 - Core landing pages render their primary guide content before Saved Guides and category-matched latest posts.
-- Attraction Guides uses a readable two-column grid on phones and three-column grid on tablets instead of shrinking six cards into one row.
+- Attraction Guides preserves full title, subtitle, and badge space through its horizontal rail on phones and tablets.
 - Planner reuses the approved homepage calendar icon, Trip.com disclosure block, and watercolor artwork on desktop and mobile.
 - FAQ uses polished two-column desktop and one-column mobile accordions with related internal links.
 - Saved Guides and category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
@@ -99,7 +101,7 @@ Core guide categories are created on theme activation if missing:
 Core guide pages support local Saved Guides:
 
 - Share the current page without login, using native share where available and link-copy fallback.
-- Save guide cards without login.
+- Save an opened guide article without login.
 - View saved guides on the current device.
 - Export saved guides to `solotochina-saved-guides.json`.
 - Import saved guides from the exported JSON format.
@@ -112,7 +114,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.14.0`.
+Current tools plugin version: `0.15.0`.
 
 The custom plugin owns the first tool only:
 
@@ -196,7 +198,7 @@ Current environment note:
 - PHP CLI is installed locally in `.tools/php/`.
 - The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
 - Static project checks and PHP syntax checks pass before packaging.
-- Browser preview checks protect homepage reference alignment, landing-page content order and mobile card widths, article table-of-contents breakpoints, utility-page content scope, FAQ expansion, and horizontal overflow.
+- Browser preview checks protect homepage reference alignment, the two-column City Guides fold and expansion, Attraction Guides 75vw/42vw rail behavior, subtitle lines and divider ratios, article-only save behavior, article table-of-contents breakpoints, utility-page content scope, FAQ expansion, and horizontal overflow.
 
 ## GitHub / Source Control Status
 

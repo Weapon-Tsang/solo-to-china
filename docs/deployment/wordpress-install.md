@@ -71,9 +71,9 @@ Then activate the theme and plugin inside WordPress Admin.
 After activation, check these pages in WordPress:
 
 - Home: image-led homepage loads with transparent header.
-- Survival Kit: guide cards can be saved locally.
-- City Guides: city cards can be saved locally.
-- Attraction Guides: attraction cards can be saved locally.
+- Survival Kit: opened guide articles can be saved locally; listing cards do not show save controls.
+- City Guides: opened city-guide articles can be saved locally; listing cards do not show save controls.
+- Attraction Guides: opened attraction-guide articles can be saved locally; listing cards do not show save controls.
 - Planner: Trip.com CTA opens in a new tab.
 - Tools: Ticket Tool / Reminder renders, requires a visit date, and can save a local reminder.
 - FAQ: FAQ items open and close normally.
@@ -108,6 +108,6 @@ This release includes the approved homepage direction as a custom theme scaffold
 
 The reminder feature is currently local-device only. It shows a simple booking-window status, stores saved reminders in the visitor's browser, can export/import a `.json` backup, can clear saved reminders from the current device, and can download an `.ics` calendar file for each reminder date. It does not require login, email, SMS, or database storage.
 
-Saved Guides are also local-device only. They store selected guide cards from the homepage and core guide pages in the visitor's browser, can export/import a `.json` backup, and can be cleared from the current device. They do not require login or database storage.
+Saved Guides are also local-device only. They store guides selected after opening an article in the visitor's browser, can export/import a `.json` backup, and can be cleared from the current device. They do not require login or database storage.
 
 Email/SMS reminder delivery and cross-device sync should be added later as plugin features, after deciding storage, notification provider, consent copy, and anti-spam rules.

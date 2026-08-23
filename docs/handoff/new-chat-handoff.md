@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.14.0`
+Version: `0.15.0`
 
 Location:
 
@@ -140,7 +140,10 @@ Implemented:
 - City Guides image cards.
 - Attraction Guides image cards.
 - Homepage order strictly follows the approved reference and does not insert Latest Guides before Planner.
-- Mobile Survival Kit is horizontally scrollable, City Guides is collapsible after four cards, and Attraction Guides is a horizontal snap rail.
+- Mobile Survival Kit is horizontally scrollable; City Guides uses a two-column grid that initially shows four cards under a centered frosted-gradient reveal.
+- The City Guides reveal expands and fades smoothly. Attraction Guides uses 75vw phone cards and 42vw tablet cards in a momentum-driven horizontal rail with mandatory scroll snap and next-card peeks.
+- Guide-list cards do not expose save controls. Local Save Guide appears only after a guide article is opened.
+- Survival Kit subtitles remain one line with centered 60%-height dividers, and attraction badges use compact type.
 - Planner and Ticket homepage bands use dedicated reference-style icons and non-overlapping content columns.
 - Planner band.
 - Homepage Planner CTA opens Trip.com externally with `rel="sponsored noopener"`.
@@ -160,7 +163,7 @@ Implemented:
 - Shared Guide card rendering for archive, search, and default post lists.
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
 - Core landing pages keep primary guide content before Saved Guides and category-matched latest posts.
-- Attraction Guides uses two columns on phones and three columns on tablets so cards remain readable.
+- Attraction Guides uses a horizontal phone/tablet rail so cards retain readable image, title, subtitle, and badge space.
 - Guide articles use a horizontal pre-content table of contents on mobile and the sidebar table of contents on desktop.
 - Planner uses the approved homepage calendar icon, partner disclosure, and watercolor artwork.
 - FAQ uses responsive accordions with related internal links.
@@ -188,7 +191,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.14.0`
+Version: `0.15.0`
 
 Location:
 
@@ -284,11 +287,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 22:36:14 +08:00
-Theme version: 0.14.0
-Theme SHA256: 19BF36C5E227BDB4C1B02CC605C6A0D03DAE5ADA994FBC721331DEDEE6199722
-Plugin version: 0.14.0
-Plugin SHA256: C8EE2706A7B99DF27A339113CA20E8EDCA9A1829350B87BBD46904A39FA273C9
+Generated: 2026-08-23 23:30:40 +08:00
+Theme version: 0.15.0
+Theme SHA256: B0D85B9929E2577B818F26E12BCEC9267FE92F938DF95012C6EAC8992261C34E
+Plugin version: 0.15.0
+Plugin SHA256: 586A0AAB45D9360FBCD307E2A54600653E669CA5F37E5F8CE4E77F829658028A
 ```
 
 Regenerate artifacts with:
@@ -356,6 +359,7 @@ The verification scripts protect:
 - content-first landing-page order and responsive attraction-card widths
 - mobile-before-content and desktop-sidebar table-of-contents states
 - utility-page Saved Guides boundaries, Planner visual continuity, and FAQ accordion styling
+- the City Guides two-column gradient fold, the Attraction Guides momentum rail and peek cues, article-only save actions, compact subtitles, and centered Survival Kit dividers
 - shared Guide card rendering for archives and search
 - latest guide rendering on the three core content landing pages
 - latest guide rendering on the homepage
@@ -387,9 +391,9 @@ After installing on WordPress, check:
 - Home loads with the approved image-led banner and transparent header.
 - Mobile menu opens and closes.
 - Header does not obscure content on mobile.
-- Survival Kit page renders and guide cards can be saved.
-- City Guides page renders and guide cards can be saved.
-- Attraction Guides page renders and guide cards can be saved.
+- Survival Kit page renders without list-card save controls.
+- City Guides page renders its mobile four-card gradient fold without list-card save controls.
+- Attraction Guides page renders its mobile horizontal rail without list-card save controls.
 - Saved Guides export/import/clear works in current browser.
 - Share page works or copies link.
 - Planner page Trip.com CTA opens in a new tab.

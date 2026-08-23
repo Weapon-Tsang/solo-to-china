@@ -19,22 +19,49 @@
 		return String(value || '').trim().slice(0, maxLength);
 	}
 
-	function stcCollapsibleGuideGrid() {
-		var grid = document.querySelector('[data-stc-collapsible-grid]');
-		var toggle = document.querySelector('[data-stc-grid-toggle]');
-		var label = toggle ? toggle.querySelector('[data-stc-grid-toggle-label]') : null;
+	function stcCityGridReveal() {
+		var media = window.matchMedia('(max-width: 840px)');
+		var shells = document.querySelectorAll('[data-stc-city-grid-shell]');
 
-		if (!grid || !toggle || !label) {
-			return;
-		}
+		shells.forEach(function (shell) {
+			var grid = shell.querySelector('[data-stc-city-grid]');
+			var button = shell.querySelector('[data-stc-city-reveal]');
+			var label = shell.querySelector('[data-stc-city-reveal-label]');
+			var cards = grid ? Array.from(grid.querySelectorAll('.stc-image-card')) : [];
 
-		grid.classList.add('is-collapsible');
-		toggle.hidden = false;
+			if (!grid || !button || !label || cards.length <= 4) {
+				return;
+			}
 
-		toggle.addEventListener('click', function () {
-			var isExpanded = grid.classList.toggle('is-expanded');
-			toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-			label.textContent = isExpanded ? 'Show fewer cities' : 'Show 4 more cities';
+			function syncCollapsedHeight() {
+				if (!media.matches) {
+					shell.classList.remove('is-ready');
+					grid.style.removeProperty('--stc-city-collapsed-height');
+					grid.style.removeProperty('--stc-city-expanded-height');
+					button.hidden = true;
+					return;
+				}
+
+				var firstCard = cards[0].getBoundingClientRect();
+				var fourthCard = cards[3].getBoundingClientRect();
+				var lastCard = cards[cards.length - 1].getBoundingClientRect();
+				var collapsedHeight = Math.ceil(fourthCard.bottom - firstCard.top);
+				var expandedHeight = Math.ceil(lastCard.bottom - firstCard.top);
+
+				grid.style.setProperty('--stc-city-collapsed-height', collapsedHeight + 'px');
+				grid.style.setProperty('--stc-city-expanded-height', expandedHeight + 'px');
+				label.textContent = '+' + (cards.length - 4) + ' More Cities';
+				button.hidden = false;
+				shell.classList.add('is-ready');
+			}
+
+			button.addEventListener('click', function () {
+				shell.classList.add('is-expanded');
+				button.setAttribute('aria-expanded', 'true');
+			});
+
+			syncCollapsedHeight();
+			window.addEventListener('resize', syncCollapsedHeight);
 		});
 	}
 
@@ -145,13 +172,8 @@
 			buttons.forEach(function (button) {
 				var isSaved = savedIds.indexOf(button.getAttribute('data-guide-id')) !== -1;
 
-				if (button.classList.contains('stc-save-guide--image-card')) {
-					button.classList.toggle('is-saved', isSaved);
-					button.setAttribute('aria-label', isSaved ? 'Saved guide' : 'Save guide');
-					return;
-				}
-
-				button.textContent = isSaved ? 'Saved' : 'Save';
+				button.textContent = isSaved ? 'Saved' : 'Save guide';
+				button.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
 			});
 		}
 
@@ -384,7 +406,7 @@
 	}
 
 	stcMobileNav();
-	stcCollapsibleGuideGrid();
+	stcCityGridReveal();
 	stcSavedGuides();
 	stcPageShare();
 	stcGuideToc();

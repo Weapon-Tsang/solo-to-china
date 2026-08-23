@@ -96,7 +96,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.14.0") -or (-not $PackageScript.Contains("Plugin version: 0.14.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.15.0") -or (-not $PackageScript.Contains("Plugin version: 0.15.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -125,8 +125,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.14.0")) {
-        $Failures.Add("Theme stylesheet header version is not 0.14.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.15.0")) {
+        $Failures.Add("Theme stylesheet header version is not 0.15.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -139,7 +139,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.14.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.15.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -190,8 +190,11 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.14.0'")) {
-        $Failures.Add("Theme asset version is not 0.14.0.")
+    if (-not $Functions.Contains("'0.15.0'")) {
+        $Failures.Add("Theme asset version is not 0.15.0.")
+    }
+    if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
+        $Failures.Add("Theme functions are missing the article-only local save renderer.")
     }
     if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
         $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
@@ -277,8 +280,8 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     if (-not $PageTemplate.Contains("solo_to_china_ticket_tool")) {
         $Failures.Add("Tools page template does not render the guest-first ticket tool shortcode.")
     }
-    if (-not $PageTemplate.Contains("data-stc-save-guide")) {
-        $Failures.Add("Core page template is missing local guide save actions.")
+    if ($PageTemplate.Contains("data-stc-save-guide") -or $PageTemplate.Contains("stc-save-guide--image-card")) {
+        $Failures.Add("Core landing cards still expose save actions before the guide is opened.")
     }
     if (-not $PageTemplate.Contains("data-stc-saved-guides")) {
         $Failures.Add("Core page template is missing the local saved guides list.")
@@ -304,8 +307,10 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     if (-not $PageTemplate.Contains("stc-card-grid--cities") -or (-not $PageTemplate.Contains("stc-card-grid--attractions"))) {
         $Failures.Add("City Guides and Attraction Guides landing pages do not use the homepage-reference image card grids.")
     }
-    if (-not $PageTemplate.Contains("stc-save-guide--image-card")) {
-        $Failures.Add("Guide landing image cards do not keep the local save action.")
+    foreach ($CityLandingToken in @("stc-city-grid-shell", "data-stc-city-grid", "data-stc-city-reveal")) {
+        if (-not $PageTemplate.Contains($CityLandingToken)) {
+            $Failures.Add("City Guides landing page is missing mobile gradient-fold markup: $CityLandingToken")
+        }
     }
     foreach ($UtilityPageToken in @("`$guide_landing_slugs", "stc-planner--page", "stc-planner__icon", "stc-planner__art", "stc-faq--page", "stc-faq__answer-link")) {
         if (-not $PageTemplate.Contains($UtilityPageToken)) {
@@ -351,6 +356,9 @@ if (Test-Path -LiteralPath $SingleTemplatePath -PathType Leaf) {
     }
     if (-not $SingleTemplate.Contains("stc-city-guide__checklist")) {
         $Failures.Add("Single template is missing the City Guide planning checklist.")
+    }
+    if (-not $SingleTemplate.Contains("stc_render_article_save_button")) {
+        $Failures.Add("Guide articles do not provide the post-open local save action.")
     }
     if (-not $SingleTemplate.Contains("stc-guide-toc--mobile") -or (-not $SingleTemplate.Contains("stc-guide-toc--desktop"))) {
         $Failures.Add("Guide article templates do not provide separate mobile and desktop table-of-contents positions.")
@@ -407,7 +415,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.14.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.15.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -415,11 +423,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.14.0")) {
-        $Failures.Add("Tools plugin header version is not 0.14.0.")
+    if (-not $Plugin.Contains("Version: 0.15.0")) {
+        $Failures.Add("Tools plugin header version is not 0.15.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.14.0'")) {
-        $Failures.Add("Tools plugin version constant is not 0.14.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.15.0'")) {
+        $Failures.Add("Tools plugin version constant is not 0.15.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -579,8 +587,8 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if (-not $FrontPage.Contains("stc_render_survival_icon")) {
         $Failures.Add("Survival Kit cards are still missing real icon rendering.")
     }
-    if (-not $FrontPage.Contains("data-stc-save-guide")) {
-        $Failures.Add("Homepage image cards are missing local guide save actions.")
+    if ($FrontPage.Contains("data-stc-save-guide") -or $FrontPage.Contains("stc-save-guide--image-card")) {
+        $Failures.Add("Homepage cards still expose save actions before the guide is opened.")
     }
     if ($FrontPage.Contains("stc_render_home_latest_guides")) {
         $Failures.Add("Homepage still inserts Latest Guides outside the approved reference layout.")
@@ -599,16 +607,13 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
         }
         $PreviousHomepageIndex = $HomepageIndex
     }
-    foreach ($HomepageMarkupToken in @("stc-planner__icon", "stc-ticket-band__icon", "stc-ticket-band__step-icon", "data-stc-collapsible-grid", "data-stc-grid-toggle")) {
+    foreach ($HomepageMarkupToken in @("stc-planner__icon", "stc-ticket-band__icon", "stc-ticket-band__step-icon", "stc-city-grid-shell", "data-stc-city-grid", "data-stc-city-reveal")) {
         if (-not $FrontPage.Contains($HomepageMarkupToken)) {
             $Failures.Add("Homepage is missing responsive reference markup: $HomepageMarkupToken")
         }
     }
-    if (-not $FrontPage.Contains("'City Guide'")) {
-        $Failures.Add("Homepage city cards do not save with the City Guide type.")
-    }
-    if (-not $FrontPage.Contains("'Attraction Guide'")) {
-        $Failures.Add("Homepage attraction cards do not save with the Attraction Guide type.")
+    if ($FrontPage.Contains("data-stc-collapsible-grid") -or $FrontPage.Contains("data-stc-grid-toggle")) {
+        $Failures.Add("Homepage still includes the removed vertical city-card expansion control.")
     }
     if (-not $FrontPage.Contains("https://www.trip.com/") -or (-not $FrontPage.Contains("rel=""sponsored noopener"""))) {
         $Failures.Add("Homepage Planner CTA is not a sponsored Trip.com external link.")
@@ -629,7 +634,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing reference-style visual asset: $ImageReference")
         }
     }
-    foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner__icon", ".stc-ticket-band__icon", ".stc-grid-toggle", "scroll-snap-type")) {
+    foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner__icon", ".stc-ticket-band__icon", "scroll-snap-type")) {
         if (-not $ThemeCss.Contains($StyleToken)) {
             $Failures.Add("Theme CSS is missing selected homepage visual style token: $StyleToken")
         }
@@ -695,6 +700,16 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing secondary-page responsive style: $SecondaryPageStyleToken")
         }
     }
+    foreach ($MobileRailStyleToken in @("grid-auto-columns: 75vw", "grid-auto-columns: 42vw", "-webkit-overflow-scrolling: touch", "overscroll-behavior-inline: contain", ".stc-survival-card::after", ".stc-article-save", ".stc-city-grid-shell", ".stc-city-grid-reveal", "backdrop-filter: blur", "linear-gradient(to bottom, transparent", "grid-template-columns: repeat(2")) {
+        if (-not $ThemeCss.Contains($MobileRailStyleToken)) {
+            $Failures.Add("Theme CSS is missing requested mobile rail or article-save style: $MobileRailStyleToken")
+        }
+    }
+    foreach ($RemovedCardControlStyle in @(".stc-grid-toggle", ".stc-save-guide--image-card", ".is-collapsible")) {
+        if ($ThemeCss.Contains($RemovedCardControlStyle)) {
+            $Failures.Add("Theme CSS still includes removed card control style: $RemovedCardControlStyle")
+        }
+    }
     foreach ($UtilityPageStyleToken in @(".stc-planner--page", ".stc-faq--page", ".stc-faq summary::after", ".stc-faq__answer-link")) {
         if (-not $ThemeCss.Contains($UtilityPageStyleToken)) {
             $Failures.Add("Theme CSS is missing utility-page responsive style: $UtilityPageStyleToken")
@@ -743,8 +758,13 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     if (-not $ThemeJs.Contains("stcSavedGuides")) {
         $Failures.Add("Theme JavaScript is missing the local saved guides controller.")
     }
-    if (-not $ThemeJs.Contains("stcCollapsibleGuideGrid") -or (-not $ThemeJs.Contains("data-stc-grid-toggle"))) {
-        $Failures.Add("Theme JavaScript is missing the mobile city grid collapse controller.")
+    if ($ThemeJs.Contains("stcCollapsibleGuideGrid") -or $ThemeJs.Contains("data-stc-grid-toggle")) {
+        $Failures.Add("Theme JavaScript still includes the removed mobile city grid collapse controller.")
+    }
+    foreach ($CityRevealScriptToken in @("stcCityGridReveal", "data-stc-city-grid", "data-stc-city-reveal", "More Cities", "--stc-city-collapsed-height", "--stc-city-expanded-height")) {
+        if (-not $ThemeJs.Contains($CityRevealScriptToken)) {
+            $Failures.Add("Theme JavaScript is missing the gradient city-grid reveal behavior: $CityRevealScriptToken")
+        }
     }
     if (-not $ThemeJs.Contains("localStorage")) {
         $Failures.Add("Theme JavaScript does not persist saved guides locally.")
@@ -753,7 +773,7 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
         $Failures.Add("Theme JavaScript is missing the delete saved guide action.")
     }
     if (-not $ThemeJs.Contains("document.querySelectorAll('[data-stc-save-guide]')")) {
-        $Failures.Add("Theme JavaScript is missing homepage guide save button binding.")
+        $Failures.Add("Theme JavaScript is missing article guide save button binding.")
     }
     if (-not $ThemeJs.Contains("if (list)")) {
         $Failures.Add("Theme JavaScript does not guard saved guide list-only behavior on the homepage.")

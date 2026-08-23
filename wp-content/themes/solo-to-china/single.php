@@ -35,6 +35,7 @@ get_header();
 							<p class="stc-attraction-guide__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
 						<?php endif; ?>
 						<p class="stc-attraction-guide__meta"><?php echo esc_html( get_the_date() ); ?></p>
+						<?php stc_render_article_save_button( 'Attraction Guide' ); ?>
 					</header>
 
 					<div class="stc-attraction-guide__layout">
@@ -70,6 +71,7 @@ get_header();
 							<p class="stc-city-guide__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
 						<?php endif; ?>
 						<p class="stc-city-guide__meta"><?php echo esc_html( get_the_date() ); ?></p>
+						<?php stc_render_article_save_button( 'City Guide' ); ?>
 					</header>
 
 					<div class="stc-city-guide__layout">
@@ -105,6 +107,7 @@ get_header();
 							<p class="stc-survival-kit__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
 						<?php endif; ?>
 						<p class="stc-survival-kit__meta"><?php echo esc_html( get_the_date() ); ?></p>
+						<?php stc_render_article_save_button( 'Survival Kit' ); ?>
 					</header>
 
 					<div class="stc-survival-kit__layout">

@@ -35,11 +35,6 @@ $attractions = [
 	[ 'name' => 'Shanghai Disney Resort', 'city' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney' ],
 ];
 
-if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
-	function stc_render_home_save_guide_button( $title, $copy, $type ) {
-		echo '<button class="stc-save-guide stc-save-guide--image-card" type="button" aria-label="' . esc_attr__( 'Save guide', 'solo-to-china' ) . '" data-stc-save-guide data-guide-type="' . esc_attr( $type ) . '" data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $title ) ) . '" data-guide-title="' . esc_attr( $title ) . '" data-guide-copy="' . esc_attr( $copy ) . '"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.75L6 21V4.75Z"/></svg></button>';
-	}
-}
 ?>
 
 <main id="main">
@@ -69,24 +64,26 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 			<h2 id="cities-title">City Guides</h2>
 			<a href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">View all city guides</a>
 		</div>
-		<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-collapsible-grid>
-			<?php foreach ( $cities as $city ) : ?>
-				<article class="stc-image-card stc-image-card--<?php echo esc_attr( $city['class'] ); ?>">
-					<span class="stc-image-card__media" aria-hidden="true"></span>
-					<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">
-						<span class="stc-image-card__content">
-							<strong><?php echo esc_html( $city['name'] ); ?></strong>
-							<span><?php echo esc_html( $city['copy'] ); ?></span>
-						</span>
-					</a>
-					<?php stc_render_home_save_guide_button( $city['name'], $city['copy'], 'City Guide' ); ?>
-				</article>
-			<?php endforeach; ?>
+		<div class="stc-city-grid-shell" data-stc-city-grid-shell>
+			<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-city-grid>
+				<?php foreach ( $cities as $city ) : ?>
+					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $city['class'] ); ?>">
+						<span class="stc-image-card__media" aria-hidden="true"></span>
+						<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">
+							<span class="stc-image-card__content">
+								<strong><?php echo esc_html( $city['name'] ); ?></strong>
+								<span><?php echo esc_html( $city['copy'] ); ?></span>
+							</span>
+						</a>
+					</article>
+				<?php endforeach; ?>
+			</div>
+			<div class="stc-city-grid-reveal">
+				<button type="button" data-stc-city-reveal aria-controls="home-city-grid" aria-expanded="false">
+					<span data-stc-city-reveal-label>+4 More Cities</span>
+				</button>
+			</div>
 		</div>
-		<button class="stc-grid-toggle" type="button" data-stc-grid-toggle aria-controls="home-city-grid" aria-expanded="false" hidden>
-			<span data-stc-grid-toggle-label>Show 4 more cities</span>
-			<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
-		</button>
 	</section>
 
 	<section class="stc-section" aria-labelledby="attractions-title">
@@ -105,7 +102,6 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 							<span><?php echo esc_html( $attraction['city'] ); ?></span>
 						</span>
 					</a>
-					<?php stc_render_home_save_guide_button( $attraction['name'], $attraction['tag'] . ' in ' . $attraction['city'], 'Attraction Guide' ); ?>
 				</article>
 			<?php endforeach; ?>
 		</div>
