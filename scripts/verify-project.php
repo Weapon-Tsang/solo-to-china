@@ -83,7 +83,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.4.0') === false || strpos($packageScript, 'Plugin version: 0.4.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.5.0') === false || strpos($packageScript, 'Plugin version: 0.5.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -112,8 +112,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.4.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.4.0.';
+    if (strpos($themeStyle, 'Version: 0.5.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.5.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -126,7 +126,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.4.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.5.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -172,14 +172,17 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.4.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.4.0.';
+    if (strpos($functions, "'0.5.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.5.0.';
     }
     if (strpos($functions, 'stc_is_attraction_guide_post') === false) {
         $failures[] = 'Theme functions are missing the Attraction Guide post detector.';
     }
     if (strpos($functions, 'stc_is_city_guide_post') === false) {
         $failures[] = 'Theme functions are missing the City Guide post detector.';
+    }
+    if (strpos($functions, 'stc_is_survival_kit_post') === false) {
+        $failures[] = 'Theme functions are missing the Survival Kit post detector.';
     }
     if (strpos($functions, 'register_block_pattern') === false || strpos($functions, 'solo-to-china/attraction-guide-v1') === false) {
         $failures[] = 'Theme does not register the Attraction Guide content pattern.';
@@ -195,6 +198,14 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     foreach (['Best areas to stay', 'Getting around', 'First-time itinerary', 'Food and neighborhoods', 'Day trips and nearby attractions', 'Common city mistakes'] as $patternText) {
         if (strpos($functions, $patternText) === false) {
             $failures[] = "City Guide content pattern is missing section: {$patternText}";
+        }
+    }
+    if (strpos($functions, 'solo-to-china/survival-kit-v1') === false) {
+        $failures[] = 'Theme does not register the Survival Kit content pattern.';
+    }
+    foreach (['Quick answer', 'What to set up before arrival', 'Step-by-step setup', 'What can go wrong', 'Backup plan', 'FAQ'] as $patternText) {
+        if (strpos($functions, $patternText) === false) {
+            $failures[] = "Survival Kit content pattern is missing section: {$patternText}";
         }
     }
 }
@@ -250,6 +261,9 @@ if (is_file($singleTemplatePath)) {
     if (strpos($singleTemplate, 'stc_is_city_guide_post') === false) {
         $failures[] = 'Single template does not route City Guide posts.';
     }
+    if (strpos($singleTemplate, 'stc_is_survival_kit_post') === false) {
+        $failures[] = 'Single template does not route Survival Kit posts.';
+    }
     if (strpos($singleTemplate, 'stc-single--attraction-guide') === false) {
         $failures[] = 'Single template is missing the Attraction Guide article layout class.';
     }
@@ -262,6 +276,12 @@ if (is_file($singleTemplatePath)) {
     if (strpos($singleTemplate, 'stc-city-guide__checklist') === false) {
         $failures[] = 'Single template is missing the City Guide planning checklist.';
     }
+    if (strpos($singleTemplate, 'stc-single--survival-kit') === false) {
+        $failures[] = 'Single template is missing the Survival Kit article layout class.';
+    }
+    if (strpos($singleTemplate, 'stc-survival-kit__checklist') === false) {
+        $failures[] = 'Single template is missing the Survival Kit planning checklist.';
+    }
     foreach (['Best time', 'Transport', 'Ticket price', 'Booking window', 'Where to stay', 'Common mistakes'] as $guideTopic) {
         if (strpos($singleTemplate, $guideTopic) === false) {
             $failures[] = "Attraction Guide template is missing planning topic: {$guideTopic}";
@@ -270,6 +290,11 @@ if (is_file($singleTemplatePath)) {
     foreach (['Where to stay', 'Getting around', 'Itinerary', 'Food', 'Neighborhoods', 'Common mistakes'] as $guideTopic) {
         if (strpos($singleTemplate, $guideTopic) === false) {
             $failures[] = "City Guide template is missing planning topic: {$guideTopic}";
+        }
+    }
+    foreach (['Before arrival', 'Setup steps', 'Required apps', 'Documents', 'Connectivity', 'Backup plan'] as $guideTopic) {
+        if (strpos($singleTemplate, $guideTopic) === false) {
+            $failures[] = "Survival Kit template is missing planning topic: {$guideTopic}";
         }
     }
 }
@@ -286,7 +311,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.4.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.5.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -294,11 +319,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.4.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.4.0.';
+    if (strpos($plugin, 'Version: 0.5.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.5.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.4.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.4.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.5.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.5.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -531,6 +556,15 @@ if (is_file($themeCssPath)) {
     }
     if (strpos($themeCss, '.stc-city-guide__checklist') === false) {
         $failures[] = 'Theme CSS is missing the City Guide checklist styling.';
+    }
+    if (strpos($themeCss, '.stc-single--survival-kit') === false) {
+        $failures[] = 'Theme CSS is missing the Survival Kit single layout.';
+    }
+    if (strpos($themeCss, '.stc-survival-kit__layout') === false) {
+        $failures[] = 'Theme CSS is missing the Survival Kit content/sidebar layout.';
+    }
+    if (strpos($themeCss, '.stc-survival-kit__checklist') === false) {
+        $failures[] = 'Theme CSS is missing the Survival Kit checklist styling.';
     }
 }
 

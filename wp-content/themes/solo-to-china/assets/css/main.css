@@ -682,13 +682,15 @@ label:focus-visible {
 }
 
 .stc-single--attraction-guide,
-.stc-single--city-guide {
+.stc-single--city-guide,
+.stc-single--survival-kit {
 	display: grid;
 	gap: 30px;
 }
 
 .stc-attraction-guide__hero,
-.stc-city-guide__hero {
+.stc-city-guide__hero,
+.stc-survival-kit__hero {
 	background: #fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
@@ -700,7 +702,9 @@ label:focus-visible {
 .stc-attraction-guide__eyebrow,
 .stc-attraction-guide__meta,
 .stc-city-guide__eyebrow,
-.stc-city-guide__meta {
+.stc-city-guide__meta,
+.stc-survival-kit__eyebrow,
+.stc-survival-kit__meta {
 	color: var(--stc-green);
 	font-size: 13px;
 	font-weight: 800;
@@ -710,7 +714,8 @@ label:focus-visible {
 }
 
 .stc-attraction-guide__hero h1,
-.stc-city-guide__hero h1 {
+.stc-city-guide__hero h1,
+.stc-survival-kit__hero h1 {
 	font-family: Georgia, "Times New Roman", serif;
 	font-size: clamp(42px, 6vw, 72px);
 	letter-spacing: 0;
@@ -719,7 +724,8 @@ label:focus-visible {
 }
 
 .stc-attraction-guide__deck,
-.stc-city-guide__deck {
+.stc-city-guide__deck,
+.stc-survival-kit__deck {
 	color: var(--stc-muted);
 	font-size: 20px;
 	line-height: 1.5;
@@ -728,7 +734,8 @@ label:focus-visible {
 }
 
 .stc-attraction-guide__layout,
-.stc-city-guide__layout {
+.stc-city-guide__layout,
+.stc-survival-kit__layout {
 	align-items: start;
 	display: grid;
 	gap: 26px;
@@ -764,7 +771,8 @@ label:focus-visible {
 }
 
 .stc-attraction-guide__sidebar,
-.stc-city-guide__sidebar {
+.stc-city-guide__sidebar,
+.stc-survival-kit__sidebar {
 	position: sticky;
 	top: 110px;
 }
@@ -787,15 +795,26 @@ label:focus-visible {
 	padding: 20px;
 }
 
+.stc-survival-kit__checklist {
+	background: #fff1ef;
+	border: 1px solid #f1cbc7;
+	border-radius: var(--stc-radius);
+	display: grid;
+	gap: 16px;
+	padding: 20px;
+}
+
 .stc-attraction-guide__checklist h2,
-.stc-city-guide__checklist h2 {
+.stc-city-guide__checklist h2,
+.stc-survival-kit__checklist h2 {
 	font-size: 18px;
 	letter-spacing: 0;
 	margin: 0;
 }
 
 .stc-attraction-guide__checklist ul,
-.stc-city-guide__checklist ul {
+.stc-city-guide__checklist ul,
+.stc-survival-kit__checklist ul {
 	display: grid;
 	gap: 12px;
 	list-style: none;
@@ -804,7 +823,8 @@ label:focus-visible {
 }
 
 .stc-attraction-guide__checklist li,
-.stc-city-guide__checklist li {
+.stc-city-guide__checklist li,
+.stc-survival-kit__checklist li {
 	border-top: 1px solid rgba(169, 120, 36, .25);
 	display: grid;
 	gap: 3px;
@@ -815,32 +835,41 @@ label:focus-visible {
 	border-top-color: rgba(20, 107, 84, .22);
 }
 
+.stc-survival-kit__checklist li {
+	border-top-color: rgba(217, 39, 39, .2);
+}
+
 .stc-attraction-guide__checklist li:first-child,
-.stc-city-guide__checklist li:first-child {
+.stc-city-guide__checklist li:first-child,
+.stc-survival-kit__checklist li:first-child {
 	border-top: 0;
 	padding-top: 0;
 }
 
 .stc-attraction-guide__checklist span,
-.stc-city-guide__checklist span {
+.stc-city-guide__checklist span,
+.stc-survival-kit__checklist span {
 	color: var(--stc-ink);
 	font-weight: 800;
 }
 
 .stc-attraction-guide__checklist small,
-.stc-city-guide__checklist small {
+.stc-city-guide__checklist small,
+.stc-survival-kit__checklist small {
 	color: var(--stc-muted);
 	line-height: 1.45;
 }
 
 .stc-attraction-guide__footer,
-.stc-city-guide__footer {
+.stc-city-guide__footer,
+.stc-survival-kit__footer {
 	border-top: 1px solid var(--stc-line);
 	padding-top: 22px;
 }
 
 .stc-attraction-guide__footer a,
-.stc-city-guide__footer a {
+.stc-city-guide__footer a,
+.stc-survival-kit__footer a {
 	color: var(--stc-green);
 	font-weight: 800;
 }
@@ -1028,18 +1057,21 @@ label:focus-visible {
 	}
 
 	.stc-attraction-guide__layout,
-	.stc-city-guide__layout {
+	.stc-city-guide__layout,
+	.stc-survival-kit__layout {
 		grid-template-columns: 1fr;
 	}
 
 	.stc-attraction-guide__hero,
 	.stc-city-guide__hero,
+	.stc-survival-kit__hero,
 	.stc-entry-content--guide {
 		padding: 24px;
 	}
 
 	.stc-attraction-guide__sidebar,
-	.stc-city-guide__sidebar {
+	.stc-city-guide__sidebar,
+	.stc-survival-kit__sidebar {
 		position: static;
 	}
 

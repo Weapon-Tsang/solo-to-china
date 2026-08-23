@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.4.0' );
+define( 'STC_THEME_VERSION', '0.5.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -114,6 +114,16 @@ function stc_is_city_guide_post( $post_id = null ) {
 	return has_category( 'city-guides', $post_id ) || has_tag( 'city-guide', $post_id );
 }
 
+function stc_is_survival_kit_post( $post_id = null ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	return has_category( 'survival-kit', $post_id ) || has_tag( 'survival-kit', $post_id );
+}
+
 function stc_register_block_patterns() {
 	if ( ! function_exists( 'register_block_pattern' ) ) {
 		return;
@@ -177,6 +187,30 @@ function stc_register_block_patterns() {
 			'description' => __( 'A practical SoloToChina article structure for city guides.', 'solo-to-china' ),
 			'categories'  => [ 'solo-to-china' ],
 			'content'     => $city_guide_content,
+		]
+	);
+
+	$survival_kit_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the practical answer: what the traveler should do, when to do it, and what to prepare before arriving in China.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Quick answer</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Give the short, confidence-building answer first, including who this applies to and the safest default choice.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>What to set up before arrival</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>List the items to prepare before departure, such as payment setup, Essential Apps, eSIM and internet, Visa and entry documents, VPN and access needs.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Step-by-step setup</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Break the setup into simple steps a first-time visitor can follow without Chinese language confidence.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>What can go wrong</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Explain the common failure points, confusing app screens, payment issues, passport checks, blocked services, or arrival-day friction.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Backup plan</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Give a fallback route if the main setup fails, including cash/card options, hotel help, airport counters, offline screenshots, and alternate apps.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Answer the most likely first-time visitor questions in short, practical blocks.</p><!-- /wp:paragraph -->';
+
+	register_block_pattern(
+		'solo-to-china/survival-kit-v1',
+		[
+			'title'       => __( 'Survival Kit v1', 'solo-to-china' ),
+			'description' => __( 'A practical SoloToChina article structure for first-time China travel survival topics.', 'solo-to-china' ),
+			'categories'  => [ 'solo-to-china' ],
+			'content'     => $survival_kit_content,
 		]
 	);
 }

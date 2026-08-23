@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.4.0`
+Version: `0.5.0`
 
 Location:
 
@@ -149,6 +149,7 @@ Implemented:
 - No-account page sharing on core guide pages.
 - Attraction Guide article layout and editor content pattern.
 - City Guide article layout and editor content pattern.
+- Survival Kit article layout and editor content pattern.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
 - `single.php` for guide/article posts.
@@ -171,7 +172,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.4.0`
+Version: `0.5.0`
 
 Location:
 
@@ -267,11 +268,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 16:07:19 +08:00
-Theme version: 0.4.0
-Theme SHA256: 27E29D37A90A374849E74607CB97E55862861F7D0A1BDF908F2BD713DC7849E2
-Plugin version: 0.4.0
-Plugin SHA256: D8327D918FB5B32F9961CCDCC7A8F46F9C49364D06042DB35979062A54B98108
+Generated: 2026-08-23 16:19:05 +08:00
+Theme version: 0.5.0
+Theme SHA256: F3F2B8C0B28830F95951B4B10A26DFB6AFF0DE2DB58ADA91BFBE8C5A97459734
+Plugin version: 0.5.0
+Plugin SHA256: C848BF17695531A84AB5469F485359FDBECE63FAF349433BD1403709E5614284
 ```
 
 Regenerate artifacts with:
@@ -385,9 +386,8 @@ Good next increments:
 2. Fix real install spacing, header, and mobile issues based on screenshots.
 3. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 4. Add more realistic guide-card metadata once actual content pages exist.
-5. Add basic content templates for Survival Kit article pages if real posts/categories are ready.
-6. Improve FAQ content and internal links.
-7. Add lightweight analytics/event tracking only after deciding privacy approach.
+5. Improve FAQ content and internal links.
+6. Add lightweight analytics/event tracking only after deciding privacy approach.
 
 ## Do Not Start Without Explicit Approval
 
