@@ -29,12 +29,7 @@ get_header();
 				while ( have_posts() ) :
 					the_post();
 					?>
-					<article <?php post_class( 'stc-post-card' ); ?>>
-						<a href="<?php echo esc_url( get_permalink() ); ?>">
-							<h2><?php the_title(); ?></h2>
-							<p><?php echo esc_html( get_the_excerpt() ); ?></p>
-						</a>
-					</article>
+					<?php stc_render_guide_card(); ?>
 				<?php endwhile; ?>
 			</div>
 

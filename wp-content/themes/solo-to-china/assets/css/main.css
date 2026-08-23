@@ -935,19 +935,60 @@ label:focus-visible {
 
 .stc-post-list {
 	display: grid;
-	gap: 16px;
+	gap: 18px;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
 }
 
 .stc-post-card {
 	background: #fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
+	overflow: hidden;
+}
+
+.stc-post-card__link {
+	display: grid;
+	gap: 14px;
+	min-height: 100%;
 	padding: 22px;
+}
+
+.stc-post-card__meta {
+	align-items: center;
+	color: var(--stc-muted);
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 13px;
+	font-weight: 700;
+	gap: 10px;
+	line-height: 1.4;
+}
+
+.stc-post-card__type {
+	background: #eef6f2;
+	border: 1px solid #cfe0d8;
+	border-radius: 999px;
+	color: var(--stc-green);
+	display: inline-flex;
+	padding: 5px 9px;
+}
+
+.stc-post-card--attraction-guide .stc-post-card__type {
+	background: #fff6e8;
+	border-color: #ead7b9;
+	color: var(--stc-gold);
+}
+
+.stc-post-card--survival-kit .stc-post-card__type {
+	background: #fff1ef;
+	border-color: #f1cbc7;
+	color: var(--stc-red);
 }
 
 .stc-post-card h2 {
 	font-size: 22px;
-	margin: 0 0 8px;
+	line-height: 1.2;
+	margin: 0;
 }
 
 .stc-post-card p,
@@ -955,6 +996,13 @@ label:focus-visible {
 	color: var(--stc-muted);
 	line-height: 1.6;
 	margin: 0;
+}
+
+.stc-post-card__cta {
+	align-self: end;
+	color: var(--stc-red);
+	font-size: 14px;
+	font-weight: 800;
 }
 
 .stc-footer {

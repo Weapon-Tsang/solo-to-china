@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.5.0' );
+define( 'STC_THEME_VERSION', '0.6.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -122,6 +122,66 @@ function stc_is_survival_kit_post( $post_id = null ) {
 	}
 
 	return has_category( 'survival-kit', $post_id ) || has_tag( 'survival-kit', $post_id );
+}
+
+function stc_get_guide_type_slug( $post_id = null ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+
+	if ( stc_is_survival_kit_post( $post_id ) ) {
+		return 'survival-kit';
+	}
+
+	if ( stc_is_attraction_guide_post( $post_id ) ) {
+		return 'attraction-guide';
+	}
+
+	if ( stc_is_city_guide_post( $post_id ) ) {
+		return 'city-guide';
+	}
+
+	return 'travel-guide';
+}
+
+function stc_get_guide_type_label( $post_id = null ) {
+	$slug = stc_get_guide_type_slug( $post_id );
+
+	$labels = [
+		'survival-kit'     => __( 'Survival Kit', 'solo-to-china' ),
+		'attraction-guide' => __( 'Attraction Guide', 'solo-to-china' ),
+		'city-guide'       => __( 'City Guide', 'solo-to-china' ),
+		'travel-guide'     => __( 'Travel Guide', 'solo-to-china' ),
+	];
+
+	return $labels[ $slug ] ?? $labels['travel-guide'];
+}
+
+function stc_render_guide_card( $post_id = null ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$type_slug  = stc_get_guide_type_slug( $post_id );
+	$type_label = stc_get_guide_type_label( $post_id );
+	$classes    = get_post_class( [ 'stc-post-card', 'stc-post-card--' . $type_slug ], $post_id );
+	$excerpt    = get_the_excerpt( $post_id );
+	$date_attr  = get_the_date( DATE_W3C, $post_id );
+	$date_label = get_the_date( '', $post_id );
+
+	echo '<article class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+	echo '<a class="stc-post-card__link" href="' . esc_url( get_permalink( $post_id ) ) . '">';
+	echo '<div class="stc-post-card__meta">';
+	echo '<span class="stc-post-card__type">' . esc_html( $type_label ) . '</span>';
+	echo '<time datetime="' . esc_attr( $date_attr ) . '">' . esc_html( $date_label ) . '</time>';
+	echo '</div>';
+	echo '<h2>' . esc_html( get_the_title( $post_id ) ) . '</h2>';
+	if ( $excerpt ) {
+		echo '<p>' . esc_html( wp_trim_words( $excerpt, 28 ) ) . '</p>';
+	}
+	echo '<span class="stc-post-card__cta">' . esc_html__( 'Read guide', 'solo-to-china' ) . '</span>';
+	echo '</a>';
+	echo '</article>';
 }
 
 function stc_register_block_patterns() {

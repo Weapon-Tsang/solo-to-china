@@ -2,7 +2,7 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.5.0`.
+Current version: `0.6.0`.
 
 The theme owns:
 
@@ -15,6 +15,7 @@ The theme owns:
 - Attraction Guide article layout and editor content pattern.
 - City Guide article layout and editor content pattern.
 - Survival Kit article layout and editor content pattern.
+- Shared Guide card rendering for archive, search, and default post lists.
 - Theme design system, responsive layout, keyboard focus, and skip-to-content behavior.
 
 The theme should not own tool business logic. Project-owned tools belong in `wp-content/plugins/solo-to-china-tools/`.

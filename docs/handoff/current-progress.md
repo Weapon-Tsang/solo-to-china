@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.5.0`.
+Current theme version: `0.6.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -57,9 +57,9 @@ The custom theme implements the approved image-led homepage direction:
 - City Guide editor content pattern covering where to stay, getting around, first-time itineraries, food, neighborhoods, day trips, and common city mistakes.
 - Survival Kit article layout for practical setup and troubleshooting pages.
 - Survival Kit editor content pattern covering quick answers, pre-arrival setup, step-by-step setup, failure cases, backup plans, and FAQ.
-- Basic archive template for future category/tag guide lists.
+- Shared Guide card rendering for archive, search, and default post lists, with guide type badges and consistent CTAs.
 - Basic 404 template with links back to core travel sections.
-- Basic search results template without adding Search to top-level navigation.
+- Search results template without adding Search to top-level navigation.
 - Custom search form template for controlled search label and button copy.
 - Styled default WordPress search form for search fallback states.
 - Theme and plugin README files updated to match current version and responsibility boundaries.
@@ -90,7 +90,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.5.0`.
+Current tools plugin version: `0.6.0`.
 
 The custom plugin owns the first tool only:
 
@@ -171,12 +171,13 @@ Packaging command:
 
 Current environment note:
 
-- PHP CLI is not installed locally, so PHP syntax checks are skipped by the PowerShell verifier.
-- Static project checks pass before packaging.
+- PHP CLI is installed locally in `.tools/php/`.
+- The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
+- Static project checks and PHP syntax checks pass before packaging.
 
-## Known GitHub Limitation In This Session
+## GitHub / Source Control Status
 
-Normal `git` push failed earlier due Windows Schannel credential issues. GitHub text file updates through the connector worked for earlier increments, but binary images and release zips are reliable only in the local generated packages.
+Normal `git push origin main` works in the current clone.
 
 For deployment, use the local zip artifacts as the source of truth.
 
@@ -186,7 +187,7 @@ Reasonable next bounded increments:
 
 - Improve mobile spacing and touch targets after installing on WordPress and checking real screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-- Add more realistic guide-card metadata once actual content pages exist.
+- Populate real guide posts and check archive/search card density on mobile screenshots.
 
 Do not start yet without a new design/spec:
 

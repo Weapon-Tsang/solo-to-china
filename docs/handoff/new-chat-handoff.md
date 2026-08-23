@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.5.0`
+Version: `0.6.0`
 
 Location:
 
@@ -150,6 +150,7 @@ Implemented:
 - Attraction Guide article layout and editor content pattern.
 - City Guide article layout and editor content pattern.
 - Survival Kit article layout and editor content pattern.
+- Shared Guide card rendering for archive, search, and default post lists.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
 - `single.php` for guide/article posts.
@@ -172,7 +173,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.5.0`
+Version: `0.6.0`
 
 Location:
 
@@ -268,11 +269,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 16:19:05 +08:00
-Theme version: 0.5.0
-Theme SHA256: F3F2B8C0B28830F95951B4B10A26DFB6AFF0DE2DB58ADA91BFBE8C5A97459734
-Plugin version: 0.5.0
-Plugin SHA256: C848BF17695531A84AB5469F485359FDBECE63FAF349433BD1403709E5614284
+Generated: 2026-08-23 17:00:12 +08:00
+Theme version: 0.6.0
+Theme SHA256: 7E5D0A62E3A4ECDE848319A18FC41324A6A407A5DF26D3EC6F498508C95A69A1
+Plugin version: 0.6.0
+Plugin SHA256: 265545C944F46D25751AC0394949E3D8BEA43CEB109B85F9B8C7CDAF5BF52AD6
 ```
 
 Regenerate artifacts with:
@@ -319,14 +320,14 @@ Primary verification command:
 Expected current result:
 
 ```text
-PHP CLI not found; skipped PHP syntax checks.
 SoloToChina project verification passed.
 ```
 
 Local environment note:
 
-- PHP CLI is not installed locally, so the PowerShell verifier skips PHP syntax checks.
-- Static project checks pass.
+- PHP CLI is installed locally in `.tools/php/`.
+- The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
+- Static project checks and PHP syntax checks pass.
 
 The verification scripts protect:
 
@@ -334,6 +335,7 @@ The verification scripts protect:
 - fixed IA labels
 - banned transaction-first nav labels
 - theme/plugin version consistency
+- shared Guide card rendering for archives and search
 - theme/plugin responsibility boundaries
 - local saved guide behavior
 - ticket reminder behavior
@@ -385,7 +387,7 @@ Good next increments:
 1. Install the theme/plugin on the live WordPress site and capture desktop/mobile screenshots.
 2. Fix real install spacing, header, and mobile issues based on screenshots.
 3. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-4. Add more realistic guide-card metadata once actual content pages exist.
+4. Populate real guide posts and check archive/search card density on mobile screenshots.
 5. Improve FAQ content and internal links.
 6. Add lightweight analytics/event tracking only after deciding privacy approach.
 
