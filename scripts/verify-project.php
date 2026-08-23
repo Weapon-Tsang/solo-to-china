@@ -622,6 +622,7 @@ if (is_file($themeJsPath)) {
 }
 
 $phpFiles = [];
+$phpExecutable = PHP_BINARY ?: 'php';
 foreach ($requiredFiles as $relativePath) {
     if (substr($relativePath, -4) === '.php') {
         $phpFiles[] = $relativePath;
@@ -634,7 +635,7 @@ foreach ($phpFiles as $relativePath) {
         continue;
     }
 
-    $command = 'php -l ' . escapeshellarg($absolutePath);
+    $command = escapeshellarg($phpExecutable) . ' -l ' . escapeshellarg($absolutePath);
     exec($command, $output, $exitCode);
     if ($exitCode !== 0) {
         $failures[] = "PHP syntax check failed: {$relativePath}";

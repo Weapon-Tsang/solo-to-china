@@ -25,6 +25,7 @@ wp-content/debug.log
 Thumbs.db
 .idea/
 .vscode/
+.tools/
 node_modules/
 vendor/
 

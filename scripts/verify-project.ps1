@@ -620,12 +620,20 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     }
 }
 
+$PhpExecutable = $null
 $PhpCommand = Get-Command php -ErrorAction SilentlyContinue
+$LocalPhpPath = Join-Path $Root ".tools/php/php.exe"
 if ($PhpCommand) {
+    $PhpExecutable = $PhpCommand.Source
+} elseif (Test-Path -LiteralPath $LocalPhpPath -PathType Leaf) {
+    $PhpExecutable = $LocalPhpPath
+}
+
+if ($PhpExecutable) {
     foreach ($RelativePath in $RequiredFiles | Where-Object { $_.EndsWith(".php") }) {
         $AbsolutePath = Join-Path $Root $RelativePath
         if (Test-Path -LiteralPath $AbsolutePath -PathType Leaf) {
-            & php -l $AbsolutePath | Out-Null
+            & $PhpExecutable -l $AbsolutePath | Out-Null
             if ($LASTEXITCODE -ne 0) {
                 $Failures.Add("PHP syntax check failed: $RelativePath")
             }
