@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.6.0`.
+Current theme version: `0.7.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -58,6 +58,7 @@ The custom theme implements the approved image-led homepage direction:
 - Survival Kit article layout for practical setup and troubleshooting pages.
 - Survival Kit editor content pattern covering quick answers, pre-arrival setup, step-by-step setup, failure cases, backup plans, and FAQ.
 - Shared Guide card rendering for archive, search, and default post lists, with guide type badges and consistent CTAs.
+- Survival Kit, City Guides, and Attraction Guides landing pages automatically show latest published posts from their matching categories.
 - Basic 404 template with links back to core travel sections.
 - Search results template without adding Search to top-level navigation.
 - Custom search form template for controlled search label and button copy.
@@ -90,7 +91,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.6.0`.
+Current tools plugin version: `0.7.0`.
 
 The custom plugin owns the first tool only:
 
@@ -187,7 +188,7 @@ Reasonable next bounded increments:
 
 - Improve mobile spacing and touch targets after installing on WordPress and checking real screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-- Populate real guide posts and check archive/search card density on mobile screenshots.
+- Populate real guide posts in the matching categories and check landing-page/archive/search card density on mobile screenshots.
 
 Do not start yet without a new design/spec:
 

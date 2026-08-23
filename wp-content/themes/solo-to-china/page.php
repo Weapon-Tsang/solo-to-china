@@ -173,6 +173,8 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 				</div>
 			</section>
 		<?php endif; ?>
+
+		<?php stc_render_core_page_latest_guides( $slug ); ?>
 	<?php else : ?>
 		<section class="stc-content">
 			<?php

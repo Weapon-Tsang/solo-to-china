@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.6.0' );
+define( 'STC_THEME_VERSION', '0.7.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -182,6 +182,74 @@ function stc_render_guide_card( $post_id = null ) {
 	echo '<span class="stc-post-card__cta">' . esc_html__( 'Read guide', 'solo-to-china' ) . '</span>';
 	echo '</a>';
 	echo '</article>';
+}
+
+function stc_core_page_latest_guides_config( $slug ) {
+	$config = [
+		'survival-kit'      => [
+			'category' => 'survival-kit',
+			'label'    => __( 'Latest Survival Kit guides', 'solo-to-china' ),
+			'empty'    => __( 'Published Survival Kit guides will appear here.', 'solo-to-china' ),
+		],
+		'city-guides'       => [
+			'category' => 'city-guides',
+			'label'    => __( 'Latest City Guides', 'solo-to-china' ),
+			'empty'    => __( 'Published City Guide articles will appear here.', 'solo-to-china' ),
+		],
+		'attraction-guides' => [
+			'category' => 'attraction-guides',
+			'label'    => __( 'Latest Attraction Guides', 'solo-to-china' ),
+			'empty'    => __( 'Published Attraction Guide articles will appear here.', 'solo-to-china' ),
+		],
+	];
+
+	return $config[ $slug ] ?? null;
+}
+
+function stc_render_core_page_latest_guides( $slug ) {
+	$config = stc_core_page_latest_guides_config( $slug );
+
+	if ( ! $config ) {
+		return;
+	}
+
+	$query = new WP_Query(
+		[
+			'category_name'       => $config['category'],
+			'ignore_sticky_posts' => true,
+			'no_found_rows'       => true,
+			'post_status'         => 'publish',
+			'post_type'           => 'post',
+			'posts_per_page'      => 6,
+		]
+	);
+
+	$category     = get_category_by_slug( $config['category'] );
+	$archive_link = $category ? get_category_link( $category ) : home_url( '/category/' . $config['category'] . '/' );
+
+	echo '<section class="stc-page-section stc-latest-guides" aria-labelledby="stc-latest-guides-title">';
+	echo '<div class="stc-latest-guides__header">';
+	echo '<div>';
+	echo '<p>' . esc_html__( 'Fresh practical guides', 'solo-to-china' ) . '</p>';
+	echo '<h2 id="stc-latest-guides-title">' . esc_html( $config['label'] ) . '</h2>';
+	echo '</div>';
+	echo '<a href="' . esc_url( $archive_link ) . '">' . esc_html__( 'Browse all', 'solo-to-china' ) . '</a>';
+	echo '</div>';
+
+	if ( $query->have_posts() ) {
+		echo '<div class="stc-post-list">';
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			stc_render_guide_card( get_the_ID() );
+		}
+		echo '</div>';
+	} else {
+		echo '<p class="stc-latest-guides__empty">' . esc_html( $config['empty'] ) . '</p>';
+	}
+
+	wp_reset_postdata();
+
+	echo '</section>';
 }
 
 function stc_register_block_patterns() {

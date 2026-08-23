@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.6.0`
+Version: `0.7.0`
 
 Location:
 
@@ -151,6 +151,7 @@ Implemented:
 - City Guide article layout and editor content pattern.
 - Survival Kit article layout and editor content pattern.
 - Shared Guide card rendering for archive, search, and default post lists.
+- Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
 - `single.php` for guide/article posts.
@@ -173,7 +174,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.6.0`
+Version: `0.7.0`
 
 Location:
 
@@ -269,11 +270,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 17:00:12 +08:00
-Theme version: 0.6.0
-Theme SHA256: 7E5D0A62E3A4ECDE848319A18FC41324A6A407A5DF26D3EC6F498508C95A69A1
-Plugin version: 0.6.0
-Plugin SHA256: 265545C944F46D25751AC0394949E3D8BEA43CEB109B85F9B8C7CDAF5BF52AD6
+Generated: 2026-08-23 17:13:39 +08:00
+Theme version: 0.7.0
+Theme SHA256: 558080A6F1AF581542D10DF36D3676D293B44894A962A28FAEE7B652E7BD5B5C
+Plugin version: 0.7.0
+Plugin SHA256: 517719F108FF48FF728D3AA85FC1CA2E110ECFB116AAAB17E23E232AC4EE1758
 ```
 
 Regenerate artifacts with:
@@ -336,6 +337,7 @@ The verification scripts protect:
 - banned transaction-first nav labels
 - theme/plugin version consistency
 - shared Guide card rendering for archives and search
+- latest guide rendering on the three core content landing pages
 - theme/plugin responsibility boundaries
 - local saved guide behavior
 - ticket reminder behavior
@@ -387,7 +389,7 @@ Good next increments:
 1. Install the theme/plugin on the live WordPress site and capture desktop/mobile screenshots.
 2. Fix real install spacing, header, and mobile issues based on screenshots.
 3. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-4. Populate real guide posts and check archive/search card density on mobile screenshots.
+4. Populate real guide posts and check landing-page/archive/search card density on mobile screenshots.
 5. Improve FAQ content and internal links.
 6. Add lightweight analytics/event tracking only after deciding privacy approach.
 

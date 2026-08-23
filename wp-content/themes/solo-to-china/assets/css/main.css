@@ -1005,6 +1005,49 @@ label:focus-visible {
 	font-weight: 800;
 }
 
+.stc-latest-guides {
+	display: grid;
+	gap: 22px;
+}
+
+.stc-latest-guides__header {
+	align-items: end;
+	display: flex;
+	gap: 18px;
+	justify-content: space-between;
+}
+
+.stc-latest-guides__header p {
+	color: var(--stc-red);
+	font-size: 13px;
+	font-weight: 800;
+	letter-spacing: .08em;
+	margin: 0 0 6px;
+	text-transform: uppercase;
+}
+
+.stc-latest-guides__header h2 {
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 34px;
+	letter-spacing: 0;
+	margin: 0;
+}
+
+.stc-latest-guides__header a {
+	color: var(--stc-green);
+	font-weight: 800;
+	white-space: nowrap;
+}
+
+.stc-latest-guides__empty {
+	background: #fff;
+	border: 1px dashed #cfe0d8;
+	border-radius: var(--stc-radius);
+	color: var(--stc-muted);
+	margin: 0;
+	padding: 20px;
+}
+
 .stc-footer {
 	background: #0f1513;
 	color: #fff;
@@ -1026,6 +1069,11 @@ label:focus-visible {
 
 @media (max-width: 900px) {
 	.stc-section__header {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.stc-latest-guides__header {
 		align-items: flex-start;
 		flex-direction: column;
 	}
