@@ -212,6 +212,7 @@ label:focus-visible {
 
 .stc-survival,
 .stc-section,
+.stc-home-latest,
 .stc-planner,
 .stc-ticket-band,
 .stc-faq {
@@ -1040,6 +1041,20 @@ label:focus-visible {
 }
 
 .stc-latest-guides__empty {
+	background: #fff;
+	border: 1px dashed #cfe0d8;
+	border-radius: var(--stc-radius);
+	color: var(--stc-muted);
+	margin: 0;
+	padding: 20px;
+}
+
+.stc-home-latest {
+	display: grid;
+	gap: 22px;
+}
+
+.stc-home-latest__empty {
 	background: #fff;
 	border: 1px dashed #cfe0d8;
 	border-radius: var(--stc-radius);

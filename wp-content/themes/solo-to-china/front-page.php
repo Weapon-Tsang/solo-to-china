@@ -107,6 +107,8 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 		</div>
 	</section>
 
+	<?php stc_render_home_latest_guides(); ?>
+
 	<section class="stc-planner" aria-labelledby="planner-title">
 		<div>
 			<h2 id="planner-title">Plan your trip</h2>

@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.7.0`
+Version: `0.8.0`
 
 Location:
 
@@ -152,6 +152,8 @@ Implemented:
 - Survival Kit article layout and editor content pattern.
 - Shared Guide card rendering for archive, search, and default post lists.
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
+- Latest published guide posts on the homepage.
+- Core guide category setup on theme activation.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
 - `single.php` for guide/article posts.
@@ -174,7 +176,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.7.0`
+Version: `0.8.0`
 
 Location:
 
@@ -270,11 +272,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 17:13:39 +08:00
-Theme version: 0.7.0
-Theme SHA256: 558080A6F1AF581542D10DF36D3676D293B44894A962A28FAEE7B652E7BD5B5C
-Plugin version: 0.7.0
-Plugin SHA256: 517719F108FF48FF728D3AA85FC1CA2E110ECFB116AAAB17E23E232AC4EE1758
+Generated: 2026-08-23 18:12:55 +08:00
+Theme version: 0.8.0
+Theme SHA256: E290D57F789A4C2CD917F2B7B7BA9CCDBFBA8DA903EA5FED31B651D1AD87D2C9
+Plugin version: 0.8.0
+Plugin SHA256: 6B6419566F3D8A37FB2A1EFCBB8B6DA30B7F393C07FAF777279A20B1448C66E5
 ```
 
 Regenerate artifacts with:
@@ -338,6 +340,8 @@ The verification scripts protect:
 - theme/plugin version consistency
 - shared Guide card rendering for archives and search
 - latest guide rendering on the three core content landing pages
+- latest guide rendering on the homepage
+- core guide category setup on theme activation
 - theme/plugin responsibility boundaries
 - local saved guide behavior
 - ticket reminder behavior

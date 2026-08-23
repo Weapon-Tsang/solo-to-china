@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.7.0' );
+define( 'STC_THEME_VERSION', '0.8.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -75,6 +75,23 @@ function stc_core_pages() {
 	];
 }
 
+function stc_core_guide_categories() {
+	return [
+		'survival-kit'      => [
+			'name'        => 'Survival Kit',
+			'description' => 'Practical setup and troubleshooting guides for first-time China travel.',
+		],
+		'city-guides'       => [
+			'name'        => 'City Guides',
+			'description' => 'City strategy guides for where to stay, how to move, and what to do.',
+		],
+		'attraction-guides' => [
+			'name'        => 'Attraction Guides',
+			'description' => 'Scenic spot and attraction guides for timing, transport, tickets, and route planning.',
+		],
+	];
+}
+
 function stc_ensure_core_pages() {
 	foreach ( stc_core_pages() as $slug => $title ) {
 		if ( get_page_by_path( $slug ) ) {
@@ -93,6 +110,24 @@ function stc_ensure_core_pages() {
 	}
 }
 add_action( 'after_switch_theme', 'stc_ensure_core_pages' );
+
+function stc_ensure_core_categories() {
+	foreach ( stc_core_guide_categories() as $slug => $category ) {
+		if ( term_exists( $slug, 'category' ) ) {
+			continue;
+		}
+
+		wp_insert_term(
+			$category['name'],
+			'category',
+			[
+				'description' => $category['description'],
+				'slug'        => $slug,
+			]
+		);
+	}
+}
+add_action( 'after_switch_theme', 'stc_ensure_core_categories' );
 
 function stc_is_attraction_guide_post( $post_id = null ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
@@ -248,6 +283,60 @@ function stc_render_core_page_latest_guides( $slug ) {
 	}
 
 	wp_reset_postdata();
+
+	echo '</section>';
+}
+
+function stc_get_guide_category_ids() {
+	$category_ids = [];
+
+	foreach ( array_keys( stc_core_guide_categories() ) as $slug ) {
+		$category = get_category_by_slug( $slug );
+
+		if ( $category ) {
+			$category_ids[] = (int) $category->term_id;
+		}
+	}
+
+	return $category_ids;
+}
+
+function stc_render_home_latest_guides() {
+	$category_ids = stc_get_guide_category_ids();
+
+	echo '<section class="stc-home-latest" aria-labelledby="stc-home-latest-title">';
+	echo '<div class="stc-section__header">';
+	echo '<h2 id="stc-home-latest-title">' . esc_html__( 'Latest practical guides', 'solo-to-china' ) . '</h2>';
+	echo '<a href="' . esc_url( home_url( '/survival-kit/' ) ) . '">' . esc_html__( 'Start with Survival Kit', 'solo-to-china' ) . '</a>';
+	echo '</div>';
+
+	if ( $category_ids ) {
+		$query = new WP_Query(
+			[
+				'category__in'        => $category_ids,
+				'ignore_sticky_posts' => true,
+				'no_found_rows'       => true,
+				'post_status'         => 'publish',
+				'post_type'           => 'post',
+				'posts_per_page'      => 6,
+			]
+		);
+
+		if ( $query->have_posts() ) {
+			echo '<div class="stc-post-list">';
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				stc_render_guide_card( get_the_ID() );
+			}
+			echo '</div>';
+		} else {
+			echo '<p class="stc-home-latest__empty">' . esc_html__( 'Published guide posts will appear here automatically.', 'solo-to-china' ) . '</p>';
+		}
+
+		wp_reset_postdata();
+	} else {
+		echo '<p class="stc-home-latest__empty">' . esc_html__( 'Publish posts in the Survival Kit, City Guides, or Attraction Guides categories to fill this section.', 'solo-to-china' ) . '</p>';
+	}
 
 	echo '</section>';
 }
