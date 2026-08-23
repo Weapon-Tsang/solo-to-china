@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.13.0`
+Version: `0.14.0`
 
 Location:
 
@@ -162,6 +162,9 @@ Implemented:
 - Core landing pages keep primary guide content before Saved Guides and category-matched latest posts.
 - Attraction Guides uses two columns on phones and three columns on tablets so cards remain readable.
 - Guide articles use a horizontal pre-content table of contents on mobile and the sidebar table of contents on desktop.
+- Planner uses the approved homepage calendar icon, partner disclosure, and watercolor artwork.
+- FAQ uses responsive accordions with related internal links.
+- Saved Guides remain on the three content landing pages and do not appear on Planner, Tools, or FAQ.
 - Core guide category setup on theme activation.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
@@ -185,7 +188,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.13.0`
+Version: `0.14.0`
 
 Location:
 
@@ -281,11 +284,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 22:18:31 +08:00
-Theme version: 0.13.0
-Theme SHA256: 530A707F420B82D01919D1F931166CADA3289B7E9C23A9AFC827091020EA4F46
-Plugin version: 0.13.0
-Plugin SHA256: 9532E9FBAE842D1D7A640B0656221B7DB2F3D9265E1B0F16D4375C4AE314C07F
+Generated: 2026-08-23 22:36:14 +08:00
+Theme version: 0.14.0
+Theme SHA256: 19BF36C5E227BDB4C1B02CC605C6A0D03DAE5ADA994FBC721331DEDEE6199722
+Plugin version: 0.14.0
+Plugin SHA256: C8EE2706A7B99DF27A339113CA20E8EDCA9A1829350B87BBD46904A39FA273C9
 ```
 
 Regenerate artifacts with:
@@ -352,6 +355,7 @@ The verification scripts protect:
 - automatic guide article table of contents
 - content-first landing-page order and responsive attraction-card widths
 - mobile-before-content and desktop-sidebar table-of-contents states
+- utility-page Saved Guides boundaries, Planner visual continuity, and FAQ accordion styling
 - shared Guide card rendering for archives and search
 - latest guide rendering on the three core content landing pages
 - latest guide rendering on the homepage

@@ -96,7 +96,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.13.0") -or (-not $PackageScript.Contains("Plugin version: 0.13.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.14.0") -or (-not $PackageScript.Contains("Plugin version: 0.14.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -125,8 +125,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.13.0")) {
-        $Failures.Add("Theme stylesheet header version is not 0.13.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.14.0")) {
+        $Failures.Add("Theme stylesheet header version is not 0.14.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -139,7 +139,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.13.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.14.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -190,8 +190,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.13.0'")) {
-        $Failures.Add("Theme asset version is not 0.13.0.")
+    if (-not $Functions.Contains("'0.14.0'")) {
+        $Failures.Add("Theme asset version is not 0.14.0.")
     }
     if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
         $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
@@ -307,6 +307,14 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     if (-not $PageTemplate.Contains("stc-save-guide--image-card")) {
         $Failures.Add("Guide landing image cards do not keep the local save action.")
     }
+    foreach ($UtilityPageToken in @("`$guide_landing_slugs", "stc-planner--page", "stc-planner__icon", "stc-planner__art", "stc-faq--page", "stc-faq__answer-link")) {
+        if (-not $PageTemplate.Contains($UtilityPageToken)) {
+            $Failures.Add("Core page template is missing utility-page presentation token: $UtilityPageToken")
+        }
+    }
+    if (-not $PageTemplate.Contains("in_array( `$slug, `$guide_landing_slugs, true )")) {
+        $Failures.Add("Saved Guides are not limited to the three content landing pages.")
+    }
     foreach ($LandingToken in @("stc-page-primary", "stc-saved-guides", "stc_render_core_page_latest_guides")) {
         if (-not $PageTemplate.Contains($LandingToken)) {
             $Failures.Add("Core landing page is missing content-first structure token: $LandingToken")
@@ -399,7 +407,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.13.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.14.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -407,11 +415,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.13.0")) {
-        $Failures.Add("Tools plugin header version is not 0.13.0.")
+    if (-not $Plugin.Contains("Version: 0.14.0")) {
+        $Failures.Add("Tools plugin header version is not 0.14.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.13.0'")) {
-        $Failures.Add("Tools plugin version constant is not 0.13.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.14.0'")) {
+        $Failures.Add("Tools plugin version constant is not 0.14.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -685,6 +693,11 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     foreach ($SecondaryPageStyleToken in @(".stc-page-primary .stc-card-grid--attractions", ".stc-guide-toc--mobile", ".stc-guide-toc--desktop")) {
         if (-not $ThemeCss.Contains($SecondaryPageStyleToken)) {
             $Failures.Add("Theme CSS is missing secondary-page responsive style: $SecondaryPageStyleToken")
+        }
+    }
+    foreach ($UtilityPageStyleToken in @(".stc-planner--page", ".stc-faq--page", ".stc-faq summary::after", ".stc-faq__answer-link")) {
+        if (-not $ThemeCss.Contains($UtilityPageStyleToken)) {
+            $Failures.Add("Theme CSS is missing utility-page responsive style: $UtilityPageStyleToken")
         }
     }
     foreach ($GuideClass in @(".stc-guide-quick-facts", ".stc-guide-fact", ".stc-guide-warning", ".stc-guide-route")) {

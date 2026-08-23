@@ -60,17 +60,18 @@ $core_pages = [
 		'title' => 'FAQ',
 		'copy'  => 'Short answers to common first-trip questions.',
 		'items' => [
-			[ 'title' => 'Do I need a visa to visit China?', 'copy' => 'Check the latest entry rules for your passport before booking.' ],
-			[ 'title' => 'How can I pay in China?', 'copy' => 'Set up mobile payment before arrival and keep a backup card or cash.' ],
-			[ 'title' => 'Which apps are essential in China?', 'copy' => 'Maps, translation, payments, ride hailing, and train tools are the basics.' ],
-			[ 'title' => 'Can I use Google, WhatsApp, and other services in China?', 'copy' => 'Some services may not work normally. Plan your connection setup in advance.' ],
-			[ 'title' => 'Is China safe for solo travelers?', 'copy' => 'Most trips are straightforward with normal urban travel awareness and planning.' ],
-			[ 'title' => 'How do I get around between cities?', 'copy' => 'High-speed rail is often the easiest option between major cities.' ],
+			[ 'title' => 'Do I need a visa to visit China?', 'copy' => 'Check the latest entry rules for your passport before booking.', 'link' => '/survival-kit/', 'link_label' => 'Review entry preparation' ],
+			[ 'title' => 'How can I pay in China?', 'copy' => 'Set up mobile payment before arrival and keep a backup card or cash.', 'link' => '/survival-kit/', 'link_label' => 'Open the payment setup guide' ],
+			[ 'title' => 'Which apps are essential in China?', 'copy' => 'Maps, translation, payments, ride hailing, and train tools are the basics.', 'link' => '/survival-kit/', 'link_label' => 'Browse essential setup guides' ],
+			[ 'title' => 'Can I use Google, WhatsApp, and other services in China?', 'copy' => 'Some services may not work normally. Plan your connection setup in advance.', 'link' => '/survival-kit/', 'link_label' => 'Prepare internet access' ],
+			[ 'title' => 'Is China safe for solo travelers?', 'copy' => 'Most trips are straightforward with normal urban travel awareness and planning.', 'link' => '/city-guides/', 'link_label' => 'Browse practical city guides' ],
+			[ 'title' => 'How do I get around between cities?', 'copy' => 'High-speed rail is often the easiest option between major cities.', 'link' => '/planner/', 'link_label' => 'Continue to trip planning' ],
 		],
 	],
 ];
 
-$page = $core_pages[ $slug ] ?? null;
+$page                = $core_pages[ $slug ] ?? null;
+$guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 
 if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 	function stc_render_save_guide_button( $item, $type, $is_image_card = false ) {
@@ -133,14 +134,23 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 				</div>
 			</section>
 		<?php elseif ( 'planner' === $slug ) : ?>
-			<section class="stc-page-section">
-				<div class="stc-feature-panel">
+			<section class="stc-planner stc-planner--page" aria-labelledby="stc-planner-page-title">
+				<div class="stc-planner__intro">
+					<span class="stc-planner__icon" aria-hidden="true">
+						<svg viewBox="0 0 48 48" focusable="false"><rect x="6" y="9" width="32" height="31" rx="3"/><path d="M14 5v8M30 5v8M6 18h32M13 25h5M22 25h5M13 32h5"/><circle cx="36" cy="35" r="9"/><path d="m32.5 35 2.5 2.5 4.5-5"/></svg>
+					</span>
 					<div>
-						<h2><?php esc_html_e( 'Plan, then book with confidence', 'solo-to-china' ); ?></h2>
-						<p><?php esc_html_e( 'Use the guides first, then open Trip.com when you are ready to compare hotels, trains, flights, or activities.', 'solo-to-china' ); ?></p>
+						<h2 id="stc-planner-page-title"><?php esc_html_e( 'Plan your trip', 'solo-to-china' ); ?></h2>
+						<p><?php esc_html_e( 'Use practical guides first, then compare travel products with a clear route and budget.', 'solo-to-china' ); ?></p>
 					</div>
-					<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener"><?php esc_html_e( 'Open Trip.com', 'solo-to-china' ); ?></a>
 				</div>
+				<div class="stc-planner__partner">
+					<span><?php esc_html_e( 'Start planning on', 'solo-to-china' ); ?></span>
+					<strong>Trip.com</strong>
+					<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener"><?php esc_html_e( 'Start planning on Trip.com', 'solo-to-china' ); ?></a>
+					<p><?php esc_html_e( 'Opens in a new tab. We may earn a commission at no extra cost to you.', 'solo-to-china' ); ?></p>
+				</div>
+				<span class="stc-planner__art" aria-hidden="true"></span>
 			</section>
 		<?php elseif ( 'tools' === $slug ) : ?>
 			<section class="stc-page-section">
@@ -159,12 +169,15 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 				</div>
 			</section>
 		<?php elseif ( 'faq' === $slug ) : ?>
-			<section class="stc-page-section">
+			<section class="stc-faq stc-faq--page" aria-label="Frequently asked questions">
 				<div class="stc-faq__grid">
 					<?php foreach ( $page['items'] as $item ) : ?>
 						<details>
 							<summary><?php echo esc_html( $item['title'] ); ?></summary>
-							<p><?php echo esc_html( $item['copy'] ); ?></p>
+							<div class="stc-faq__answer">
+								<p><?php echo esc_html( $item['copy'] ); ?></p>
+								<a class="stc-faq__answer-link" href="<?php echo esc_url( home_url( $item['link'] ) ); ?>"><?php echo esc_html( $item['link_label'] ); ?></a>
+							</div>
 						</details>
 					<?php endforeach; ?>
 				</div>
@@ -172,25 +185,27 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 		<?php endif; ?>
 		</div>
 
-		<section class="stc-saved-guides" aria-labelledby="stc-saved-guides-title">
-			<div>
-				<div class="stc-saved-guides__header">
-					<h2 id="stc-saved-guides-title"><?php esc_html_e( 'Saved on this device', 'solo-to-china' ); ?></h2>
-					<div class="stc-saved-guides__actions">
-						<button type="button" data-stc-export-guides><?php esc_html_e( 'Export', 'solo-to-china' ); ?></button>
-						<label>
-							<span><?php esc_html_e( 'Import', 'solo-to-china' ); ?></span>
-							<input type="file" accept="application/json,.json" data-stc-import-guides>
-						</label>
-						<button type="button" data-stc-clear-guides><?php esc_html_e( 'Clear all', 'solo-to-china' ); ?></button>
+		<?php if ( in_array( $slug, $guide_landing_slugs, true ) ) : ?>
+			<section class="stc-saved-guides" aria-labelledby="stc-saved-guides-title">
+				<div>
+					<div class="stc-saved-guides__header">
+						<h2 id="stc-saved-guides-title"><?php esc_html_e( 'Saved on this device', 'solo-to-china' ); ?></h2>
+						<div class="stc-saved-guides__actions">
+							<button type="button" data-stc-export-guides><?php esc_html_e( 'Export', 'solo-to-china' ); ?></button>
+							<label>
+								<span><?php esc_html_e( 'Import', 'solo-to-china' ); ?></span>
+								<input type="file" accept="application/json,.json" data-stc-import-guides>
+							</label>
+							<button type="button" data-stc-clear-guides><?php esc_html_e( 'Clear all', 'solo-to-china' ); ?></button>
+						</div>
 					</div>
+					<p class="stc-local-note"><?php esc_html_e( 'Stored only on this device. Export or clear it anytime.', 'solo-to-china' ); ?></p>
+					<div data-stc-saved-guides></div>
 				</div>
-				<p class="stc-local-note"><?php esc_html_e( 'Stored only on this device. Export or clear it anytime.', 'solo-to-china' ); ?></p>
-				<div data-stc-saved-guides></div>
-			</div>
-		</section>
+			</section>
 
-		<?php stc_render_core_page_latest_guides( $slug ); ?>
+			<?php stc_render_core_page_latest_guides( $slug ); ?>
+		<?php endif; ?>
 	<?php else : ?>
 		<section class="stc-content">
 			<?php

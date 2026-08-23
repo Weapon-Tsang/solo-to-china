@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.13.0`.
+Current theme version: `0.14.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -53,6 +53,9 @@ The custom theme implements the approved image-led homepage direction:
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
 - Core landing pages render their primary guide content before Saved Guides and category-matched latest posts.
 - Attraction Guides uses a readable two-column grid on phones and three-column grid on tablets instead of shrinking six cards into one row.
+- Planner reuses the approved homepage calendar icon, Trip.com disclosure block, and watercolor artwork on desktop and mobile.
+- FAQ uses polished two-column desktop and one-column mobile accordions with related internal links.
+- Saved Guides and category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
 - Planner band.
 - Homepage Planner CTA opens Trip.com as a sponsored external link.
 - Ticket Tool / Reminder band.
@@ -109,7 +112,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.13.0`.
+Current tools plugin version: `0.14.0`.
 
 The custom plugin owns the first tool only:
 
@@ -193,7 +196,7 @@ Current environment note:
 - PHP CLI is installed locally in `.tools/php/`.
 - The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
 - Static project checks and PHP syntax checks pass before packaging.
-- Browser preview checks protect homepage reference alignment, landing-page content order and mobile card widths, article table-of-contents breakpoints, and horizontal overflow.
+- Browser preview checks protect homepage reference alignment, landing-page content order and mobile card widths, article table-of-contents breakpoints, utility-page content scope, FAQ expansion, and horizontal overflow.
 
 ## GitHub / Source Control Status
 
