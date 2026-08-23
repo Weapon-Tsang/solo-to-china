@@ -83,7 +83,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.2.0') === false || strpos($packageScript, 'Plugin version: 0.2.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.3.0') === false || strpos($packageScript, 'Plugin version: 0.3.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -112,8 +112,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.2.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.2.0.';
+    if (strpos($themeStyle, 'Version: 0.3.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.3.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -126,7 +126,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.2.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.3.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -172,8 +172,19 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.2.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.2.0.';
+    if (strpos($functions, "'0.3.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.3.0.';
+    }
+    if (strpos($functions, 'stc_is_attraction_guide_post') === false) {
+        $failures[] = 'Theme functions are missing the Attraction Guide post detector.';
+    }
+    if (strpos($functions, 'register_block_pattern') === false || strpos($functions, 'solo-to-china/attraction-guide-v1') === false) {
+        $failures[] = 'Theme does not register the Attraction Guide content pattern.';
+    }
+    foreach (['Best time to visit', 'How to get there', 'Tickets and prices', 'Opening and booking timing', 'Where to stay', 'Common mistakes'] as $patternText) {
+        if (strpos($functions, $patternText) === false) {
+            $failures[] = "Attraction Guide content pattern is missing section: {$patternText}";
+        }
     }
 }
 
@@ -219,6 +230,25 @@ if (is_file($pageTemplatePath)) {
     }
 }
 
+$singleTemplatePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/single.php';
+if (is_file($singleTemplatePath)) {
+    $singleTemplate = file_get_contents($singleTemplatePath);
+    if (strpos($singleTemplate, 'stc_is_attraction_guide_post') === false) {
+        $failures[] = 'Single template does not route Attraction Guide posts.';
+    }
+    if (strpos($singleTemplate, 'stc-single--attraction-guide') === false) {
+        $failures[] = 'Single template is missing the Attraction Guide article layout class.';
+    }
+    if (strpos($singleTemplate, 'stc-attraction-guide__checklist') === false) {
+        $failures[] = 'Single template is missing the Attraction Guide planning checklist.';
+    }
+    foreach (['Best time', 'Transport', 'Ticket price', 'Booking window', 'Where to stay', 'Common mistakes'] as $guideTopic) {
+        if (strpos($singleTemplate, $guideTopic) === false) {
+            $failures[] = "Attraction Guide template is missing planning topic: {$guideTopic}";
+        }
+    }
+}
+
 $pluginPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php';
 if (is_file($pluginPath)) {
     $plugin = file_get_contents($pluginPath);
@@ -231,7 +261,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.2.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.3.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -239,11 +269,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.2.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.2.0.';
+    if (strpos($plugin, 'Version: 0.3.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.3.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.2.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.2.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.3.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.3.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -266,7 +296,20 @@ if (is_file($pluginPath)) {
     if (strpos($pluginSource, 'booking_lead_days') === false) {
         $failures[] = 'Attraction ticket data is missing booking lead day metadata.';
     }
-    foreach (['West Lake', 'Shanghai Disney Resort', 'Summer Palace', 'Chengdu Research Base of Giant Panda Breeding'] as $attractionName) {
+    foreach ([
+        'West Lake',
+        'Shanghai Disney Resort',
+        'Summer Palace',
+        'Chengdu Research Base of Giant Panda Breeding',
+        'Temple of Heaven',
+        'The Bund',
+        'Longmen Grottoes',
+        'Mogao Caves',
+        'Leshan Giant Buddha',
+        'Huangshan Scenic Area',
+        'Jiuzhaigou Valley',
+        'Li River Cruise',
+    ] as $attractionName) {
         if (strpos($attractions, $attractionName) === false) {
             $failures[] = "Attraction ticket data is missing planned coverage for: {$attractionName}";
         }
@@ -291,6 +334,12 @@ if (is_file($pluginPath)) {
     }
     if (strpos($shortcodes, 'name="stc_visit_date" required') === false) {
         $failures[] = 'Ticket tool visit date input is not required.';
+    }
+    if (strpos($shortcodes, 'stc_tools_group_attractions_by_city') === false) {
+        $failures[] = 'Ticket tool shortcode does not group attractions by city.';
+    }
+    if (strpos($shortcodes, '<optgroup') === false) {
+        $failures[] = 'Ticket tool attraction select does not render city optgroups.';
     }
 }
 
@@ -439,6 +488,15 @@ if (is_file($themeCssPath)) {
     }
     if (strpos($themeCss, '.search-submit') === false || strpos($themeCss, 'max-width: none') === false) {
         $failures[] = 'Theme CSS is missing mobile search form stacking.';
+    }
+    if (strpos($themeCss, '.stc-single--attraction-guide') === false) {
+        $failures[] = 'Theme CSS is missing the Attraction Guide single layout.';
+    }
+    if (strpos($themeCss, '.stc-attraction-guide__layout') === false) {
+        $failures[] = 'Theme CSS is missing the Attraction Guide content/sidebar layout.';
+    }
+    if (strpos($themeCss, '.stc-attraction-guide__checklist') === false) {
+        $failures[] = 'Theme CSS is missing the Attraction Guide checklist styling.';
     }
 }
 

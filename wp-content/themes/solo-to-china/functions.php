@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.2.0' );
+define( 'STC_THEME_VERSION', '0.3.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -93,6 +93,58 @@ function stc_ensure_core_pages() {
 	}
 }
 add_action( 'after_switch_theme', 'stc_ensure_core_pages' );
+
+function stc_is_attraction_guide_post( $post_id = null ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	return has_category( 'attraction-guides', $post_id ) || has_tag( 'attraction-guide', $post_id );
+}
+
+function stc_register_block_patterns() {
+	if ( ! function_exists( 'register_block_pattern' ) ) {
+		return;
+	}
+
+	if ( function_exists( 'register_block_pattern_category' ) ) {
+		register_block_pattern_category(
+			'solo-to-china',
+			[ 'label' => __( 'SoloToChina', 'solo-to-china' ) ]
+		);
+	}
+
+	$attraction_guide_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the practical answer: who should visit, how much time to allow, and what travelers should decide before they go.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Best time to visit</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Cover seasons, weather, crowd levels, photography windows, and when solo or first-time visitors should avoid peak pressure.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>How to get there</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Explain metro, taxi, high-speed rail, airport, walking, and last-mile details in plain English.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Tickets and prices</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>List price ranges, common ticket types, what is included, and passport or real-name entry notes.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Opening and booking timing</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Explain opening hours, closed days, how many days ahead to check tickets, and when to use the reminder tool.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Where to stay</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Recommend the best nearby or connected areas for first-time visitors, with tradeoffs for price, transit, and late arrivals.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Common mistakes</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Call out traps, confusing entrances, timing mistakes, overpacked routes, taxi issues, and holiday crowd risks.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Suggested route</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Give a simple route order for a calm first visit, including where to start, where to pause, and how to exit.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Answer the most likely first-time visitor questions in short, direct blocks.</p><!-- /wp:paragraph -->';
+
+	register_block_pattern(
+		'solo-to-china/attraction-guide-v1',
+		[
+			'title'       => __( 'Attraction Guide v1', 'solo-to-china' ),
+			'description' => __( 'A practical SoloToChina article structure for scenic spot and attraction guides.', 'solo-to-china' ),
+			'categories'  => [ 'solo-to-china' ],
+			'content'     => $attraction_guide_content,
+		]
+	);
+}
+add_action( 'init', 'stc_register_block_patterns' );
 
 function stc_render_survival_icon( $icon ) {
 	$paths = [

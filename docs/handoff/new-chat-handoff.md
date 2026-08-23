@@ -1,6 +1,6 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-08-22
+Date: 2026-08-23
 
 Use this document to continue the SoloToChina WordPress project in a new Codex/ChatGPT conversation.
 
@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.2.0`
+Version: `0.3.0`
 
 Location:
 
@@ -147,6 +147,7 @@ Implemented:
 - Skip-to-content link.
 - Local Saved Guides UI.
 - No-account page sharing on core guide pages.
+- Attraction Guide article layout and editor content pattern.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
 - `single.php` for guide/article posts.
@@ -169,7 +170,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.2.0`
+Version: `0.3.0`
 
 Location:
 
@@ -190,6 +191,7 @@ Current tool:
 Current behavior:
 
 - Select attraction.
+- Attraction select is grouped by city for easier scanning on mobile.
 - Select visit date.
 - Visit date is required.
 - Calculate recommended ticket-check/reminder date from `booking_lead_days`.
@@ -209,7 +211,7 @@ Current behavior:
 - Validate imported reminder dates before saving locally.
 - Load frontend assets only on the homepage, Tools page, or pages containing the shortcode.
 
-Static first-phase attraction data currently covers 10 attractions across:
+Static first-phase attraction data currently covers 18 attractions across:
 
 - Beijing
 - Shanghai
@@ -218,6 +220,12 @@ Static first-phase attraction data currently covers 10 attractions across:
 - Hangzhou
 - Chengdu
 - Guangzhou
+- Luoyang
+- Dunhuang
+- Leshan
+- Huangshan
+- Jiuzhaigou
+- Guilin
 
 Ticket reminders use browser `localStorage` only. They do not send email/SMS and do not write to the database.
 
@@ -258,11 +266,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-22 00:43:58 +08:00
-Theme version: 0.2.0
-Theme SHA256: 48F952407E63DF8012C592BEA43D59C975493D795DBC763630A1A3782F039D11
-Plugin version: 0.2.0
-Plugin SHA256: D8484B86D9AF9A9BC103DCB99C59A31BBF2E4457F831C14638EAA5F6463FDC2A
+Generated: 2026-08-23 15:53:51 +08:00
+Theme version: 0.3.0
+Theme SHA256: 913444F0828B2DC6B54FC81051F985C6ACC4CDEC901D5389B9D828A79E9502B3
+Plugin version: 0.3.0
+Plugin SHA256: 440E6D7E3450D251A9CAEDC9F5A14D23272BCB9DFAA416B62A39CFBB8077D3D8
 ```
 
 Regenerate artifacts with:
@@ -336,26 +344,13 @@ The verification scripts protect:
 
 ## GitHub / Source Control Status
 
-Normal `git` push failed earlier because of Windows Schannel credential issues:
+This continuation was cloned from:
 
 ```text
-SEC_E_NO_CREDENTIALS
+https://github.com/Weapon-Tsang/solo-to-china
 ```
 
-Use local generated zips as the deployment source of truth for now.
-
-Current `git status --short` shows the repo is still an initial uncommitted import:
-
-```text
-?? .gitignore
-?? README.md
-?? docs/
-?? exports/
-?? scripts/
-?? wp-content/
-```
-
-Do not assume GitHub remote contains the latest binary/image/package state unless separately verified.
+At the start of the 2026-08-23 continuation, the local checkout was clean on `main` and `.\scripts\verify-project.ps1` passed. Regenerate local zip artifacts after plugin or theme changes and use the fresh `dist/` output for deployment.
 
 ## Post-Install Manual QA
 
@@ -387,7 +382,7 @@ Good next increments:
 
 1. Install the theme/plugin on the live WordPress site and capture desktop/mobile screenshots.
 2. Fix real install spacing, header, and mobile issues based on screenshots.
-3. Expand static attraction data inside the existing Ticket Tool only.
+3. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 4. Add more realistic guide-card metadata once actual content pages exist.
 5. Add basic content templates for Survival Kit article pages if real posts/categories are ready.
 6. Improve FAQ content and internal links.

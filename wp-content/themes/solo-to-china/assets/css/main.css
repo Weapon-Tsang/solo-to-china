@@ -681,6 +681,141 @@ label:focus-visible {
 	margin: 0;
 }
 
+.stc-single--attraction-guide {
+	display: grid;
+	gap: 30px;
+}
+
+.stc-attraction-guide__hero {
+	background: #fff;
+	border: 1px solid var(--stc-line);
+	border-radius: var(--stc-radius);
+	display: grid;
+	gap: 12px;
+	padding: 30px;
+}
+
+.stc-attraction-guide__eyebrow,
+.stc-attraction-guide__meta {
+	color: var(--stc-green);
+	font-size: 13px;
+	font-weight: 800;
+	letter-spacing: .08em;
+	margin: 0;
+	text-transform: uppercase;
+}
+
+.stc-attraction-guide__hero h1 {
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: clamp(42px, 6vw, 72px);
+	letter-spacing: 0;
+	line-height: 1;
+	margin: 0;
+}
+
+.stc-attraction-guide__deck {
+	color: var(--stc-muted);
+	font-size: 20px;
+	line-height: 1.5;
+	margin: 0;
+	max-width: 720px;
+}
+
+.stc-attraction-guide__layout {
+	align-items: start;
+	display: grid;
+	gap: 26px;
+	grid-template-columns: minmax(0, 1fr) 300px;
+}
+
+.stc-entry-content--guide {
+	background: #fff;
+	border: 1px solid var(--stc-line);
+	border-radius: var(--stc-radius);
+	color: var(--stc-ink);
+	padding: 32px;
+}
+
+.stc-entry-content--guide > *:first-child {
+	margin-top: 0;
+}
+
+.stc-entry-content--guide h2 {
+	color: var(--stc-ink);
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 30px;
+	letter-spacing: 0;
+	line-height: 1.15;
+	margin: 34px 0 12px;
+}
+
+.stc-entry-content--guide p,
+.stc-entry-content--guide li {
+	color: var(--stc-muted);
+	font-size: 17px;
+	line-height: 1.7;
+}
+
+.stc-attraction-guide__sidebar {
+	position: sticky;
+	top: 110px;
+}
+
+.stc-attraction-guide__checklist {
+	background: #fff6e8;
+	border: 1px solid #efd8b4;
+	border-radius: var(--stc-radius);
+	display: grid;
+	gap: 16px;
+	padding: 20px;
+}
+
+.stc-attraction-guide__checklist h2 {
+	font-size: 18px;
+	letter-spacing: 0;
+	margin: 0;
+}
+
+.stc-attraction-guide__checklist ul {
+	display: grid;
+	gap: 12px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.stc-attraction-guide__checklist li {
+	border-top: 1px solid rgba(169, 120, 36, .25);
+	display: grid;
+	gap: 3px;
+	padding-top: 12px;
+}
+
+.stc-attraction-guide__checklist li:first-child {
+	border-top: 0;
+	padding-top: 0;
+}
+
+.stc-attraction-guide__checklist span {
+	color: var(--stc-ink);
+	font-weight: 800;
+}
+
+.stc-attraction-guide__checklist small {
+	color: var(--stc-muted);
+	line-height: 1.45;
+}
+
+.stc-attraction-guide__footer {
+	border-top: 1px solid var(--stc-line);
+	padding-top: 22px;
+}
+
+.stc-attraction-guide__footer a {
+	color: var(--stc-green);
+	font-weight: 800;
+}
+
 .search-form {
 	display: flex;
 	gap: 10px;
@@ -861,6 +996,19 @@ label:focus-visible {
 	.stc-saved-guide-item {
 		align-items: start;
 		grid-template-columns: 1fr;
+	}
+
+	.stc-attraction-guide__layout {
+		grid-template-columns: 1fr;
+	}
+
+	.stc-attraction-guide__hero,
+	.stc-entry-content--guide {
+		padding: 24px;
+	}
+
+	.stc-attraction-guide__sidebar {
+		position: static;
 	}
 
 	.search-form {

@@ -2,7 +2,7 @@
 
 Project-owned WordPress functionality for SoloToChina.
 
-Current version: `0.2.0`.
+Current version: `0.3.0`.
 
 This plugin owns:
 
@@ -12,7 +12,7 @@ This plugin owns:
 - Reminder export/import/clear actions
 - Individual reminder delete action
 - `.ics` calendar download for saved reminders
-- Static first-phase attraction data
+- Expanded and city-grouped static first-phase attraction data
 
 The first tool should be limited to Attraction Ticket Reservation & Reminder. Do not add unrelated calculators, checklists, app selectors, or other tools until real user demand supports them.
 

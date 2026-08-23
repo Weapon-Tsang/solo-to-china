@@ -1,6 +1,6 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-08-22
+Date: 2026-08-23
 
 ## Current Working Boundary
 
@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.2.0`.
+Current theme version: `0.3.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -51,6 +51,8 @@ The custom theme implements the approved image-led homepage direction:
 - Footer.
 - Keyboard focus styling and skip-to-content link.
 - Basic single article template for future guide posts.
+- Attraction Guide article layout for scenic spot strategy pages.
+- Attraction Guide editor content pattern covering best time, transport, ticket prices, opening and booking timing, where to stay, and common mistakes.
 - Basic archive template for future category/tag guide lists.
 - Basic 404 template with links back to core travel sections.
 - Basic search results template without adding Search to top-level navigation.
@@ -84,7 +86,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.2.0`.
+Current tools plugin version: `0.3.0`.
 
 The custom plugin owns the first tool only:
 
@@ -97,9 +99,10 @@ The shortcode is:
 Current Ticket Tool behavior:
 
 - Select attraction.
+- Attraction select is grouped by city for easier scanning on mobile.
 - Select visit date.
 - Calculate recommended ticket-check/reminder date from `booking_lead_days`.
-- Static first-phase attraction data currently covers 10 attractions across Beijing, Shanghai, Xi'an, Zhangjiajie, Hangzhou, Chengdu, and Guangzhou.
+- Static first-phase attraction data currently covers 18 attractions across Beijing, Shanghai, Xi'an, Zhangjiajie, Hangzhou, Chengdu, Guangzhou, Luoyang, Dunhuang, Leshan, Huangshan, Jiuzhaigou, and Guilin.
 - Frontend assets load on the homepage, Tools page, or pages that contain the ticket tool shortcode.
 - Show booking-window status:
   - `Book now`
@@ -178,8 +181,9 @@ For deployment, use the local zip artifacts as the source of truth.
 Reasonable next bounded increments:
 
 - Improve mobile spacing and touch targets after installing on WordPress and checking real screenshots.
-- Expand static attraction data inside the existing Ticket Tool only.
-- Add non-account share links for guide pages.
+- Continue refining or expanding static attraction data inside the existing Ticket Tool only.
+- Build City Guide article template v1.
+- Build Survival Kit article template v1.
 
 Do not start yet without a new design/spec:
 

@@ -80,7 +80,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.2.0") -or (-not $PackageScript.Contains("Plugin version: 0.2.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.3.0") -or (-not $PackageScript.Contains("Plugin version: 0.3.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -109,8 +109,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.2.0")) {
-        $Failures.Add("Theme stylesheet header version is not 0.2.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.3.0")) {
+        $Failures.Add("Theme stylesheet header version is not 0.3.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -123,7 +123,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.2.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.3.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -171,8 +171,19 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.2.0'")) {
-        $Failures.Add("Theme asset version is not 0.2.0.")
+    if (-not $Functions.Contains("'0.3.0'")) {
+        $Failures.Add("Theme asset version is not 0.3.0.")
+    }
+    if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
+        $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
+    }
+    if (-not $Functions.Contains("register_block_pattern") -or (-not $Functions.Contains("solo-to-china/attraction-guide-v1"))) {
+        $Failures.Add("Theme does not register the Attraction Guide content pattern.")
+    }
+    foreach ($PatternText in @("Best time to visit", "How to get there", "Tickets and prices", "Opening and booking timing", "Where to stay", "Common mistakes")) {
+        if (-not $Functions.Contains($PatternText)) {
+            $Failures.Add("Attraction Guide content pattern is missing section: $PatternText")
+        }
     }
 }
 
@@ -218,6 +229,25 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     }
 }
 
+$SingleTemplatePath = Join-Path $Root "wp-content/themes/solo-to-china/single.php"
+if (Test-Path -LiteralPath $SingleTemplatePath -PathType Leaf) {
+    $SingleTemplate = Get-Content -LiteralPath $SingleTemplatePath -Raw
+    if (-not $SingleTemplate.Contains("stc_is_attraction_guide_post")) {
+        $Failures.Add("Single template does not route Attraction Guide posts.")
+    }
+    if (-not $SingleTemplate.Contains("stc-single--attraction-guide")) {
+        $Failures.Add("Single template is missing the Attraction Guide article layout class.")
+    }
+    if (-not $SingleTemplate.Contains("stc-attraction-guide__checklist")) {
+        $Failures.Add("Single template is missing the Attraction Guide planning checklist.")
+    }
+    foreach ($GuideTopic in @("Best time", "Transport", "Ticket price", "Booking window", "Where to stay", "Common mistakes")) {
+        if (-not $SingleTemplate.Contains($GuideTopic)) {
+            $Failures.Add("Attraction Guide template is missing planning topic: $GuideTopic")
+        }
+    }
+}
+
 $PluginPath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php"
 if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $Plugin = Get-Content -LiteralPath $PluginPath -Raw
@@ -230,7 +260,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.2.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.3.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -238,11 +268,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.2.0")) {
-        $Failures.Add("Tools plugin header version is not 0.2.0.")
+    if (-not $Plugin.Contains("Version: 0.3.0")) {
+        $Failures.Add("Tools plugin header version is not 0.3.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.2.0'")) {
-        $Failures.Add("Tools plugin version constant is not 0.2.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.3.0'")) {
+        $Failures.Add("Tools plugin version constant is not 0.3.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -265,7 +295,20 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     if (-not $PluginSource.Contains("booking_lead_days")) {
         $Failures.Add("Attraction ticket data is missing booking lead day metadata.")
     }
-    foreach ($AttractionName in @("West Lake", "Shanghai Disney Resort", "Summer Palace", "Chengdu Research Base of Giant Panda Breeding")) {
+    foreach ($AttractionName in @(
+        "West Lake",
+        "Shanghai Disney Resort",
+        "Summer Palace",
+        "Chengdu Research Base of Giant Panda Breeding",
+        "Temple of Heaven",
+        "The Bund",
+        "Longmen Grottoes",
+        "Mogao Caves",
+        "Leshan Giant Buddha",
+        "Huangshan Scenic Area",
+        "Jiuzhaigou Valley",
+        "Li River Cruise"
+    )) {
         if (-not $Attractions.Contains($AttractionName)) {
             $Failures.Add("Attraction ticket data is missing planned coverage for: $AttractionName")
         }
@@ -290,6 +333,12 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     }
     if (-not $Shortcodes.Contains("name=""stc_visit_date"" required")) {
         $Failures.Add("Ticket tool visit date input is not required.")
+    }
+    if (-not $Shortcodes.Contains("stc_tools_group_attractions_by_city")) {
+        $Failures.Add("Ticket tool shortcode does not group attractions by city.")
+    }
+    if (-not $Shortcodes.Contains("<optgroup")) {
+        $Failures.Add("Ticket tool attraction select does not render city optgroups.")
     }
 }
 
@@ -438,6 +487,15 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     }
     if (-not $ThemeCss.Contains(".search-submit") -or (-not $ThemeCss.Contains("max-width: none"))) {
         $Failures.Add("Theme CSS is missing mobile search form stacking.")
+    }
+    if (-not $ThemeCss.Contains(".stc-single--attraction-guide")) {
+        $Failures.Add("Theme CSS is missing the Attraction Guide single layout.")
+    }
+    if (-not $ThemeCss.Contains(".stc-attraction-guide__layout")) {
+        $Failures.Add("Theme CSS is missing the Attraction Guide content/sidebar layout.")
+    }
+    if (-not $ThemeCss.Contains(".stc-attraction-guide__checklist")) {
+        $Failures.Add("Theme CSS is missing the Attraction Guide checklist styling.")
     }
 }
 
