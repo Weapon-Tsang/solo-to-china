@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.3.0' );
+define( 'STC_THEME_VERSION', '0.4.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -104,6 +104,16 @@ function stc_is_attraction_guide_post( $post_id = null ) {
 	return has_category( 'attraction-guides', $post_id ) || has_tag( 'attraction-guide', $post_id );
 }
 
+function stc_is_city_guide_post( $post_id = null ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	return has_category( 'city-guides', $post_id ) || has_tag( 'city-guide', $post_id );
+}
+
 function stc_register_block_patterns() {
 	if ( ! function_exists( 'register_block_pattern' ) ) {
 		return;
@@ -141,6 +151,32 @@ function stc_register_block_patterns() {
 			'description' => __( 'A practical SoloToChina article structure for scenic spot and attraction guides.', 'solo-to-china' ),
 			'categories'  => [ 'solo-to-china' ],
 			'content'     => $attraction_guide_content,
+		]
+	);
+
+	$city_guide_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the city answer: who this city is best for, how many days to stay, and what first-time visitors should plan before arrival.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Best areas to stay</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Compare the best neighborhoods or districts for first-time visitors, solo travelers, transport access, price, nightlife, and early departures.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Getting around</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Explain metro, taxi, ride-hailing, airport or railway station transfers, walkability, and language friction in plain English.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>First-time itinerary</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Give a simple 1-3 day route for a calm first visit, with realistic travel time and room for meals or rest.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Food and neighborhoods</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Introduce food areas, useful local dishes, market or street-food expectations, and how to avoid tourist-only traps.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Day trips and nearby attractions</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>List nearby scenic spots, ancient towns, museums, mountains, or transit-friendly extensions that pair naturally with this city.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>Common city mistakes</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Call out rushed routes, wrong station choices, late-night arrival issues, holiday crowding, weather surprises, and payment or app friction.</p><!-- /wp:paragraph -->'
+		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
+		. '<!-- wp:paragraph --><p>Answer the most likely first-time city questions in short, practical blocks.</p><!-- /wp:paragraph -->';
+
+	register_block_pattern(
+		'solo-to-china/city-guide-v1',
+		[
+			'title'       => __( 'City Guide v1', 'solo-to-china' ),
+			'description' => __( 'A practical SoloToChina article structure for city guides.', 'solo-to-china' ),
+			'categories'  => [ 'solo-to-china' ],
+			'content'     => $city_guide_content,
 		]
 	);
 }

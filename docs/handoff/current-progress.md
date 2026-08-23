@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.3.0`.
+Current theme version: `0.4.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -53,6 +53,8 @@ The custom theme implements the approved image-led homepage direction:
 - Basic single article template for future guide posts.
 - Attraction Guide article layout for scenic spot strategy pages.
 - Attraction Guide editor content pattern covering best time, transport, ticket prices, opening and booking timing, where to stay, and common mistakes.
+- City Guide article layout for city strategy pages.
+- City Guide editor content pattern covering where to stay, getting around, first-time itineraries, food, neighborhoods, day trips, and common city mistakes.
 - Basic archive template for future category/tag guide lists.
 - Basic 404 template with links back to core travel sections.
 - Basic search results template without adding Search to top-level navigation.
@@ -86,7 +88,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.3.0`.
+Current tools plugin version: `0.4.0`.
 
 The custom plugin owns the first tool only:
 
@@ -182,7 +184,6 @@ Reasonable next bounded increments:
 
 - Improve mobile spacing and touch targets after installing on WordPress and checking real screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-- Build City Guide article template v1.
 - Build Survival Kit article template v1.
 
 Do not start yet without a new design/spec:

@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.3.0`
+Version: `0.4.0`
 
 Location:
 
@@ -148,6 +148,7 @@ Implemented:
 - Local Saved Guides UI.
 - No-account page sharing on core guide pages.
 - Attraction Guide article layout and editor content pattern.
+- City Guide article layout and editor content pattern.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
 - `single.php` for guide/article posts.
@@ -170,7 +171,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.3.0`
+Version: `0.4.0`
 
 Location:
 
@@ -266,11 +267,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 15:53:51 +08:00
-Theme version: 0.3.0
-Theme SHA256: 913444F0828B2DC6B54FC81051F985C6ACC4CDEC901D5389B9D828A79E9502B3
-Plugin version: 0.3.0
-Plugin SHA256: 440E6D7E3450D251A9CAEDC9F5A14D23272BCB9DFAA416B62A39CFBB8077D3D8
+Generated: 2026-08-23 16:07:19 +08:00
+Theme version: 0.4.0
+Theme SHA256: 27E29D37A90A374849E74607CB97E55862861F7D0A1BDF908F2BD713DC7849E2
+Plugin version: 0.4.0
+Plugin SHA256: D8327D918FB5B32F9961CCDCC7A8F46F9C49364D06042DB35979062A54B98108
 ```
 
 Regenerate artifacts with:

@@ -14,7 +14,14 @@ get_header();
 		while ( have_posts() ) :
 			the_post();
 			$is_attraction_guide = stc_is_attraction_guide_post();
-			$article_classes     = $is_attraction_guide ? 'stc-single stc-single--attraction-guide' : 'stc-single';
+			$is_city_guide       = stc_is_city_guide_post();
+			$article_classes     = 'stc-single';
+
+			if ( $is_attraction_guide ) {
+				$article_classes .= ' stc-single--attraction-guide';
+			} elseif ( $is_city_guide ) {
+				$article_classes .= ' stc-single--city-guide';
+			}
 			?>
 			<article <?php post_class( $article_classes ); ?>>
 				<?php if ( $is_attraction_guide ) : ?>
@@ -49,6 +56,39 @@ get_header();
 
 					<footer class="stc-attraction-guide__footer">
 						<a href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">Back to Attraction Guides</a>
+					</footer>
+				<?php elseif ( $is_city_guide ) : ?>
+					<header class="stc-city-guide__hero">
+						<p class="stc-city-guide__eyebrow">City Guide</p>
+						<h1><?php the_title(); ?></h1>
+						<?php if ( has_excerpt() ) : ?>
+							<p class="stc-city-guide__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
+						<?php endif; ?>
+						<p class="stc-city-guide__meta"><?php echo esc_html( get_the_date() ); ?></p>
+					</header>
+
+					<div class="stc-city-guide__layout">
+						<div class="stc-entry-content stc-entry-content--guide">
+							<?php the_content(); ?>
+						</div>
+						<aside class="stc-city-guide__sidebar" aria-label="City guide planning topics">
+							<section class="stc-city-guide__checklist">
+								<h2>City planning checklist</h2>
+								<ul>
+									<li><span>Where to stay</span><small>Best base areas and tradeoffs</small></li>
+									<li><span>Getting around</span><small>Metro, taxi, airport, rail</small></li>
+									<li><span>Itinerary</span><small>Realistic first-time route</small></li>
+									<li><span>Food</span><small>Local dishes and easy areas</small></li>
+									<li><span>Neighborhoods</span><small>What each area is best for</small></li>
+									<li><span>Common mistakes</span><small>Station, timing, crowd risks</small></li>
+								</ul>
+								<a class="stc-button stc-button--secondary" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">Browse city guides</a>
+							</section>
+						</aside>
+					</div>
+
+					<footer class="stc-city-guide__footer">
+						<a href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">Back to City Guides</a>
 					</footer>
 				<?php else : ?>
 					<header class="stc-content__header">

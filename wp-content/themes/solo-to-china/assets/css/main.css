@@ -681,12 +681,14 @@ label:focus-visible {
 	margin: 0;
 }
 
-.stc-single--attraction-guide {
+.stc-single--attraction-guide,
+.stc-single--city-guide {
 	display: grid;
 	gap: 30px;
 }
 
-.stc-attraction-guide__hero {
+.stc-attraction-guide__hero,
+.stc-city-guide__hero {
 	background: #fff;
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
@@ -696,7 +698,9 @@ label:focus-visible {
 }
 
 .stc-attraction-guide__eyebrow,
-.stc-attraction-guide__meta {
+.stc-attraction-guide__meta,
+.stc-city-guide__eyebrow,
+.stc-city-guide__meta {
 	color: var(--stc-green);
 	font-size: 13px;
 	font-weight: 800;
@@ -705,7 +709,8 @@ label:focus-visible {
 	text-transform: uppercase;
 }
 
-.stc-attraction-guide__hero h1 {
+.stc-attraction-guide__hero h1,
+.stc-city-guide__hero h1 {
 	font-family: Georgia, "Times New Roman", serif;
 	font-size: clamp(42px, 6vw, 72px);
 	letter-spacing: 0;
@@ -713,7 +718,8 @@ label:focus-visible {
 	margin: 0;
 }
 
-.stc-attraction-guide__deck {
+.stc-attraction-guide__deck,
+.stc-city-guide__deck {
 	color: var(--stc-muted);
 	font-size: 20px;
 	line-height: 1.5;
@@ -721,7 +727,8 @@ label:focus-visible {
 	max-width: 720px;
 }
 
-.stc-attraction-guide__layout {
+.stc-attraction-guide__layout,
+.stc-city-guide__layout {
 	align-items: start;
 	display: grid;
 	gap: 26px;
@@ -756,7 +763,8 @@ label:focus-visible {
 	line-height: 1.7;
 }
 
-.stc-attraction-guide__sidebar {
+.stc-attraction-guide__sidebar,
+.stc-city-guide__sidebar {
 	position: sticky;
 	top: 110px;
 }
@@ -770,13 +778,24 @@ label:focus-visible {
 	padding: 20px;
 }
 
-.stc-attraction-guide__checklist h2 {
+.stc-city-guide__checklist {
+	background: #eef6f2;
+	border: 1px solid #cfe2d9;
+	border-radius: var(--stc-radius);
+	display: grid;
+	gap: 16px;
+	padding: 20px;
+}
+
+.stc-attraction-guide__checklist h2,
+.stc-city-guide__checklist h2 {
 	font-size: 18px;
 	letter-spacing: 0;
 	margin: 0;
 }
 
-.stc-attraction-guide__checklist ul {
+.stc-attraction-guide__checklist ul,
+.stc-city-guide__checklist ul {
 	display: grid;
 	gap: 12px;
 	list-style: none;
@@ -784,34 +803,44 @@ label:focus-visible {
 	padding: 0;
 }
 
-.stc-attraction-guide__checklist li {
+.stc-attraction-guide__checklist li,
+.stc-city-guide__checklist li {
 	border-top: 1px solid rgba(169, 120, 36, .25);
 	display: grid;
 	gap: 3px;
 	padding-top: 12px;
 }
 
-.stc-attraction-guide__checklist li:first-child {
+.stc-city-guide__checklist li {
+	border-top-color: rgba(20, 107, 84, .22);
+}
+
+.stc-attraction-guide__checklist li:first-child,
+.stc-city-guide__checklist li:first-child {
 	border-top: 0;
 	padding-top: 0;
 }
 
-.stc-attraction-guide__checklist span {
+.stc-attraction-guide__checklist span,
+.stc-city-guide__checklist span {
 	color: var(--stc-ink);
 	font-weight: 800;
 }
 
-.stc-attraction-guide__checklist small {
+.stc-attraction-guide__checklist small,
+.stc-city-guide__checklist small {
 	color: var(--stc-muted);
 	line-height: 1.45;
 }
 
-.stc-attraction-guide__footer {
+.stc-attraction-guide__footer,
+.stc-city-guide__footer {
 	border-top: 1px solid var(--stc-line);
 	padding-top: 22px;
 }
 
-.stc-attraction-guide__footer a {
+.stc-attraction-guide__footer a,
+.stc-city-guide__footer a {
 	color: var(--stc-green);
 	font-weight: 800;
 }
@@ -998,16 +1027,19 @@ label:focus-visible {
 		grid-template-columns: 1fr;
 	}
 
-	.stc-attraction-guide__layout {
+	.stc-attraction-guide__layout,
+	.stc-city-guide__layout {
 		grid-template-columns: 1fr;
 	}
 
 	.stc-attraction-guide__hero,
+	.stc-city-guide__hero,
 	.stc-entry-content--guide {
 		padding: 24px;
 	}
 
-	.stc-attraction-guide__sidebar {
+	.stc-attraction-guide__sidebar,
+	.stc-city-guide__sidebar {
 		position: static;
 	}
 
