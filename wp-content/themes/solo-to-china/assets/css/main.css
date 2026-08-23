@@ -245,13 +245,12 @@ label:focus-visible {
 
 .stc-survival,
 .stc-section,
-.stc-home-latest,
 .stc-planner,
 .stc-ticket-band,
 .stc-faq {
 	margin: 0 auto;
 	max-width: var(--stc-max);
-	padding: 54px 32px;
+	padding: 32px;
 }
 
 .home .stc-survival {
@@ -293,8 +292,8 @@ label:focus-visible {
 	display: grid;
 	gap: 8px;
 	justify-items: center;
-	min-height: 138px;
-	padding: 24px;
+	min-height: 126px;
+	padding: 18px 12px;
 	text-align: center;
 }
 
@@ -338,11 +337,16 @@ label:focus-visible {
 	white-space: nowrap;
 }
 
+.home .stc-survival-card span:last-child {
+	font-size: 11px;
+	line-height: 1.3;
+}
+
 .stc-section__header {
 	align-items: end;
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 22px;
+	margin-bottom: 16px;
 }
 
 .stc-section h2,
@@ -358,7 +362,7 @@ label:focus-visible {
 
 .stc-card-grid {
 	display: grid;
-	gap: 20px;
+	gap: 14px;
 }
 
 .stc-card-grid--cities {
@@ -495,6 +499,12 @@ label:focus-visible {
 	line-height: 1.2;
 }
 
+.stc-card-grid--cities .stc-image-card__content span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .stc-card-grid--attractions .stc-image-card__content {
 	bottom: 14px;
 	gap: 3px;
@@ -526,16 +536,43 @@ label:focus-visible {
 }
 
 .stc-save-guide--image-card {
+	align-items: center;
 	background: rgba(255, 255, 255, .9);
 	border-color: rgba(255, 255, 255, .7);
+	border-radius: 50%;
 	box-shadow: 0 10px 26px rgba(0, 0, 0, .16);
 	color: var(--stc-ink);
+	display: inline-flex;
+	height: 34px;
+	justify-content: center;
 	opacity: 0;
+	padding: 0;
 	position: absolute;
 	right: 12px;
 	top: 12px;
 	transition: opacity .2s ease;
+	width: 34px;
 	z-index: 4;
+}
+
+.stc-save-guide--image-card svg {
+	fill: none;
+	height: 18px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 18px;
+}
+
+.stc-save-guide--image-card.is-saved {
+	background: var(--stc-green);
+	color: #fff;
+	opacity: 1;
+}
+
+.stc-save-guide--image-card.is-saved svg {
+	fill: currentColor;
 }
 
 .stc-image-card:hover .stc-save-guide--image-card,
@@ -547,6 +584,10 @@ label:focus-visible {
 	top: 46px;
 }
 
+.stc-grid-toggle {
+	display: none;
+}
+
 .stc-planner,
 .stc-ticket-band {
 	align-items: center;
@@ -554,23 +595,17 @@ label:focus-visible {
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
 	display: grid;
-	gap: 28px;
-	grid-template-columns: .9fr 1fr;
-	margin-bottom: 24px;
-	margin-top: 24px;
-	min-height: 148px;
+	gap: 24px;
+	margin-bottom: 16px;
+	margin-top: 16px;
+	min-height: 126px;
 	overflow: hidden;
-	padding: 28px 42px;
+	padding: 20px 28px;
 	position: relative;
 }
 
-.stc-planner::after {
-	background: url("../images/planner-art.png") center / contain no-repeat;
-	content: "";
-	inset: 24px 28px 24px auto;
-	opacity: .68;
-	position: absolute;
-	width: 220px;
+.stc-planner {
+	grid-template-columns: minmax(245px, 1fr) minmax(250px, 1.05fr) minmax(150px, .72fr);
 }
 
 .stc-planner > * {
@@ -578,41 +613,94 @@ label:focus-visible {
 	z-index: 1;
 }
 
-.stc-planner > div:last-child {
+.stc-planner__intro {
+	align-items: center;
+	display: grid;
+	gap: 20px;
+	grid-template-columns: 78px 1fr;
+}
+
+.stc-planner__icon {
+	align-items: center;
+	color: var(--stc-green);
+	display: inline-flex;
+	height: 72px;
+	justify-content: center;
+	width: 72px;
+}
+
+.stc-planner__icon svg {
+	fill: none;
+	height: 68px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2;
+	width: 68px;
+}
+
+.stc-planner__partner {
 	border-left: 1px solid rgba(20, 107, 84, .18);
 	display: grid;
-	gap: 8px;
-	padding-left: 40px;
-	padding-right: 220px;
+	gap: 5px;
+	padding-left: 28px;
 }
 
 .stc-planner span {
 	color: var(--stc-muted);
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .stc-planner strong {
 	color: #2474e8;
-	font-size: 42px;
+	font-size: 34px;
 	line-height: 1;
+}
+
+.stc-planner h2 {
+	color: var(--stc-green);
+	font-family: inherit;
+	font-size: 19px;
+	line-height: 1.15;
+	text-transform: uppercase;
+}
+
+.stc-planner__partner .stc-button {
+	justify-self: start;
+	min-height: 40px;
+	padding: 0 14px;
+}
+
+.stc-planner__partner p {
+	font-size: 9px;
+	line-height: 1.35;
+}
+
+.stc-planner__art {
+	align-self: stretch;
+	background: url("../images/planner-art.png") right center / contain no-repeat;
+	display: block;
+	min-height: 86px;
 }
 
 .stc-ticket-band {
 	background: #fff6e8;
 	border-color: #efd8b4;
-	grid-template-columns: 1fr 1fr auto;
+	grid-template-columns: minmax(330px, 1.4fr) minmax(220px, .9fr) minmax(190px, auto);
 }
 
-.stc-ticket-band::before {
+.stc-ticket-band__intro {
+	align-items: center;
+	display: grid;
+	gap: 14px;
+	grid-template-columns: 80px 1fr;
+}
+
+.stc-ticket-band__icon {
 	background: url("../images/ticket-art.png") center / contain no-repeat;
-	content: "";
-	height: 88px;
-	left: 42px;
-	opacity: .88;
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	width: 124px;
+	display: block;
+	height: 72px;
+	width: 80px;
 }
 
 .stc-ticket-band > * {
@@ -620,42 +708,77 @@ label:focus-visible {
 	z-index: 1;
 }
 
-.stc-ticket-band > div:first-child {
-	padding-left: 140px;
-}
-
 .stc-ticket-band h2 {
 	color: var(--stc-gold);
-	font-size: 28px;
+	font-family: inherit;
+	font-size: 16px;
 	line-height: 1.05;
 	text-transform: uppercase;
+	white-space: nowrap;
 }
 
 .stc-ticket-band__steps {
 	border-left: 1px solid rgba(169, 120, 36, .22);
 	display: grid;
-	gap: 14px;
-	padding-left: 36px;
+	gap: 12px;
+	padding-left: 24px;
 }
 
-.stc-ticket-band__steps p,
+.stc-ticket-band__steps p {
+	align-items: start;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 24px 1fr;
+	margin: 0;
+}
+
+.stc-ticket-band__steps p > span:last-child,
 .stc-ticket-band__action {
 	display: grid;
-	gap: 4px;
+	gap: 3px;
+}
+
+.stc-ticket-band__step-icon {
+	color: #c98b24;
+	display: inline-flex;
+	height: 22px;
+	width: 22px;
+}
+
+.stc-ticket-band__step-icon svg {
+	fill: none;
+	height: 22px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 22px;
 }
 
 .stc-ticket-band__steps strong {
 	color: var(--stc-ink);
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .stc-ticket-band__steps span {
 	color: var(--stc-muted);
-	font-size: 13px;
+	font-size: 10px;
+	line-height: 1.35;
 }
 
 .stc-ticket-band__action {
 	justify-items: end;
+}
+
+.stc-ticket-band__action .stc-button {
+	font-size: 12px;
+	min-height: 40px;
+	padding: 0 14px;
+	white-space: nowrap;
+}
+
+.stc-ticket-band__action p {
+	font-size: 9px;
 }
 
 .stc-faq__grid {
@@ -946,6 +1069,11 @@ label:focus-visible {
 	color: var(--stc-muted);
 	line-height: 1.6;
 	margin: 0;
+}
+
+.home .stc-section h2,
+.home .stc-faq h2 {
+	font-size: 26px;
 }
 
 .stc-single--attraction-guide,
@@ -1459,20 +1587,6 @@ label:focus-visible {
 	padding: 20px;
 }
 
-.stc-home-latest {
-	display: grid;
-	gap: 22px;
-}
-
-.stc-home-latest__empty {
-	background: #fff;
-	border: 1px dashed #cfe0d8;
-	border-radius: var(--stc-radius);
-	color: var(--stc-muted);
-	margin: 0;
-	padding: 20px;
-}
-
 .stc-footer {
 	background: radial-gradient(circle at 100% 0, rgba(255, 255, 255, .08), transparent 34%), #0f1513;
 	color: #fff;
@@ -1564,7 +1678,7 @@ label:focus-visible {
 	width: 28px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 840px) {
 	.stc-section__header {
 		align-items: flex-start;
 		flex-direction: column;
@@ -1631,7 +1745,6 @@ label:focus-visible {
 		transform: rotate(-45deg);
 	}
 
-	.stc-survival__grid,
 	.stc-link-grid,
 	.stc-link-grid--five,
 	.stc-feature-panel,
@@ -1643,23 +1756,162 @@ label:focus-visible {
 		grid-template-columns: 1fr;
 	}
 
-	.stc-card-grid--cities,
-	.stc-card-grid--attractions {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+	.home .stc-hero {
+		background-position: 62% center;
+		min-height: 430px;
 	}
 
-	.stc-card-grid--cities .stc-image-card,
-	.stc-card-grid--attractions .stc-image-card {
-		aspect-ratio: 1 / 1.16;
+	.home .stc-hero__content {
+		left: 20px;
+		max-width: 310px;
+		top: 126px;
 	}
 
-	.stc-survival-card {
-		border-bottom: 1px solid var(--stc-line);
-		border-right: 0;
+	.home .stc-hero h1 {
+		font-size: 48px;
+		line-height: .94;
+		margin-bottom: 14px;
+	}
+
+	.home .stc-hero p {
+		font-size: 16px;
+		margin-bottom: 22px;
+	}
+
+	.home .stc-section,
+	.home .stc-faq {
+		padding: 30px 20px;
+	}
+
+	.home .stc-section__header,
+	.home .stc-faq .stc-section__header {
+		align-items: center;
+		flex-direction: row;
+		gap: 12px;
+	}
+
+	.home .stc-section h2,
+	.home .stc-faq h2 {
+		font-size: 24px;
+	}
+
+	.home .stc-section__header a {
+		font-size: 11px;
+		white-space: nowrap;
 	}
 
 	.home .stc-survival {
-		padding: 0 20px;
+		padding: 0;
+	}
+
+	.home .stc-survival__grid {
+		grid-template-columns: repeat(5, 118px);
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+	}
+
+	.home .stc-survival__grid::-webkit-scrollbar,
+	.home .stc-card-grid--attractions::-webkit-scrollbar {
+		display: none;
+	}
+
+	.home .stc-survival-card {
+		border-bottom: 0;
+		border-right: 1px solid var(--stc-line);
+		gap: 5px;
+		min-height: 110px;
+		padding: 13px 8px;
+		scroll-snap-align: start;
+	}
+
+	.home .stc-survival-card__icon {
+		height: 34px;
+		width: 34px;
+	}
+
+	.home .stc-survival-card__icon svg {
+		height: 19px;
+		width: 19px;
+	}
+
+	.home .stc-survival-card strong {
+		font-size: 12px;
+	}
+
+	.home .stc-survival-card span:last-child {
+		font-size: 9px;
+	}
+
+	.stc-card-grid--cities {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.stc-card-grid--cities .stc-image-card {
+		aspect-ratio: 1 / 1.08;
+	}
+
+	.stc-js .home .stc-card-grid--cities.is-collapsible {
+		max-height: calc((100vw - 50px) * 1.08 + 10px);
+		overflow: hidden;
+		transition: max-height .45s ease;
+	}
+
+	.stc-js .home .stc-card-grid--cities.is-collapsible.is-expanded {
+		max-height: 1000px;
+	}
+
+	.home .stc-card-grid--attractions {
+		grid-auto-columns: 40vw;
+		grid-auto-flow: column;
+		grid-template-columns: none;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-bottom: 10px;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+	}
+
+	.home .stc-card-grid--attractions .stc-image-card {
+		aspect-ratio: 2 / 3;
+		scroll-snap-align: start;
+	}
+
+	.stc-grid-toggle {
+		align-items: center;
+		background: transparent;
+		border: 0;
+		color: var(--stc-green);
+		cursor: pointer;
+		display: inline-flex;
+		font: inherit;
+		font-size: 12px;
+		font-weight: 800;
+		gap: 5px;
+		justify-content: center;
+		margin: 14px auto 0;
+		min-height: 38px;
+		padding: 0 12px;
+	}
+
+	.stc-grid-toggle[hidden] {
+		display: none;
+	}
+
+	.stc-grid-toggle svg {
+		fill: none;
+		height: 18px;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 2;
+		transition: transform .25s ease;
+		width: 18px;
+	}
+
+	.stc-grid-toggle[aria-expanded="true"] svg {
+		transform: rotate(180deg);
 	}
 
 	.stc-page-hero--visual {
@@ -1671,48 +1923,84 @@ label:focus-visible {
 
 	.stc-planner,
 	.stc-ticket-band {
-		gap: 18px;
-		padding: 28px 24px;
+		gap: 16px;
+		margin-left: 20px;
+		margin-right: 20px;
+		padding: 20px;
 	}
 
-	.stc-planner::after {
-		inset: auto 16px 16px auto;
-		opacity: .22;
-		width: 160px;
+	.stc-planner__intro {
+		gap: 14px;
+		grid-template-columns: 58px 1fr;
 	}
 
-	.stc-planner > div:last-child {
+	.stc-planner__icon {
+		height: 54px;
+		width: 54px;
+	}
+
+	.stc-planner__icon svg {
+		height: 52px;
+		width: 52px;
+	}
+
+	.stc-planner__partner {
 		border-left: 0;
 		border-top: 1px solid rgba(20, 107, 84, .18);
-		padding: 18px 0 0;
+		padding: 14px 0 0;
 	}
 
 	.stc-planner strong {
-		font-size: 34px;
+		font-size: 30px;
 	}
 
-	.stc-ticket-band::before {
-		height: 68px;
-		left: auto;
+	.stc-planner__art {
+		bottom: 16px;
+		height: 82px;
+		min-height: 0;
 		opacity: .16;
-		right: 18px;
-		top: 24px;
-		transform: none;
-		width: 96px;
+		position: absolute;
+		right: 12px;
+		width: 150px;
 	}
 
-	.stc-ticket-band > div:first-child {
-		padding-left: 0;
+	.stc-planner__partner > * {
+		max-width: 230px;
+	}
+
+	.stc-planner__partner .stc-button {
+		font-size: 12px;
+		white-space: nowrap;
+	}
+
+	.stc-ticket-band__intro {
+		gap: 14px;
+		grid-template-columns: 76px 1fr;
+	}
+
+	.stc-ticket-band__icon {
+		height: 58px;
+		width: 76px;
+	}
+
+	.stc-ticket-band h2 {
+		font-size: 17px;
+		white-space: normal;
 	}
 
 	.stc-ticket-band__steps {
 		border-left: 0;
 		border-top: 1px solid rgba(169, 120, 36, .22);
-		padding: 18px 0 0;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		padding: 14px 0 0;
 	}
 
 	.stc-ticket-band__action {
-		justify-items: start;
+		justify-items: stretch;
+	}
+
+	.stc-ticket-band__action .stc-button {
+		width: 100%;
 	}
 
 	.stc-save-guide--image-card {
@@ -1724,8 +2012,13 @@ label:focus-visible {
 	}
 
 	.stc-footer__inner {
-		gap: 26px;
-		padding: 38px 0 28px;
+		gap: 22px 28px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		padding: 32px 0 24px;
+	}
+
+	.stc-footer__brand {
+		grid-column: 1 / -1;
 	}
 
 	.stc-footer__bottom {
@@ -1784,5 +2077,36 @@ label:focus-visible {
 
 	.search-submit {
 		width: 100%;
+	}
+}
+
+@media (min-width: 600px) and (max-width: 840px) {
+	.home .stc-survival__grid {
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		overflow: visible;
+	}
+
+	.home .stc-card-grid--cities {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	.stc-js .home .stc-card-grid--cities.is-collapsible {
+		max-height: calc(27vw - 22px);
+	}
+
+	.stc-js .home .stc-card-grid--cities.is-collapsible.is-expanded {
+		max-height: calc(54vw - 30px);
+	}
+
+	.home .stc-card-grid--attractions {
+		grid-auto-columns: 24vw;
+	}
+
+	.stc-footer__inner {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	.stc-footer__brand {
+		grid-column: 1 / -1;
 	}
 }

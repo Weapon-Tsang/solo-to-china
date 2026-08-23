@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.11.0`
+Version: `0.12.0`
 
 Location:
 
@@ -139,6 +139,9 @@ Implemented:
 - Survival Kit strip.
 - City Guides image cards.
 - Attraction Guides image cards.
+- Homepage order strictly follows the approved reference and does not insert Latest Guides before Planner.
+- Mobile Survival Kit is horizontally scrollable, City Guides is collapsible after four cards, and Attraction Guides is a horizontal snap rail.
+- Planner and Ticket homepage bands use dedicated reference-style icons and non-overlapping content columns.
 - Planner band.
 - Homepage Planner CTA opens Trip.com externally with `rel="sponsored noopener"`.
 - Ticket Tool / Reminder homepage band.
@@ -156,7 +159,6 @@ Implemented:
 - Automatic table of contents for guide articles based on H2 sections.
 - Shared Guide card rendering for archive, search, and default post lists.
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
-- Latest published guide posts on the homepage.
 - Core guide category setup on theme activation.
 - Core IA page rendering by slug.
 - Core IA page auto-creation on theme activation if missing.
@@ -180,7 +182,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.11.0`
+Version: `0.12.0`
 
 Location:
 
@@ -276,11 +278,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 20:33:06 +08:00
-Theme version: 0.11.0
-Theme SHA256: 478E3D66EF5C326B78B1E4CA425F0766D4A4E8FB49F07D7228E7722FA8344E18
-Plugin version: 0.11.0
-Plugin SHA256: 795720733E5BB0A6CCE5FDA0A3582CA30B734699A47E1DD1F89C8832048C220D
+Generated: 2026-08-23 21:55:26 +08:00
+Theme version: 0.12.0
+Theme SHA256: BDDD5A9A023A015CBDECBD56446C069EEAB3B5AC8F628557573B40517FC460B4
+Plugin version: 0.12.0
+Plugin SHA256: 79FA80737D87994DFE2AB5C6CE9AD1AB2CC1481CA7BAA86851DD06DF3CCC3CE3
 ```
 
 Regenerate artifacts with:

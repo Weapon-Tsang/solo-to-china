@@ -96,7 +96,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.11.0") -or (-not $PackageScript.Contains("Plugin version: 0.11.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.12.0") -or (-not $PackageScript.Contains("Plugin version: 0.12.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -125,8 +125,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.11.0")) {
-        $Failures.Add("Theme stylesheet header version is not 0.11.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.12.0")) {
+        $Failures.Add("Theme stylesheet header version is not 0.12.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -139,7 +139,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.11.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.12.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -190,8 +190,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.11.0'")) {
-        $Failures.Add("Theme asset version is not 0.11.0.")
+    if (-not $Functions.Contains("'0.12.0'")) {
+        $Failures.Add("Theme asset version is not 0.12.0.")
     }
     if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
         $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
@@ -214,8 +214,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_core_page_latest_guides")) {
         $Failures.Add("Theme functions are missing the core page latest guides renderer.")
     }
-    if (-not $Functions.Contains("stc_render_home_latest_guides")) {
-        $Failures.Add("Theme functions are missing the homepage latest guides renderer.")
+    if ($Functions.Contains("stc_render_home_latest_guides")) {
+        $Failures.Add("Theme functions still include the removed homepage latest guides renderer.")
     }
     if (-not $Functions.Contains("register_block_pattern") -or (-not $Functions.Contains("solo-to-china/attraction-guide-v1"))) {
         $Failures.Add("Theme does not register the Attraction Guide content pattern.")
@@ -385,7 +385,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.11.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.12.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -393,11 +393,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.11.0")) {
-        $Failures.Add("Tools plugin header version is not 0.11.0.")
+    if (-not $Plugin.Contains("Version: 0.12.0")) {
+        $Failures.Add("Tools plugin header version is not 0.12.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.11.0'")) {
-        $Failures.Add("Tools plugin version constant is not 0.11.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.12.0'")) {
+        $Failures.Add("Tools plugin version constant is not 0.12.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -560,8 +560,27 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if (-not $FrontPage.Contains("data-stc-save-guide")) {
         $Failures.Add("Homepage image cards are missing local guide save actions.")
     }
-    if (-not $FrontPage.Contains("stc_render_home_latest_guides")) {
-        $Failures.Add("Homepage does not render latest published guide posts.")
+    if ($FrontPage.Contains("stc_render_home_latest_guides")) {
+        $Failures.Add("Homepage still inserts Latest Guides outside the approved reference layout.")
+    }
+    foreach ($HomepageToken in @("stc-survival", "stc-card-grid--cities", "stc-card-grid--attractions", "stc-planner", "stc-ticket-band", "stc-faq")) {
+        if (-not $FrontPage.Contains($HomepageToken)) {
+            $Failures.Add("Homepage is missing approved reference section: $HomepageToken")
+        }
+    }
+    $HomepageOrder = @("stc-survival", "stc-card-grid--cities", "stc-card-grid--attractions", "stc-planner", "stc-ticket-band", "stc-faq")
+    $PreviousHomepageIndex = -1
+    foreach ($HomepageToken in $HomepageOrder) {
+        $HomepageIndex = $FrontPage.IndexOf($HomepageToken)
+        if ($HomepageIndex -le $PreviousHomepageIndex) {
+            $Failures.Add("Homepage reference sections are not in the approved order near: $HomepageToken")
+        }
+        $PreviousHomepageIndex = $HomepageIndex
+    }
+    foreach ($HomepageMarkupToken in @("stc-planner__icon", "stc-ticket-band__icon", "stc-ticket-band__step-icon", "data-stc-collapsible-grid", "data-stc-grid-toggle")) {
+        if (-not $FrontPage.Contains($HomepageMarkupToken)) {
+            $Failures.Add("Homepage is missing responsive reference markup: $HomepageMarkupToken")
+        }
     }
     if (-not $FrontPage.Contains("'City Guide'")) {
         $Failures.Add("Homepage city cards do not save with the City Guide type.")
@@ -588,7 +607,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing reference-style visual asset: $ImageReference")
         }
     }
-    foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner::after", ".stc-ticket-band::before")) {
+    foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner__icon", ".stc-ticket-band__icon", ".stc-grid-toggle", "scroll-snap-type")) {
         if (-not $ThemeCss.Contains($StyleToken)) {
             $Failures.Add("Theme CSS is missing selected homepage visual style token: $StyleToken")
         }
@@ -643,8 +662,8 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if (-not $ThemeCss.Contains(".stc-latest-guides")) {
         $Failures.Add("Theme CSS is missing core page latest guides styling.")
     }
-    if (-not $ThemeCss.Contains(".stc-home-latest")) {
-        $Failures.Add("Theme CSS is missing homepage latest guides styling.")
+    if ($ThemeCss.Contains(".stc-home-latest")) {
+        $Failures.Add("Theme CSS still includes the removed homepage latest guides section.")
     }
     if (-not $ThemeCss.Contains(".stc-guide-toc")) {
         $Failures.Add("Theme CSS is missing Guide table of contents styling.")
@@ -691,6 +710,9 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     }
     if (-not $ThemeJs.Contains("stcSavedGuides")) {
         $Failures.Add("Theme JavaScript is missing the local saved guides controller.")
+    }
+    if (-not $ThemeJs.Contains("stcCollapsibleGuideGrid") -or (-not $ThemeJs.Contains("data-stc-grid-toggle"))) {
+        $Failures.Add("Theme JavaScript is missing the mobile city grid collapse controller.")
     }
     if (-not $ThemeJs.Contains("localStorage")) {
         $Failures.Add("Theme JavaScript does not persist saved guides locally.")

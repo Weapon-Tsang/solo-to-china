@@ -76,7 +76,11 @@ if ( ! function_exists( 'stc_render_save_guide_button' ) ) {
 	function stc_render_save_guide_button( $item, $type, $is_image_card = false ) {
 		$button_class = $is_image_card ? 'stc-save-guide stc-save-guide--image-card' : 'stc-save-guide';
 
-		echo '<button class="' . esc_attr( $button_class ) . '" type="button" data-stc-save-guide data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $item['title'] ) ) . '" data-guide-type="' . esc_attr( $type ) . '" data-guide-title="' . esc_attr( $item['title'] ) . '" data-guide-copy="' . esc_attr( $item['copy'] ) . '">' . esc_html__( 'Save', 'solo-to-china' ) . '</button>';
+		$button_content = $is_image_card
+			? '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.75L6 21V4.75Z"/></svg>'
+			: esc_html__( 'Save', 'solo-to-china' );
+		$button_label = $is_image_card ? ' aria-label="' . esc_attr__( 'Save guide', 'solo-to-china' ) . '"' : '';
+		echo '<button class="' . esc_attr( $button_class ) . '" type="button"' . $button_label . ' data-stc-save-guide data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $item['title'] ) ) . '" data-guide-type="' . esc_attr( $type ) . '" data-guide-title="' . esc_attr( $item['title'] ) . '" data-guide-copy="' . esc_attr( $item['copy'] ) . '">' . $button_content . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 ?>

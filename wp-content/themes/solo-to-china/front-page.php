@@ -8,21 +8,21 @@
 get_header();
 
 $survival_items = [
-	[ 'title' => 'Payment', 'copy' => 'Cards and mobile payments.', 'icon' => 'payment' ],
-	[ 'title' => 'Essential Apps', 'copy' => 'Maps, transport, translate.', 'icon' => 'apps' ],
+	[ 'title' => 'Payment', 'copy' => 'Cards & mobile payments', 'icon' => 'payment' ],
+	[ 'title' => 'Essential Apps', 'copy' => 'Navigation, transport, translate', 'icon' => 'apps' ],
 	[ 'title' => 'eSIM', 'copy' => 'Stay connected anywhere.', 'icon' => 'esim' ],
-	[ 'title' => 'Visa', 'copy' => 'Requirements and entry tips.', 'icon' => 'visa' ],
-	[ 'title' => 'VPN / Internet', 'copy' => 'Access and connection tips.', 'icon' => 'vpn' ],
+	[ 'title' => 'Visa', 'copy' => 'Requirements & application tips', 'icon' => 'visa' ],
+	[ 'title' => 'VPN / Internet', 'copy' => 'Access, safety & connection tips', 'icon' => 'vpn' ],
 ];
 
 $cities = [
-	[ 'name' => 'Beijing', 'copy' => 'History and culture', 'class' => 'beijing' ],
-	[ 'name' => 'Shanghai', 'copy' => 'Modern and vibrant', 'class' => 'shanghai' ],
-	[ 'name' => 'Guangzhou', 'copy' => 'Business and food', 'class' => 'guangzhou' ],
-	[ 'name' => 'Chengdu', 'copy' => 'Pandas and laid-back life', 'class' => 'chengdu' ],
-	[ 'name' => 'Chongqing', 'copy' => 'Mountains and rivers', 'class' => 'chongqing' ],
+	[ 'name' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing' ],
+	[ 'name' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai' ],
+	[ 'name' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou' ],
+	[ 'name' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu' ],
+	[ 'name' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing' ],
 	[ 'name' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian' ],
-	[ 'name' => 'Hangzhou', 'copy' => 'West Lake calm', 'class' => 'hangzhou' ],
+	[ 'name' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou' ],
 	[ 'name' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie' ],
 ];
 
@@ -37,7 +37,7 @@ $attractions = [
 
 if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 	function stc_render_home_save_guide_button( $title, $copy, $type ) {
-		echo '<button class="stc-save-guide stc-save-guide--image-card" type="button" data-stc-save-guide data-guide-type="' . esc_attr( $type ) . '" data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $title ) ) . '" data-guide-title="' . esc_attr( $title ) . '" data-guide-copy="' . esc_attr( $copy ) . '">Save</button>';
+		echo '<button class="stc-save-guide stc-save-guide--image-card" type="button" aria-label="' . esc_attr__( 'Save guide', 'solo-to-china' ) . '" data-stc-save-guide data-guide-type="' . esc_attr( $type ) . '" data-guide-id="' . esc_attr( sanitize_title( $type . '-' . $title ) ) . '" data-guide-title="' . esc_attr( $title ) . '" data-guide-copy="' . esc_attr( $copy ) . '"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.75L6 21V4.75Z"/></svg></button>';
 	}
 }
 ?>
@@ -69,7 +69,7 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 			<h2 id="cities-title">City Guides</h2>
 			<a href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">View all city guides</a>
 		</div>
-		<div class="stc-card-grid stc-card-grid--cities">
+		<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-collapsible-grid>
 			<?php foreach ( $cities as $city ) : ?>
 				<article class="stc-image-card stc-image-card--<?php echo esc_attr( $city['class'] ); ?>">
 					<span class="stc-image-card__media" aria-hidden="true"></span>
@@ -83,6 +83,10 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 				</article>
 			<?php endforeach; ?>
 		</div>
+		<button class="stc-grid-toggle" type="button" data-stc-grid-toggle aria-controls="home-city-grid" aria-expanded="false" hidden>
+			<span data-stc-grid-toggle-label>Show 4 more cities</span>
+			<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
+		</button>
 	</section>
 
 	<section class="stc-section" aria-labelledby="attractions-title">
@@ -107,29 +111,36 @@ if ( ! function_exists( 'stc_render_home_save_guide_button' ) ) {
 		</div>
 	</section>
 
-	<?php stc_render_home_latest_guides(); ?>
-
 	<section class="stc-planner" aria-labelledby="planner-title">
-		<div>
-			<h2 id="planner-title">Plan your trip</h2>
-			<p>Build your itinerary and book with confidence.</p>
+		<div class="stc-planner__intro">
+			<span class="stc-planner__icon" aria-hidden="true">
+				<svg viewBox="0 0 48 48" focusable="false"><rect x="6" y="9" width="32" height="31" rx="3"/><path d="M14 5v8M30 5v8M6 18h32M13 25h5M22 25h5M13 32h5"/><circle cx="36" cy="35" r="9"/><path d="m32.5 35 2.5 2.5 4.5-5"/></svg>
+			</span>
+			<div>
+				<h2 id="planner-title">Plan your trip</h2>
+				<p>Build your itinerary and book with confidence.</p>
+			</div>
 		</div>
-		<div>
+		<div class="stc-planner__partner">
 			<span>Start planning on</span>
 			<strong>Trip.com</strong>
 			<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener">Start planning on Trip.com</a>
 			<p>Opens in a new tab. We may earn a commission at no extra cost to you.</p>
 		</div>
+		<span class="stc-planner__art" aria-hidden="true"></span>
 	</section>
 
 	<section class="stc-ticket-band" aria-labelledby="ticket-title">
-		<div>
-			<h2 id="ticket-title">Ticket Tool / Reminder</h2>
-			<p>Check attraction ticket dates and set a free reminder.</p>
+		<div class="stc-ticket-band__intro">
+			<span class="stc-ticket-band__icon" aria-hidden="true"></span>
+			<div>
+				<h2 id="ticket-title">Ticket Tool / Reminder</h2>
+				<p>Check attraction ticket dates and set a free reminder.</p>
+			</div>
 		</div>
 		<div class="stc-ticket-band__steps">
-			<p><strong>Check ticket date</strong><span>See availability and important notes.</span></p>
-			<p><strong>Set free reminder</strong><span>Get notified before your visit.</span></p>
+			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><span><strong>Check ticket date</strong><span>See availability and important notes.</span></span></p>
+			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><span><strong>Set free reminder</strong><span>Get notified before your visit.</span></span></p>
 		</div>
 		<div class="stc-ticket-band__action">
 			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check ticket date / Set reminder</a>

@@ -19,6 +19,25 @@
 		return String(value || '').trim().slice(0, maxLength);
 	}
 
+	function stcCollapsibleGuideGrid() {
+		var grid = document.querySelector('[data-stc-collapsible-grid]');
+		var toggle = document.querySelector('[data-stc-grid-toggle]');
+		var label = toggle ? toggle.querySelector('[data-stc-grid-toggle-label]') : null;
+
+		if (!grid || !toggle || !label) {
+			return;
+		}
+
+		grid.classList.add('is-collapsible');
+		toggle.hidden = false;
+
+		toggle.addEventListener('click', function () {
+			var isExpanded = grid.classList.toggle('is-expanded');
+			toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+			label.textContent = isExpanded ? 'Show fewer cities' : 'Show 4 more cities';
+		});
+	}
+
 	function stcGuideType(value) {
 		var guideType = stcClampText(value, 40);
 		var allowedTypes = ['Survival Kit', 'City Guide', 'Attraction Guide'];
@@ -124,7 +143,15 @@
 			});
 
 			buttons.forEach(function (button) {
-				button.textContent = savedIds.indexOf(button.getAttribute('data-guide-id')) === -1 ? 'Save' : 'Saved';
+				var isSaved = savedIds.indexOf(button.getAttribute('data-guide-id')) !== -1;
+
+				if (button.classList.contains('stc-save-guide--image-card')) {
+					button.classList.toggle('is-saved', isSaved);
+					button.setAttribute('aria-label', isSaved ? 'Saved guide' : 'Save guide');
+					return;
+				}
+
+				button.textContent = isSaved ? 'Saved' : 'Save';
 			});
 		}
 
@@ -186,8 +213,8 @@
 
 				guides.unshift(guide);
 				writeGuides(guides.slice(0, 24));
-				button.textContent = 'Saved';
 				renderGuides();
+				updateButtons();
 			});
 		});
 
@@ -342,6 +369,7 @@
 	}
 
 	stcMobileNav();
+	stcCollapsibleGuideGrid();
 	stcSavedGuides();
 	stcPageShare();
 	stcGuideToc();

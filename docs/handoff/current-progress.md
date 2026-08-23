@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.11.0`.
+Current theme version: `0.12.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -45,6 +45,10 @@ The custom theme implements the approved image-led homepage direction:
 - Reduced hero copy density.
 - Survival Kit strip.
 - City Guides and Attraction Guides image cards.
+- Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Tool / Reminder, FAQ, and Footer.
+- The homepage no longer inserts Latest Guides between Attraction Guides and Planner; current posts remain available on their matching landing pages and archives.
+- Mobile Survival Kit uses a compact horizontal rail, City Guides shows four cards with an animated expand/collapse control, and Attraction Guides uses a horizontal snap rail.
+- City subtitles stay on one line, image-card save actions use compact bookmark controls, and Planner/Ticket content columns include dedicated icons without overlap.
 - Homepage-reference visual assets now provide distinct city and attraction card images, plus Planner and Ticket band art.
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
 - Planner band.
@@ -64,7 +68,6 @@ The custom theme implements the approved image-led homepage direction:
 - Guide article sidebars automatically show an On this page table of contents generated from H2 sections.
 - Shared Guide card rendering for archive, search, and default post lists, with guide type badges and consistent CTAs.
 - Survival Kit, City Guides, and Attraction Guides landing pages automatically show latest published posts from their matching categories.
-- Homepage automatically shows the latest published guide posts from the three core guide categories.
 - Core guide categories are created on theme activation if missing.
 - Basic 404 template with links back to core travel sections.
 - Search results template without adding Search to top-level navigation.
@@ -104,7 +107,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.11.0`.
+Current tools plugin version: `0.12.0`.
 
 The custom plugin owns the first tool only:
 
