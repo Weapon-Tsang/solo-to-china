@@ -61,7 +61,7 @@ $attractions = [
 	<section class="stc-section" aria-labelledby="cities-title">
 		<div class="stc-section__header">
 			<h2 id="cities-title">City Guides</h2>
-			<a href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">View all city guides</a>
+			<a class="stc-section__view-all" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>" aria-label="View all city guides">View all <span aria-hidden="true">&rsaquo;</span></a>
 		</div>
 		<div class="stc-guide-grid-shell" data-stc-guide-grid-shell data-stc-guide-label="Cities">
 			<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-guide-grid>
@@ -89,7 +89,7 @@ $attractions = [
 	<section class="stc-section" aria-labelledby="attractions-title">
 		<div class="stc-section__header">
 			<h2 id="attractions-title">Attraction Guides</h2>
-			<a href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">View all attractions</a>
+			<a class="stc-section__view-all" href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>" aria-label="View all attraction guides">View all <span aria-hidden="true">&rsaquo;</span></a>
 		</div>
 		<div class="stc-guide-grid-shell" data-stc-guide-grid-shell data-stc-guide-label="Attractions">
 			<div id="home-attraction-grid" class="stc-card-grid stc-card-grid--attractions" data-stc-guide-grid>

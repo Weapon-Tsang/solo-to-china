@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.19.0`.
+Current theme version: `0.20.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -52,7 +52,8 @@ The custom theme implements the approved image-led homepage direction:
 - Each guide-grid button reports the remaining item count, moves focus to the first newly revealed card, and fades away as the remaining cards expand smoothly.
 - Survival Kit and city subtitles stay on one line, Survival Kit dividers are centered at 60% height, and attraction badges use smaller type.
 - Guide-list cards do not show save controls; the local Save Guide action appears only after a guide article is opened.
-- Homepage and landing guide cards now use distinct 960x1200 WebP assets with centered `object-fit: cover`, separate contrast scrims, and 4:5 mobile framing.
+- Homepage and landing guide cards now use distinct 960x1200 WebP assets with centered `object-fit: cover`, smooth contrast scrims, and 3:4 mobile framing.
+- Mobile City and Attraction cards share 14px corners, 12px grid gaps, 12px subtitles, glass attraction badges, compact green View all links, and tactile reveal buttons.
 - WordPress featured guide cards request the responsive 960px `stc-guide-card-2x` size with `srcset`/`sizes` instead of low-resolution thumbnail presets.
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
 - Core landing pages render their primary guide content before Saved Guides and category-matched latest posts.
@@ -119,7 +120,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.19.0`.
+Current tools plugin version: `0.20.0`.
 
 The custom plugin owns the first tool only:
 

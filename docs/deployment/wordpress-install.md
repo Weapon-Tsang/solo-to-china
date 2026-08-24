@@ -86,7 +86,7 @@ Also check:
 - Keyboard Tab shows visible focus states.
 - Saved Guides and Saved Reminders show local-only copy.
 - Export/import/clear actions work only on the current browser.
-- City and Attraction cards are sharp on a high-DPI phone, use centered 4:5 framing, and retain a readable bottom scrim without image blur.
+- City and Attraction cards are sharp on a high-DPI phone, use centered 3:4 framing, and retain a readable smooth bottom scrim without image blur.
 
 ## Do Not Overwrite
 

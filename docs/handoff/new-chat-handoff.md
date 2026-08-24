@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.19.0`
+Version: `0.20.0`
 
 Location:
 
@@ -146,7 +146,8 @@ Implemented:
 - Mobile Planner and Ticket Tool bands use tuned line heights, text-column widths, and paragraph spacing.
 - Guide-list cards do not expose save controls. Local Save Guide appears only after a guide article is opened.
 - Survival Kit subtitles remain one line with centered 60%-height dividers, and attraction badges use compact type.
-- Homepage and landing guide cards use 960x1200 WebP assets, centered cover positioning, separate scrims, and 4:5 mobile framing to avoid low-resolution over-zoom.
+- Homepage and landing guide cards use 960x1200 WebP assets, centered cover positioning, smooth scrims, and 3:4 mobile framing to avoid low-resolution over-zoom.
+- Mobile City and Attraction cards use 14px corners, 12px grid gaps, glass attraction badges, compact green View all links, and tactile reveal buttons.
 - WordPress post cards request the responsive 960px `stc-guide-card-2x` featured-image size with `srcset`/`sizes`.
 - Planner and Ticket homepage bands use dedicated reference-style icons and non-overlapping content columns.
 - Planner and Ticket cards use concise hierarchy, 44px CTAs, one-line feature labels, and restrained 11px disclosure/trust copy.
@@ -198,7 +199,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.19.0`
+Version: `0.20.0`
 
 Location:
 
@@ -294,11 +295,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-25 00:50:50 +08:00
-Theme version: 0.19.0
-Theme SHA256: E690478AD5DAB9AF3A3DAF51D596A2CF3D7FE8AD7A48B88BC9B1F7813BDFB02C
-Plugin version: 0.19.0
-Plugin SHA256: BC25105D8B6755E81A24FC7F535B577CD60B261987679C7F850FE06D3E4255A3
+Generated: 2026-08-25 01:09:10 +08:00
+Theme version: 0.20.0
+Theme SHA256: 3D63B671DA2C7CA6AE52C1D6C2418467C305266A6A7C2C935453DE3A6E793033
+Plugin version: 0.20.0
+Plugin SHA256: 59B7640A13F9127FCF45B88CE1195D1DFC095C6C23F9D98A3B1CC2DD14F6DC6C
 ```
 
 Regenerate artifacts with:

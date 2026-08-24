@@ -353,6 +353,22 @@ label:focus-visible {
 	margin-bottom: 16px;
 }
 
+.stc-section__view-all {
+	align-items: center;
+	color: var(--stc-green);
+	display: inline-flex;
+	font-size: 13px;
+	font-weight: 700;
+	gap: 4px;
+	text-decoration: none;
+}
+
+.stc-section__view-all span {
+	font-size: 18px;
+	font-weight: 400;
+	line-height: 1;
+}
+
 .stc-section h2,
 .stc-survival h2,
 .stc-planner h2,
@@ -424,7 +440,7 @@ label:focus-visible {
 }
 
 .stc-image-card__media::after {
-	background: linear-gradient(180deg, rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .76));
+	background: linear-gradient(to top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .35) 40%, transparent 100%);
 	content: "";
 	inset: 0;
 	position: absolute;
@@ -460,6 +476,7 @@ label:focus-visible {
 	font-family: Georgia, "Times New Roman", serif;
 	font-size: clamp(20px, 1.8vw, 24px);
 	line-height: 1.05;
+	text-shadow: 0 2px 8px rgba(0, 0, 0, .65);
 }
 
 .stc-image-card__content span {
@@ -491,14 +508,17 @@ label:focus-visible {
 }
 
 .stc-image-card__tag {
-	background: rgba(15, 21, 19, .58);
-	border-radius: 5px;
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	background: rgba(0, 0, 0, .45);
+	border: 1px solid rgba(255, 255, 255, .18);
+	border-radius: 6px;
 	color: #fff;
-	font-size: 10px;
-	font-weight: 800;
+	font-size: 11px;
+	font-weight: 700;
 	left: 10px;
 	line-height: 1;
-	padding: 5px 6px;
+	padding: 4px 8px;
 	position: absolute;
 	top: 10px;
 	z-index: 3;
@@ -1850,8 +1870,12 @@ label:focus-visible {
 	}
 
 	.home .stc-section__header a {
-		font-size: 11px;
+		font-size: 13px;
 		white-space: nowrap;
+	}
+
+	.home .stc-section__header .stc-section__view-all {
+		color: var(--stc-green);
 	}
 
 	.home .stc-survival {
@@ -1915,6 +1939,7 @@ label:focus-visible {
 	.stc-card-grid--attractions,
 	.stc-page-primary .stc-card-grid--cities,
 	.stc-page-primary .stc-card-grid--attractions {
+		gap: 12px;
 		grid-auto-flow: row;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		overflow: visible;
@@ -1924,7 +1949,14 @@ label:focus-visible {
 
 	.stc-card-grid--cities .stc-image-card,
 	.stc-card-grid--attractions .stc-image-card {
-		aspect-ratio: 4 / 5;
+		aspect-ratio: 3 / 4;
+		border-radius: 14px;
+	}
+
+	.stc-card-grid--cities .stc-image-card__content span,
+	.stc-card-grid--attractions .stc-image-card__content span {
+		color: rgba(255, 255, 255, .85);
+		font-size: 12px;
 	}
 
 	.stc-js .stc-guide-grid-shell.is-ready .stc-card-grid {
@@ -1962,7 +1994,7 @@ label:focus-visible {
 		background: rgba(255, 255, 255, .82);
 		border: 1px solid rgba(17, 111, 83, .2);
 		border-radius: 999px;
-		box-shadow: 0 6px 18px rgba(11, 43, 34, .12);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 		color: var(--stc-green);
 		cursor: pointer;
 		display: inline-flex;
@@ -1973,6 +2005,12 @@ label:focus-visible {
 		justify-content: center;
 		min-height: 38px;
 		padding: 0 16px;
+		transition: opacity .16s ease, transform .16s ease;
+	}
+
+	.stc-guide-grid-reveal button:active {
+		opacity: .9;
+		transform: scale(.96);
 	}
 
 	.stc-guide-grid-reveal__chevron {
