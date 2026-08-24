@@ -9,12 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.16.0' );
+define( 'STC_THEME_VERSION', '0.17.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'post-thumbnails' );
+	add_image_size( 'stc-guide-card-2x', 960, 0, false );
 	add_theme_support( 'align-wide' );
 	add_theme_support( 'html5', [ 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ] );
 
@@ -190,6 +191,14 @@ function stc_get_guide_type_label( $post_id = null ) {
 	return $labels[ $slug ] ?? $labels['travel-guide'];
 }
 
+function stc_render_guide_card_media( $image_file, $alt = '' ) {
+	$image_url = get_template_directory_uri() . '/assets/images/' . ltrim( $image_file, '/' );
+
+	echo '<span class="stc-image-card__media">';
+	echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $alt ) . '" width="960" height="1200" loading="lazy" decoding="async">';
+	echo '</span>';
+}
+
 function stc_render_guide_card( $post_id = null ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
 
@@ -206,6 +215,21 @@ function stc_render_guide_card( $post_id = null ) {
 
 	echo '<article class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 	echo '<a class="stc-post-card__link" href="' . esc_url( get_permalink( $post_id ) ) . '">';
+	if ( has_post_thumbnail( $post_id ) ) {
+		echo '<span class="stc-post-card__media">';
+		echo wp_get_attachment_image(
+			get_post_thumbnail_id( $post_id ),
+			'stc-guide-card-2x',
+			false,
+			[
+				'class'    => 'stc-post-card__image',
+				'loading'  => 'lazy',
+				'decoding' => 'async',
+				'sizes'    => '(max-width: 720px) calc(100vw - 40px), (max-width: 1100px) calc(50vw - 48px), 360px',
+			]
+		);
+		echo '</span>';
+	}
 	echo '<div class="stc-post-card__meta">';
 	echo '<span class="stc-post-card__type">' . esc_html( $type_label ) . '</span>';
 	echo '<time datetime="' . esc_attr( $date_attr ) . '">' . esc_html( $date_label ) . '</time>';

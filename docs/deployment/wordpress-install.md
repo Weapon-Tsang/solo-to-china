@@ -75,8 +75,10 @@ After activation, check these pages in WordPress:
 - City Guides: opened city-guide articles can be saved locally; listing cards do not show save controls.
 - Attraction Guides: opened attraction-guide articles can be saved locally; listing cards do not show save controls.
 - Planner: Trip.com CTA opens in a new tab.
-- Tools: Ticket Tool / Reminder renders, requires a visit date, and can save a local reminder.
+- Tools: Ticket Date & Availability renders, requires a visit date, and can save a local reminder.
 - FAQ: FAQ items open and close normally.
+
+For featured images uploaded before version `0.17.0`, regenerate WordPress thumbnails once so the `stc-guide-card-2x` 960px size is available. New uploads receive the size automatically. Source featured images should be at least 960px wide; 1200px or wider is preferred for high-DPI screens.
 
 Also check:
 
@@ -84,6 +86,7 @@ Also check:
 - Keyboard Tab shows visible focus states.
 - Saved Guides and Saved Reminders show local-only copy.
 - Export/import/clear actions work only on the current browser.
+- City and Attraction cards are sharp on a high-DPI phone, use centered 4:5 framing, and retain a readable bottom scrim without image blur.
 
 ## Do Not Overwrite
 

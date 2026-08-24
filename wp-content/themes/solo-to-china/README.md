@@ -2,7 +2,7 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.16.0`.
+Current version: `0.17.0`.
 
 The theme owns:
 
@@ -22,6 +22,8 @@ The theme owns:
 - Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
 - Core landing pages keep their primary guide content before Saved Guides and category-matched latest posts.
 - City and Attraction landing cards use matching two-column mobile grids that show four complete cards before a compact frosted reveal button.
+- Featured guide cards request the responsive 960px `stc-guide-card-2x` WordPress image size instead of low-resolution thumbnails.
+- Homepage and landing guide cards use 960x1200 WebP media, centered `object-fit: cover`, mobile 4:5 framing, and a separate contrast scrim.
 - Guide articles place a compact horizontal table of contents before mobile content while retaining the desktop sidebar table of contents.
 - Planner reuses the approved homepage icon, partner disclosure, and watercolor artwork across desktop and mobile.
 - FAQ uses responsive two-column/one-column accordions with related internal links.
@@ -32,6 +34,7 @@ The theme owns:
 - Guide-list cards stay focused on opening content; local save actions appear only after a guide article is opened.
 - Survival Kit subtitles stay on one line with centered 60%-height dividers, while attraction badges use quieter compact type.
 - Reference-style Planner and Ticket bands with dedicated icons and non-overlapping content columns.
+- Planner and Ticket cards use concise copy, 44px CTAs, restrained disclosures, and simplified one-line feature labels.
 - Core guide category setup on theme activation.
 - Theme design system, responsive layout, keyboard focus, and skip-to-content behavior.
 

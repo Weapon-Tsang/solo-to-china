@@ -44,6 +44,20 @@ $requiredFiles = [
     'wp-content/themes/solo-to-china/assets/images/card-disney.png',
     'wp-content/themes/solo-to-china/assets/images/planner-art.png',
     'wp-content/themes/solo-to-china/assets/images/ticket-art.png',
+    'wp-content/themes/solo-to-china/assets/images/card-beijing-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-shanghai-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-guangzhou-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-chengdu-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-chongqing-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-xian-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-hangzhou-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-city-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-forbidden-city-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-great-wall-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-terracotta-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-attraction-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-west-lake-hd.webp',
+    'wp-content/themes/solo-to-china/assets/images/card-disney-hd.webp',
     'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php',
     'wp-content/plugins/solo-to-china-tools/README.md',
     'wp-content/plugins/solo-to-china-tools/includes/attractions.php',
@@ -99,7 +113,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.16.0') === false || strpos($packageScript, 'Plugin version: 0.16.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.17.0') === false || strpos($packageScript, 'Plugin version: 0.17.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -128,8 +142,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.16.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.16.0.';
+    if (strpos($themeStyle, 'Version: 0.17.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.17.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -142,7 +156,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.16.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.17.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -191,8 +205,17 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'STC_THEME_VERSION') === false) {
         $failures[] = 'Theme functions are missing a single theme version constant.';
     }
-    if (strpos($functions, "'0.16.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.16.0.';
+    if (strpos($functions, "add_image_size( 'stc-guide-card-2x', 960") === false) {
+        $failures[] = 'Theme setup is missing the 960px Retina guide card image size.';
+    }
+    if (strpos($functions, 'wp_get_attachment_image') === false || strpos($functions, "'stc-guide-card-2x'") === false) {
+        $failures[] = 'WordPress guide cards do not request the responsive Retina image size.';
+    }
+    if (strpos($functions, 'stc_render_guide_card_media') === false) {
+        $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
+    }
+    if (strpos($functions, "'0.17.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.17.0.';
     }
     if (strpos($functions, 'stc_render_article_save_button') === false || strpos($functions, 'data-stc-save-guide') === false || strpos($functions, 'stc-article-save') === false) {
         $failures[] = 'Theme functions are missing the article-only local save renderer.';
@@ -416,7 +439,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.16.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.17.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -424,11 +447,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.16.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.16.0.';
+    if (strpos($plugin, 'Version: 0.17.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.17.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.16.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.16.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.17.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.17.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -582,7 +605,7 @@ if (is_file($pluginCssPath)) {
 $frontPagePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/front-page.php';
 if (is_file($frontPagePath)) {
     $frontPage = file_get_contents($frontPagePath);
-    if (strpos($frontPage, 'stc-image-card__media') === false) {
+    if (strpos($frontPage, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Homepage image cards are missing a dedicated media layer.';
     }
     if (strpos($frontPage, 'stc_render_survival_icon') === false) {
@@ -619,6 +642,16 @@ if (is_file($frontPagePath)) {
     if (strpos($frontPage, 'https://www.trip.com/') === false || strpos($frontPage, 'rel="sponsored noopener"') === false) {
         $failures[] = 'Homepage Planner CTA is not a sponsored Trip.com external link.';
     }
+    foreach (['Plan Your Trip', 'Book hotels, trains &amp; flights with confidence.', 'Explore on Trip.com', 'Ticket Date &amp; Availability', 'Check booking windows &amp; set free alerts before your visit.', 'Real-time Dates', 'Free Alerts', 'Check Dates &amp; Set Alerts', 'Free to use', 'No login required'] as $toolCopy) {
+        if (strpos($frontPage, $toolCopy) === false) {
+            $failures[] = "Homepage tool cards are missing refined copy: {$toolCopy}";
+        }
+    }
+    foreach (['Start planning on', 'Build your itinerary and book with confidence.', 'Ticket Tool / Reminder', 'See availability and important notes.', 'Get notified before your visit.', 'Check ticket date / Set reminder'] as $removedToolCopy) {
+        if (strpos($frontPage, $removedToolCopy) !== false) {
+            $failures[] = "Homepage tool cards still include superseded copy: {$removedToolCopy}";
+        }
+    }
 }
 
 $themeCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/assets/css/main.css';
@@ -627,12 +660,22 @@ if (is_file($themeCssPath)) {
     if (strpos($themeCss, '../images/hero-home.png') === false) {
         $failures[] = 'Homepage hero does not reference the generated hero image asset.';
     }
-    if (strpos($themeCss, '../images/guide-card-bg.png') === false) {
-        $failures[] = 'Guide cards do not reference the generated card image asset.';
-    }
-    foreach (['card-beijing.png', 'card-shanghai.png', 'card-guangzhou.png', 'card-chengdu.png', 'card-forbidden-city.png', 'card-great-wall.png', 'card-disney.png', 'planner-art.png', 'ticket-art.png'] as $imageReference) {
+    foreach (['planner-art.png', 'ticket-art.png'] as $imageReference) {
         if (strpos($themeCss, $imageReference) === false) {
             $failures[] = "Theme CSS is missing reference-style visual asset: {$imageReference}";
+        }
+    }
+    foreach (['.stc-image-card__media img', 'object-fit: cover', 'object-position: center', '.stc-image-card__media::after', 'aspect-ratio: 4 / 5'] as $guideImageStyle) {
+        if (strpos($themeCss, $guideImageStyle) === false) {
+            $failures[] = "Theme CSS is missing high-resolution guide image behavior: {$guideImageStyle}";
+        }
+    }
+    if (strpos($themeCss, 'var(--stc-card-image') !== false || strpos($themeCss, '.stc-image-card:hover .stc-image-card__media {') !== false) {
+        $failures[] = 'Guide card media still uses the old combined background or whole-layer zoom.';
+    }
+    foreach (['.stc-affiliate-disclosure', 'color: #8c9ba5', 'font-size: 11px', '.stc-ticket-band__trust', 'min-height: 44px', 'opacity: .08'] as $toolCardStyle) {
+        if (strpos($themeCss, $toolCardStyle) === false) {
+            $failures[] = "Theme CSS is missing refined tool-card styling: {$toolCardStyle}";
         }
     }
     foreach (['.home .stc-header', '.stc-header', 'box-shadow', '.stc-page-hero--visual', '.stc-planner__icon', '.stc-ticket-band__icon', 'scroll-snap-type'] as $styleToken) {
@@ -846,6 +889,18 @@ $phpExecutable = PHP_BINARY ?: 'php';
 foreach ($requiredFiles as $relativePath) {
     if (substr($relativePath, -4) === '.php') {
         $phpFiles[] = $relativePath;
+    }
+}
+
+foreach (array_filter($requiredFiles, static fn ($path) => substr($path, -8) === '-hd.webp') as $relativePath) {
+    $absolutePath = $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
+    if (!is_file($absolutePath)) {
+        continue;
+    }
+
+    $dimensions = getimagesize($absolutePath);
+    if ($dimensions === false || $dimensions[0] < 960 || $dimensions[1] < 1200) {
+        $failures[] = "Retina guide image must be at least 960x1200: {$relativePath}";
     }
 }
 

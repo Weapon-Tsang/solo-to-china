@@ -1,6 +1,6 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-08-23
+Date: 2026-08-25
 
 ## Current Working Boundary
 
@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.16.0`.
+Current theme version: `0.17.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -45,24 +45,25 @@ The custom theme implements the approved image-led homepage direction:
 - Reduced hero copy density.
 - Survival Kit strip.
 - City Guides and Attraction Guides image cards.
-- Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Tool / Reminder, FAQ, and Footer.
+- Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Date & Availability, FAQ, and Footer.
 - The homepage no longer inserts Latest Guides between Attraction Guides and Planner; current posts remain available on their matching landing pages and archives.
 - Mobile Survival Kit uses a responsive two-column grid on narrow screens and returns to five columns when space allows, with no clipped horizontal rail.
 - City Guides and Attraction Guides share a two-column mobile grid that displays four complete cards before a compact frosted capsule button placed below the second row.
 - Each guide-grid button reports the remaining item count, moves focus to the first newly revealed card, and fades away as the remaining cards expand smoothly.
 - Survival Kit and city subtitles stay on one line, Survival Kit dividers are centered at 60% height, and attraction badges use smaller type.
 - Guide-list cards do not show save controls; the local Save Guide action appears only after a guide article is opened.
-- Homepage-reference visual assets now provide distinct city and attraction card images, plus Planner and Ticket band art.
+- Homepage and landing guide cards now use distinct 960x1200 WebP assets with centered `object-fit: cover`, separate contrast scrims, and 4:5 mobile framing.
+- WordPress featured guide cards request the responsive 960px `stc-guide-card-2x` size with `srcset`/`sizes` instead of low-resolution thumbnail presets.
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
 - Core landing pages render their primary guide content before Saved Guides and category-matched latest posts.
 - Attraction Guides preserves full title, subtitle, and badge space in the same four-card mobile fold used by City Guides.
-- Mobile Planner and Ticket Tool bands use tighter, consistent line heights and wider text columns so headings and supporting copy wrap naturally.
+- Mobile Planner and Ticket cards use concise copy, 20-24px padding, 16px module gaps, 44px CTAs, simplified one-line features, and restrained 11px disclosures.
 - Planner reuses the approved homepage calendar icon, Trip.com disclosure block, and watercolor artwork on desktop and mobile.
 - FAQ uses polished two-column desktop and one-column mobile accordions with related internal links.
 - Saved Guides and category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
 - Planner band.
 - Homepage Planner CTA opens Trip.com as a sponsored external link.
-- Ticket Tool / Reminder band.
+- Ticket Date & Availability band.
 - FAQ section.
 - Footer.
 - Keyboard focus styling and skip-to-content link.
@@ -116,7 +117,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.16.0`.
+Current tools plugin version: `0.17.0`.
 
 The custom plugin owns the first tool only:
 

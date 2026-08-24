@@ -16,23 +16,23 @@ $survival_items = [
 ];
 
 $cities = [
-	[ 'name' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing' ],
-	[ 'name' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai' ],
-	[ 'name' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou' ],
-	[ 'name' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu' ],
-	[ 'name' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing' ],
-	[ 'name' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian' ],
-	[ 'name' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou' ],
-	[ 'name' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie' ],
+	[ 'name' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing', 'image' => 'card-beijing-hd.webp' ],
+	[ 'name' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai', 'image' => 'card-shanghai-hd.webp' ],
+	[ 'name' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou', 'image' => 'card-guangzhou-hd.webp' ],
+	[ 'name' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu', 'image' => 'card-chengdu-hd.webp' ],
+	[ 'name' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing', 'image' => 'card-chongqing-hd.webp' ],
+	[ 'name' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian', 'image' => 'card-xian-hd.webp' ],
+	[ 'name' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou', 'image' => 'card-hangzhou-hd.webp' ],
+	[ 'name' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie', 'image' => 'card-zhangjiajie-city-hd.webp' ],
 ];
 
 $attractions = [
-	[ 'name' => 'Forbidden City', 'city' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city' ],
-	[ 'name' => 'Great Wall', 'city' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall' ],
-	[ 'name' => 'Terracotta Warriors', 'city' => "Xi'an", 'tag' => 'Passport', 'class' => 'terracotta' ],
-	[ 'name' => 'Zhangjiajie', 'city' => 'Hunan', 'tag' => 'Best time: Apr-Nov', 'class' => 'zhangjiajie' ],
-	[ 'name' => 'West Lake', 'city' => 'Hangzhou', 'tag' => 'Best time: Mar-May', 'class' => 'west-lake' ],
-	[ 'name' => 'Shanghai Disney Resort', 'city' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney' ],
+	[ 'name' => 'Forbidden City', 'city' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city', 'image' => 'card-forbidden-city-hd.webp' ],
+	[ 'name' => 'Great Wall', 'city' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall', 'image' => 'card-great-wall-hd.webp' ],
+	[ 'name' => 'Terracotta Warriors', 'city' => "Xi'an", 'tag' => 'Passport', 'class' => 'terracotta', 'image' => 'card-terracotta-hd.webp' ],
+	[ 'name' => 'Zhangjiajie', 'city' => 'Hunan', 'tag' => 'Best time: Apr-Nov', 'class' => 'zhangjiajie', 'image' => 'card-zhangjiajie-attraction-hd.webp' ],
+	[ 'name' => 'West Lake', 'city' => 'Hangzhou', 'tag' => 'Best time: Mar-May', 'class' => 'west-lake', 'image' => 'card-west-lake-hd.webp' ],
+	[ 'name' => 'Shanghai Disney Resort', 'city' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney', 'image' => 'card-disney-hd.webp' ],
 ];
 
 ?>
@@ -68,7 +68,7 @@ $attractions = [
 			<div id="home-city-grid" class="stc-card-grid stc-card-grid--cities" data-stc-guide-grid>
 				<?php foreach ( $cities as $city ) : ?>
 					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $city['class'] ); ?>">
-						<span class="stc-image-card__media" aria-hidden="true"></span>
+						<?php stc_render_guide_card_media( $city['image'], $city['name'] ); ?>
 						<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">
 							<span class="stc-image-card__content">
 								<strong><?php echo esc_html( $city['name'] ); ?></strong>
@@ -96,7 +96,7 @@ $attractions = [
 			<div id="home-attraction-grid" class="stc-card-grid stc-card-grid--attractions" data-stc-guide-grid>
 				<?php foreach ( $attractions as $attraction ) : ?>
 					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $attraction['class'] ); ?>">
-						<span class="stc-image-card__media" aria-hidden="true"></span>
+						<?php stc_render_guide_card_media( $attraction['image'], $attraction['name'] ); ?>
 						<span class="stc-image-card__tag"><?php echo esc_html( $attraction['tag'] ); ?></span>
 						<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">
 							<span class="stc-image-card__content">
@@ -122,15 +122,14 @@ $attractions = [
 				<svg viewBox="0 0 48 48" focusable="false"><rect x="6" y="9" width="32" height="31" rx="3"/><path d="M14 5v8M30 5v8M6 18h32M13 25h5M22 25h5M13 32h5"/><circle cx="36" cy="35" r="9"/><path d="m32.5 35 2.5 2.5 4.5-5"/></svg>
 			</span>
 			<div>
-				<h2 id="planner-title">Plan your trip</h2>
-				<p>Build your itinerary and book with confidence.</p>
+				<h2 id="planner-title">Plan Your Trip</h2>
+				<p>Book hotels, trains &amp; flights with confidence.</p>
 			</div>
 		</div>
 		<div class="stc-planner__partner">
-			<span>Start planning on</span>
 			<strong>Trip.com</strong>
-			<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener">Start planning on Trip.com</a>
-			<p>Opens in a new tab. We may earn a commission at no extra cost to you.</p>
+			<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener">Explore on Trip.com <span aria-hidden="true">&#8599;</span></a>
+			<p class="stc-affiliate-disclosure">Opens in a new tab. We may earn a commission at no extra cost to you.</p>
 		</div>
 		<span class="stc-planner__art" aria-hidden="true"></span>
 	</section>
@@ -139,17 +138,17 @@ $attractions = [
 		<div class="stc-ticket-band__intro">
 			<span class="stc-ticket-band__icon" aria-hidden="true"></span>
 			<div>
-				<h2 id="ticket-title">Ticket Tool / Reminder</h2>
-				<p>Check attraction ticket dates and set a free reminder.</p>
+				<h2 id="ticket-title">Ticket Date &amp; Availability</h2>
+				<p>Check booking windows &amp; set free alerts before your visit.</p>
 			</div>
 		</div>
 		<div class="stc-ticket-band__steps">
-			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><span><strong>Check ticket date</strong><span>See availability and important notes.</span></span></p>
-			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><span><strong>Set free reminder</strong><span>Get notified before your visit.</span></span></p>
+			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><strong>Real-time Dates</strong></p>
+			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><strong>Free Alerts</strong></p>
 		</div>
 		<div class="stc-ticket-band__action">
-			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check ticket date / Set reminder</a>
-			<p>No login required. Free to use.</p>
+			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check Dates &amp; Set Alerts</a>
+			<p class="stc-ticket-band__trust"><span aria-hidden="true">&#10003;</span> Free to use <span aria-hidden="true">&bull;</span> No login required</p>
 		</div>
 	</section>
 

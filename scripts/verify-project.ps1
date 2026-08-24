@@ -41,6 +41,20 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/assets/images/card-disney.png",
     "wp-content/themes/solo-to-china/assets/images/planner-art.png",
     "wp-content/themes/solo-to-china/assets/images/ticket-art.png",
+    "wp-content/themes/solo-to-china/assets/images/card-beijing-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-shanghai-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-guangzhou-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-chengdu-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-chongqing-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-xian-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-hangzhou-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-city-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-forbidden-city-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-great-wall-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-terracotta-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-attraction-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-west-lake-hd.webp",
+    "wp-content/themes/solo-to-china/assets/images/card-disney-hd.webp",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
     "wp-content/plugins/solo-to-china-tools/README.md",
     "wp-content/plugins/solo-to-china-tools/includes/attractions.php",
@@ -96,7 +110,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.16.0") -or (-not $PackageScript.Contains("Plugin version: 0.16.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.17.0") -or (-not $PackageScript.Contains("Plugin version: 0.17.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -125,8 +139,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.16.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.16.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.17.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.17.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -139,7 +153,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.16.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.17.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -190,8 +204,17 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("STC_THEME_VERSION")) {
         $Failures.Add("Theme functions are missing a single theme version constant.")
     }
-    if (-not $Functions.Contains("'0.16.0'")) {
-		$Failures.Add("Theme asset version is not 0.16.0.")
+    if (-not $Functions.Contains("add_image_size( 'stc-guide-card-2x', 960")) {
+        $Failures.Add("Theme setup is missing the 960px Retina guide card image size.")
+    }
+    if (-not $Functions.Contains("wp_get_attachment_image") -or (-not $Functions.Contains("'stc-guide-card-2x'"))) {
+        $Failures.Add("WordPress guide cards do not request the responsive Retina image size.")
+    }
+    if (-not $Functions.Contains("stc_render_guide_card_media")) {
+        $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
+    }
+    if (-not $Functions.Contains("'0.17.0'")) {
+		$Failures.Add("Theme asset version is not 0.17.0.")
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")
@@ -248,6 +271,13 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
         if (-not $Functions.Contains($PatternText)) {
             $Failures.Add("Survival Kit content pattern is missing section: $PatternText")
         }
+    }
+}
+
+foreach ($RelativePath in $RequiredFiles | Where-Object { $_.EndsWith("-hd.webp") }) {
+    $AbsolutePath = Join-Path $Root $RelativePath
+    if ((Test-Path -LiteralPath $AbsolutePath -PathType Leaf) -and (Get-Item -LiteralPath $AbsolutePath).Length -lt 100000) {
+        $Failures.Add("Retina guide image is unexpectedly small: $RelativePath")
     }
 }
 
@@ -415,7 +445,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.16.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.17.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -423,11 +453,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.16.0")) {
-		$Failures.Add("Tools plugin header version is not 0.16.0.")
+    if (-not $Plugin.Contains("Version: 0.17.0")) {
+		$Failures.Add("Tools plugin header version is not 0.17.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.16.0'")) {
-		$Failures.Add("Tools plugin version constant is not 0.16.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.17.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.17.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -581,7 +611,7 @@ if (Test-Path -LiteralPath $PluginCssPath -PathType Leaf) {
 $FrontPagePath = Join-Path $Root "wp-content/themes/solo-to-china/front-page.php"
 if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     $FrontPage = Get-Content -LiteralPath $FrontPagePath -Raw
-    if (-not $FrontPage.Contains("stc-image-card__media")) {
+    if (-not $FrontPage.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Homepage image cards are missing a dedicated media layer.")
     }
     if (-not $FrontPage.Contains("stc_render_survival_icon")) {
@@ -618,6 +648,16 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if (-not $FrontPage.Contains("https://www.trip.com/") -or (-not $FrontPage.Contains("rel=""sponsored noopener"""))) {
         $Failures.Add("Homepage Planner CTA is not a sponsored Trip.com external link.")
     }
+    foreach ($ToolCopy in @("Plan Your Trip", "Book hotels, trains &amp; flights with confidence.", "Explore on Trip.com", "Ticket Date &amp; Availability", "Check booking windows &amp; set free alerts before your visit.", "Real-time Dates", "Free Alerts", "Check Dates &amp; Set Alerts", "Free to use", "No login required")) {
+        if (-not $FrontPage.Contains($ToolCopy)) {
+            $Failures.Add("Homepage tool cards are missing refined copy: $ToolCopy")
+        }
+    }
+    foreach ($RemovedToolCopy in @("Start planning on", "Build your itinerary and book with confidence.", "Ticket Tool / Reminder", "See availability and important notes.", "Get notified before your visit.", "Check ticket date / Set reminder")) {
+        if ($FrontPage.Contains($RemovedToolCopy)) {
+            $Failures.Add("Homepage tool cards still include superseded copy: $RemovedToolCopy")
+        }
+    }
 }
 
 $ThemeCssPath = Join-Path $Root "wp-content/themes/solo-to-china/assets/css/main.css"
@@ -626,12 +666,22 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if (-not $ThemeCss.Contains("../images/hero-home.png")) {
         $Failures.Add("Homepage hero does not reference the generated hero image asset.")
     }
-    if (-not $ThemeCss.Contains("../images/guide-card-bg.png")) {
-        $Failures.Add("Guide cards do not reference the generated card image asset.")
-    }
-    foreach ($ImageReference in @("card-beijing.png", "card-shanghai.png", "card-guangzhou.png", "card-chengdu.png", "card-forbidden-city.png", "card-great-wall.png", "card-disney.png", "planner-art.png", "ticket-art.png")) {
+    foreach ($ImageReference in @("planner-art.png", "ticket-art.png")) {
         if (-not $ThemeCss.Contains($ImageReference)) {
             $Failures.Add("Theme CSS is missing reference-style visual asset: $ImageReference")
+        }
+    }
+    foreach ($GuideImageStyle in @(".stc-image-card__media img", "object-fit: cover", "object-position: center", ".stc-image-card__media::after", "aspect-ratio: 4 / 5")) {
+        if (-not $ThemeCss.Contains($GuideImageStyle)) {
+            $Failures.Add("Theme CSS is missing high-resolution guide image behavior: $GuideImageStyle")
+        }
+    }
+    if ($ThemeCss.Contains("var(--stc-card-image") -or $ThemeCss.Contains(".stc-image-card:hover .stc-image-card__media {")) {
+        $Failures.Add("Guide card media still uses the old combined background or whole-layer zoom.")
+    }
+    foreach ($ToolCardStyle in @(".stc-affiliate-disclosure", "color: #8c9ba5", "font-size: 11px", ".stc-ticket-band__trust", "min-height: 44px", "opacity: .08")) {
+        if (-not $ThemeCss.Contains($ToolCardStyle)) {
+            $Failures.Add("Theme CSS is missing refined tool-card styling: $ToolCardStyle")
         }
     }
     foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner__icon", ".stc-ticket-band__icon", "scroll-snap-type")) {

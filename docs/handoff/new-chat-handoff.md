@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.16.0`
+Version: `0.17.0`
 
 Location:
 
@@ -146,10 +146,13 @@ Implemented:
 - Mobile Planner and Ticket Tool bands use tuned line heights, text-column widths, and paragraph spacing.
 - Guide-list cards do not expose save controls. Local Save Guide appears only after a guide article is opened.
 - Survival Kit subtitles remain one line with centered 60%-height dividers, and attraction badges use compact type.
+- Homepage and landing guide cards use 960x1200 WebP assets, centered cover positioning, separate scrims, and 4:5 mobile framing to avoid low-resolution over-zoom.
+- WordPress post cards request the responsive 960px `stc-guide-card-2x` featured-image size with `srcset`/`sizes`.
 - Planner and Ticket homepage bands use dedicated reference-style icons and non-overlapping content columns.
+- Planner and Ticket cards use concise hierarchy, 44px CTAs, one-line feature labels, and restrained 11px disclosure/trust copy.
 - Planner band.
 - Homepage Planner CTA opens Trip.com externally with `rel="sponsored noopener"`.
-- Ticket Tool / Reminder homepage band.
+- Ticket Date & Availability homepage band.
 - FAQ section.
 - Footer.
 - Mobile menu.
@@ -193,7 +196,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.16.0`
+Version: `0.17.0`
 
 Location:
 
@@ -289,11 +292,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-23 23:53:56 +08:00
-Theme version: 0.16.0
-Theme SHA256: 23BF6853BEE3E068DE2AE8BEAC28D2B94C016DDC2F04C81FFDB3CA7F1B709FEE
-Plugin version: 0.16.0
-Plugin SHA256: 2471FE63855A53F983D82D225D07C89C5892C6EF7D025E4A540FD9AB0A6B1C6D
+Generated: 2026-08-25 00:19:09 +08:00
+Theme version: 0.17.0
+Theme SHA256: 8BF5AE78910E5442B513978264C1A0A6282861D01621087000B61385B4E0DD7B
+Plugin version: 0.17.0
+Plugin SHA256: E41024AD698FB45EA04BB75C20F0577DA807FB30AEFE65396BDDAD69EF574D2A
 ```
 
 Regenerate artifacts with:
@@ -400,7 +403,7 @@ After installing on WordPress, check:
 - Share page works or copies link.
 - Planner page Trip.com CTA opens in a new tab.
 - Homepage Planner CTA opens Trip.com in a new tab.
-- Tools page renders Ticket Tool / Reminder.
+- Tools page renders Ticket Date & Availability.
 - Ticket Tool requires visit date.
 - Past visit date cannot be saved as reminder.
 - Saved reminders export/import/clear/delete works in current browser.

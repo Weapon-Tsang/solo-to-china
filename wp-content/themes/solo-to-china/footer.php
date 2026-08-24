@@ -30,7 +30,7 @@
 		</nav>
 		<nav class="stc-footer__column" aria-label="<?php esc_attr_e( 'Tools', 'solo-to-china' ); ?>">
 			<h2>Tools</h2>
-			<a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Ticket Tool / Reminder</a>
+			<a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Ticket Date &amp; Availability</a>
 		</nav>
 		<nav class="stc-footer__column" aria-label="<?php esc_attr_e( 'Help', 'solo-to-china' ); ?>">
 			<h2>Help</h2>

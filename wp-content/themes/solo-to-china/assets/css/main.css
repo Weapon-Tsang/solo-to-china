@@ -413,19 +413,32 @@ label:focus-visible {
 }
 
 .stc-image-card__media {
-	background:
-		linear-gradient(180deg, rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .76)),
-		var(--stc-card-image, url("../images/guide-card-bg.png")) center / cover no-repeat,
-		linear-gradient(135deg, #a14937, #2f6f68);
+	background: #27463e;
 	inset: 0;
+	overflow: hidden;
 	pointer-events: none;
 	position: absolute;
-	transition: transform .35s ease;
 	z-index: 0;
 }
 
-.stc-image-card:hover .stc-image-card__media {
-	transform: scale(1.04);
+.stc-image-card__media img {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	transition: transform .35s ease;
+	width: 100%;
+}
+
+.stc-image-card__media::after {
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, .76));
+	content: "";
+	inset: 0;
+	position: absolute;
+}
+
+.stc-image-card:hover .stc-image-card__media img {
+	transform: scale(1.02);
 }
 
 .stc-image-card__link {
@@ -435,62 +448,6 @@ label:focus-visible {
 	position: absolute;
 	text-decoration: none;
 	z-index: 2;
-}
-
-.stc-image-card--beijing {
-	--stc-card-image: url("../images/card-beijing.png");
-}
-
-.stc-image-card--shanghai {
-	--stc-card-image: url("../images/card-shanghai.png");
-}
-
-.stc-image-card--guangzhou {
-	--stc-card-image: url("../images/card-guangzhou.png");
-}
-
-.stc-image-card--chengdu {
-	--stc-card-image: url("../images/card-chengdu.png");
-}
-
-.stc-image-card--chongqing {
-	--stc-card-image: url("../images/card-chongqing.png");
-}
-
-.stc-image-card--xian {
-	--stc-card-image: url("../images/card-xian.png");
-}
-
-.stc-image-card--hangzhou {
-	--stc-card-image: url("../images/card-hangzhou.png");
-}
-
-.stc-card-grid--cities .stc-image-card--zhangjiajie {
-	--stc-card-image: url("../images/card-zhangjiajie-city.png");
-}
-
-.stc-image-card--forbidden-city {
-	--stc-card-image: url("../images/card-forbidden-city.png");
-}
-
-.stc-image-card--great-wall {
-	--stc-card-image: url("../images/card-great-wall.png");
-}
-
-.stc-image-card--terracotta {
-	--stc-card-image: url("../images/card-terracotta.png");
-}
-
-.stc-card-grid--attractions .stc-image-card--zhangjiajie {
-	--stc-card-image: url("../images/card-zhangjiajie-attraction.png");
-}
-
-.stc-image-card--west-lake {
-	--stc-card-image: url("../images/card-west-lake.png");
-}
-
-.stc-image-card--disney {
-	--stc-card-image: url("../images/card-disney.png");
 }
 
 .stc-image-card__content {
@@ -561,17 +518,17 @@ label:focus-visible {
 	border: 1px solid var(--stc-line);
 	border-radius: var(--stc-radius);
 	display: grid;
-	gap: 24px;
+	gap: 16px;
 	margin-bottom: 16px;
 	margin-top: 16px;
 	min-height: 126px;
 	overflow: hidden;
-	padding: 20px 28px;
+	padding: 24px;
 	position: relative;
 }
 
 .stc-planner {
-	grid-template-columns: minmax(245px, 1fr) minmax(250px, 1.05fr) minmax(150px, .72fr);
+	grid-template-columns: minmax(260px, 1.15fr) minmax(250px, 1fr) minmax(130px, .55fr);
 }
 
 .stc-planner > * {
@@ -582,7 +539,7 @@ label:focus-visible {
 .stc-planner__intro {
 	align-items: center;
 	display: grid;
-	gap: 20px;
+	gap: 16px;
 	grid-template-columns: 78px 1fr;
 }
 
@@ -608,11 +565,11 @@ label:focus-visible {
 .stc-planner__partner {
 	border-left: 1px solid rgba(20, 107, 84, .18);
 	display: grid;
-	gap: 5px;
-	padding-left: 28px;
+	gap: 8px;
+	padding-left: 24px;
 }
 
-.stc-planner span {
+.stc-planner__partner > span {
 	color: var(--stc-muted);
 	font-size: 12px;
 }
@@ -632,14 +589,17 @@ label:focus-visible {
 }
 
 .stc-planner__partner .stc-button {
+	border-radius: 8px;
 	justify-self: start;
-	min-height: 40px;
+	min-height: 44px;
 	padding: 0 14px;
 }
 
-.stc-planner__partner p {
-	font-size: 9px;
-	line-height: 1.35;
+.stc-affiliate-disclosure {
+	color: #8c9ba5 !important;
+	font-size: 11px !important;
+	line-height: 1.4;
+	margin: 0;
 }
 
 .stc-planner__art {
@@ -647,6 +607,7 @@ label:focus-visible {
 	background: url("../images/planner-art.png") right center / contain no-repeat;
 	display: block;
 	min-height: 86px;
+	opacity: .08;
 }
 
 .stc-planner--page {
@@ -657,7 +618,7 @@ label:focus-visible {
 .stc-ticket-band {
 	background: #fff6e8;
 	border-color: #efd8b4;
-	grid-template-columns: minmax(330px, 1.4fr) minmax(220px, .9fr) minmax(190px, auto);
+	grid-template-columns: minmax(340px, 1.35fr) minmax(250px, .9fr) minmax(210px, auto);
 }
 
 .stc-ticket-band__intro {
@@ -683,30 +644,28 @@ label:focus-visible {
 	color: var(--stc-gold);
 	font-family: inherit;
 	font-size: 16px;
-	line-height: 1.05;
+	line-height: 1.2;
 	text-transform: uppercase;
-	white-space: nowrap;
 }
 
 .stc-ticket-band__steps {
 	border-left: 1px solid rgba(169, 120, 36, .22);
 	display: grid;
-	gap: 12px;
+	gap: 16px;
 	padding-left: 24px;
 }
 
 .stc-ticket-band__steps p {
-	align-items: start;
+	align-items: center;
 	display: grid;
 	gap: 10px;
 	grid-template-columns: 24px 1fr;
 	margin: 0;
 }
 
-.stc-ticket-band__steps p > span:last-child,
 .stc-ticket-band__action {
 	display: grid;
-	gap: 3px;
+	gap: 8px;
 }
 
 .stc-ticket-band__step-icon {
@@ -729,12 +688,8 @@ label:focus-visible {
 .stc-ticket-band__steps strong {
 	color: var(--stc-ink);
 	font-size: 12px;
-}
-
-.stc-ticket-band__steps span {
-	color: var(--stc-muted);
-	font-size: 10px;
-	line-height: 1.35;
+	line-height: 1.25;
+	white-space: nowrap;
 }
 
 .stc-ticket-band__action {
@@ -742,14 +697,18 @@ label:focus-visible {
 }
 
 .stc-ticket-band__action .stc-button {
+	border-radius: 8px;
 	font-size: 12px;
-	min-height: 40px;
+	min-height: 44px;
 	padding: 0 14px;
 	white-space: nowrap;
 }
 
-.stc-ticket-band__action p {
-	font-size: 9px;
+.stc-ticket-band__trust {
+	color: #8c9ba5;
+	font-size: 11px;
+	line-height: 1.4;
+	margin: 0;
 }
 
 .stc-faq__grid {
@@ -1551,6 +1510,21 @@ label:focus-visible {
 	padding: 22px;
 }
 
+.stc-post-card__media {
+	aspect-ratio: 4 / 5;
+	display: block;
+	margin: -22px -22px 0;
+	overflow: hidden;
+}
+
+.stc-post-card__image {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	width: 100%;
+}
+
 .stc-post-card__meta {
 	align-items: center;
 	color: var(--stc-muted);
@@ -1914,12 +1888,9 @@ label:focus-visible {
 		transition: max-height .5s ease;
 	}
 
-	.stc-card-grid--cities .stc-image-card {
-		aspect-ratio: 1 / 1.08;
-	}
-
+	.stc-card-grid--cities .stc-image-card,
 	.stc-card-grid--attractions .stc-image-card {
-		aspect-ratio: 2 / 3;
+		aspect-ratio: 4 / 5;
 	}
 
 	.stc-js .stc-guide-grid-shell.is-ready .stc-card-grid {
@@ -2060,7 +2031,7 @@ label:focus-visible {
 		bottom: 16px;
 		height: 82px;
 		min-height: 0;
-		opacity: .16;
+		opacity: .08;
 		position: absolute;
 		right: 12px;
 		width: 150px;
@@ -2109,7 +2080,6 @@ label:focus-visible {
 	.stc-ticket-band__steps strong {
 		display: block;
 		line-height: 1.25;
-		margin-bottom: 3px;
 	}
 
 	.stc-ticket-band__action {

@@ -26,26 +26,26 @@ $core_pages = [
 		'title' => 'City Guides',
 		'copy'  => 'City hubs for planning where to stay, how to move, and what to do.',
 		'items' => [
-			[ 'title' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing' ],
-			[ 'title' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai' ],
-			[ 'title' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou' ],
-			[ 'title' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu' ],
-			[ 'title' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing' ],
-			[ 'title' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian' ],
-			[ 'title' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou' ],
-			[ 'title' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie' ],
+			[ 'title' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing', 'image' => 'card-beijing-hd.webp' ],
+			[ 'title' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai', 'image' => 'card-shanghai-hd.webp' ],
+			[ 'title' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou', 'image' => 'card-guangzhou-hd.webp' ],
+			[ 'title' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu', 'image' => 'card-chengdu-hd.webp' ],
+			[ 'title' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing', 'image' => 'card-chongqing-hd.webp' ],
+			[ 'title' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian', 'image' => 'card-xian-hd.webp' ],
+			[ 'title' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou', 'image' => 'card-hangzhou-hd.webp' ],
+			[ 'title' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie', 'image' => 'card-zhangjiajie-city-hd.webp' ],
 		],
 	],
 	'attraction-guides' => [
 		'title' => 'Attraction Guides',
 		'copy'  => 'Ticket timing, passport notes, best seasons, and practical visit planning.',
 		'items' => [
-			[ 'title' => 'Forbidden City', 'copy' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city' ],
-			[ 'title' => 'Great Wall', 'copy' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall' ],
-			[ 'title' => 'Terracotta Warriors', 'copy' => "Xi'an", 'tag' => 'Passport', 'class' => 'terracotta' ],
-			[ 'title' => 'Zhangjiajie', 'copy' => 'Hunan', 'tag' => 'Best time: Apr-Nov', 'class' => 'zhangjiajie' ],
-			[ 'title' => 'West Lake', 'copy' => 'Hangzhou', 'tag' => 'Best time: Mar-May', 'class' => 'west-lake' ],
-			[ 'title' => 'Shanghai Disney Resort', 'copy' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney' ],
+			[ 'title' => 'Forbidden City', 'copy' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city', 'image' => 'card-forbidden-city-hd.webp' ],
+			[ 'title' => 'Great Wall', 'copy' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall', 'image' => 'card-great-wall-hd.webp' ],
+			[ 'title' => 'Terracotta Warriors', 'copy' => "Xi'an", 'tag' => 'Passport', 'class' => 'terracotta', 'image' => 'card-terracotta-hd.webp' ],
+			[ 'title' => 'Zhangjiajie', 'copy' => 'Hunan', 'tag' => 'Best time: Apr-Nov', 'class' => 'zhangjiajie', 'image' => 'card-zhangjiajie-attraction-hd.webp' ],
+			[ 'title' => 'West Lake', 'copy' => 'Hangzhou', 'tag' => 'Best time: Mar-May', 'class' => 'west-lake', 'image' => 'card-west-lake-hd.webp' ],
+			[ 'title' => 'Shanghai Disney Resort', 'copy' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney', 'image' => 'card-disney-hd.webp' ],
 		],
 	],
 	'planner'           => [
@@ -111,7 +111,7 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 				<div id="<?php echo esc_attr( $guide_grid_id ); ?>" class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>" data-stc-guide-grid>
 					<?php foreach ( $page['items'] as $item ) : ?>
 						<article class="stc-image-card stc-image-card--<?php echo esc_attr( $item['class'] ); ?>">
-							<span class="stc-image-card__media" aria-hidden="true"></span>
+							<?php stc_render_guide_card_media( $item['image'], $item['title'] ); ?>
 							<?php if ( ! empty( $item['tag'] ) ) : ?>
 								<span class="stc-image-card__tag"><?php echo esc_html( $item['tag'] ); ?></span>
 							<?php endif; ?>
@@ -139,15 +139,14 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 						<svg viewBox="0 0 48 48" focusable="false"><rect x="6" y="9" width="32" height="31" rx="3"/><path d="M14 5v8M30 5v8M6 18h32M13 25h5M22 25h5M13 32h5"/><circle cx="36" cy="35" r="9"/><path d="m32.5 35 2.5 2.5 4.5-5"/></svg>
 					</span>
 					<div>
-						<h2 id="stc-planner-page-title"><?php esc_html_e( 'Plan your trip', 'solo-to-china' ); ?></h2>
-						<p><?php esc_html_e( 'Use practical guides first, then compare travel products with a clear route and budget.', 'solo-to-china' ); ?></p>
+						<h2 id="stc-planner-page-title"><?php esc_html_e( 'Plan Your Trip', 'solo-to-china' ); ?></h2>
+						<p><?php esc_html_e( 'Book hotels, trains & flights with confidence.', 'solo-to-china' ); ?></p>
 					</div>
 				</div>
 				<div class="stc-planner__partner">
-					<span><?php esc_html_e( 'Start planning on', 'solo-to-china' ); ?></span>
 					<strong>Trip.com</strong>
-					<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener"><?php esc_html_e( 'Start planning on Trip.com', 'solo-to-china' ); ?></a>
-					<p><?php esc_html_e( 'Opens in a new tab. We may earn a commission at no extra cost to you.', 'solo-to-china' ); ?></p>
+					<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener"><?php esc_html_e( 'Explore on Trip.com', 'solo-to-china' ); ?> <span aria-hidden="true">&#8599;</span></a>
+					<p class="stc-affiliate-disclosure"><?php esc_html_e( 'Opens in a new tab. We may earn a commission at no extra cost to you.', 'solo-to-china' ); ?></p>
 				</div>
 				<span class="stc-planner__art" aria-hidden="true"></span>
 			</section>
@@ -155,8 +154,8 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 			<section class="stc-page-section">
 				<div class="stc-feature-panel stc-feature-panel--gold">
 					<div>
-						<h2><?php esc_html_e( 'Ticket Tool / Reminder', 'solo-to-china' ); ?></h2>
-						<p><?php esc_html_e( 'Check attraction booking timing and plan a reminder before your visit.', 'solo-to-china' ); ?></p>
+						<h2><?php esc_html_e( 'Ticket Date & Availability', 'solo-to-china' ); ?></h2>
+						<p><?php esc_html_e( 'Check booking windows & set free alerts before your visit.', 'solo-to-china' ); ?></p>
 					</div>
 					<?php
 					if ( shortcode_exists( 'solo_to_china_ticket_tool' ) ) {
