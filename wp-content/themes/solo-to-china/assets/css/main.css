@@ -713,62 +713,58 @@ label:focus-visible {
 
 .stc-faq__grid {
 	display: grid;
-	gap: 12px;
+	column-gap: 32px;
 	grid-template-columns: repeat(2, 1fr);
 }
 
 .stc-faq details {
-	background: #fff;
-	border: 1px solid var(--stc-line);
-	border-radius: var(--stc-radius);
-	overflow: hidden;
+	border: 0;
+	border-bottom: 1px solid #e8ece9;
 }
 
 .stc-faq summary {
 	align-items: center;
 	cursor: pointer;
 	display: grid;
-	font-weight: 800;
+	font-size: 16px;
+	font-weight: 600;
 	gap: 14px;
-	grid-template-columns: minmax(0, 1fr) 20px;
-	line-height: 1.35;
+	grid-template-columns: minmax(0, 1fr) 18px;
+	line-height: 1.4;
 	list-style: none;
-	min-height: 56px;
-	padding: 13px 16px;
+	min-height: 58px;
+	padding: 16px 0;
 }
 
 .stc-faq summary::-webkit-details-marker {
 	display: none;
 }
 
-.stc-faq summary::after {
+.stc-faq__chevron {
 	color: var(--stc-green);
-	content: "+";
-	font-size: 22px;
-	font-weight: 500;
-	justify-self: center;
-	line-height: 1;
+	fill: none;
+	height: 18px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	transition: transform .24s ease;
+	width: 18px;
 }
 
-.stc-faq details[open] {
-	background: #fbfdfc;
-	border-color: #cddfd6;
-}
-
-.stc-faq details[open] summary::after {
-	content: "-";
+.stc-faq details[open] .stc-faq__chevron {
+	transform: rotate(180deg);
 }
 
 .stc-faq__answer {
-	border-top: 1px solid var(--stc-line);
 	display: grid;
 	gap: 10px;
-	padding: 14px 16px 16px;
+	padding: 0 32px 16px 0;
 }
 
 .stc-faq__answer p {
-	color: var(--stc-muted);
-	line-height: 1.55;
+	color: #4a5568;
+	line-height: 1.6;
 	margin: 0;
 }
 
@@ -786,7 +782,7 @@ label:focus-visible {
 
 .stc-faq--page .stc-faq__grid {
 	align-items: start;
-	gap: 14px;
+	column-gap: 40px;
 }
 
 .stc-main {
@@ -1621,7 +1617,7 @@ label:focus-visible {
 }
 
 .stc-footer {
-	background: radial-gradient(circle at 100% 0, rgba(255, 255, 255, .08), transparent 34%), #0f1513;
+	background: #0d1714;
 	color: #fff;
 	padding: 0 max(32px, calc((100vw - var(--stc-max)) / 2 + 32px));
 }
@@ -1634,22 +1630,35 @@ label:focus-visible {
 }
 
 .stc-footer__brand p {
+	color: #8a9c94;
 	line-height: 1.55;
 	max-width: 260px;
 }
 
 .stc-footer h2 {
-	font-size: 16px;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: .04em;
 	margin: 0 0 12px;
+	text-transform: uppercase;
 }
 
 .stc-footer a {
+	color: #9eb0a7;
 	display: block;
-	margin: 8px 0;
+	margin: 0;
 }
 
 .stc-footer__column a {
+	line-height: 1.4;
+	padding: 6px 0;
 	text-decoration: none;
+}
+
+.stc-footer .stc-brand--footer {
+	color: #fff;
+	display: inline-flex;
 }
 
 .stc-footer__column a:hover,
@@ -1660,41 +1669,60 @@ label:focus-visible {
 .stc-footer__socials {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 16px;
+	gap: 10px;
 	margin-top: 22px;
 }
 
 .stc-footer__social {
 	align-items: center;
+	background: rgba(255, 255, 255, .08);
+	border-radius: 50%;
 	color: #fff;
 	display: inline-flex;
-	height: 22px;
+	height: 36px;
 	justify-content: center;
-	opacity: .92;
-	width: 22px;
+	width: 36px;
 }
 
 .stc-footer__social svg {
 	fill: none;
-	height: 20px;
+	height: 18px;
 	stroke: currentColor;
 	stroke-linecap: round;
 	stroke-linejoin: round;
 	stroke-width: 1.8;
-	width: 20px;
+	width: 18px;
 }
 
 .stc-footer__bottom {
 	align-items: center;
-	border-top: 1px solid rgba(255, 255, 255, .1);
-	display: grid;
+	border-top: 1px solid rgba(255, 255, 255, .08);
+	display: flex;
+	flex-wrap: wrap;
 	gap: 16px;
-	grid-template-columns: 1fr auto auto;
+	justify-content: space-between;
 	padding: 18px 0 22px;
 }
 
 .stc-footer__bottom p {
+	color: #8a9c94;
 	margin: 0;
+}
+
+.stc-footer__legal {
+	display: flex;
+	gap: 18px;
+}
+
+.stc-footer__legal a {
+	font-size: 13px;
+	padding: 6px 0;
+	text-decoration: none;
+}
+
+.stc-footer__legal a:hover,
+.stc-footer__legal a:focus-visible {
+	color: #fff;
 }
 
 .stc-footer__seal {
@@ -2110,9 +2138,10 @@ label:focus-visible {
 	}
 
 	.stc-footer__bottom {
-		align-items: start;
-		grid-template-columns: 1fr;
-		justify-items: start;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
 	}
 
 	.stc-saved-guides__header {
@@ -2222,7 +2251,7 @@ label:focus-visible {
 	}
 
 	.stc-footer__inner {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	.stc-footer__brand {

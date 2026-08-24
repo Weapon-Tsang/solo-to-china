@@ -158,10 +158,10 @@ $attractions = [
 			<a href="<?php echo esc_url( home_url( '/faq/' ) ); ?>">View all FAQs</a>
 		</div>
 		<div class="stc-faq__grid">
-			<details><summary>Do I need a visa to visit China?</summary><p>Check entry rules before you travel.</p></details>
-			<details><summary>How can I pay in China?</summary><p>Payment setup is a key first step.</p></details>
-			<details><summary>Is China safe for solo travelers?</summary><p>Plan with practical local context.</p></details>
-			<details><summary>Which apps are essential in China?</summary><p>Maps, translation, payments, and transport matter most.</p></details>
+			<details><summary><span>Do I need a visa to visit China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Check entry rules before you travel.</p></div></details>
+			<details><summary><span>How can I pay in China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Payment setup is a key first step.</p></div></details>
+			<details><summary><span>Is China safe for solo travelers?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Plan with practical local context.</p></div></details>
+			<details><summary><span>Which apps are essential in China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Maps, translation, payments, and transport matter most.</p></div></details>
 		</div>
 	</section>
 </main>

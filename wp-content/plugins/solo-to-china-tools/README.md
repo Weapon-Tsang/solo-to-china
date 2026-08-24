@@ -2,7 +2,7 @@
 
 Project-owned WordPress functionality for SoloToChina.
 
-Current version: `0.17.0`.
+Current version: `0.18.0`.
 
 This plugin owns:
 

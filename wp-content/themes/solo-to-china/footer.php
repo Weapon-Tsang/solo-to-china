@@ -45,7 +45,11 @@
 	</div>
 	<div class="stc-footer__bottom">
 		<p>&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> SoloToChina. All rights reserved.</p>
-		<p>Guest-first. Practical. Independent.</p>
+		<nav class="stc-footer__legal" aria-label="<?php esc_attr_e( 'Legal', 'solo-to-china' ); ?>">
+			<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a>
+			<a href="<?php echo esc_url( home_url( '/terms-of-use/' ) ); ?>">Terms of Use</a>
+		</nav>
+		<p class="stc-footer__principles">Guest-first. Practical. Independent.</p>
 		<span class="stc-footer__seal" aria-hidden="true">STC</span>
 	</div>
 </footer>

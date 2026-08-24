@@ -171,7 +171,7 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 				<div class="stc-faq__grid">
 					<?php foreach ( $page['items'] as $item ) : ?>
 						<details>
-							<summary><?php echo esc_html( $item['title'] ); ?></summary>
+							<summary><span><?php echo esc_html( $item['title'] ); ?></span><?php stc_render_faq_chevron(); ?></summary>
 							<div class="stc-faq__answer">
 								<p><?php echo esc_html( $item['copy'] ); ?></p>
 								<a class="stc-faq__answer-link" href="<?php echo esc_url( home_url( $item['link'] ) ); ?>"><?php echo esc_html( $item['link_label'] ); ?></a>

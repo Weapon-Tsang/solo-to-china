@@ -2,7 +2,7 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.17.0`.
+Current version: `0.18.0`.
 
 The theme owns:
 
@@ -27,6 +27,8 @@ The theme owns:
 - Guide articles place a compact horizontal table of contents before mobile content while retaining the desktop sidebar table of contents.
 - Planner reuses the approved homepage icon, partner disclosure, and watercolor artwork across desktop and mobile.
 - FAQ uses responsive two-column/one-column accordions with related internal links.
+- FAQ uses borderless single-line dividers, 16px medium-weight titles, comfortable answer typography, and animated 18px SVG chevrons.
+- Footer uses a solid deep-ink background, higher-contrast links, 36px social icon circles, two-column mobile navigation, and a centered legal row.
 - Saved Guides remain limited to Survival Kit, City Guides, and Attraction Guides instead of appearing on Planner, Tools, or FAQ.
 - Reference-locked homepage order from Survival Kit through FAQ, without an inserted latest-post section.
 - Responsive mobile Survival Kit grid plus matching two-column City Guides and Attraction Guides grids with complete four-card previews and compact frosted reveal buttons.

@@ -113,7 +113,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.17.0') === false || strpos($packageScript, 'Plugin version: 0.17.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.18.0') === false || strpos($packageScript, 'Plugin version: 0.18.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -142,8 +142,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.17.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.17.0.';
+    if (strpos($themeStyle, 'Version: 0.18.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.18.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -156,7 +156,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.17.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.18.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -214,8 +214,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.17.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.17.0.';
+    if (strpos($functions, "'0.18.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.18.0.';
     }
     if (strpos($functions, 'stc_render_article_save_button') === false || strpos($functions, 'data-stc-save-guide') === false || strpos($functions, 'stc-article-save') === false) {
         $failures[] = 'Theme functions are missing the article-only local save renderer.';
@@ -286,7 +286,7 @@ foreach ($themePhpFiles as $themePhpFile) {
 $footerPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/footer.php';
 if (is_file($footerPath)) {
     $footer = file_get_contents($footerPath);
-    foreach (['stc-footer__inner', 'stc-footer__socials', 'stc-footer__bottom', 'Guest-first. Practical. Independent.'] as $footerToken) {
+    foreach (['stc-footer__inner', 'stc-footer__socials', 'stc-footer__bottom', 'stc-footer__legal', 'Privacy Policy', 'Terms of Use', 'Guest-first. Practical. Independent.'] as $footerToken) {
         if (strpos($footer, $footerToken) === false) {
             $failures[] = "Footer does not preserve the selected homepage-reference footer token: {$footerToken}";
         }
@@ -324,6 +324,9 @@ if (is_file($pageTemplatePath)) {
     }
     if (strpos($pageTemplate, 'data-stc-share-page') === false) {
         $failures[] = 'Core page template is missing no-account page sharing.';
+    }
+    if (strpos($pageTemplate, 'stc_render_faq_chevron') === false || strpos($pageTemplate, 'stc-faq__answer') === false) {
+        $failures[] = 'FAQ page template is missing the shared SVG chevron or answer wrapper.';
     }
     if (strpos($pageTemplate, 'stc_render_core_page_latest_guides') === false) {
         $failures[] = 'Core guide pages do not render latest published guide posts.';
@@ -439,7 +442,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.17.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.18.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -447,11 +450,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.17.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.17.0.';
+    if (strpos($plugin, 'Version: 0.18.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.18.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.17.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.17.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.18.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.18.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -614,6 +617,9 @@ if (is_file($frontPagePath)) {
     if (strpos($frontPage, 'data-stc-save-guide') !== false || strpos($frontPage, 'stc-save-guide--image-card') !== false) {
         $failures[] = 'Homepage cards still expose save actions before the guide is opened.';
     }
+    if (strpos($frontPage, 'stc_render_faq_chevron') === false || strpos($frontPage, 'stc-faq__answer') === false) {
+        $failures[] = 'Homepage FAQ is missing the shared SVG chevron or answer wrapper.';
+    }
     if (strpos($frontPage, 'stc_render_home_latest_guides') !== false) {
         $failures[] = 'Homepage still inserts Latest Guides outside the approved reference layout.';
     }
@@ -686,6 +692,19 @@ if (is_file($themeCssPath)) {
     foreach (['.stc-footer__inner', '.stc-footer__socials', '.stc-footer__bottom'] as $footerStyleToken) {
         if (strpos($themeCss, $footerStyleToken) === false) {
             $failures[] = "Theme CSS is missing selected homepage-reference footer style token: {$footerStyleToken}";
+        }
+    }
+    foreach (['.stc-faq__chevron', 'border-bottom: 1px solid #e8ece9', 'font-weight: 600', 'color: #4a5568', 'line-height: 1.6', 'transform: rotate(180deg)'] as $faqRefactorToken) {
+        if (strpos($themeCss, $faqRefactorToken) === false) {
+            $failures[] = "Theme CSS is missing refined FAQ accordion styling: {$faqRefactorToken}";
+        }
+    }
+    if (strpos($themeCss, '.stc-faq summary::after') !== false) {
+        $failures[] = 'FAQ still uses the old text pseudo-element icon instead of the SVG chevron.';
+    }
+    foreach (['background: #0d1714', 'color: #9eb0a7', 'color: #8a9c94', 'background: rgba(255, 255, 255, .08)', 'height: 36px', '.stc-footer__legal'] as $modernFooterToken) {
+        if (strpos($themeCss, $modernFooterToken) === false) {
+            $failures[] = "Theme CSS is missing modern footer styling: {$modernFooterToken}";
         }
     }
     if (strpos($themeCss, 'rgba(0, 0, 0, .72)') !== false) {
@@ -772,7 +791,7 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS still includes removed card control style: {$removedCardControlStyle}";
         }
     }
-    foreach (['.stc-planner--page', '.stc-faq--page', '.stc-faq summary::after', '.stc-faq__answer-link'] as $utilityPageStyleToken) {
+    foreach (['.stc-planner--page', '.stc-faq--page', '.stc-faq__chevron', '.stc-faq__answer-link'] as $utilityPageStyleToken) {
         if (strpos($themeCss, $utilityPageStyleToken) === false) {
             $failures[] = "Theme CSS is missing utility-page responsive style: {$utilityPageStyleToken}";
         }

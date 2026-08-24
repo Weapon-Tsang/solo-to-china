@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.17.0`.
+Current theme version: `0.18.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -60,6 +60,8 @@ The custom theme implements the approved image-led homepage direction:
 - Mobile Planner and Ticket cards use concise copy, 20-24px padding, 16px module gaps, 44px CTAs, simplified one-line features, and restrained 11px disclosures.
 - Planner reuses the approved homepage calendar icon, Trip.com disclosure block, and watercolor artwork on desktop and mobile.
 - FAQ uses polished two-column desktop and one-column mobile accordions with related internal links.
+- FAQ now uses borderless single-line dividers, 16px medium-weight titles, 18px rotating SVG chevrons, and 1.6-line-height answers.
+- Footer now uses solid deep ink, higher-contrast text, 36px social icon circles, two-column mobile navigation, and a centered legal/copyright area.
 - Saved Guides and category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
 - Planner band.
 - Homepage Planner CTA opens Trip.com as a sponsored external link.
@@ -117,7 +119,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.17.0`.
+Current tools plugin version: `0.18.0`.
 
 The custom plugin owns the first tool only:
 

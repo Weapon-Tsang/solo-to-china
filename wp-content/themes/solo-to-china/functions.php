@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.17.0' );
+define( 'STC_THEME_VERSION', '0.18.0' );
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -197,6 +197,12 @@ function stc_render_guide_card_media( $image_file, $alt = '' ) {
 	echo '<span class="stc-image-card__media">';
 	echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $alt ) . '" width="960" height="1200" loading="lazy" decoding="async">';
 	echo '</span>';
+}
+
+function stc_render_faq_chevron() {
+	echo '<svg class="stc-faq__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">';
+	echo '<path d="m7 9 5 5 5-5" />';
+	echo '</svg>';
 }
 
 function stc_render_guide_card( $post_id = null ) {

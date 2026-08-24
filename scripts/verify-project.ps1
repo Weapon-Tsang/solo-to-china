@@ -110,7 +110,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.17.0") -or (-not $PackageScript.Contains("Plugin version: 0.17.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.18.0") -or (-not $PackageScript.Contains("Plugin version: 0.18.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -139,8 +139,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.17.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.17.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.18.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.18.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -153,7 +153,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.17.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.18.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -213,8 +213,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.17.0'")) {
-		$Failures.Add("Theme asset version is not 0.17.0.")
+    if (-not $Functions.Contains("'0.18.0'")) {
+		$Failures.Add("Theme asset version is not 0.18.0.")
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")
@@ -292,7 +292,7 @@ foreach ($ThemePhpFile in $ThemePhpFiles) {
 $FooterPath = Join-Path $Root "wp-content/themes/solo-to-china/footer.php"
 if (Test-Path -LiteralPath $FooterPath -PathType Leaf) {
     $Footer = Get-Content -LiteralPath $FooterPath -Raw
-    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__socials", "stc-footer__bottom", "Guest-first. Practical. Independent.")) {
+    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__socials", "stc-footer__bottom", "stc-footer__legal", "Privacy Policy", "Terms of Use", "Guest-first. Practical. Independent.")) {
         if (-not $Footer.Contains($FooterToken)) {
             $Failures.Add("Footer does not preserve the selected homepage-reference footer token: $FooterToken")
         }
@@ -330,6 +330,9 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     }
     if (-not $PageTemplate.Contains("data-stc-share-page")) {
         $Failures.Add("Core page template is missing no-account page sharing.")
+    }
+    if (-not $PageTemplate.Contains("stc_render_faq_chevron") -or (-not $PageTemplate.Contains("stc-faq__answer"))) {
+        $Failures.Add("FAQ page template is missing the shared SVG chevron or answer wrapper.")
     }
     if (-not $PageTemplate.Contains("stc_render_core_page_latest_guides")) {
         $Failures.Add("Core guide pages do not render latest published guide posts.")
@@ -445,7 +448,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.17.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.18.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -453,11 +456,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.17.0")) {
-		$Failures.Add("Tools plugin header version is not 0.17.0.")
+    if (-not $Plugin.Contains("Version: 0.18.0")) {
+		$Failures.Add("Tools plugin header version is not 0.18.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.17.0'")) {
-		$Failures.Add("Tools plugin version constant is not 0.17.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.18.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.18.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -620,6 +623,9 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if ($FrontPage.Contains("data-stc-save-guide") -or $FrontPage.Contains("stc-save-guide--image-card")) {
         $Failures.Add("Homepage cards still expose save actions before the guide is opened.")
     }
+    if (-not $FrontPage.Contains("stc_render_faq_chevron") -or (-not $FrontPage.Contains("stc-faq__answer"))) {
+        $Failures.Add("Homepage FAQ is missing the shared SVG chevron or answer wrapper.")
+    }
     if ($FrontPage.Contains("stc_render_home_latest_guides")) {
         $Failures.Add("Homepage still inserts Latest Guides outside the approved reference layout.")
     }
@@ -692,6 +698,19 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     foreach ($FooterStyleToken in @(".stc-footer__inner", ".stc-footer__socials", ".stc-footer__bottom")) {
         if (-not $ThemeCss.Contains($FooterStyleToken)) {
             $Failures.Add("Theme CSS is missing selected homepage-reference footer style token: $FooterStyleToken")
+        }
+    }
+    foreach ($FaqRefactorToken in @(".stc-faq__chevron", "border-bottom: 1px solid #e8ece9", "font-weight: 600", "color: #4a5568", "line-height: 1.6", "transform: rotate(180deg)")) {
+        if (-not $ThemeCss.Contains($FaqRefactorToken)) {
+            $Failures.Add("Theme CSS is missing refined FAQ accordion styling: $FaqRefactorToken")
+        }
+    }
+    if ($ThemeCss.Contains(".stc-faq summary::after")) {
+        $Failures.Add("FAQ still uses the old text pseudo-element icon instead of the SVG chevron.")
+    }
+    foreach ($ModernFooterToken in @("background: #0d1714", "color: #9eb0a7", "color: #8a9c94", "background: rgba(255, 255, 255, .08)", "height: 36px", ".stc-footer__legal")) {
+        if (-not $ThemeCss.Contains($ModernFooterToken)) {
+            $Failures.Add("Theme CSS is missing modern footer styling: $ModernFooterToken")
         }
     }
     if ($ThemeCss.Contains("rgba(0, 0, 0, .72)")) {
@@ -778,7 +797,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS still includes removed card control style: $RemovedCardControlStyle")
         }
     }
-    foreach ($UtilityPageStyleToken in @(".stc-planner--page", ".stc-faq--page", ".stc-faq summary::after", ".stc-faq__answer-link")) {
+    foreach ($UtilityPageStyleToken in @(".stc-planner--page", ".stc-faq--page", ".stc-faq__chevron", ".stc-faq__answer-link")) {
         if (-not $ThemeCss.Contains($UtilityPageStyleToken)) {
             $Failures.Add("Theme CSS is missing utility-page responsive style: $UtilityPageStyleToken")
         }

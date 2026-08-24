@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.17.0`
+Version: `0.18.0`
 
 Location:
 
@@ -172,6 +172,8 @@ Implemented:
 - Guide articles use a horizontal pre-content table of contents on mobile and the sidebar table of contents on desktop.
 - Planner uses the approved homepage calendar icon, partner disclosure, and watercolor artwork.
 - FAQ uses responsive accordions with related internal links.
+- FAQ uses a borderless divided-list treatment with animated 18px SVG chevrons and comfortable answer typography.
+- Footer uses a solid deep-ink surface, accessible text contrast, 36px social circles, two-column mobile navigation, and a legal row.
 - Saved Guides remain on the three content landing pages and do not appear on Planner, Tools, or FAQ.
 - Core guide category setup on theme activation.
 - Core IA page rendering by slug.
@@ -196,7 +198,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.17.0`
+Version: `0.18.0`
 
 Location:
 
@@ -292,11 +294,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-25 00:19:09 +08:00
-Theme version: 0.17.0
-Theme SHA256: 8BF5AE78910E5442B513978264C1A0A6282861D01621087000B61385B4E0DD7B
-Plugin version: 0.17.0
-Plugin SHA256: E41024AD698FB45EA04BB75C20F0577DA807FB30AEFE65396BDDAD69EF574D2A
+Generated: 2026-08-25 00:36:07 +08:00
+Theme version: 0.18.0
+Theme SHA256: A0B04D2D3F8E6F4D351E93774CCD03D6E74AD1373943DEB0DB2105286015BC73
+Plugin version: 0.18.0
+Plugin SHA256: DBCBFCAE154C6A6B30CAE13D40AF0E45972E7D15BDCC76A783640CC2DBBABE89
 ```
 
 Regenerate artifacts with:
