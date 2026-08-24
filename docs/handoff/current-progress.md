@@ -36,13 +36,14 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.20.0`.
+Current theme version: `0.21.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
 - Transparent header over the hero image.
 - Non-home header uses the same brand/navigation language with readable dark text on a white surface.
 - Reduced hero copy density.
+- Mobile Hero uses bounded 75vh framing (480-580px), bottom-positioned 32px copy over a smooth dark scrim, a 46px vermilion CTA, and a glass menu button so Survival Kit begins within the first viewport.
 - Survival Kit strip.
 - City Guides and Attraction Guides image cards.
 - Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Date & Availability, FAQ, and Footer.
@@ -120,7 +121,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.20.0`.
+Current tools plugin version: `0.21.0`.
 
 The custom plugin owns the first tool only:
 

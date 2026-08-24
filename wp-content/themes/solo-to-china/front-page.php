@@ -42,7 +42,7 @@ $attractions = [
 		<div class="stc-hero__content">
 			<h1>China,<br>clearly planned</h1>
 			<p>Practical tips for independent travel.</p>
-			<a class="stc-button stc-button--primary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Start your China journey</a>
+			<a class="stc-button stc-button--primary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Start Exploring <span aria-hidden="true">&rarr;</span></a>
 		</div>
 	</section>
 

@@ -113,7 +113,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.20.0') === false || strpos($packageScript, 'Plugin version: 0.20.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.21.0') === false || strpos($packageScript, 'Plugin version: 0.21.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -142,8 +142,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.20.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.20.0.';
+    if (strpos($themeStyle, 'Version: 0.21.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.21.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -156,7 +156,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.20.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.21.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -214,8 +214,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.20.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.20.0.';
+    if (strpos($functions, "'0.21.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.21.0.';
     }
     if (strpos($functions, 'stc_render_article_save_button') === false || strpos($functions, 'data-stc-save-guide') === false || strpos($functions, 'stc-article-save') === false) {
         $failures[] = 'Theme functions are missing the article-only local save renderer.';
@@ -442,7 +442,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.20.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.21.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -450,11 +450,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.20.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.20.0.';
+    if (strpos($plugin, 'Version: 0.21.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.21.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.20.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.20.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.21.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.21.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -652,6 +652,9 @@ if (is_file($frontPagePath)) {
             $failures[] = "Homepage is missing responsive reference markup: {$homepageMarkupToken}";
         }
     }
+    if (strpos($frontPage, 'Start Exploring') === false || strpos($frontPage, 'Start your China journey') !== false) {
+        $failures[] = 'Homepage Hero CTA does not use the refined Start Exploring copy.';
+    }
     if (substr_count($frontPage, 'class="stc-section__view-all"') !== 2 || strpos($frontPage, '&rsaquo;') === false) {
         $failures[] = 'Homepage guide sections are missing the unified View all arrow links.';
     }
@@ -784,6 +787,11 @@ if (is_file($themeCssPath)) {
     foreach (['.stc-section__view-all', 'linear-gradient(to top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .35) 40%, transparent 100%)', 'background: rgba(0, 0, 0, .45)', '-webkit-backdrop-filter: blur(8px)', 'border: 1px solid rgba(255, 255, 255, .18)', 'aspect-ratio: 3 / 4', 'border-radius: 14px', 'gap: 12px', 'color: rgba(255, 255, 255, .85)', 'font-size: 12px', 'text-shadow: 0 2px 8px rgba(0, 0, 0, .65)', 'box-shadow: 0 2px 8px rgba(0, 0, 0, .06)', 'transform: scale(.96)'] as $refinedGuideCardToken) {
         if (strpos($themeCss, $refinedGuideCardToken) === false) {
             $failures[] = "Theme CSS is missing refined mobile guide-card styling: {$refinedGuideCardToken}";
+        }
+    }
+    foreach (['height: 75vh', 'min-height: 480px', 'max-height: 580px', 'font-size: 32px', 'line-height: 1.15', 'font-size: 13px', 'color: rgba(255, 255, 255, .9)', 'margin-bottom: 20px', 'linear-gradient(to top, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%)', 'background: #c84832', 'height: 46px', 'border-radius: 10px', 'box-shadow: 0 4px 16px rgba(0, 0, 0, .18)', 'transform: scale(.97)', 'background: rgba(255, 255, 255, .15)', 'border: 1px solid rgba(255, 255, 255, .25)'] as $mobileHeroToken) {
+        if (strpos($themeCss, $mobileHeroToken) === false) {
+            $failures[] = "Theme CSS is missing refined mobile Hero styling: {$mobileHeroToken}";
         }
     }
     foreach (['.stc-planner__intro p', '.stc-ticket-band__intro p', '.stc-ticket-band__steps strong', '.stc-ticket-band__action p'] as $mobileToolTypographyToken) {

@@ -146,8 +146,11 @@ label:focus-visible {
 }
 
 .home .stc-menu-toggle {
-	background: rgba(255, 255, 255, .12);
-	border-color: rgba(255, 255, 255, .34);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	background: rgba(255, 255, 255, .15);
+	border: 1px solid rgba(255, 255, 255, .25);
+	border-radius: 8px;
 	color: #fff;
 }
 
@@ -1831,25 +1834,49 @@ label:focus-visible {
 	}
 
 	.home .stc-hero {
-		background-position: 62% center;
-		min-height: 430px;
+		background:
+			linear-gradient(to top, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%),
+			url("../images/hero-home.png") 62% center / cover no-repeat,
+			linear-gradient(135deg, #12392f, #b76a35 48%, #d9e6ef);
+		height: 75vh;
+		max-height: 580px;
+		min-height: 480px;
 	}
 
 	.home .stc-hero__content {
+		bottom: 44px;
 		left: 20px;
-		max-width: 310px;
-		top: 126px;
+		max-width: 320px;
+		right: 20px;
+		top: auto;
 	}
 
 	.home .stc-hero h1 {
-		font-size: 48px;
-		line-height: .94;
+		font-size: 32px;
+		line-height: 1.15;
 		margin-bottom: 14px;
 	}
 
 	.home .stc-hero p {
-		font-size: 16px;
-		margin-bottom: 22px;
+		color: rgba(255, 255, 255, .9);
+		font-size: 13px;
+		margin-bottom: 20px;
+	}
+
+	.home .stc-hero .stc-button--primary {
+		background: #c84832;
+		border-radius: 10px;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
+		font-size: 14px;
+		font-weight: 600;
+		height: 46px;
+		min-height: 46px;
+		transition: opacity .16s ease, transform .16s ease;
+	}
+
+	.home .stc-hero .stc-button--primary:active {
+		opacity: .92;
+		transform: scale(.97);
 	}
 
 	.home .stc-section,

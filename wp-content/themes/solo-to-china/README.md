@@ -2,7 +2,7 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.20.0`.
+Current version: `0.21.0`.
 
 The theme owns:
 
@@ -31,10 +31,10 @@ The theme owns:
 - Footer uses a solid deep-ink background, higher-contrast links, 36px social icon circles, two-column mobile navigation, and a centered legal row.
 - Saved Guides remain limited to Survival Kit, City Guides, and Attraction Guides instead of appearing on Planner, Tools, or FAQ.
 - Reference-locked homepage order from Survival Kit through FAQ, without an inserted latest-post section.
-- Responsive mobile Survival Kit grid plus matching two-column City Guides and Attraction Guides grids with complete four-card previews and compact frosted reveal buttons.
+- Single-row mobile Survival Kit shortcuts plus matching two-column City Guides and Attraction Guides grids with complete four-card previews and compact frosted reveal buttons.
 - Mobile Planner and Ticket Tool bands use tuned line heights, spacing, and text-column widths.
 - Guide-list cards stay focused on opening content; local save actions appear only after a guide article is opened.
-- Survival Kit subtitles stay on one line with centered 60%-height dividers, while attraction badges use quieter compact type.
+- Mobile Hero uses bounded 75vh framing, bottom-weighted readable copy, a vermilion CTA, and a glass menu control.
 - Reference-style Planner and Ticket bands with dedicated icons and non-overlapping content columns.
 - Planner and Ticket cards use concise copy, 44px CTAs, restrained disclosures, and simplified one-line feature labels.
 - Core guide category setup on theme activation.

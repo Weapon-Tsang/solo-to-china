@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.20.0`
+Version: `0.21.0`
 
 Location:
 
@@ -136,6 +136,7 @@ Implemented:
 - Transparent header over selected banner image.
 - Readable white-surface header on non-home pages.
 - Reduced hero text density.
+- Mobile Hero uses bounded 75vh framing (480-580px), bottom-positioned 32px copy over a smooth dark scrim, a 46px vermilion CTA, and a glass menu button so Survival Kit begins within the first viewport.
 - Survival Kit strip.
 - City Guides image cards.
 - Attraction Guides image cards.
@@ -199,7 +200,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.20.0`
+Version: `0.21.0`
 
 Location:
 
@@ -295,11 +296,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-25 01:09:10 +08:00
-Theme version: 0.20.0
-Theme SHA256: 3D63B671DA2C7CA6AE52C1D6C2418467C305266A6A7C2C935453DE3A6E793033
-Plugin version: 0.20.0
-Plugin SHA256: 59B7640A13F9127FCF45B88CE1195D1DFC095C6C23F9D98A3B1CC2DD14F6DC6C
+Generated: 2026-08-25 01:17:41 +08:00
+Theme version: 0.21.0
+Theme SHA256: B8FD9048D694E852A74E99D373B5AB26BD6FA560C9DCB650F72E791ABCA391EA
+Plugin version: 0.21.0
+Plugin SHA256: 159A6CD5E32ADDDDE59E48CB0D5DA3349FB9BD64C2890ABF6513917DEA1A9370
 ```
 
 Regenerate artifacts with:

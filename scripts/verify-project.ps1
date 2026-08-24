@@ -110,7 +110,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.20.0") -or (-not $PackageScript.Contains("Plugin version: 0.20.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.21.0") -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -139,8 +139,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.20.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.20.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.21.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.21.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -153,7 +153,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.20.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.21.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -213,8 +213,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.20.0'")) {
-		$Failures.Add("Theme asset version is not 0.20.0.")
+    if (-not $Functions.Contains("'0.21.0'")) {
+		$Failures.Add("Theme asset version is not 0.21.0.")
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")
@@ -448,7 +448,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.20.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.21.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -456,11 +456,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.20.0")) {
-		$Failures.Add("Tools plugin header version is not 0.20.0.")
+    if (-not $Plugin.Contains("Version: 0.21.0")) {
+		$Failures.Add("Tools plugin header version is not 0.21.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.20.0'")) {
-		$Failures.Add("Tools plugin version constant is not 0.20.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.21.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.21.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -658,6 +658,9 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
             $Failures.Add("Homepage is missing responsive reference markup: $HomepageMarkupToken")
         }
     }
+    if (-not $FrontPage.Contains("Start Exploring") -or $FrontPage.Contains("Start your China journey")) {
+        $Failures.Add("Homepage Hero CTA does not use the refined Start Exploring copy.")
+    }
     if (([regex]::Matches($FrontPage, 'class="stc-section__view-all"')).Count -ne 2 -or (-not $FrontPage.Contains('&rsaquo;'))) {
         $Failures.Add("Homepage guide sections are missing the unified View all arrow links.")
     }
@@ -790,6 +793,11 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     foreach ($RefinedGuideCardToken in @(".stc-section__view-all", "linear-gradient(to top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .35) 40%, transparent 100%)", "background: rgba(0, 0, 0, .45)", "-webkit-backdrop-filter: blur(8px)", "border: 1px solid rgba(255, 255, 255, .18)", "aspect-ratio: 3 / 4", "border-radius: 14px", "gap: 12px", "color: rgba(255, 255, 255, .85)", "font-size: 12px", "text-shadow: 0 2px 8px rgba(0, 0, 0, .65)", "box-shadow: 0 2px 8px rgba(0, 0, 0, .06)", "transform: scale(.96)")) {
         if (-not $ThemeCss.Contains($RefinedGuideCardToken)) {
             $Failures.Add("Theme CSS is missing refined mobile guide-card styling: $RefinedGuideCardToken")
+        }
+    }
+    foreach ($MobileHeroToken in @("height: 75vh", "min-height: 480px", "max-height: 580px", "font-size: 32px", "line-height: 1.15", "font-size: 13px", "color: rgba(255, 255, 255, .9)", "margin-bottom: 20px", "linear-gradient(to top, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%)", "background: #c84832", "height: 46px", "border-radius: 10px", "box-shadow: 0 4px 16px rgba(0, 0, 0, .18)", "transform: scale(.97)", "background: rgba(255, 255, 255, .15)", "border: 1px solid rgba(255, 255, 255, .25)")) {
+        if (-not $ThemeCss.Contains($MobileHeroToken)) {
+            $Failures.Add("Theme CSS is missing refined mobile Hero styling: $MobileHeroToken")
         }
     }
     foreach ($MobileToolTypographyToken in @(".stc-planner__intro p", ".stc-ticket-band__intro p", ".stc-ticket-band__steps strong", ".stc-ticket-band__action p")) {

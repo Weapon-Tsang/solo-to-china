@@ -83,6 +83,8 @@ For featured images uploaded before version `0.17.0`, regenerate WordPress thumb
 Also check:
 
 - Mobile menu opens and closes.
+- Mobile Hero stays within 480-580px at 75vh, keeps its title to two readable lines, and reveals the top of the Survival Kit shortcuts in the first viewport.
+- Mobile Hero uses the vermilion Start Exploring CTA and the translucent glass menu button.
 - Keyboard Tab shows visible focus states.
 - Saved Guides and Saved Reminders show local-only copy.
 - Export/import/clear actions work only on the current browser.
