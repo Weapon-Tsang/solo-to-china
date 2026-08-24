@@ -332,7 +332,6 @@ label:focus-visible {
 	width: 24px;
 }
 
-.stc-survival-card span:last-child,
 .stc-section__header a,
 .stc-planner p,
 .stc-ticket-band p,
@@ -344,12 +343,6 @@ label:focus-visible {
 
 .stc-survival-card strong {
 	font-size: 14px;
-	white-space: nowrap;
-}
-
-.home .stc-survival-card span:last-child {
-	font-size: 9px;
-	line-height: 1.2;
 	white-space: nowrap;
 }
 
@@ -1862,47 +1855,60 @@ label:focus-visible {
 	}
 
 	.home .stc-survival {
+		background: #f9faf9;
+		border-bottom: 1px solid #eef2f0;
+		box-shadow: none;
 		padding: 0;
 	}
 
 	.home .stc-survival__grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		background: #f9faf9;
+		gap: 4px;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
 		overflow: visible;
+		padding: 16px 8px;
 	}
 
 	.home .stc-survival-card {
-		border-bottom: 0;
-		gap: 5px;
-		min-height: 110px;
-		padding: 13px 8px;
+		gap: 6px;
+		grid-template-rows: 40px auto;
+		min-height: 68px;
+		min-width: 0;
+		padding: 0 2px;
+		transition: opacity .16s ease, transform .16s ease;
 	}
 
-	.home .stc-survival-card:nth-child(even)::after {
+	.home .stc-survival-card::after {
 		display: none;
 	}
 
-	.home .stc-survival-card:last-child {
-		grid-column: 1 / -1;
+	.home .stc-survival-card:active {
+		opacity: .85;
+		transform: scale(.95);
 	}
 
 	.home .stc-survival-card__icon {
-		height: 34px;
-		width: 34px;
+		background: rgba(20, 83, 45, .08);
+		color: #14532d;
+		height: 40px;
+		width: 40px;
 	}
 
 	.home .stc-survival-card__icon svg {
-		height: 19px;
-		width: 19px;
+		height: 21px;
+		width: 21px;
 	}
 
 	.home .stc-survival-card strong {
-		font-size: 12px;
-	}
-
-	.home .stc-survival-card span:last-child {
-		font-size: 9px;
-		line-height: 1.3;
-		white-space: normal;
+		color: #2d3748;
+		font-size: 11px;
+		font-weight: 500;
+		line-height: 1.2;
+		overflow: hidden;
+		text-align: center;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 100%;
 	}
 
 	.stc-card-grid--cities,
@@ -2237,19 +2243,6 @@ label:focus-visible {
 }
 
 @media (min-width: 600px) and (max-width: 840px) {
-	.home .stc-survival__grid {
-		grid-template-columns: repeat(5, minmax(0, 1fr));
-		overflow: visible;
-	}
-
-	.home .stc-survival-card:nth-child(even)::after {
-		display: block;
-	}
-
-	.home .stc-survival-card:last-child {
-		grid-column: auto;
-	}
-
 	.stc-footer__inner {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}

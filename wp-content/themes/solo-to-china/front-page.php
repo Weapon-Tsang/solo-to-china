@@ -8,11 +8,11 @@
 get_header();
 
 $survival_items = [
-	[ 'title' => 'Payment', 'copy' => 'Cards & mobile payments', 'icon' => 'payment' ],
-	[ 'title' => 'Essential Apps', 'copy' => 'Navigation, transport, translate', 'icon' => 'apps' ],
-	[ 'title' => 'eSIM', 'copy' => 'Stay connected anywhere.', 'icon' => 'esim' ],
-	[ 'title' => 'Visa', 'copy' => 'Requirements & application tips', 'icon' => 'visa' ],
-	[ 'title' => 'VPN / Internet', 'copy' => 'Access, safety & connection tips', 'icon' => 'vpn' ],
+	[ 'title' => 'Payment', 'icon' => 'payment' ],
+	[ 'title' => 'Apps', 'icon' => 'apps' ],
+	[ 'title' => 'eSIM', 'icon' => 'esim' ],
+	[ 'title' => 'Visa', 'icon' => 'visa' ],
+	[ 'title' => 'VPN', 'icon' => 'vpn' ],
 ];
 
 $cities = [
@@ -53,7 +53,6 @@ $attractions = [
 				<a class="stc-survival-card" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">
 					<?php stc_render_survival_icon( $item['icon'] ); ?>
 					<strong><?php echo esc_html( $item['title'] ); ?></strong>
-					<span><?php echo esc_html( $item['copy'] ); ?></span>
 				</a>
 			<?php endforeach; ?>
 		</div>

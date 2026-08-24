@@ -110,7 +110,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
-    if (-not $PackageScript.Contains("Theme version: 0.18.0") -or (-not $PackageScript.Contains("Plugin version: 0.18.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.19.0") -or (-not $PackageScript.Contains("Plugin version: 0.19.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -139,8 +139,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.18.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.18.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.19.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.19.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -153,7 +153,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.18.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.19.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -213,8 +213,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.18.0'")) {
-		$Failures.Add("Theme asset version is not 0.18.0.")
+    if (-not $Functions.Contains("'0.19.0'")) {
+		$Failures.Add("Theme asset version is not 0.19.0.")
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")
@@ -448,7 +448,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.18.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.19.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -456,11 +456,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.18.0")) {
-		$Failures.Add("Tools plugin header version is not 0.18.0.")
+    if (-not $Plugin.Contains("Version: 0.19.0")) {
+		$Failures.Add("Tools plugin header version is not 0.19.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.18.0'")) {
-		$Failures.Add("Tools plugin version constant is not 0.18.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.19.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.19.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -619,6 +619,16 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     }
     if (-not $FrontPage.Contains("stc_render_survival_icon")) {
         $Failures.Add("Survival Kit cards are still missing real icon rendering.")
+    }
+    foreach ($SurvivalLabel in @("Payment", "Apps", "eSIM", "Visa", "VPN")) {
+        if (-not $FrontPage.Contains("'title' => '$SurvivalLabel'")) {
+            $Failures.Add("Homepage Survival Kit is missing compact label: $SurvivalLabel")
+        }
+    }
+    foreach ($RemovedSurvivalCopy in @("Cards & mobile payments", "Essential Apps", "Stay connected anywhere.", "VPN / Internet")) {
+        if ($FrontPage.Contains($RemovedSurvivalCopy)) {
+            $Failures.Add("Homepage Survival Kit still includes superseded copy: $RemovedSurvivalCopy")
+        }
     }
     if ($FrontPage.Contains("data-stc-save-guide") -or $FrontPage.Contains("stc-save-guide--image-card")) {
         $Failures.Add("Homepage cards still expose save actions before the guide is opened.")
@@ -779,13 +789,15 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing mobile tool typography tuning: $MobileToolTypographyToken")
         }
     }
-    foreach ($SurvivalResponsiveToken in @(".home .stc-survival__grid", ".home .stc-survival-card:nth-child(even)::after", ".home .stc-survival-card:last-child")) {
+    foreach ($SurvivalResponsiveToken in @(".home .stc-survival__grid", "grid-template-columns: repeat(5, minmax(0, 1fr))", "gap: 4px", "padding: 16px 8px", "background: rgba(20, 83, 45, .08)", "color: #14532d", "font-size: 11px", "font-weight: 500", "text-overflow: ellipsis", "transform: scale(.95)")) {
         if (-not $ThemeCss.Contains($SurvivalResponsiveToken)) {
-            $Failures.Add("Theme CSS is missing responsive Survival Kit layout behavior: $SurvivalResponsiveToken")
+            $Failures.Add("Theme CSS is missing five-column Survival Kit behavior: $SurvivalResponsiveToken")
         }
     }
-    if ($ThemeCss.Contains("grid-template-columns: repeat(5, 142px)")) {
-        $Failures.Add("Mobile Survival Kit still uses the clipped fixed-width rail.")
+    foreach ($RemovedSurvivalStyle in @(".home .stc-survival-card span:last-child", ".home .stc-survival-card:nth-child(even)::after", ".home .stc-survival-card:last-child")) {
+        if ($ThemeCss.Contains($RemovedSurvivalStyle)) {
+            $Failures.Add("Theme CSS still includes obsolete Survival Kit layout styling: $RemovedSurvivalStyle")
+        }
     }
     foreach ($RemovedGuideRailStyle in @("grid-auto-columns: 75vw", "grid-auto-columns: 42vw", ".stc-city-grid-shell", ".stc-city-grid-reveal")) {
         if ($ThemeCss.Contains($RemovedGuideRailStyle)) {

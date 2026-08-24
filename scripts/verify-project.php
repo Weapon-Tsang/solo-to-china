@@ -113,7 +113,7 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
-    if (strpos($packageScript, 'Theme version: 0.18.0') === false || strpos($packageScript, 'Plugin version: 0.18.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.19.0') === false || strpos($packageScript, 'Plugin version: 0.19.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -142,8 +142,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.18.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.18.0.';
+    if (strpos($themeStyle, 'Version: 0.19.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.19.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -156,7 +156,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.18.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.19.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -214,8 +214,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.18.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.18.0.';
+    if (strpos($functions, "'0.19.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.19.0.';
     }
     if (strpos($functions, 'stc_render_article_save_button') === false || strpos($functions, 'data-stc-save-guide') === false || strpos($functions, 'stc-article-save') === false) {
         $failures[] = 'Theme functions are missing the article-only local save renderer.';
@@ -442,7 +442,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.18.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.19.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
@@ -450,11 +450,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.18.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.18.0.';
+    if (strpos($plugin, 'Version: 0.19.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.19.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.18.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.18.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.19.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.19.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -613,6 +613,16 @@ if (is_file($frontPagePath)) {
     }
     if (strpos($frontPage, 'stc_render_survival_icon') === false) {
         $failures[] = 'Survival Kit cards are still missing real icon rendering.';
+    }
+    foreach (['Payment', 'Apps', 'eSIM', 'Visa', 'VPN'] as $survivalLabel) {
+        if (strpos($frontPage, "'title' => '{$survivalLabel}'") === false) {
+            $failures[] = "Homepage Survival Kit is missing compact label: {$survivalLabel}";
+        }
+    }
+    foreach (['Cards & mobile payments', 'Essential Apps', 'Stay connected anywhere.', 'VPN / Internet'] as $removedSurvivalCopy) {
+        if (strpos($frontPage, $removedSurvivalCopy) !== false) {
+            $failures[] = "Homepage Survival Kit still includes superseded copy: {$removedSurvivalCopy}";
+        }
     }
     if (strpos($frontPage, 'data-stc-save-guide') !== false || strpos($frontPage, 'stc-save-guide--image-card') !== false) {
         $failures[] = 'Homepage cards still expose save actions before the guide is opened.';
@@ -773,13 +783,15 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing mobile tool typography tuning: {$mobileToolTypographyToken}";
         }
     }
-    foreach (['.home .stc-survival__grid', '.home .stc-survival-card:nth-child(even)::after', '.home .stc-survival-card:last-child'] as $survivalResponsiveToken) {
+    foreach (['.home .stc-survival__grid', 'grid-template-columns: repeat(5, minmax(0, 1fr))', 'gap: 4px', 'padding: 16px 8px', 'background: rgba(20, 83, 45, .08)', 'color: #14532d', 'font-size: 11px', 'font-weight: 500', 'text-overflow: ellipsis', 'transform: scale(.95)'] as $survivalResponsiveToken) {
         if (strpos($themeCss, $survivalResponsiveToken) === false) {
-            $failures[] = "Theme CSS is missing responsive Survival Kit layout behavior: {$survivalResponsiveToken}";
+            $failures[] = "Theme CSS is missing five-column Survival Kit behavior: {$survivalResponsiveToken}";
         }
     }
-    if (strpos($themeCss, 'grid-template-columns: repeat(5, 142px)') !== false) {
-        $failures[] = 'Mobile Survival Kit still uses the clipped fixed-width rail.';
+    foreach (['.home .stc-survival-card span:last-child', '.home .stc-survival-card:nth-child(even)::after', '.home .stc-survival-card:last-child'] as $removedSurvivalStyle) {
+        if (strpos($themeCss, $removedSurvivalStyle) !== false) {
+            $failures[] = "Theme CSS still includes obsolete Survival Kit layout styling: {$removedSurvivalStyle}";
+        }
     }
     foreach (['grid-auto-columns: 75vw', 'grid-auto-columns: 42vw', '.stc-city-grid-shell', '.stc-city-grid-reveal'] as $removedGuideRailStyle) {
         if (strpos($themeCss, $removedGuideRailStyle) !== false) {

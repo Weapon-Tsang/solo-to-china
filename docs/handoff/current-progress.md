@@ -36,7 +36,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.18.0`.
+Current theme version: `0.19.0`.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -47,7 +47,7 @@ The custom theme implements the approved image-led homepage direction:
 - City Guides and Attraction Guides image cards.
 - Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Date & Availability, FAQ, and Footer.
 - The homepage no longer inserts Latest Guides between Attraction Guides and Planner; current posts remain available on their matching landing pages and archives.
-- Mobile Survival Kit uses a responsive two-column grid on narrow screens and returns to five columns when space allows, with no clipped horizontal rail.
+- Mobile Survival Kit is a single-row, five-column app shortcut strip with compact labels, full-item links, 40px icon badges, and touch feedback from 360px upward.
 - City Guides and Attraction Guides share a two-column mobile grid that displays four complete cards before a compact frosted capsule button placed below the second row.
 - Each guide-grid button reports the remaining item count, moves focus to the first newly revealed card, and fades away as the remaining cards expand smoothly.
 - Survival Kit and city subtitles stay on one line, Survival Kit dividers are centered at 60% height, and attraction badges use smaller type.
@@ -119,7 +119,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Plugin Status
 
-Current tools plugin version: `0.18.0`.
+Current tools plugin version: `0.19.0`.
 
 The custom plugin owns the first tool only:
 

@@ -121,7 +121,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.18.0`
+Version: `0.19.0`
 
 Location:
 
@@ -140,7 +140,7 @@ Implemented:
 - City Guides image cards.
 - Attraction Guides image cards.
 - Homepage order strictly follows the approved reference and does not insert Latest Guides before Planner.
-- Mobile Survival Kit uses a responsive two-column narrow-screen grid and restores five columns when space allows.
+- Mobile Survival Kit uses a single-row, five-column app shortcut strip with compact one-line labels and full-item touch targets from 360px upward.
 - City Guides and Attraction Guides use matching two-column mobile grids that show four complete cards before a compact frosted capsule button below the second row.
 - Both reveal buttons show the remaining count, expand smoothly, fade away, and move focus to the first newly revealed card.
 - Mobile Planner and Ticket Tool bands use tuned line heights, text-column widths, and paragraph spacing.
@@ -198,7 +198,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Plugin: `SoloToChina Tools`
 
-Version: `0.18.0`
+Version: `0.19.0`
 
 Location:
 
@@ -294,11 +294,11 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-25 00:36:07 +08:00
-Theme version: 0.18.0
-Theme SHA256: A0B04D2D3F8E6F4D351E93774CCD03D6E74AD1373943DEB0DB2105286015BC73
-Plugin version: 0.18.0
-Plugin SHA256: DBCBFCAE154C6A6B30CAE13D40AF0E45972E7D15BDCC76A783640CC2DBBABE89
+Generated: 2026-08-25 00:50:50 +08:00
+Theme version: 0.19.0
+Theme SHA256: E690478AD5DAB9AF3A3DAF51D596A2CF3D7FE8AD7A48B88BC9B1F7813BDFB02C
+Plugin version: 0.19.0
+Plugin SHA256: BC25105D8B6755E81A24FC7F535B577CD60B261987679C7F850FE06D3E4255A3
 ```
 
 Regenerate artifacts with:
