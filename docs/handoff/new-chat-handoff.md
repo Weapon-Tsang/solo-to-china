@@ -201,7 +201,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Child Theme: `SoloToChina Child`
 
-Version: `0.2.0`
+Version: `0.3.0`
 
 Location:
 
@@ -223,8 +223,15 @@ Implemented:
 - Two-line Hero title and first-viewport Survival Kit continuity at 390 and 375 widths.
 - Real local WordPress preview through `scripts/start-preview.ps1` and the official WordPress Playground CLI.
 - Playwright screenshots at 1440, 768, 390, and 375 with zero horizontal overflow and zero browser console errors/warnings.
+- Guide / Article presentation in `assets/css/article.css`, loaded only for single posts.
+- Distinct image-led Attraction Guide, City Guide, and Survival Kit heroes using existing high-resolution Parent Theme imagery.
+- Controlled editorial reading width, sticky desktop TOC, horizontal mobile TOC, differentiated checklist and structured content modules, and responsive article rhythm.
+- Semantic Home / Hub / Current Article breadcrumbs from a narrowly scoped Child filter without copying `single.php` or emitting competing SEO schema.
+- Parent TOC and local Save Guide behavior preserved; article interaction checks pass.
+- Ephemeral Playground article fixtures for all three guide families; these do not alter production content or add a static demo.
+- Article Playwright QA at 1440, 768, 390, and 375, plus City and Survival Kit branch checks at 390, with one H1, correct navigation/Breadcrumb state, zero overflow, and zero console errors/warnings.
 
-The next stage is the Guide / Article template family. Do not copy the entire Parent Theme. Override a template only when CSS and a small Child function are insufficient.
+The next stage is the City Guides / Attraction Guides / Survival Kit hub family. Do not copy the entire Parent Theme. Override a template only when CSS and a small Child function are insufficient.
 
 ## Current Plugin Status
 
@@ -327,13 +334,13 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-31 22:26:57 +08:00
+Generated: 2026-08-31 23:10:52 +08:00
 Theme version: 0.21.0
-Theme SHA256: F664032A0881A95FDD82321E0926E2CC99F4436EE41035ACB922243AE4E32792
-Child Theme version: 0.2.0
-Child Theme SHA256: F3A506B7684D024FACB2D9D5E54E764CDAC4A91224BF285F69A1A6B05C780864
+Theme SHA256: F558FB30C89027329B59A539A84F8946DFC523A08B78B027389DC4796D605FC5
+Child Theme version: 0.3.0
+Child Theme SHA256: 02448C8B5FF15161319F0CFE1EE59FC136F1E17BF1408618EC0983897ABA53A1
 Plugin version: 0.21.0
-Plugin SHA256: C5DEE8AB90236BC4A8C0DF730BDD4DA7977375610B85CB08135085A35A24655C
+Plugin SHA256: 62F6726E925E5C945C73C32ED80F07178745F9A10E054183393C05DA9B91429B
 ```
 
 Regenerate artifacts with:
@@ -437,6 +444,8 @@ After installing on WordPress, check:
 - Survival Kit page renders without list-card save controls.
 - City Guides page renders its complete mobile four-card fold without list-card save controls.
 - Attraction Guides page renders the same complete mobile four-card fold without list-card save controls.
+- Attraction, City, and Survival Kit articles each show one H1, the correct image-led Hero, semantic Breadcrumb, mobile/desktop On this page navigation, and the matching planning checklist.
+- Article Save Guide changes to a pressed Saved state and persists locally; article TOC links place headings below the Header.
 - Saved Guides export/import/clear works in current browser.
 - Share page works or copies link.
 - Planner page Trip.com CTA opens in a new tab.

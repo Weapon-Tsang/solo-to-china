@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.2.0' );
+define( 'STC_CHILD_VERSION', '0.3.0' );
 
 /**
  * Load Child Theme presentation after the Parent Theme stylesheet.
@@ -49,6 +49,15 @@ function stc_child_enqueue_assets() {
 		);
 	}
 
+	if ( is_single() ) {
+		wp_enqueue_style(
+			'stc-child-article',
+			get_stylesheet_directory_uri() . '/assets/css/article.css',
+			[ 'stc-child-site' ],
+			STC_CHILD_VERSION
+		);
+	}
+
 	wp_enqueue_script(
 		'stc-child-interactions',
 		get_stylesheet_directory_uri() . '/assets/js/site.js',
@@ -60,6 +69,48 @@ function stc_child_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'stc_child_enqueue_assets', 20 );
 
 /**
+ * Add a compact, semantic breadcrumb to guide articles without duplicating the
+ * Parent Theme single template. Schema output remains available to SEO plugins.
+ *
+ * @param string $content Post content.
+ * @return string
+ */
+function stc_child_prepend_guide_breadcrumbs( $content ) {
+	if ( ! is_single() || ! in_the_loop() || ! is_main_query() || ! function_exists( 'stc_get_guide_type_slug' ) ) {
+		return $content;
+	}
+
+	$guide_type = stc_get_guide_type_slug();
+	$hubs       = [
+		'attraction-guide' => [
+			'label' => __( 'Attraction Guides', 'solo-to-china-child' ),
+			'path'  => '/attraction-guides/',
+		],
+		'city-guide'       => [
+			'label' => __( 'City Guides', 'solo-to-china-child' ),
+			'path'  => '/city-guides/',
+		],
+		'survival-kit'     => [
+			'label' => __( 'Survival Kit', 'solo-to-china-child' ),
+			'path'  => '/survival-kit/',
+		],
+	];
+
+	if ( ! isset( $hubs[ $guide_type ] ) || false !== strpos( $content, 'stc-guide-breadcrumb' ) ) {
+		return $content;
+	}
+
+	$hub        = $hubs[ $guide_type ];
+	$breadcrumb = '<nav class="stc-guide-breadcrumb" aria-label="' . esc_attr__( 'Breadcrumb', 'solo-to-china-child' ) . '">';
+	$breadcrumb .= '<ol><li><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Home', 'solo-to-china-child' ) . '</a></li>';
+	$breadcrumb .= '<li><a href="' . esc_url( home_url( $hub['path'] ) ) . '">' . esc_html( $hub['label'] ) . '</a></li>';
+	$breadcrumb .= '<li><span aria-current="page">' . esc_html( get_the_title() ) . '</span></li></ol></nav>';
+
+	return $breadcrumb . $content;
+}
+add_filter( 'the_content', 'stc_child_prepend_guide_breadcrumbs', 8 );
+
+/**
  * Render the fixed primary navigation with an accessible current-page state.
  */
 function stc_child_render_primary_navigation() {
@@ -67,7 +118,7 @@ function stc_child_render_primary_navigation() {
 	$guide_nav_map      = [
 		'survival-kit'      => 'survival-kit',
 		'city-guide'        => 'city-guides',
-		'attraction-guide'  => 'attraction-guides',
+		'attraction-guide' => 'attraction-guides',
 	];
 
 	echo '<nav id="stc-primary-nav" class="stc-nav" aria-label="' . esc_attr__( 'Primary navigation', 'solo-to-china-child' ) . '">';

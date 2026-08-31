@@ -122,7 +122,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Child Theme Status
 
-Current Child Theme version: `0.2.0`.
+Current Child Theme version: `0.3.0`.
 
 The first independent Child Theme foundation stage is complete:
 
@@ -145,6 +145,19 @@ The shared-component and homepage stage is also complete:
 - Added a real WordPress Playground preview (`scripts/start-preview.ps1`) that mounts Parent, Child, and Plugin; no static demo or production deployment is used.
 - Playwright QA passed at 1440, 768, 390, and 375 widths with no horizontal overflow, no browser console errors/warnings, working menu/Escape behavior, current-page navigation semantics, guide reveal focus transfer, and FAQ expansion.
 - Final screenshots are stored locally in ignored `output/playwright/`.
+
+The Guide / Article template stage is complete:
+
+- Added `assets/css/article.css`, loaded only on single posts after the shared Child assets.
+- Renovated Attraction Guide, City Guide, and Survival Kit article heroes with distinct restrained accents and existing high-resolution destination imagery.
+- Added a measured desktop reading column, sticky On this page sidebar, differentiated planning checklists, and editorial quick-fact, warning, and route modules.
+- Added a horizontal mobile On this page navigator, edge-to-edge mobile article rhythm, single-column fact modules, 44px-class controls, and heading anchor offsets below the Header.
+- Added semantic Home / Hub / Current Article breadcrumbs through a narrowly scoped Child `the_content` filter, avoiding a copied Parent `single.php` and avoiding duplicate SEO-plugin schema or metadata.
+- Preserved Parent Theme TOC generation and local Save Guide logic; the Theme still owns presentation only and the Plugin remains unchanged.
+- Added temporary Playground-only Attraction, City, and Survival Kit article fixtures to the preview Blueprint. They write only to the ephemeral preview database and are not production content or a static demo.
+- Playwright QA passed for the Attraction article at 1440, 768, 390, and 375 widths; City and Survival Kit branches were also checked at 390. All checked pages had one H1, correct guide navigation state, correct Breadcrumb hub, no horizontal overflow, and zero browser console errors/warnings.
+- Save Guide correctly reached `aria-pressed="true"`; mobile TOC navigation reached the target heading with the Header offset preserved.
+- Child PHP remains compatible with the declared PHP 7.4 minimum.
 
 ## Plugin Status
 
@@ -235,7 +248,7 @@ Current environment note:
 - PHP CLI is installed locally in `.tools/php/`.
 - The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
 - Static project checks and PHP syntax checks pass before packaging.
-- Browser preview checks protect homepage reference alignment, both four-card guide folds and expansion, responsive Survival Kit columns, mobile tool-band line heights, article-only save behavior, article table-of-contents breakpoints, utility-page content scope, FAQ expansion, and horizontal overflow.
+- Browser preview checks protect homepage reference alignment, both four-card guide folds and expansion, responsive Survival Kit columns, mobile tool-band line heights, article-only save behavior, semantic breadcrumbs, article table-of-contents breakpoints, utility-page content scope, FAQ expansion, and horizontal overflow.
 
 ## GitHub / Source Control Status
 
@@ -247,8 +260,8 @@ For deployment, use the local zip artifacts as the source of truth.
 
 Reasonable next bounded increments:
 
-- Renovate Guide / Article templates in the Child Theme while preserving TOC, Saved Guides, responsive featured images, and content hierarchy.
-- Improve mobile spacing and touch targets after installing the Child Theme on WordPress and checking real screenshots.
+- Renovate the City Guides / Attraction Guides / Survival Kit hub family in the Child Theme while preserving content-first card behavior and responsive featured images.
+- Improve article spacing and touch targets after installing the Child Theme on WordPress and checking real-content screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 - Populate real guide posts in the matching categories and check landing-page/archive/search card density on mobile screenshots.
 

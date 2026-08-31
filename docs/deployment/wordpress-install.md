@@ -79,6 +79,7 @@ After activation, check these pages in WordPress:
 - Survival Kit: opened guide articles can be saved locally; listing cards do not show save controls.
 - City Guides: opened city-guide articles can be saved locally; listing cards do not show save controls.
 - Attraction Guides: opened attraction-guide articles can be saved locally; listing cards do not show save controls.
+- Guide articles: Attraction, City, and Survival Kit posts show the correct image-led Hero, one H1, Home / Hub / Article Breadcrumb, On this page navigation, and matching planning checklist.
 - Planner: Trip.com CTA opens in a new tab.
 - Tools: Ticket Date & Availability renders, requires a visit date, and can save a local reminder.
 - FAQ: FAQ items open and close normally.
@@ -95,6 +96,7 @@ Also check:
 - Saved Guides and Saved Reminders show local-only copy.
 - Export/import/clear actions work only on the current browser.
 - City and Attraction cards are sharp on a high-DPI phone, use centered 3:4 framing, and retain a readable smooth bottom scrim without image blur.
+- Article reading width stays controlled on desktop; the mobile article has no horizontal overflow at 375-390px, and TOC links stop below the Header.
 
 ## Do Not Overwrite
 
@@ -116,7 +118,7 @@ The project-owned code boundaries are only:
 
 ## Current Scope
 
-This release includes the approved homepage direction as a custom theme scaffold and a guest-first Ticket Reservation & Reminder shortcode.
+This release includes the approved homepage direction, the renovated Child Theme Guide / Article presentation, and a guest-first Ticket Reservation & Reminder shortcode.
 
 The reminder feature is currently local-device only. It shows a simple booking-window status, stores saved reminders in the visitor's browser, can export/import a `.json` backup, can clear saved reminders from the current device, and can download an `.ics` calendar file for each reminder date. It does not require login, email, SMS, or database storage.
 

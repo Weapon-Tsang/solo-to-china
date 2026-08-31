@@ -56,7 +56,7 @@ $PluginHash = (Get-FileHash -LiteralPath $PluginZip -Algorithm SHA256).Hash
     "Theme: solo-to-china-theme.zip",
     "Theme SHA256: $ThemeHash",
     "",
-    "Child Theme version: 0.2.0",
+    "Child Theme version: 0.3.0",
     "Child Theme: solo-to-china-child-theme.zip",
     "Child Theme SHA256: $ChildThemeHash",
     "",

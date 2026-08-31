@@ -1,0 +1,649 @@
+/* Guide and article presentation for the SoloToChina Child Theme. */
+
+.single .stc-main {
+	background:
+		linear-gradient(180deg, #f0f2ed 0, var(--stc-color-canvas) 18rem, var(--stc-color-surface) 44rem);
+}
+
+.single .stc-content {
+	box-sizing: border-box;
+	margin-inline: auto;
+	max-width: var(--stc-container-max);
+	padding: clamp(2rem, 4vw, 3.75rem) var(--stc-container-gutter) clamp(4rem, 8vw, 7rem);
+}
+
+.stc-single--attraction-guide,
+.stc-single--city-guide,
+.stc-single--survival-kit {
+	--stc-guide-accent: var(--stc-color-gold-muted);
+	--stc-guide-accent-soft: #f5ecdc;
+	--stc-guide-accent-line: #ddc69f;
+	display: grid;
+	gap: clamp(2rem, 4vw, 3.25rem);
+}
+
+.stc-single--city-guide {
+	--stc-guide-accent: var(--stc-color-jade);
+	--stc-guide-accent-soft: #e7f0eb;
+	--stc-guide-accent-line: #bfd5ca;
+}
+
+.stc-single--survival-kit {
+	--stc-guide-accent: var(--stc-color-brand);
+	--stc-guide-accent-soft: #f8e9e5;
+	--stc-guide-accent-line: #e6c0b8;
+}
+
+.stc-attraction-guide__hero,
+.stc-city-guide__hero,
+.stc-survival-kit__hero {
+	align-items: flex-start;
+	background-color: #17221d;
+	background-position: center;
+	background-size: cover;
+	border: 0;
+	border-radius: var(--stc-radius-lg);
+	box-shadow: var(--stc-shadow-raised);
+	color: var(--stc-color-on-dark);
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-block-size: clamp(25rem, 43vw, 34rem);
+	overflow: clip;
+	padding: clamp(2rem, 5vw, 4.5rem);
+	position: relative;
+}
+
+.stc-attraction-guide__hero {
+	background-image:
+		linear-gradient(90deg, rgba(7, 17, 13, 0.94) 0%, rgba(7, 17, 13, 0.82) 42%, rgba(7, 17, 13, 0.22) 76%),
+		url("../../../solo-to-china/assets/images/card-forbidden-city-hd.webp");
+}
+
+.stc-city-guide__hero {
+	background-image:
+		linear-gradient(90deg, rgba(7, 17, 13, 0.94) 0%, rgba(7, 17, 13, 0.78) 42%, rgba(7, 17, 13, 0.2) 76%),
+		url("../../../solo-to-china/assets/images/card-beijing-hd.webp");
+}
+
+.stc-survival-kit__hero {
+	background-image:
+		linear-gradient(90deg, rgba(7, 17, 13, 0.95) 0%, rgba(7, 17, 13, 0.84) 44%, rgba(7, 17, 13, 0.26) 78%),
+		url("../../../solo-to-china/assets/images/card-hangzhou-hd.webp");
+}
+
+.stc-attraction-guide__hero h1,
+.stc-city-guide__hero h1,
+.stc-survival-kit__hero h1 {
+	color: var(--stc-color-on-dark);
+	font-size: clamp(2.75rem, 5.4vw, 5rem);
+	letter-spacing: -0.045em;
+	line-height: 0.98;
+	margin: var(--stc-space-3) 0 var(--stc-space-5);
+	max-width: 13ch;
+	text-shadow: 0 0.125rem 1.25rem rgba(0, 0, 0, 0.24);
+}
+
+.stc-attraction-guide__eyebrow,
+.stc-city-guide__eyebrow,
+.stc-survival-kit__eyebrow {
+	align-items: center;
+	color: #f3d8a9;
+	display: flex;
+	font-size: 0.75rem;
+	font-weight: 780;
+	gap: 0.625rem;
+	letter-spacing: 0.12em;
+	margin: 0;
+	text-transform: uppercase;
+}
+
+.stc-attraction-guide__eyebrow::before,
+.stc-city-guide__eyebrow::before,
+.stc-survival-kit__eyebrow::before {
+	background: currentColor;
+	block-size: 0.125rem;
+	content: "";
+	inline-size: 2rem;
+}
+
+.stc-city-guide__eyebrow {
+	color: #a7dec9;
+}
+
+.stc-survival-kit__eyebrow {
+	color: #f3c0b8;
+}
+
+.stc-attraction-guide__deck,
+.stc-city-guide__deck,
+.stc-survival-kit__deck {
+	color: rgba(249, 251, 248, 0.88);
+	font-size: clamp(1rem, 1.5vw, 1.1875rem);
+	line-height: 1.65;
+	margin: 0 0 var(--stc-space-4);
+	max-width: 38rem;
+}
+
+.stc-attraction-guide__meta,
+.stc-city-guide__meta,
+.stc-survival-kit__meta {
+	color: rgba(249, 251, 248, 0.68);
+	font-size: var(--stc-font-size-xs);
+	letter-spacing: 0.025em;
+	margin: 0 0 var(--stc-space-4);
+}
+
+.stc-article-save {
+	background: rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(255, 255, 255, 0.36);
+	border-radius: var(--stc-radius-sm);
+	color: var(--stc-color-on-dark);
+	font-size: 0.8125rem;
+	font-weight: 720;
+	min-block-size: var(--stc-control-height);
+	padding-inline: 1.25rem;
+	transition:
+		background-color var(--stc-motion-duration-fast) var(--stc-motion-ease-standard),
+		border-color var(--stc-motion-duration-fast) var(--stc-motion-ease-standard),
+		transform var(--stc-motion-duration-fast) var(--stc-motion-ease-standard);
+}
+
+.stc-article-save:hover {
+	background: rgba(255, 255, 255, 0.2);
+	border-color: rgba(255, 255, 255, 0.62);
+}
+
+.stc-article-save:active {
+	transform: translateY(1px);
+}
+
+.stc-article-save[aria-pressed="true"] {
+	background: var(--stc-color-on-dark);
+	border-color: var(--stc-color-on-dark);
+	color: var(--stc-guide-accent);
+}
+
+.stc-attraction-guide__layout,
+.stc-city-guide__layout,
+.stc-survival-kit__layout {
+	align-items: start;
+	display: grid;
+	gap: clamp(2rem, 4vw, 3rem);
+	grid-template-columns: minmax(0, 1fr) minmax(16.5rem, 18.5rem);
+}
+
+.stc-entry-content--guide {
+	background: var(--stc-color-surface);
+	border: 1px solid var(--stc-color-line);
+	border-radius: var(--stc-radius-md);
+	box-shadow: 0 1rem 3rem rgba(19, 33, 27, 0.055);
+	color: var(--stc-color-ink-soft);
+	font-size: clamp(1.03125rem, 0.98rem + 0.18vw, 1.125rem);
+	line-height: 1.78;
+	min-width: 0;
+	padding: clamp(2rem, 4.3vw, 3.75rem);
+}
+
+.stc-entry-content--guide > :not(.alignwide):not(.alignfull) {
+	max-width: var(--stc-reading-measure);
+}
+
+.stc-entry-content--guide > h2 {
+	color: var(--stc-color-ink);
+	font-size: clamp(1.75rem, 2.8vw, 2.35rem);
+	letter-spacing: -0.035em;
+	margin-block: clamp(3rem, 6vw, 4.75rem) 1rem;
+	scroll-margin-top: 7rem;
+}
+
+.stc-entry-content--guide > h3 {
+	font-size: clamp(1.25rem, 2vw, 1.55rem);
+	margin-block: 2.25rem 0.75rem;
+	scroll-margin-top: 7rem;
+}
+
+.stc-entry-content--guide p,
+.stc-entry-content--guide ul,
+.stc-entry-content--guide ol {
+	margin-block: 0 1.35em;
+}
+
+.stc-entry-content--guide a:not(.stc-button) {
+	color: var(--stc-guide-accent);
+	font-weight: 650;
+	text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+	text-decoration-thickness: 0.08em;
+	text-underline-offset: 0.18em;
+}
+
+.stc-guide-breadcrumb {
+	border-bottom: 1px solid var(--stc-color-line);
+	margin: 0 0 clamp(2rem, 4vw, 3rem);
+	max-width: none !important;
+	padding: 0 0 var(--stc-space-4);
+}
+
+.stc-guide-breadcrumb ol {
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 0.75rem;
+	font-weight: 680;
+	gap: 0.4rem 0.65rem;
+	letter-spacing: 0.015em;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.stc-guide-breadcrumb li {
+	align-items: center;
+	display: flex;
+	gap: 0.65rem;
+	margin: 0;
+}
+
+.stc-guide-breadcrumb li:not(:last-child)::after {
+	color: var(--stc-color-muted);
+	content: "/";
+	font-weight: 400;
+}
+
+.stc-guide-breadcrumb a {
+	color: var(--stc-guide-accent) !important;
+}
+
+.stc-guide-breadcrumb [aria-current="page"] {
+	color: var(--stc-color-muted);
+}
+
+.stc-guide-quick-facts,
+.stc-guide-warning,
+.stc-guide-route {
+	border-radius: var(--stc-radius-sm);
+	margin-block: clamp(2.5rem, 5vw, 4rem);
+	max-width: none !important;
+	padding: clamp(1.5rem, 3vw, 2rem);
+}
+
+.stc-guide-quick-facts {
+	background: var(--stc-guide-accent-soft);
+	border: 1px solid var(--stc-guide-accent-line);
+}
+
+.stc-guide-quick-facts h2,
+.stc-guide-warning h2,
+.stc-guide-route h2 {
+	font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+	margin: 0 0 var(--stc-space-5);
+}
+
+.stc-guide-facts-grid {
+	display: grid;
+	gap: 1px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	overflow: clip;
+}
+
+.stc-guide-fact {
+	background: color-mix(in srgb, var(--stc-color-surface) 72%, transparent);
+	min-width: 0;
+	padding: 1.125rem;
+}
+
+.stc-guide-fact p {
+	font-size: 0.9375rem;
+	line-height: 1.55;
+	margin: 0;
+}
+
+.stc-guide-fact p + p {
+	color: var(--stc-color-muted);
+	margin-top: 0.35rem;
+}
+
+.stc-guide-warning {
+	background: color-mix(in srgb, var(--stc-guide-accent-soft) 58%, var(--stc-color-surface));
+	border-inline-start: 0.25rem solid var(--stc-guide-accent);
+}
+
+.stc-guide-warning p:last-child {
+	margin-bottom: 0;
+}
+
+.stc-guide-route {
+	background: #17231d;
+	color: rgba(249, 251, 248, 0.86);
+}
+
+.stc-guide-route h2 {
+	color: var(--stc-color-on-dark);
+}
+
+.stc-guide-route ol {
+	counter-reset: stc-route;
+	display: grid;
+	gap: var(--stc-space-4);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.stc-guide-route li {
+	align-items: start;
+	counter-increment: stc-route;
+	display: grid;
+	gap: var(--stc-space-3);
+	grid-template-columns: 2rem minmax(0, 1fr);
+	margin: 0;
+}
+
+.stc-guide-route li::before {
+	align-items: center;
+	background: var(--stc-guide-accent);
+	border-radius: var(--stc-radius-pill);
+	color: #fff;
+	content: counter(stc-route);
+	display: flex;
+	font-size: var(--stc-font-size-xs);
+	font-weight: 800;
+	height: 2rem;
+	justify-content: center;
+	width: 2rem;
+}
+
+.stc-attraction-guide__sidebar,
+.stc-city-guide__sidebar,
+.stc-survival-kit__sidebar {
+	display: grid;
+	gap: var(--stc-space-5);
+	position: sticky;
+	top: 6rem;
+}
+
+.stc-guide-toc,
+.stc-attraction-guide__checklist,
+.stc-city-guide__checklist,
+.stc-survival-kit__checklist {
+	background: var(--stc-color-surface);
+	border: 1px solid var(--stc-color-line);
+	border-radius: var(--stc-radius-sm);
+	box-shadow: none;
+	padding: 1.25rem;
+}
+
+.stc-guide-toc {
+	border-top: 0.1875rem solid var(--stc-guide-accent);
+	gap: var(--stc-space-4);
+}
+
+.stc-guide-toc h2,
+.stc-attraction-guide__checklist h2,
+.stc-city-guide__checklist h2,
+.stc-survival-kit__checklist h2 {
+	font-family: var(--stc-font-sans);
+	font-size: 0.8125rem;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	margin: 0;
+	text-transform: uppercase;
+}
+
+.stc-guide-toc ol {
+	gap: 0;
+}
+
+.stc-guide-toc li + li {
+	border-top: 1px solid var(--stc-color-line);
+}
+
+.stc-guide-toc a {
+	color: var(--stc-color-muted);
+	font-size: 0.8125rem;
+	font-weight: 650;
+	line-height: 1.4;
+	padding-block: 0.65rem;
+	transition: color var(--stc-motion-duration-fast) var(--stc-motion-ease-standard);
+}
+
+.stc-guide-toc a:hover,
+.stc-guide-toc a:focus-visible {
+	color: var(--stc-guide-accent);
+}
+
+.stc-attraction-guide__checklist,
+.stc-city-guide__checklist,
+.stc-survival-kit__checklist {
+	background: var(--stc-guide-accent-soft);
+	border-color: var(--stc-guide-accent-line);
+	display: grid;
+	gap: var(--stc-space-4);
+}
+
+.stc-attraction-guide__checklist ul,
+.stc-city-guide__checklist ul,
+.stc-survival-kit__checklist ul {
+	display: grid;
+	gap: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.stc-attraction-guide__checklist li,
+.stc-city-guide__checklist li,
+.stc-survival-kit__checklist li {
+	border-bottom: 1px solid color-mix(in srgb, var(--stc-guide-accent-line) 76%, transparent);
+	display: grid;
+	gap: 0.1rem;
+	padding-block: 0.625rem;
+}
+
+.stc-attraction-guide__checklist li span,
+.stc-city-guide__checklist li span,
+.stc-survival-kit__checklist li span {
+	font-size: 0.8125rem;
+	font-weight: 720;
+}
+
+.stc-attraction-guide__checklist li small,
+.stc-city-guide__checklist li small,
+.stc-survival-kit__checklist li small {
+	color: var(--stc-color-muted);
+	font-size: 0.75rem;
+	line-height: 1.45;
+}
+
+.stc-attraction-guide__footer,
+.stc-city-guide__footer,
+.stc-survival-kit__footer {
+	border-top: 1px solid var(--stc-color-line);
+	padding-top: var(--stc-space-6);
+}
+
+.stc-attraction-guide__footer a,
+.stc-city-guide__footer a,
+.stc-survival-kit__footer a {
+	color: var(--stc-guide-accent);
+	font-size: var(--stc-font-size-sm);
+	font-weight: 720;
+}
+
+/* Generic posts keep the same measured editorial rhythm without guide modules. */
+.single .stc-single:not(.stc-single--attraction-guide):not(.stc-single--city-guide):not(.stc-single--survival-kit) {
+	margin-inline: auto;
+	max-width: var(--stc-container-reading);
+}
+
+.single .stc-content__header,
+.single .stc-single:not(.stc-single--attraction-guide):not(.stc-single--city-guide):not(.stc-single--survival-kit) > .stc-entry-content {
+	background: var(--stc-color-surface);
+	border: 1px solid var(--stc-color-line);
+	padding: clamp(2rem, 5vw, 3.75rem);
+}
+
+.single .stc-content__header {
+	border-radius: var(--stc-radius-md) var(--stc-radius-md) 0 0;
+	border-bottom: 0;
+}
+
+.single .stc-content__header h1 {
+	font-size: clamp(2.5rem, 6vw, 4.5rem);
+	margin-top: var(--stc-space-3);
+}
+
+.single .stc-single:not(.stc-single--attraction-guide):not(.stc-single--city-guide):not(.stc-single--survival-kit) > .stc-entry-content {
+	border-radius: 0 0 var(--stc-radius-md) var(--stc-radius-md);
+	font-size: 1.0625rem;
+	line-height: 1.78;
+}
+
+@media (max-width: 840px) {
+	.single .stc-content {
+		padding-block: var(--stc-space-5) var(--stc-space-16);
+	}
+
+	.stc-attraction-guide__hero,
+	.stc-city-guide__hero,
+	.stc-survival-kit__hero {
+		background-position: 62% center;
+		border-radius: var(--stc-radius-md);
+		min-block-size: clamp(25rem, 75vw, 31rem);
+		padding: clamp(1.75rem, 6vw, 3rem);
+	}
+
+	.stc-attraction-guide__layout,
+	.stc-city-guide__layout,
+	.stc-survival-kit__layout {
+		gap: var(--stc-space-6);
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.stc-guide-toc--desktop {
+		display: none;
+	}
+
+	.stc-guide-toc--mobile {
+		display: grid;
+		grid-column: 1;
+		max-width: 100%;
+		overflow: hidden;
+	}
+
+	.stc-guide-toc--mobile ol {
+		display: flex;
+		gap: var(--stc-space-2);
+		overflow-x: auto;
+		padding-bottom: var(--stc-space-2);
+		scroll-snap-type: x proximity;
+		scrollbar-width: thin;
+	}
+
+	.stc-guide-toc--mobile li,
+	.stc-guide-toc--mobile li + li {
+		border: 0;
+		flex: 0 0 auto;
+		scroll-snap-align: start;
+	}
+
+	.stc-guide-toc--mobile a {
+		background: var(--stc-color-surface-muted);
+		border: 1px solid var(--stc-color-line);
+		border-radius: var(--stc-radius-pill);
+		padding: 0.55rem 0.85rem;
+		white-space: nowrap;
+	}
+
+	.stc-attraction-guide__sidebar,
+	.stc-city-guide__sidebar,
+	.stc-survival-kit__sidebar {
+		position: static;
+	}
+}
+
+@media (max-width: 599px) {
+	.single .stc-content {
+		padding-inline: 0;
+		padding-top: 0;
+	}
+
+	.stc-single--attraction-guide,
+	.stc-single--city-guide,
+	.stc-single--survival-kit {
+		gap: var(--stc-space-6);
+	}
+
+	.stc-attraction-guide__hero,
+	.stc-city-guide__hero,
+	.stc-survival-kit__hero {
+		background-image:
+			linear-gradient(180deg, rgba(7, 17, 13, 0.14) 0%, rgba(7, 17, 13, 0.82) 58%, rgba(7, 17, 13, 0.96) 100%),
+			var(--stc-guide-mobile-image);
+		border-radius: 0;
+		box-shadow: none;
+		min-block-size: 31rem;
+		padding: 2rem var(--stc-container-gutter);
+	}
+
+	.stc-attraction-guide__hero {
+		--stc-guide-mobile-image: url("../../../solo-to-china/assets/images/card-forbidden-city-hd.webp");
+	}
+
+	.stc-city-guide__hero {
+		--stc-guide-mobile-image: url("../../../solo-to-china/assets/images/card-beijing-hd.webp");
+	}
+
+	.stc-survival-kit__hero {
+		--stc-guide-mobile-image: url("../../../solo-to-china/assets/images/card-hangzhou-hd.webp");
+	}
+
+	.stc-attraction-guide__hero h1,
+	.stc-city-guide__hero h1,
+	.stc-survival-kit__hero h1 {
+		font-size: clamp(2.5rem, 12vw, 3.5rem);
+		max-width: 11ch;
+	}
+
+	.stc-attraction-guide__layout,
+	.stc-city-guide__layout,
+	.stc-survival-kit__layout,
+	.stc-attraction-guide__footer,
+	.stc-city-guide__footer,
+	.stc-survival-kit__footer {
+		margin-inline: var(--stc-container-gutter);
+	}
+
+	.stc-entry-content--guide {
+		border-inline: 0;
+		border-radius: 0;
+		box-shadow: none;
+		font-size: 1.03125rem;
+		margin-inline: calc(var(--stc-container-gutter) * -1);
+		padding: 2rem var(--stc-container-gutter);
+	}
+
+	.stc-guide-facts-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.stc-guide-quick-facts,
+	.stc-guide-warning,
+	.stc-guide-route {
+		margin-inline: calc(var(--stc-container-gutter) * -0.2);
+		padding: 1.375rem;
+	}
+
+	.stc-guide-breadcrumb [aria-current="page"] {
+		display: inline-block;
+		max-width: 12rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.single .stc-content__header,
+	.single .stc-single:not(.stc-single--attraction-guide):not(.stc-single--city-guide):not(.stc-single--survival-kit) > .stc-entry-content {
+		border-inline: 0;
+		border-radius: 0;
+	}
+}
