@@ -201,7 +201,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Child Theme: `SoloToChina Child`
 
-Version: `0.1.0`
+Version: `0.2.0`
 
 Location:
 
@@ -216,8 +216,15 @@ Implemented:
 - Foundation tokens for colors, type, spacing, containers, grids, radii, shadows, controls, media ratios, breakpoints, motion, focus, reduced-motion, and forced-colors.
 - Initial component foundations for buttons, forms, cards, and media frames.
 - Child Theme responsibility documentation and a dated KEEP / REFACTOR / REPLACE / REMOVE audit.
+- Shared Header, navigation, mobile menu, image-card, FAQ, and Footer renovation.
+- Current-page navigation semantics across core pages, guide posts, and guide archives.
+- Mobile menu label synchronization, Escape close, navigation-link close, and desktop-breakpoint cleanup.
+- Homepage Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket CTA, FAQ, and Footer responsive renovation without copying the Parent `front-page.php`.
+- Two-line Hero title and first-viewport Survival Kit continuity at 390 and 375 widths.
+- Real local WordPress preview through `scripts/start-preview.ps1` and the official WordPress Playground CLI.
+- Playwright screenshots at 1440, 768, 390, and 375 with zero horizontal overflow and zero browser console errors/warnings.
 
-The next stage is shared Header/Footer/navigation/button/card renovation followed by the homepage. Do not copy the entire Parent Theme. Override a template only when CSS and a small Child function are insufficient.
+The next stage is the Guide / Article template family. Do not copy the entire Parent Theme. Override a template only when CSS and a small Child function are insufficient.
 
 ## Current Plugin Status
 
@@ -320,13 +327,13 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-31 21:36:39 +08:00
+Generated: 2026-08-31 22:26:57 +08:00
 Theme version: 0.21.0
-Theme SHA256: 25CAC4BFF9262FB540312049D8AC8BEAF5C53D451AD29BA5A1A0721EACC4F077
-Child Theme version: 0.1.0
-Child Theme SHA256: 9A95F3D48757F06AF2E883755D52593414E9FB1C787C71B67546AF07DB1352E8
+Theme SHA256: F664032A0881A95FDD82321E0926E2CC99F4436EE41035ACB922243AE4E32792
+Child Theme version: 0.2.0
+Child Theme SHA256: F3A506B7684D024FACB2D9D5E54E764CDAC4A91224BF285F69A1A6B05C780864
 Plugin version: 0.21.0
-Plugin SHA256: 1231C7A0594ED007D538D56715729E278F2A0B5199C14944CFAD9DD98F003A4E
+Plugin SHA256: C5DEE8AB90236BC4A8C0DF730BDD4DA7977375610B85CB08135085A35A24655C
 ```
 
 Regenerate artifacts with:

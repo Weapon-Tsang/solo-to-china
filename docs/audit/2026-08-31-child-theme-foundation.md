@@ -34,9 +34,9 @@ Scope: SoloToChina Parent Theme `0.21.0`, SoloToChina Tools `0.21.0`, existing t
 
 ## Preview capability
 
-The repository contains installable theme/plugin code and static/PHP verification, but no WordPress core checkout, database, `wp-env`, Docker configuration, or local preview URL. Real browser screenshots of the local Child Theme therefore require an installed WordPress preview instance. A static HTML reconstruction is deliberately not used because it would not verify WordPress template loading, enqueue order, responsive images, shortcodes, or plugin integration.
+At foundation audit time the repository contained installable theme/plugin code and static/PHP verification, but no WordPress runtime or local preview URL. A static HTML reconstruction was deliberately rejected because it would not verify WordPress template loading, enqueue order, responsive images, shortcodes, or plugin integration.
 
-The Playwright CLI prerequisite is available (`npx` detected). When a WordPress preview URL is available, use the repository's `output/playwright/` path for 1440, 768, 390, and 375 screenshots and interaction checks.
+This gap was resolved in the next stage with `scripts/start-preview.ps1` and `scripts/playground-blueprint.json`. They run the official WordPress Playground CLI, mount the Parent Theme, Child Theme, and Plugin directly from this repository, and activate the Child Theme and Plugin. Playwright artifacts are stored in the ignored `output/playwright/` path.
 
 ## SEO / GEO baseline
 

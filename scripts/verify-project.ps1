@@ -7,6 +7,8 @@ $RequiredFiles = @(
     "docs/handoff/new-chat-handoff.md",
     "docs/deployment/wordpress-install.md",
     "scripts/package-release.ps1",
+    "scripts/playground-blueprint.json",
+    "scripts/start-preview.ps1",
     "wp-content/themes/solo-to-china/style.css",
     "wp-content/themes/solo-to-china/README.md",
     "wp-content/themes/solo-to-china/functions.php",
@@ -57,8 +59,12 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/assets/images/card-disney-hd.webp",
     "wp-content/themes/solo-to-china-child/style.css",
     "wp-content/themes/solo-to-china-child/functions.php",
+    "wp-content/themes/solo-to-china-child/header.php",
     "wp-content/themes/solo-to-china-child/README.md",
     "wp-content/themes/solo-to-china-child/assets/css/design-system.css",
+    "wp-content/themes/solo-to-china-child/assets/css/site.css",
+    "wp-content/themes/solo-to-china-child/assets/css/home.css",
+    "wp-content/themes/solo-to-china-child/assets/js/site.js",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
     "wp-content/plugins/solo-to-china-tools/README.md",
     "wp-content/plugins/solo-to-china-tools/includes/attractions.php",
@@ -136,6 +142,25 @@ if (Test-Path -LiteralPath $InstallDocPath -PathType Leaf) {
     foreach ($ChildInstallToken in @("Install SoloToChina Parent Theme first", "Activate SoloToChina Child")) {
         if (-not $InstallDoc.Contains($ChildInstallToken)) {
             $Failures.Add("WordPress install handoff is missing Child Theme install order: $ChildInstallToken")
+        }
+    }
+}
+
+$PreviewScriptPath = Join-Path $Root "scripts/start-preview.ps1"
+$PreviewBlueprintPath = Join-Path $Root "scripts/playground-blueprint.json"
+if (Test-Path -LiteralPath $PreviewScriptPath -PathType Leaf) {
+    $PreviewScript = Get-Content -LiteralPath $PreviewScriptPath -Raw
+    foreach ($PreviewToken in @('@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', '--mount-dir', 'playground-blueprint.json')) {
+        if (-not $PreviewScript.Contains($PreviewToken)) {
+            $Failures.Add("WordPress Playground preview script is missing: $PreviewToken")
+        }
+    }
+}
+if (Test-Path -LiteralPath $PreviewBlueprintPath -PathType Leaf) {
+    $PreviewBlueprint = Get-Content -LiteralPath $PreviewBlueprintPath -Raw
+    foreach ($BlueprintToken in @('activateTheme', 'solo-to-china-child', 'activatePlugin', 'solo-to-china-tools/solo-to-china-tools.php')) {
+        if (-not $PreviewBlueprint.Contains($BlueprintToken)) {
+            $Failures.Add("WordPress Playground blueprint is missing: $BlueprintToken")
         }
     }
 }
@@ -293,7 +318,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.1.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.2.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -307,6 +332,11 @@ if (Test-Path -LiteralPath $ChildThemeFunctionsPath -PathType Leaf) {
             $Failures.Add("Child Theme resource loading is missing: $ChildFunctionToken")
         }
     }
+    foreach ($ChildStageToken in @("stc-child-site", "stc-child-home", "is_front_page", "stc-child-interactions", "stc_child_render_primary_navigation")) {
+        if (-not $ChildThemeFunctions.Contains($ChildStageToken)) {
+            $Failures.Add("Child Theme shared/home asset stage is missing: $ChildStageToken")
+        }
+    }
 }
 
 if (Test-Path -LiteralPath $ChildThemeDesignSystemPath -PathType Leaf) {
@@ -314,6 +344,46 @@ if (Test-Path -LiteralPath $ChildThemeDesignSystemPath -PathType Leaf) {
     foreach ($DesignSystemToken in @("--stc-color-ink", "--stc-font-sans", "--stc-space-", "--stc-container-max", "--stc-grid-gap", "--stc-radius-", "--stc-shadow-", "--stc-control-height", "--stc-image-ratio", "--stc-motion-duration", ":focus-visible", "prefers-reduced-motion")) {
         if (-not $ChildThemeDesignSystem.Contains($DesignSystemToken)) {
             $Failures.Add("Child Theme design system is missing: $DesignSystemToken")
+        }
+    }
+}
+
+$ChildThemeHeaderPath = Join-Path $Root "wp-content/themes/solo-to-china-child/header.php"
+if (Test-Path -LiteralPath $ChildThemeHeaderPath -PathType Leaf) {
+    $ChildThemeHeader = Get-Content -LiteralPath $ChildThemeHeaderPath -Raw
+    foreach ($ChildHeaderMarkupToken in @('Skip to content', 'stc_child_render_primary_navigation', 'aria-expanded="false"', 'data-open-label', 'data-close-label')) {
+        if (-not $ChildThemeHeader.Contains($ChildHeaderMarkupToken)) {
+            $Failures.Add("Child Theme Header override is missing: $ChildHeaderMarkupToken")
+        }
+    }
+}
+
+$ChildThemeSiteCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/site.css"
+if (Test-Path -LiteralPath $ChildThemeSiteCssPath -PathType Leaf) {
+    $ChildThemeSiteCss = Get-Content -LiteralPath $ChildThemeSiteCssPath -Raw
+    foreach ($ChildSiteCssToken in @('.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__socials', '@media (max-width: 840px)')) {
+        if (-not $ChildThemeSiteCss.Contains($ChildSiteCssToken)) {
+            $Failures.Add("Child Theme shared site CSS is missing: $ChildSiteCssToken")
+        }
+    }
+}
+
+$ChildThemeHomeCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/home.css"
+if (Test-Path -LiteralPath $ChildThemeHomeCssPath -PathType Leaf) {
+    $ChildThemeHomeCss = Get-Content -LiteralPath $ChildThemeHomeCssPath -Raw
+    foreach ($ChildHomeCssToken in @(".home .stc-hero", ".home .stc-survival", ".home .stc-card-grid--cities", ".home .stc-card-grid--attractions", ".home .stc-planner", ".home .stc-ticket-band", ".home .stc-faq", "@media (max-width: 599px)")) {
+        if (-not $ChildThemeHomeCss.Contains($ChildHomeCssToken)) {
+            $Failures.Add("Child Theme homepage CSS is missing: $ChildHomeCssToken")
+        }
+    }
+}
+
+$ChildThemeSiteJsPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/js/site.js"
+if (Test-Path -LiteralPath $ChildThemeSiteJsPath -PathType Leaf) {
+    $ChildThemeSiteJs = Get-Content -LiteralPath $ChildThemeSiteJsPath -Raw
+    foreach ($ChildSiteJsToken in @("Escape", "aria-expanded", "data-open-label", "data-close-label", "matchMedia")) {
+        if (-not $ChildThemeSiteJs.Contains($ChildSiteJsToken)) {
+            $Failures.Add("Child Theme navigation enhancement is missing: $ChildSiteJsToken")
         }
     }
 }

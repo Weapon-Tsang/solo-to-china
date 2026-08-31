@@ -1,6 +1,6 @@
 # SoloToChina Child Theme
 
-Current version: `0.1.0`
+Current version: `0.2.0`
 
 This Child Theme is the presentation layer for the SoloToChina `0.21.0` Parent Theme. It is intentionally small: Parent templates and project-owned helpers continue to provide the working content structure, while the Child Theme owns visual tokens, incremental template overrides, responsive layout refinements, and restrained interaction styling.
 
@@ -23,4 +23,4 @@ Do not move Ticket Tool or Reminder business logic into this Child Theme. Do not
 
 ## Asset order
 
-`functions.php` loads the Child Theme stylesheet after the Parent `stc-main` handle, then loads `assets/css/design-system.css`. Page-specific Child assets should depend on the design-system handle so the cascade remains deterministic.
+`functions.php` loads the Child Theme stylesheet after the Parent `stc-main` handle, then loads `assets/css/design-system.css` and `assets/css/site.css`. The homepage additionally loads `assets/css/home.css`; `assets/js/site.js` enhances the existing Parent navigation with Escape, label synchronization, and responsive close behavior.

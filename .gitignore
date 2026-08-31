@@ -8,6 +8,8 @@ wp-config.php
 *.bak
 *.backup
 *.zip
+output/playwright/
+.playwright-cli/
 *.tar
 *.tar.gz
 exports/*.xml

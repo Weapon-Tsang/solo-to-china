@@ -24,7 +24,7 @@ Recommended future code ownership:
 Current development branch deliverables:
 
 - Custom SoloToChina theme `0.21.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.1.0` in `wp-content/themes/solo-to-china-child/`.
+- SoloToChina Child Theme `0.2.0` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.21.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
@@ -35,6 +35,14 @@ Generate install artifacts with:
 ```powershell
 .\scripts\package-release.ps1
 ```
+
+Run a real local WordPress preview with Parent Theme, Child Theme, and Plugin mounted from the repository:
+
+```powershell
+.\scripts\start-preview.ps1
+```
+
+The preview uses the official WordPress Playground CLI and defaults to `http://127.0.0.1:9400`.
 
 The script creates:
 

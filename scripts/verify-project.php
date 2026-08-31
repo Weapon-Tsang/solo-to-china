@@ -10,6 +10,8 @@ $requiredFiles = [
     'docs/handoff/new-chat-handoff.md',
     'docs/deployment/wordpress-install.md',
     'scripts/package-release.ps1',
+    'scripts/playground-blueprint.json',
+    'scripts/start-preview.ps1',
     'wp-content/themes/solo-to-china/style.css',
     'wp-content/themes/solo-to-china/README.md',
     'wp-content/themes/solo-to-china/functions.php',
@@ -60,8 +62,12 @@ $requiredFiles = [
     'wp-content/themes/solo-to-china/assets/images/card-disney-hd.webp',
     'wp-content/themes/solo-to-china-child/style.css',
     'wp-content/themes/solo-to-china-child/functions.php',
+    'wp-content/themes/solo-to-china-child/header.php',
     'wp-content/themes/solo-to-china-child/README.md',
     'wp-content/themes/solo-to-china-child/assets/css/design-system.css',
+    'wp-content/themes/solo-to-china-child/assets/css/site.css',
+    'wp-content/themes/solo-to-china-child/assets/css/home.css',
+    'wp-content/themes/solo-to-china-child/assets/js/site.js',
     'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php',
     'wp-content/plugins/solo-to-china-tools/README.md',
     'wp-content/plugins/solo-to-china-tools/includes/attractions.php',
@@ -139,6 +145,25 @@ if (is_file($installDocPath)) {
     foreach (['Install SoloToChina Parent Theme first', 'Activate SoloToChina Child'] as $childInstallToken) {
         if (strpos($installDoc, $childInstallToken) === false) {
             $failures[] = "WordPress install handoff is missing Child Theme install order: {$childInstallToken}";
+        }
+    }
+}
+
+$previewScriptPath = $root . DIRECTORY_SEPARATOR . 'scripts/start-preview.ps1';
+$previewBlueprintPath = $root . DIRECTORY_SEPARATOR . 'scripts/playground-blueprint.json';
+if (is_file($previewScriptPath)) {
+    $previewScript = file_get_contents($previewScriptPath);
+    foreach (['@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', '--mount-dir', 'playground-blueprint.json'] as $previewToken) {
+        if (strpos($previewScript, $previewToken) === false) {
+            $failures[] = "WordPress Playground preview script is missing: {$previewToken}";
+        }
+    }
+}
+if (is_file($previewBlueprintPath)) {
+    $previewBlueprint = file_get_contents($previewBlueprintPath);
+    foreach (['activateTheme', 'solo-to-china-child', 'activatePlugin', 'solo-to-china-tools/solo-to-china-tools.php'] as $blueprintToken) {
+        if (strpos($previewBlueprint, $blueprintToken) === false) {
+            $failures[] = "WordPress Playground blueprint is missing: {$blueprintToken}";
         }
     }
 }
@@ -294,7 +319,7 @@ $childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo
 $childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
 if (is_file($childThemeStylePath)) {
     $childThemeStyle = file_get_contents($childThemeStylePath);
-    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.1.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.2.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
         if (strpos($childThemeStyle, $childHeaderToken) === false) {
             $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
         }
@@ -308,6 +333,11 @@ if (is_file($childThemeFunctionsPath)) {
             $failures[] = "Child Theme resource loading is missing: {$childFunctionToken}";
         }
     }
+    foreach (['stc-child-site', 'stc-child-home', 'is_front_page', 'stc-child-interactions', 'stc_child_render_primary_navigation'] as $childStageToken) {
+        if (strpos($childThemeFunctions, $childStageToken) === false) {
+            $failures[] = "Child Theme shared/home asset stage is missing: {$childStageToken}";
+        }
+    }
 }
 
 if (is_file($childThemeDesignSystemPath)) {
@@ -315,6 +345,46 @@ if (is_file($childThemeDesignSystemPath)) {
     foreach (['--stc-color-ink', '--stc-font-sans', '--stc-space-', '--stc-container-max', '--stc-grid-gap', '--stc-radius-', '--stc-shadow-', '--stc-control-height', '--stc-image-ratio', '--stc-motion-duration', ':focus-visible', 'prefers-reduced-motion'] as $designSystemToken) {
         if (strpos($childThemeDesignSystem, $designSystemToken) === false) {
             $failures[] = "Child Theme design system is missing: {$designSystemToken}";
+        }
+    }
+}
+
+$childThemeHeaderPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/header.php';
+if (is_file($childThemeHeaderPath)) {
+    $childThemeHeader = file_get_contents($childThemeHeaderPath);
+    foreach (['Skip to content', 'stc_child_render_primary_navigation', 'aria-expanded="false"', 'data-open-label', 'data-close-label'] as $childHeaderMarkupToken) {
+        if (strpos($childThemeHeader, $childHeaderMarkupToken) === false) {
+            $failures[] = "Child Theme Header override is missing: {$childHeaderMarkupToken}";
+        }
+    }
+}
+
+$childThemeSiteCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/site.css';
+if (is_file($childThemeSiteCssPath)) {
+    $childThemeSiteCss = file_get_contents($childThemeSiteCssPath);
+    foreach (['.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__socials', '@media (max-width: 840px)'] as $childSiteCssToken) {
+        if (strpos($childThemeSiteCss, $childSiteCssToken) === false) {
+            $failures[] = "Child Theme shared site CSS is missing: {$childSiteCssToken}";
+        }
+    }
+}
+
+$childThemeHomeCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/home.css';
+if (is_file($childThemeHomeCssPath)) {
+    $childThemeHomeCss = file_get_contents($childThemeHomeCssPath);
+    foreach (['.home .stc-hero', '.home .stc-survival', '.home .stc-card-grid--cities', '.home .stc-card-grid--attractions', '.home .stc-planner', '.home .stc-ticket-band', '.home .stc-faq', '@media (max-width: 599px)'] as $childHomeCssToken) {
+        if (strpos($childThemeHomeCss, $childHomeCssToken) === false) {
+            $failures[] = "Child Theme homepage CSS is missing: {$childHomeCssToken}";
+        }
+    }
+}
+
+$childThemeSiteJsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/js/site.js';
+if (is_file($childThemeSiteJsPath)) {
+    $childThemeSiteJs = file_get_contents($childThemeSiteJsPath);
+    foreach (['Escape', 'aria-expanded', 'data-open-label', 'data-close-label', 'matchMedia'] as $childSiteJsToken) {
+        if (strpos($childThemeSiteJs, $childSiteJsToken) === false) {
+            $failures[] = "Child Theme navigation enhancement is missing: {$childSiteJsToken}";
         }
     }
 }

@@ -122,7 +122,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Child Theme Status
 
-Current Child Theme version: `0.1.0`.
+Current Child Theme version: `0.2.0`.
 
 The first independent Child Theme foundation stage is complete:
 
@@ -134,7 +134,17 @@ The first independent Child Theme foundation stage is complete:
 - Recorded the KEEP / REFACTOR / REPLACE / REMOVE audit in `docs/audit/2026-08-31-child-theme-foundation.md`.
 - No Parent template or Plugin business logic was copied into the Child Theme.
 
-The repository still has no local WordPress runtime or preview URL. Browser screenshots must be produced against a real WordPress instance with the Child Theme active; a static HTML demo is intentionally not used.
+The shared-component and homepage stage is also complete:
+
+- Added a small Child `header.php` override with `aria-current="page"` for Home, core pages, matching guide posts, and matching category archives.
+- Added shared Header, navigation, menu, button, card, FAQ, and Footer styling in `assets/css/site.css`.
+- Added homepage-specific responsive styling in `assets/css/home.css` without copying `front-page.php`.
+- Preserved the image-led approved direction while improving the Hero overlay, two-line title, CTA hierarchy, section rhythm, 4-column City / 3-column Attraction desktop grids, and 2-column mobile guide folds.
+- Improved mobile menu motion, label synchronization, Escape close, link close, and desktop-breakpoint cleanup in `assets/js/site.js`.
+- Hid non-interactive placeholder social glyphs until real destinations exist, improving trust without inventing accounts.
+- Added a real WordPress Playground preview (`scripts/start-preview.ps1`) that mounts Parent, Child, and Plugin; no static demo or production deployment is used.
+- Playwright QA passed at 1440, 768, 390, and 375 widths with no horizontal overflow, no browser console errors/warnings, working menu/Escape behavior, current-page navigation semantics, guide reveal focus transfer, and FAQ expansion.
+- Final screenshots are stored locally in ignored `output/playwright/`.
 
 ## Plugin Status
 
@@ -237,7 +247,7 @@ For deployment, use the local zip artifacts as the source of truth.
 
 Reasonable next bounded increments:
 
-- Renovate the homepage in the Child Theme, beginning with shared Header, Footer, navigation, buttons, and card families.
+- Renovate Guide / Article templates in the Child Theme while preserving TOC, Saved Guides, responsive featured images, and content hierarchy.
 - Improve mobile spacing and touch targets after installing the Child Theme on WordPress and checking real screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 - Populate real guide posts in the matching categories and check landing-page/archive/search card density on mobile screenshots.
