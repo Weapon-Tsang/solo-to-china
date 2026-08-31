@@ -13,10 +13,11 @@ Run the release package script from the repository root:
 It creates:
 
 - `dist/solo-to-china-theme.zip`
+- `dist/solo-to-china-child-theme.zip`
 - `dist/solo-to-china-tools-plugin.zip`
 - `dist/release-manifest.txt`
 
-The two `.zip` files are intended for WordPress upload. The manifest records artifact versions and SHA256 hashes for checking the generated files.
+The three `.zip` files are intended for WordPress upload. The manifest records artifact versions and SHA256 hashes for checking the generated files.
 
 ## Install Through WordPress Admin
 
@@ -24,11 +25,12 @@ Recommended path for the first install:
 
 1. Go to WordPress Admin.
 2. Open Appearance > Themes > Add New > Upload Theme.
-3. Upload `solo-to-china-theme.zip`.
-4. Activate the SoloToChina theme.
-5. Open Plugins > Add New > Upload Plugin.
-6. Upload `solo-to-china-tools-plugin.zip`.
-7. Activate the SoloToChina Tools plugin.
+3. Install SoloToChina Parent Theme first by uploading `solo-to-china-theme.zip`. Keep it installed; do not activate it yet if you are continuing directly to the Child Theme.
+4. Upload `solo-to-china-child-theme.zip`.
+5. Activate SoloToChina Child. WordPress automatically uses the installed Parent Theme for inherited templates and functionality.
+6. Open Plugins > Add New > Upload Plugin.
+7. Upload `solo-to-china-tools-plugin.zip`.
+8. Activate the SoloToChina Tools plugin.
 
 When the theme is activated, it creates any missing core IA pages:
 
@@ -51,6 +53,8 @@ In aaPanel Files, go to:
 
 Upload `solo-to-china-theme.zip` there, then extract it in the same `themes` directory.
 
+Upload `solo-to-china-child-theme.zip` to the same `themes` directory, then extract it there. Keep both theme directories installed and activate SoloToChina Child in WordPress Admin.
+
 Next go to:
 
 - `/www/wwwroot/solotochina.com/wp-content/plugins/`
@@ -60,9 +64,10 @@ Upload `solo-to-china-tools-plugin.zip` there, then extract it in the same `plug
 After extraction, the final directories should be:
 
 - `/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china/`
+- `/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china-child/`
 - `/www/wwwroot/solotochina.com/wp-content/plugins/solo-to-china-tools/`
 
-Do not extract either zip directly inside `/www/wwwroot/solotochina.com/wp-content/`.
+Do not extract either zip directly inside `/www/wwwroot/solotochina.com/wp-content/`. Both theme zips belong in `themes/`; the plugin zip belongs in `plugins/`.
 
 Then activate the theme and plugin inside WordPress Admin.
 
@@ -83,6 +88,7 @@ For featured images uploaded before version `0.17.0`, regenerate WordPress thumb
 Also check:
 
 - Mobile menu opens and closes.
+- SoloToChina Child is the active theme and SoloToChina remains installed as its Parent Theme.
 - Mobile Hero stays within 480-580px at 75vh, keeps its title to two readable lines, and reveals the top of the Survival Kit shortcuts in the first viewport.
 - Mobile Hero uses the vermilion Start Exploring CTA and the translucent glass menu button.
 - Keyboard Tab shows visible focus states.
@@ -105,6 +111,7 @@ Do not overwrite:
 The project-owned code boundaries are only:
 
 - `wp-content/themes/solo-to-china/`
+- `wp-content/themes/solo-to-china-child/`
 - `wp-content/plugins/solo-to-china-tools/`
 
 ## Current Scope

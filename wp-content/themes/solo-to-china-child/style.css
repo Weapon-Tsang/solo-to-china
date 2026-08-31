@@ -1,0 +1,17 @@
+/*
+Theme Name: SoloToChina Child
+Theme URI: https://solotochina.com
+Author: SoloToChina
+Description: Presentation overrides and the evolving design system for the SoloToChina parent theme.
+Template: solo-to-china
+Version: 0.1.0
+Text Domain: solo-to-china-child
+Requires at least: 6.5
+Tested up to: 7.1
+Requires PHP: 7.4
+*/
+
+/*
+ * WordPress requires this file for Child Theme discovery. Visual rules live in
+ * assets/css/design-system.css and later page-specific Child Theme assets.
+ */

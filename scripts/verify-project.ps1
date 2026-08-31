@@ -55,6 +55,10 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-attraction-hd.webp",
     "wp-content/themes/solo-to-china/assets/images/card-west-lake-hd.webp",
     "wp-content/themes/solo-to-china/assets/images/card-disney-hd.webp",
+    "wp-content/themes/solo-to-china-child/style.css",
+    "wp-content/themes/solo-to-china-child/functions.php",
+    "wp-content/themes/solo-to-china-child/README.md",
+    "wp-content/themes/solo-to-china-child/assets/css/design-system.css",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
     "wp-content/plugins/solo-to-china-tools/README.md",
     "wp-content/plugins/solo-to-china-tools/includes/attractions.php",
@@ -110,6 +114,11 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
     if (-not $PackageScript.Contains("Get-FileHash")) {
         $Failures.Add("Package script does not record zip checksums.")
     }
+    foreach ($ChildPackageToken in @("solo-to-china-child", "solo-to-china-child-theme.zip", "Child Theme SHA256")) {
+        if (-not $PackageScript.Contains($ChildPackageToken)) {
+            $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
+        }
+    }
     if (-not $PackageScript.Contains("Theme version: 0.21.0") -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
@@ -123,6 +132,11 @@ if (Test-Path -LiteralPath $InstallDocPath -PathType Leaf) {
     }
     if (-not $InstallDoc.Contains("Do not extract either zip directly inside")) {
         $Failures.Add("WordPress install handoff is missing aaPanel extraction warning.")
+    }
+    foreach ($ChildInstallToken in @("Install SoloToChina Parent Theme first", "Activate SoloToChina Child")) {
+        if (-not $InstallDoc.Contains($ChildInstallToken)) {
+            $Failures.Add("WordPress install handoff is missing Child Theme install order: $ChildInstallToken")
+        }
     }
 }
 
@@ -270,6 +284,36 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     foreach ($PatternText in @("Quick answer", "What to set up before arrival", "Step-by-step setup", "What can go wrong", "Backup plan", "FAQ")) {
         if (-not $Functions.Contains($PatternText)) {
             $Failures.Add("Survival Kit content pattern is missing section: $PatternText")
+        }
+    }
+}
+
+$ChildThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china-child/style.css"
+$ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-child/functions.php"
+$ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
+if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
+    $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.1.0", "Text Domain: solo-to-china-child")) {
+        if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
+            $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
+        }
+    }
+}
+
+if (Test-Path -LiteralPath $ChildThemeFunctionsPath -PathType Leaf) {
+    $ChildThemeFunctions = Get-Content -LiteralPath $ChildThemeFunctionsPath -Raw
+    foreach ($ChildFunctionToken in @("STC_CHILD_VERSION", "wp_enqueue_scripts", "stc-main", "get_stylesheet_uri", "get_stylesheet_directory_uri", "stc-child-design-system")) {
+        if (-not $ChildThemeFunctions.Contains($ChildFunctionToken)) {
+            $Failures.Add("Child Theme resource loading is missing: $ChildFunctionToken")
+        }
+    }
+}
+
+if (Test-Path -LiteralPath $ChildThemeDesignSystemPath -PathType Leaf) {
+    $ChildThemeDesignSystem = Get-Content -LiteralPath $ChildThemeDesignSystemPath -Raw
+    foreach ($DesignSystemToken in @("--stc-color-ink", "--stc-font-sans", "--stc-space-", "--stc-container-max", "--stc-grid-gap", "--stc-radius-", "--stc-shadow-", "--stc-control-height", "--stc-image-ratio", "--stc-motion-duration", ":focus-visible", "prefers-reduced-motion")) {
+        if (-not $ChildThemeDesignSystem.Contains($DesignSystemToken)) {
+            $Failures.Add("Child Theme design system is missing: $DesignSystemToken")
         }
     }
 }

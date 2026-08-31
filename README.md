@@ -24,6 +24,7 @@ Recommended future code ownership:
 Current development branch deliverables:
 
 - Custom SoloToChina theme `0.21.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.1.0` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.21.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
@@ -38,9 +39,10 @@ Generate install artifacts with:
 The script creates:
 
 - `dist/solo-to-china-theme.zip`
+- `dist/solo-to-china-child-theme.zip`
 - `dist/solo-to-china-tools-plugin.zip`
 - `dist/release-manifest.txt`
 
-The two zip files are intended for WordPress upload. The manifest records artifact versions and SHA256 hashes for verification.
+The three zip files are intended for WordPress upload. Install the Parent Theme first, install and activate the Child Theme second, then install and activate the Tools plugin. The manifest records artifact versions and SHA256 hashes for verification.
 
 Do not commit production secrets, database credentials, cache files, uploads, or server backups.

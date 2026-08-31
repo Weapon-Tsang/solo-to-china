@@ -1,12 +1,13 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-08-25
+Date: 2026-08-31
 
 ## Current Working Boundary
 
 The project-owned WordPress code lives in:
 
 - `wp-content/themes/solo-to-china/`
+- `wp-content/themes/solo-to-china-child/`
 - `wp-content/plugins/solo-to-china-tools/`
 
 Do not edit third-party themes, cache plugins, uploads, language files, database files, or `wp-config.php`.
@@ -119,6 +120,22 @@ Core guide pages support local Saved Guides:
 
 Saved Guides use browser `localStorage` only. They do not write to WordPress users, custom tables, post meta, or remote services.
 
+## Child Theme Status
+
+Current Child Theme version: `0.1.0`.
+
+The first independent Child Theme foundation stage is complete:
+
+- Added a standards-compliant `solo-to-china-child` with `Template: solo-to-china`.
+- Preserved the Parent Theme as an independently installable, upgradable fallback.
+- Added deterministic Parent -> Child -> design-system stylesheet loading without loading the Parent stylesheet twice.
+- Added design tokens for color, typography, spacing, containers, grids, radii, shadows, buttons, forms, image ratios, breakpoints, motion, and focus states.
+- Added reduced-motion and forced-colors safeguards.
+- Recorded the KEEP / REFACTOR / REPLACE / REMOVE audit in `docs/audit/2026-08-31-child-theme-foundation.md`.
+- No Parent template or Plugin business logic was copied into the Child Theme.
+
+The repository still has no local WordPress runtime or preview URL. Browser screenshots must be produced against a real WordPress instance with the Child Theme active; a static HTML demo is intentionally not used.
+
 ## Plugin Status
 
 Current tools plugin version: `0.21.0`.
@@ -162,8 +179,9 @@ Ticket reminders use browser `localStorage` only. They do not send email or SMS,
 Current generated install zips:
 
 - `dist/solo-to-china-theme.zip`
+- `dist/solo-to-china-child-theme.zip`
 - `dist/solo-to-china-tools-plugin.zip`
-- `dist/release-manifest.txt` with artifact versions and SHA256 hashes for both zip files.
+- `dist/release-manifest.txt` with artifact versions and SHA256 hashes for all three zip files.
 
 New chat handoff:
 
@@ -172,9 +190,10 @@ New chat handoff:
 Preferred install path:
 
 1. WordPress Admin > Appearance > Themes > Add New > Upload Theme.
-2. Upload and activate `solo-to-china-theme.zip`.
-3. WordPress Admin > Plugins > Add New > Upload Plugin.
-4. Upload and activate `solo-to-china-tools-plugin.zip`.
+2. Upload `solo-to-china-theme.zip` and keep the Parent Theme installed.
+3. Upload and activate `solo-to-china-child-theme.zip`.
+4. WordPress Admin > Plugins > Add New > Upload Plugin.
+5. Upload and activate `solo-to-china-tools-plugin.zip`.
 
 aaPanel file install path if WordPress upload fails:
 
@@ -184,6 +203,7 @@ aaPanel file install path if WordPress upload fails:
 Final directories should be:
 
 - `/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china/`
+- `/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china-child/`
 - `/www/wwwroot/solotochina.com/wp-content/plugins/solo-to-china-tools/`
 
 ## Verification
@@ -217,7 +237,8 @@ For deployment, use the local zip artifacts as the source of truth.
 
 Reasonable next bounded increments:
 
-- Improve mobile spacing and touch targets after installing on WordPress and checking real screenshots.
+- Renovate the homepage in the Child Theme, beginning with shared Header, Footer, navigation, buttons, and card families.
+- Improve mobile spacing and touch targets after installing the Child Theme on WordPress and checking real screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 - Populate real guide posts in the matching categories and check landing-page/archive/search card density on mobile screenshots.
 

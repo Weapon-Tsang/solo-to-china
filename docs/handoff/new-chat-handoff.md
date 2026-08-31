@@ -1,6 +1,6 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-08-23
+Date: 2026-08-31
 
 Use this document to continue the SoloToChina WordPress project in a new Codex/ChatGPT conversation.
 
@@ -100,6 +100,7 @@ Project-owned WordPress code lives only in:
 
 ```text
 wp-content/themes/solo-to-china/
+wp-content/themes/solo-to-china-child/
 wp-content/plugins/solo-to-china-tools/
 ```
 
@@ -196,6 +197,28 @@ wp-content/themes/solo-to-china/assets/images/guide-card-bg.png
 
 The current homepage design should not be replaced casually. User approved this direction after multiple visual iterations.
 
+## Current Child Theme Status
+
+Child Theme: `SoloToChina Child`
+
+Version: `0.1.0`
+
+Location:
+
+```text
+wp-content/themes/solo-to-china-child/
+```
+
+Implemented:
+
+- Standards-compliant `Template: solo-to-china` metadata.
+- Parent -> Child -> design-system enqueue order without duplicate Parent loading.
+- Foundation tokens for colors, type, spacing, containers, grids, radii, shadows, controls, media ratios, breakpoints, motion, focus, reduced-motion, and forced-colors.
+- Initial component foundations for buttons, forms, cards, and media frames.
+- Child Theme responsibility documentation and a dated KEEP / REFACTOR / REPLACE / REMOVE audit.
+
+The next stage is shared Header/Footer/navigation/button/card renovation followed by the homepage. Do not copy the entire Parent Theme. Override a template only when CSS and a small Child function are insufficient.
+
 ## Current Plugin Status
 
 Plugin: `SoloToChina Tools`
@@ -289,6 +312,7 @@ Current generated artifacts:
 
 ```text
 dist/solo-to-china-theme.zip
+dist/solo-to-china-child-theme.zip
 dist/solo-to-china-tools-plugin.zip
 dist/release-manifest.txt
 ```
@@ -296,11 +320,13 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-25 01:17:41 +08:00
+Generated: 2026-08-31 21:36:39 +08:00
 Theme version: 0.21.0
-Theme SHA256: B8FD9048D694E852A74E99D373B5AB26BD6FA560C9DCB650F72E791ABCA391EA
+Theme SHA256: 25CAC4BFF9262FB540312049D8AC8BEAF5C53D451AD29BA5A1A0721EACC4F077
+Child Theme version: 0.1.0
+Child Theme SHA256: 9A95F3D48757F06AF2E883755D52593414E9FB1C787C71B67546AF07DB1352E8
 Plugin version: 0.21.0
-Plugin SHA256: 159A6CD5E32ADDDDE59E48CB0D5DA3349FB9BD64C2890ABF6513917DEA1A9370
+Plugin SHA256: 1231C7A0594ED007D538D56715729E278F2A0B5199C14944CFAD9DD98F003A4E
 ```
 
 Regenerate artifacts with:
@@ -314,8 +340,8 @@ Regenerate artifacts with:
 Preferred install:
 
 1. WordPress Admin > Appearance > Themes > Add New > Upload Theme.
-2. Upload `dist/solo-to-china-theme.zip`.
-3. Activate SoloToChina theme.
+2. Upload `dist/solo-to-china-theme.zip` and keep the Parent Theme installed.
+3. Upload `dist/solo-to-china-child-theme.zip` and activate SoloToChina Child.
 4. WordPress Admin > Plugins > Add New > Upload Plugin.
 5. Upload `dist/solo-to-china-tools-plugin.zip`.
 6. Activate SoloToChina Tools plugin.
@@ -331,6 +357,7 @@ Final directories must be:
 
 ```text
 /www/wwwroot/solotochina.com/wp-content/themes/solo-to-china/
+/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china-child/
 /www/wwwroot/solotochina.com/wp-content/plugins/solo-to-china-tools/
 ```
 

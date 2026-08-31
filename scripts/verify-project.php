@@ -58,6 +58,10 @@ $requiredFiles = [
     'wp-content/themes/solo-to-china/assets/images/card-zhangjiajie-attraction-hd.webp',
     'wp-content/themes/solo-to-china/assets/images/card-west-lake-hd.webp',
     'wp-content/themes/solo-to-china/assets/images/card-disney-hd.webp',
+    'wp-content/themes/solo-to-china-child/style.css',
+    'wp-content/themes/solo-to-china-child/functions.php',
+    'wp-content/themes/solo-to-china-child/README.md',
+    'wp-content/themes/solo-to-china-child/assets/css/design-system.css',
     'wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php',
     'wp-content/plugins/solo-to-china-tools/README.md',
     'wp-content/plugins/solo-to-china-tools/includes/attractions.php',
@@ -113,6 +117,11 @@ if (is_file($packageScriptPath)) {
     if (strpos($packageScript, 'Get-FileHash') === false) {
         $failures[] = 'Package script does not record zip checksums.';
     }
+    foreach (['solo-to-china-child', 'solo-to-china-child-theme.zip', 'Child Theme SHA256'] as $childPackageToken) {
+        if (strpos($packageScript, $childPackageToken) === false) {
+            $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
+        }
+    }
     if (strpos($packageScript, 'Theme version: 0.21.0') === false || strpos($packageScript, 'Plugin version: 0.21.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
@@ -126,6 +135,11 @@ if (is_file($installDocPath)) {
     }
     if (strpos($installDoc, 'Do not extract either zip directly inside') === false) {
         $failures[] = 'WordPress install handoff is missing aaPanel extraction warning.';
+    }
+    foreach (['Install SoloToChina Parent Theme first', 'Activate SoloToChina Child'] as $childInstallToken) {
+        if (strpos($installDoc, $childInstallToken) === false) {
+            $failures[] = "WordPress install handoff is missing Child Theme install order: {$childInstallToken}";
+        }
     }
 }
 
@@ -271,6 +285,36 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     foreach (['Quick answer', 'What to set up before arrival', 'Step-by-step setup', 'What can go wrong', 'Backup plan', 'FAQ'] as $patternText) {
         if (strpos($functions, $patternText) === false) {
             $failures[] = "Survival Kit content pattern is missing section: {$patternText}";
+        }
+    }
+}
+
+$childThemeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/style.css';
+$childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/functions.php';
+$childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
+if (is_file($childThemeStylePath)) {
+    $childThemeStyle = file_get_contents($childThemeStylePath);
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.1.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+        if (strpos($childThemeStyle, $childHeaderToken) === false) {
+            $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
+        }
+    }
+}
+
+if (is_file($childThemeFunctionsPath)) {
+    $childThemeFunctions = file_get_contents($childThemeFunctionsPath);
+    foreach (['STC_CHILD_VERSION', 'wp_enqueue_scripts', 'stc-main', 'get_stylesheet_uri', 'get_stylesheet_directory_uri', 'stc-child-design-system'] as $childFunctionToken) {
+        if (strpos($childThemeFunctions, $childFunctionToken) === false) {
+            $failures[] = "Child Theme resource loading is missing: {$childFunctionToken}";
+        }
+    }
+}
+
+if (is_file($childThemeDesignSystemPath)) {
+    $childThemeDesignSystem = file_get_contents($childThemeDesignSystemPath);
+    foreach (['--stc-color-ink', '--stc-font-sans', '--stc-space-', '--stc-container-max', '--stc-grid-gap', '--stc-radius-', '--stc-shadow-', '--stc-control-height', '--stc-image-ratio', '--stc-motion-duration', ':focus-visible', 'prefers-reduced-motion'] as $designSystemToken) {
+        if (strpos($childThemeDesignSystem, $designSystemToken) === false) {
+            $failures[] = "Child Theme design system is missing: {$designSystemToken}";
         }
     }
 }
