@@ -122,7 +122,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.21.0`
+Version: `0.22.0`
 
 Location:
 
@@ -211,6 +211,12 @@ wp-content/themes/solo-to-china-child/
 
 Implemented:
 
+- Versioned Content Contract `1.0.0` in `content-contract/content-contract.v1.json`.
+- Public read-only `GET /wp-json/stc/v1/content-contract` endpoint with cache validators.
+- Four stable guide types and category-compatible explicit REST metadata.
+- Sixteen component capability definitions without CSS values or internal provenance.
+- Contract verification through `scripts/verify-content-contract.ps1` and the primary verifier.
+
 - Standards-compliant `Template: solo-to-china` metadata.
 - Parent -> Child -> design-system enqueue order without duplicate Parent loading.
 - Foundation tokens for colors, type, spacing, containers, grids, radii, shadows, controls, media ratios, breakpoints, motion, focus, reduced-motion, and forced-colors.
@@ -231,7 +237,7 @@ Implemented:
 - Ephemeral Playground article fixtures for all three guide families; these do not alter production content or add a static demo.
 - Article Playwright QA at 1440, 768, 390, and 375, plus City and Survival Kit branch checks at 390, with one H1, correct navigation/Breadcrumb state, zero overflow, and zero console errors/warnings.
 
-The next stage is the City Guides / Attraction Guides / Survival Kit hub family. Do not copy the entire Parent Theme. Override a template only when CSS and a small Child function are insufficient.
+The active Content Component System work is at Phase B: core editorial Gutenberg semantic classes and Child Theme component visuals. Do not change the completed Home or Article shell renovation, and do not copy the Parent Theme into the Child Theme.
 
 ## Current Plugin Status
 

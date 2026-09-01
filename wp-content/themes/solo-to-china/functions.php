@@ -9,7 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.21.0' );
+define( 'STC_THEME_VERSION', '0.22.0' );
+
+require_once get_template_directory() . '/inc/content-contract.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -90,6 +92,10 @@ function stc_core_guide_categories() {
 			'name'        => 'Attraction Guides',
 			'description' => 'Scenic spot and attraction guides for timing, transport, tickets, and route planning.',
 		],
+		'travel-guides'     => [
+			'name'        => 'Travel Guides',
+			'description' => 'General travel guides using the default SoloToChina article shell.',
+		],
 	];
 }
 
@@ -137,7 +143,9 @@ function stc_is_attraction_guide_post( $post_id = null ) {
 		return false;
 	}
 
-	return has_category( 'attraction-guides', $post_id ) || has_tag( 'attraction-guide', $post_id );
+	$explicit_type = stc_get_explicit_guide_type( $post_id );
+
+	return 'attraction-guide' === $explicit_type || ( ! $explicit_type && ( has_category( 'attraction-guides', $post_id ) || has_tag( 'attraction-guide', $post_id ) ) );
 }
 
 function stc_is_city_guide_post( $post_id = null ) {
@@ -147,7 +155,9 @@ function stc_is_city_guide_post( $post_id = null ) {
 		return false;
 	}
 
-	return has_category( 'city-guides', $post_id ) || has_tag( 'city-guide', $post_id );
+	$explicit_type = stc_get_explicit_guide_type( $post_id );
+
+	return 'city-guide' === $explicit_type || ( ! $explicit_type && ( has_category( 'city-guides', $post_id ) || has_tag( 'city-guide', $post_id ) ) );
 }
 
 function stc_is_survival_kit_post( $post_id = null ) {
@@ -157,11 +167,18 @@ function stc_is_survival_kit_post( $post_id = null ) {
 		return false;
 	}
 
-	return has_category( 'survival-kit', $post_id ) || has_tag( 'survival-kit', $post_id );
+	$explicit_type = stc_get_explicit_guide_type( $post_id );
+
+	return 'survival-kit' === $explicit_type || ( ! $explicit_type && ( has_category( 'survival-kit', $post_id ) || has_tag( 'survival-kit', $post_id ) ) );
 }
 
 function stc_get_guide_type_slug( $post_id = null ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
+	$explicit_type = stc_get_explicit_guide_type( $post_id );
+
+	if ( $explicit_type ) {
+		return $explicit_type;
+	}
 
 	if ( stc_is_survival_kit_post( $post_id ) ) {
 		return 'survival-kit';

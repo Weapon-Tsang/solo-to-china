@@ -52,7 +52,7 @@ $PluginHash = (Get-FileHash -LiteralPath $PluginZip -Algorithm SHA256).Hash
     "SoloToChina release artifacts",
     "Generated: $((Get-Date).ToString('yyyy-MM-dd HH:mm:ss zzz'))",
     "",
-    "Theme version: 0.21.0",
+    "Theme version: 0.22.0",
     "Theme: solo-to-china-theme.zip",
     "Theme SHA256: $ThemeHash",
     "",

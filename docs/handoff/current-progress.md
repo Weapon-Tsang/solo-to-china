@@ -37,7 +37,19 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.21.0`.
+Current theme version: `0.22.0`.
+
+Content Contract Phase A is complete:
+
+- Added the canonical `content-contract/content-contract.v1.json` at Contract version `1.0.0`, independent from the Theme version.
+- Defined four stable guide types, category mappings, shell behaviors, component allowlists, and optional dynamic capabilities.
+- Defined 16 machine-readable core, editorial, image, and contextual component capabilities without exposing CSS values or internal research provenance.
+- Added the public read-only `GET /wp-json/stc/v1/content-contract` endpoint with ETag, Last-Modified, and Cache-Control headers.
+- Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
+- Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
+- Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
+- Real Playground REST checks returned Contract `1.0.0`, Theme `0.22.0`, four guide types, 16 components, both REST meta fields, and the expected cache headers.
+- Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
 
@@ -260,7 +272,10 @@ For deployment, use the local zip artifacts as the source of truth.
 
 Reasonable next bounded increments:
 
-- Renovate the City Guides / Attraction Guides / Survival Kit hub family in the Child Theme while preserving content-first card behavior and responsive featured images.
+- Implement the Contract v1 core editorial Gutenberg semantic classes and Child Theme `content-components.css` without changing Home or the Article shell.
+- Add the three declared dynamic renderers while preserving SoloToChina Tools ownership of Ticket behavior.
+- Complete editor styles, structured fixtures, integration tests, and CMS-facing documentation.
+- Later renovate the City Guides / Attraction Guides / Survival Kit hub family while preserving content-first card behavior and responsive featured images.
 - Improve article spacing and touch targets after installing the Child Theme on WordPress and checking real-content screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 - Populate real guide posts in the matching categories and check landing-page/archive/search card density on mobile screenshots.

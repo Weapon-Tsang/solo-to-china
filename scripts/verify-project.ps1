@@ -6,12 +6,16 @@ $RequiredFiles = @(
     "docs/handoff/current-progress.md",
     "docs/handoff/new-chat-handoff.md",
     "docs/deployment/wordpress-install.md",
+    "docs/architecture/content-component-system.md",
     "scripts/package-release.ps1",
+    "scripts/verify-content-contract.ps1",
     "scripts/playground-blueprint.json",
     "scripts/start-preview.ps1",
     "wp-content/themes/solo-to-china/style.css",
     "wp-content/themes/solo-to-china/README.md",
     "wp-content/themes/solo-to-china/functions.php",
+    "wp-content/themes/solo-to-china/inc/content-contract.php",
+    "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json",
     "wp-content/themes/solo-to-china/header.php",
     "wp-content/themes/solo-to-china/footer.php",
     "wp-content/themes/solo-to-china/index.php",
@@ -126,7 +130,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.21.0") -or (-not $PackageScript.Contains("Child Theme version: 0.3.0")) -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.22.0") -or (-not $PackageScript.Contains("Child Theme version: 0.3.0")) -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -179,8 +183,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.21.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.21.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.22.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.22.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -193,7 +197,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.21.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.22.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -253,8 +257,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.21.0'")) {
-		$Failures.Add("Theme asset version is not 0.21.0.")
+    if (-not $Functions.Contains("'0.22.0'")) {
+		$Failures.Add("Theme asset version is not 0.22.0.")
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")

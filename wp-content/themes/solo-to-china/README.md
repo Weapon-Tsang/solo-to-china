@@ -2,9 +2,12 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.21.0`.
+Current version: `0.22.0`.
 
 The theme owns:
+
+- The versioned Content Component Capability Contract and public read-only REST endpoint.
+- Stable guide type metadata, Contract version metadata, and category-compatible guide shell routing.
 
 - Approved image-led homepage layout.
 - Homepage-reference visual system for landing pages, guide articles, image cards, header states, and CTA bands.
