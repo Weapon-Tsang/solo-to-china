@@ -1,0 +1,42 @@
+/* Parent Theme editor fallback: readable content without the Child Theme. */
+
+.editor-styles-wrapper {
+	color: #18241f;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-size: 17px;
+	line-height: 1.75;
+	padding-inline: 24px;
+}
+
+.editor-styles-wrapper .wp-block {
+	max-width: 720px;
+}
+
+.editor-styles-wrapper .wp-block[data-align="wide"] {
+	max-width: 1040px;
+}
+
+.editor-styles-wrapper :where(h1, h2, h3) {
+	font-family: Georgia, "Times New Roman", serif;
+	line-height: 1.18;
+}
+
+.editor-styles-wrapper .stc-content-block,
+.editor-styles-wrapper .stc-dynamic-component {
+	border: 1px solid #dfe5df;
+	box-sizing: border-box;
+	margin-block: 32px;
+	padding: 24px;
+}
+
+.editor-styles-wrapper .stc-content-image,
+.editor-styles-wrapper .stc-content-image img {
+	height: auto;
+	max-width: 100%;
+}
+
+.editor-styles-wrapper .stc-content-image figcaption {
+	color: #627068;
+	font-size: 13px;
+	text-align: start;
+}

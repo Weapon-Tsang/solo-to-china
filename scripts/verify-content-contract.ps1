@@ -6,6 +6,9 @@ $RuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-cont
 $ComponentsRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-components.php"
 $RenderersRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-renderers.php"
 $ComponentsCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+$ParentEditorCssPath = Join-Path $Root "wp-content/themes/solo-to-china/assets/css/editor-style.css"
+$ChildEditorCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/editor-style.css"
+$PreviewFixturesPath = Join-Path $Root "scripts/playground-fixtures.php"
 $ThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china/functions.php"
 $Failures = New-Object System.Collections.Generic.List[string]
 
@@ -33,8 +36,8 @@ foreach ($TopLevelKey in @("contract_version", "theme_version", "guide_types", "
 if ($Contract.contract_version -ne "1.0.0") {
     Add-ContractFailure "Content Contract version must be 1.0.0."
 }
-if ($Contract.theme_version -ne "0.23.0") {
-    Add-ContractFailure "Content Contract theme_version must be 0.23.0."
+if ($Contract.theme_version -ne "0.24.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.24.0."
 }
 
 $ExpectedGuideTypes = [ordered]@{
@@ -180,13 +183,38 @@ if (-not (Test-Path -LiteralPath $ComponentsCssPath -PathType Leaf)) {
     Add-ContractFailure "Child Theme Content Component CSS is missing."
 } else {
     $ComponentsCss = Get-Content -LiteralPath $ComponentsCssPath -Raw
-    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--faq", ".stc-dynamic-component", ".stc-dynamic-component--planner", ".stc-dynamic-component--ticket", ".stc-dynamic-component--affiliate", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--faq", ".stc-content-image", ".stc-content-image--evidence", ".stc-content-image--context", "figcaption", "height: auto", "max-width: 100%", ".stc-dynamic-component", ".stc-dynamic-component--planner", ".stc-dynamic-component--ticket", ".stc-dynamic-component--affiliate", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
         if (-not $ComponentsCss.Contains($CssToken)) {
             Add-ContractFailure "Content Component CSS is missing: $CssToken"
         }
     }
     if ($ComponentsCss -match "#[0-9a-fA-F]{3,8}") {
         Add-ContractFailure "Content Component CSS introduces raw color values instead of Design System tokens."
+    }
+}
+
+foreach ($EditorCssDefinition in @(
+    @{ Path = $ParentEditorCssPath; Name = "Parent"; Tokens = @(".editor-styles-wrapper", ".stc-content-block", ".stc-dynamic-component", ".stc-content-image") },
+    @{ Path = $ChildEditorCssPath; Name = "Child"; Tokens = @("design-system.css", "content-components.css", ".editor-styles-wrapper", "--stc-color-", "--stc-container-reading") }
+)) {
+    if (-not (Test-Path -LiteralPath $EditorCssDefinition.Path -PathType Leaf)) {
+        Add-ContractFailure "$($EditorCssDefinition.Name) Theme editor stylesheet is missing."
+        continue
+    }
+    $EditorCss = Get-Content -LiteralPath $EditorCssDefinition.Path -Raw
+    foreach ($EditorCssToken in $EditorCssDefinition.Tokens) {
+        if (-not $EditorCss.Contains($EditorCssToken)) {
+            Add-ContractFailure "$($EditorCssDefinition.Name) Theme editor stylesheet is missing: $EditorCssToken"
+        }
+    }
+}
+
+if (Test-Path -LiteralPath $PreviewFixturesPath -PathType Leaf) {
+    $PreviewFixtures = Get-Content -LiteralPath $PreviewFixturesPath -Raw
+    foreach ($MediaFixtureToken in @("wp_upload_bits", "wp_insert_attachment", "wp_generate_attachment_metadata", "wp_get_attachment_image", "stc-content-image--context", "'loading'", "'lazy'", "'sizes'")) {
+        if (-not $PreviewFixtures.Contains($MediaFixtureToken)) {
+            Add-ContractFailure "Playground Media fixture is missing: $MediaFixtureToken"
+        }
     }
 }
 

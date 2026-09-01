@@ -9,7 +9,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.5.0' );
+define( 'STC_CHILD_VERSION', '0.6.0' );
+
+/**
+ * Replace the Parent fallback editor stylesheet with the Child visual system.
+ *
+ * @return void
+ */
+function stc_child_add_editor_styles() {
+	remove_editor_styles();
+	add_editor_style( 'assets/css/editor-style.css' );
+}
+add_action( 'after_setup_theme', 'stc_child_add_editor_styles', 20 );
 
 /**
  * Load Child Theme presentation after the Parent Theme stylesheet.

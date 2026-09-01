@@ -122,7 +122,7 @@ Do not edit:
 
 Theme: `SoloToChina`
 
-Version: `0.23.0`
+Version: `0.24.0`
 
 Location:
 
@@ -201,7 +201,7 @@ The current homepage design should not be replaced casually. User approved this 
 
 Child Theme: `SoloToChina Child`
 
-Version: `0.5.0`
+Version: `0.6.0`
 
 Location:
 
@@ -211,6 +211,10 @@ wp-content/themes/solo-to-china-child/
 
 Implemented:
 
+- Parent/Child Gutenberg editor styles with a Parent fallback and Child Design System parity.
+- Server-rendered stable H2 IDs that preserve explicit anchors and resolve duplicate IDs.
+- Native responsive WordPress Media presentation with intrinsic ratios, alt/caption treatment, and public image roles.
+- A real ephemeral Media fixture whose output is verified for `srcset`, `sizes`, lazy loading, async decoding, and stable dimensions.
 - Safe Parent Theme dynamic renderers for Planner CTA, Ticket Reminder, and Affiliate CTA.
 - HTTPS-only external CTA validation, escaped output, stable anchors, safe external rel attributes, and visible affiliate disclosure.
 - Ticket Reminder presentation delegates to the Plugin shortcode and has an accessible Plugin-inactive fallback.
@@ -247,7 +251,7 @@ Implemented:
 - Ephemeral Playground article fixtures for all three guide families; these do not alter production content or add a static demo.
 - Article Playwright QA at 1440, 768, 390, and 375, plus City and Survival Kit branch checks at 390, with one H1, correct navigation/Breadcrumb state, zero overflow, and zero console errors/warnings.
 
-The active Content Component System work is at Phase D: responsive Media rendering, stable anchor behavior, and Gutenberg editor visual parity. Do not change the completed Home or Article shell renovation, and do not copy Ticket logic from the Plugin into either Theme.
+The active Content Component System work is at Phase E: final integration/regression coverage, Parent fallback verification, documentation cleanup, release packaging, and final push. Do not change the completed Home or Article shell renovation, and do not copy Ticket logic from the Plugin into either Theme.
 
 ## Current Plugin Status
 

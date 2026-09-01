@@ -12,6 +12,89 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Create one ephemeral WordPress Media attachment from a project-owned image.
+ *
+ * @return int Attachment ID, or zero when unavailable.
+ */
+function stc_playground_install_media_fixture() {
+	$existing = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'name'           => 'stc-playground-forbidden-city',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		)
+	);
+
+	if ( $existing ) {
+		return (int) $existing[0];
+	}
+
+	$source = get_template_directory() . '/assets/images/card-forbidden-city-hd.webp';
+	if ( ! is_readable( $source ) ) {
+		return 0;
+	}
+
+	$upload = wp_upload_bits( 'stc-playground-forbidden-city.webp', null, file_get_contents( $source ) );
+	if ( ! empty( $upload['error'] ) ) {
+		return 0;
+	}
+
+	$file_type     = wp_check_filetype( $upload['file'] );
+	$attachment_id = wp_insert_attachment(
+		array(
+			'post_mime_type' => $file_type['type'],
+			'post_title'     => 'Forbidden City visitor context',
+			'post_name'      => 'stc-playground-forbidden-city',
+			'post_status'    => 'inherit',
+		),
+		$upload['file']
+	);
+
+	if ( ! $attachment_id || is_wp_error( $attachment_id ) ) {
+		return 0;
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	$metadata = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
+	wp_update_attachment_metadata( $attachment_id, $metadata );
+	update_post_meta( $attachment_id, '_wp_attachment_image_alt', 'Visitors approaching the Forbidden City in Beijing' );
+
+	return (int) $attachment_id;
+}
+
+/**
+ * Render a core Image block from the ephemeral Media attachment.
+ *
+ * @param int $attachment_id Attachment ID.
+ * @return string
+ */
+function stc_playground_render_media_block( $attachment_id ) {
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	$image = wp_get_attachment_image(
+		$attachment_id,
+		'large',
+		false,
+		array(
+			'class'    => 'wp-image-' . $attachment_id,
+			'alt'      => 'Visitors approaching the Forbidden City in Beijing',
+			'loading'  => 'lazy',
+			'decoding' => 'async',
+			'sizes'    => '(max-width: 768px) calc(100vw - 40px), 670px',
+		)
+	);
+
+	return '<!-- wp:image {"id":' . (int) $attachment_id . ',"sizeSlug":"large","linkDestination":"none","className":"stc-content-image stc-content-image--context"} -->' .
+		'<figure class="wp-block-image size-large stc-content-image stc-content-image--context">' . $image .
+		'<figcaption class="wp-element-caption">The palace scale is easier to absorb when the visit leaves room for pauses.</figcaption></figure>' .
+		'<!-- /wp:image -->';
+}
+
+/**
  * Return representative articles composed only from supported Gutenberg blocks.
  *
  * @return array<int, array<string, string>>
@@ -77,10 +160,11 @@ HTML,
 			'content'        => <<<'HTML'
 <!-- wp:paragraph {"className":"stc-guide-intro"} --><p class="stc-guide-intro">The Forbidden City rewards a little preparation. Prioritize clear entry logistics and enough breathing room for a first visit.</p><!-- /wp:paragraph -->
 <!-- wp:group {"className":"stc-content-block stc-content-block--quick-facts","layout":{"type":"constrained"}} --><div class="wp-block-group stc-content-block stc-content-block--quick-facts"><!-- wp:heading {"level":2} --><h2 class="wp-block-heading">At a glance</h2><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><li><strong>Best time:</strong> First entry window.</li><li><strong>Time needed:</strong> Three to four hours.</li><li><strong>Bring:</strong> The original reservation passport.</li></ul><!-- /wp:list --></div><!-- /wp:group -->
+{{STC_MEDIA_BLOCK}}
 <!-- wp:heading --><h2 class="wp-block-heading">How to visit</h2><!-- /wp:heading -->
 <!-- wp:group {"className":"stc-content-block stc-content-block--steps","layout":{"type":"constrained"}} --><div class="wp-block-group stc-content-block stc-content-block--steps"><!-- wp:list {"ordered":true} --><ol class="wp-block-list"><li>Confirm the current opening calendar.</li><li>Arrive before the reservation window.</li><li>Follow the central halls, then choose one side gallery.</li><li>Exit north and walk away from the busiest pickup area.</li></ol><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:group {"className":"stc-content-block stc-content-block--warning","layout":{"type":"constrained"}} --><div class="wp-block-group stc-content-block stc-content-block--warning"><!-- wp:heading {"level":2} --><h2 class="wp-block-heading">Passport and booking warning</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Match every visitor name and passport number exactly, and carry the original passport used for the reservation.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
-<!-- wp:shortcode -->[stc_ticket_reminder attraction_slug="forbidden-city" title="Check the ticket timing before your Beijing days are fixed"]<!-- /wp:shortcode -->
+<!-- wp:shortcode -->[stc_ticket_reminder attraction_slug="forbidden-city" title="Check the ticket timing before your Beijing days are fixed" anchor="forbidden-city-ticket-reminder"]<!-- /wp:shortcode -->
 <!-- wp:group {"className":"stc-content-block stc-content-block--faq","layout":{"type":"constrained"}} --><div class="wp-block-group stc-content-block stc-content-block--faq"><!-- wp:heading {"level":2} --><h2 class="wp-block-heading">FAQ</h2><!-- /wp:heading --><!-- wp:details --><details class="wp-block-details"><summary>Can I buy at the entrance?</summary><!-- wp:paragraph --><p>Do not rely on same-day availability. Check the official release timing before finalizing the itinerary.</p><!-- /wp:paragraph --></details><!-- /wp:details --></div><!-- /wp:group -->
 HTML,
 		),
@@ -93,6 +177,8 @@ HTML,
  * @return void
  */
 function stc_playground_install_fixtures() {
+	$media_block = stc_playground_render_media_block( stc_playground_install_media_fixture() );
+
 	foreach ( stc_playground_fixture_definitions() as $fixture ) {
 		$term = get_term_by( 'slug', $fixture['category'], 'category' );
 		if ( ! $term ) {
@@ -109,7 +195,7 @@ function stc_playground_install_fixtures() {
 				'post_title'   => $fixture['title'],
 				'post_name'    => $fixture['slug'],
 				'post_excerpt' => $fixture['excerpt'],
-				'post_content' => $fixture['content'],
+				'post_content' => str_replace( '{{STC_MEDIA_BLOCK}}', $media_block, $fixture['content'] ),
 				'post_status'  => 'publish',
 				'post_type'    => 'post',
 			)

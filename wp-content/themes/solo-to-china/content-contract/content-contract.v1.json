@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "theme_version": "0.23.0",
+  "theme_version": "0.24.0",
   "guide_types": {
     "survival-kit": {
       "slug": "survival-kit",

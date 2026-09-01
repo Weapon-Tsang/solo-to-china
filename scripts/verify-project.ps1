@@ -31,6 +31,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/front-page.php",
     "wp-content/themes/solo-to-china/screenshot.png",
     "wp-content/themes/solo-to-china/assets/css/main.css",
+    "wp-content/themes/solo-to-china/assets/css/editor-style.css",
     "wp-content/themes/solo-to-china/assets/js/main.js",
     "wp-content/themes/solo-to-china/assets/images/hero-home.png",
     "wp-content/themes/solo-to-china/assets/images/guide-card-bg.png",
@@ -73,6 +74,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china-child/assets/css/home.css",
     "wp-content/themes/solo-to-china-child/assets/css/article.css",
     "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+    "wp-content/themes/solo-to-china-child/assets/css/editor-style.css",
     "wp-content/themes/solo-to-china-child/assets/js/site.js",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
     "wp-content/plugins/solo-to-china-tools/README.md",
@@ -134,7 +136,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.23.0") -or (-not $PackageScript.Contains("Child Theme version: 0.5.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.24.0") -or (-not $PackageScript.Contains("Child Theme version: 0.6.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -202,8 +204,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.23.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.23.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.24.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.24.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -216,7 +218,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.23.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.24.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -276,8 +278,13 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.23.0'")) {
-		$Failures.Add("Theme asset version is not 0.23.0.")
+    if (-not $Functions.Contains("'0.24.0'")) {
+		$Failures.Add("Theme asset version is not 0.24.0.")
+    }
+    foreach ($ContentEditorToken in @("editor-styles", "add_editor_style", "assets/css/editor-style.css", "stc_add_stable_content_heading_ids", "sanitize_title", "preg_replace_callback")) {
+        if (-not $Functions.Contains($ContentEditorToken)) {
+            $Failures.Add("Theme is missing stable content anchors or editor style support: $ContentEditorToken")
+        }
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")
@@ -342,7 +349,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.5.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.6.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -359,6 +366,11 @@ if (Test-Path -LiteralPath $ChildThemeFunctionsPath -PathType Leaf) {
     foreach ($ChildStageToken in @("stc-child-site", "stc-child-home", "is_front_page", "stc-child-article", "stc-child-content-components", "is_single", "stc-child-interactions", "stc_child_render_primary_navigation", "stc_child_prepend_guide_breadcrumbs")) {
         if (-not $ChildThemeFunctions.Contains($ChildStageToken)) {
             $Failures.Add("Child Theme shared/home asset stage is missing: $ChildStageToken")
+        }
+    }
+    foreach ($ChildEditorToken in @("stc_child_add_editor_styles", "add_editor_style", "assets/css/editor-style.css")) {
+        if (-not $ChildThemeFunctions.Contains($ChildEditorToken)) {
+            $Failures.Add("Child Theme editor visual parity is missing: $ChildEditorToken")
         }
     }
     if ($ChildThemeFunctions.Contains("str_contains(")) {

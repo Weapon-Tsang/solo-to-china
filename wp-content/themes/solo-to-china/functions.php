@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.23.0' );
+define( 'STC_THEME_VERSION', '0.24.0' );
 
 require_once get_template_directory() . '/inc/content-contract.php';
 require_once get_template_directory() . '/inc/content-components.php';
@@ -21,6 +21,8 @@ function stc_theme_setup() {
 	add_theme_support( 'post-thumbnails' );
 	add_image_size( 'stc-guide-card-2x', 960, 0, false );
 	add_theme_support( 'align-wide' );
+	add_theme_support( 'editor-styles' );
+	add_editor_style( 'assets/css/editor-style.css' );
 	add_theme_support( 'html5', [ 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ] );
 
 	register_nav_menus(
@@ -30,6 +32,60 @@ function stc_theme_setup() {
 	);
 }
 add_action( 'after_setup_theme', 'stc_theme_setup' );
+
+/**
+ * Add deterministic server-rendered IDs to content H2 elements.
+ *
+ * Explicit Gutenberg/CMS anchors are preserved. Missing or duplicate heading
+ * IDs receive readable stable slugs, so navigation remains useful without JS.
+ *
+ * @param string $content Rendered post content.
+ * @return string
+ */
+function stc_add_stable_content_heading_ids( $content ) {
+	if ( ! is_singular() || ! in_the_loop() || ! is_main_query() || false === stripos( $content, '<h2' ) ) {
+		return $content;
+	}
+
+	$used_ids = array();
+	$index    = 0;
+
+	return preg_replace_callback(
+		'/<h2\b([^>]*)>(.*?)<\/h2>/is',
+		function ( $matches ) use ( &$used_ids, &$index ) {
+			$index++;
+			$attributes  = $matches[1];
+			$inner_html  = $matches[2];
+			$explicit_id = '';
+
+			if ( preg_match( '/\sid=(["\'])(.*?)\1/i', $attributes, $id_match ) ) {
+				$explicit_id = sanitize_title( $id_match[2] );
+			}
+
+			$base_id = $explicit_id ? $explicit_id : sanitize_title( wp_strip_all_tags( $inner_html ) );
+			$base_id = $base_id ? $base_id : 'section-' . $index;
+			$heading_id = $base_id;
+			$suffix     = 2;
+
+			while ( isset( $used_ids[ $heading_id ] ) ) {
+				$heading_id = $base_id . '-' . $suffix;
+				$suffix++;
+			}
+
+			$used_ids[ $heading_id ] = true;
+
+			if ( $explicit_id ) {
+				$attributes = preg_replace( '/\sid=(["\']).*?\1/i', ' id="' . esc_attr( $heading_id ) . '"', $attributes, 1 );
+			} else {
+				$attributes = ' id="' . esc_attr( $heading_id ) . '"' . $attributes;
+			}
+
+			return '<h2' . $attributes . '>' . $inner_html . '</h2>';
+		},
+		$content
+	);
+}
+add_filter( 'the_content', 'stc_add_stable_content_heading_ids', 12 );
 
 function stc_enqueue_assets() {
 	wp_enqueue_style(

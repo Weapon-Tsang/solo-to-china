@@ -1,0 +1,39 @@
+@import url("./design-system.css");
+@import url("./content-components.css");
+
+/* Child Theme block-editor canvas, aligned with the public reading experience. */
+
+.editor-styles-wrapper {
+	background: var(--stc-color-surface);
+	color: var(--stc-color-ink-soft);
+	font-family: var(--stc-font-sans);
+	font-size: var(--stc-font-size-base);
+	line-height: 1.75;
+	padding-inline: var(--stc-container-gutter);
+}
+
+.editor-styles-wrapper .wp-block {
+	max-width: var(--stc-container-reading);
+}
+
+.editor-styles-wrapper .wp-block[data-align="wide"] {
+	max-width: var(--stc-container-wide);
+}
+
+.editor-styles-wrapper :where(h1, h2, h3) {
+	color: var(--stc-color-ink);
+	font-family: var(--stc-font-display);
+	line-height: 1.18;
+}
+
+.editor-styles-wrapper a {
+	color: var(--stc-color-jade);
+}
+
+.editor-styles-wrapper .stc-dynamic-component {
+	pointer-events: none;
+}
+
+.editor-styles-wrapper .stc-content-image {
+	margin-block: var(--stc-space-8);
+}

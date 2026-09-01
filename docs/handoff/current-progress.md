@@ -37,7 +37,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.23.0`.
+Current theme version: `0.24.0`.
 
 Content Contract Phase A is complete:
 
@@ -134,7 +134,7 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Child Theme Status
 
-Current Child Theme version: `0.4.0`.
+Current Child Theme version: `0.6.0`.
 
 Content Component System Phase B is complete:
 
@@ -155,6 +155,15 @@ Content Component System Phase C is complete:
 - Plugin asset detection now covers posts containing the Theme-level Ticket Reminder shortcode, so the delegated form loads its existing CSS/JavaScript without Theme coupling.
 - Child Theme `0.5.0` provides restrained dynamic-component layouts and contextual Ticket form containment using Design System tokens.
 - Playwright confirmed the Plugin form is delegated exactly once, Forbidden City is preselected, controls retain 46px height, Planner/Affiliate links carry the required safety attributes and disclosures, and checked desktop/mobile pages have no overflow or console errors.
+
+Content Component System Phase D is complete:
+
+- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.6.0` replaces it with a Design System/Content Component editor canvas.
+- Server-side H2 anchor generation preserves explicit public anchors, adds readable IDs when absent, and suffixes duplicates before JavaScript enhancement.
+- Child Theme adds responsive WordPress Media styling for context, evidence, illustration, and decorative roles without forcing image ratios or publishing internal provenance.
+- Playground creates a real ephemeral Media attachment from a project image and inserts it through `wp_get_attachment_image`, rather than hardcoding an external image or custom HTML block.
+- Raw response checks confirmed five server-rendered unique H2 IDs and Media output with intrinsic 819x1024 dimensions, responsive candidates, `sizes`, `loading="lazy"`, `decoding="async"`, alt text, and caption.
+- Playwright confirmed the browser selected a 768px candidate for a 670px desktop render and a 350px candidate for a 350px mobile render, with zero page overflow and zero console errors/warnings.
 
 The first independent Child Theme foundation stage is complete:
 

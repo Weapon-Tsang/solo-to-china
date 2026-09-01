@@ -1,7 +1,7 @@
 # SoloToChina Content Component System
 
 Current Content Contract version: `1.0.0`  
-Compatible Parent Theme version: `0.23.0`
+Compatible Parent Theme version: `0.24.0`
 
 ## Ownership
 
@@ -89,6 +89,14 @@ Comparison tables scroll within their own container on narrow screens instead of
 Components marked `anchorable` accept stable public anchors suitable for section navigation and media placement such as `getting-there`. The image capability accepts a WordPress Media ID, alt text, optional caption/role, and an optional `after_block_id` relation.
 
 Internal evidence, claim, source, or authorization data must never be serialized into public HTML attributes. WordPress only renders already-ingested Media through normal responsive image and caption behavior.
+
+The Parent Theme adds missing H2 IDs on the server after block and shortcode rendering. Explicit Gutenberg/CMS anchors are preserved; missing and duplicate IDs receive deterministic readable suffixes. The existing JavaScript TOC therefore enhances already-addressable HTML instead of being the only source of section IDs.
+
+Content images remain native WordPress Media. Core attachment rendering provides intrinsic `width`/`height`, `srcset`, `sizes`, lazy loading, async decoding, alt text, and semantic captions. The Child Theme styles the shared `.stc-content-image` family without overriding intrinsic aspect ratios; optional public roles (`evidence`, `context`, `illustration`, `decorative`) only affect presentation.
+
+## Editor Parity
+
+The Parent Theme ships a small independent editor stylesheet so it stays usable when activated alone. When the Child Theme is active, it replaces that fallback with an editor stylesheet that imports the Child Design System and Content Component visuals. The editor canvas uses the same reading width, typography, semantic component classes, responsive Media treatment, and accessible color hierarchy as the public article surface.
 
 ## Dynamic Renderers
 
