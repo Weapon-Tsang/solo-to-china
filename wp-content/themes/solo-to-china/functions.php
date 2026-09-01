@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'STC_THEME_VERSION', '0.22.0' );
 
 require_once get_template_directory() . '/inc/content-contract.php';
+require_once get_template_directory() . '/inc/content-components.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );

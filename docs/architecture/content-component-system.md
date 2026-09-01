@@ -73,6 +73,17 @@ Contract v1 exposes 16 capabilities:
 
 Core and editorial components use native Gutenberg blocks plus stable `stc-content-block--*` semantic classes. Dynamic components declare renderer keys; the CMS stores only intent and safe parameters, never copied feature HTML.
 
+The Parent Theme registers nine reusable, unlocked Gutenberg patterns under the `SoloToChina Content` category. They are component starters rather than fixed topic templates: editors and CMS clients may combine them in any valid order and quantity. The Child Theme owns their visual treatment in `assets/css/content-components.css`; the Contract never publishes those CSS decisions.
+
+The shared editorial families are:
+
+- Answer and summary: Quick Answer, Key Takeaways, Quick Facts
+- Guidance: Tip, Warning, Steps, Checklist
+- Structured comparison: Comparison Table
+- Disclosure: FAQ using native `details` and `summary`
+
+Comparison tables scroll within their own container on narrow screens instead of widening the page. FAQ rows retain native keyboard behavior. Component CSS uses the established design tokens and reduced-motion behavior, with no CMS-supplied inline styles.
+
 ## Block Anchors And Images
 
 Components marked `anchorable` accept stable public anchors suitable for section navigation and media placement such as `getting-there`. The image capability accepts a WordPress Media ID, alt text, optional caption/role, and an optional `after_block_id` relation.
@@ -85,3 +96,7 @@ Internal evidence, claim, source, or authorization data must never be serialized
 - Historical Gutenberg posts require no Contract metadata and continue using taxonomy fallback.
 - The Parent Theme remains a functional fallback without the Child Theme.
 - Content structure is intentionally free; components may appear in different counts and orders without creating topic-specific templates.
+
+## Integration Fixtures
+
+`scripts/playground-fixtures.php` installs three disposable Gutenberg articles for Survival Kit, City Guide, and Attraction Guide flows. The fixtures set explicit guide metadata and exercise different component combinations. They are mounted only by the local WordPress Playground script, are excluded from release packages, and are not production content or a static demo.

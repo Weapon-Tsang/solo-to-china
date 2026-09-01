@@ -18,12 +18,24 @@ if (-not $NpxCommand) {
 
 Write-Host "Starting SoloToChina WordPress Playground at http://127.0.0.1:$Port"
 
-& $NpxCommand.Source `
-    --yes `
-    "@wp-playground/cli@latest" `
-    server `
-    "--port=$Port" `
-    "--blueprint=$Blueprint" `
-    --mount-dir $ParentTheme "/wordpress/wp-content/themes/solo-to-china" `
-    --mount-dir $ChildTheme "/wordpress/wp-content/themes/solo-to-china-child" `
-    --mount-dir $ToolsPlugin "/wordpress/wp-content/plugins/solo-to-china-tools"
+$PlaygroundArguments = @(
+    "--yes"
+    "@wp-playground/cli@latest"
+    "server"
+    "--port=$Port"
+    "--blueprint=$Blueprint"
+    "--mount-dir"
+    $ParentTheme
+    "/wordpress/wp-content/themes/solo-to-china"
+    "--mount-dir"
+    $ChildTheme
+    "/wordpress/wp-content/themes/solo-to-china-child"
+    "--mount-dir"
+    $ToolsPlugin
+    "/wordpress/wp-content/plugins/solo-to-china-tools"
+    "--mount-dir"
+    $PSScriptRoot
+    "/tmp/solo-to-china-scripts"
+)
+
+& $NpxCommand.Source @PlaygroundArguments

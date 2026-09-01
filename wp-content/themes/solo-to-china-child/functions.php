@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.3.0' );
+define( 'STC_CHILD_VERSION', '0.4.0' );
 
 /**
  * Load Child Theme presentation after the Parent Theme stylesheet.
@@ -54,6 +54,13 @@ function stc_child_enqueue_assets() {
 			'stc-child-article',
 			get_stylesheet_directory_uri() . '/assets/css/article.css',
 			[ 'stc-child-site' ],
+			STC_CHILD_VERSION
+		);
+
+		wp_enqueue_style(
+			'stc-child-content-components',
+			get_stylesheet_directory_uri() . '/assets/css/content-components.css',
+			[ 'stc-child-article' ],
 			STC_CHILD_VERSION
 		);
 	}

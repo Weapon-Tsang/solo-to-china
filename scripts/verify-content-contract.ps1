@@ -3,6 +3,8 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 $ContractPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json"
 $RuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-contract.php"
+$ComponentsRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-components.php"
+$ComponentsCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
 $ThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china/functions.php"
 $Failures = New-Object System.Collections.Generic.List[string]
 
@@ -132,6 +134,39 @@ if (Test-Path -LiteralPath $ThemeFunctionsPath -PathType Leaf) {
     $ThemeFunctions = Get-Content -LiteralPath $ThemeFunctionsPath -Raw
     if (-not $ThemeFunctions.Contains("inc/content-contract.php")) {
         Add-ContractFailure "Parent Theme does not load the Content Contract runtime."
+    }
+    if (-not $ThemeFunctions.Contains("inc/content-components.php")) {
+        Add-ContractFailure "Parent Theme does not load the Content Component runtime."
+    }
+}
+
+if (-not (Test-Path -LiteralPath $ComponentsRuntimePath -PathType Leaf)) {
+    Add-ContractFailure "Content Component Gutenberg runtime is missing."
+} else {
+    $ComponentsRuntime = Get-Content -LiteralPath $ComponentsRuntimePath -Raw
+    foreach ($PatternToken in @("register_block_pattern", "solo-to-china/content-components", "stc-content-block--quick-answer", "stc-content-block--key-takeaways", "stc-content-block--quick-facts", "stc-content-block--tip", "stc-content-block--warning", "stc-content-block--steps", "stc-content-block--checklist", "stc-content-block--comparison", "stc-content-block--faq", "<!-- wp:group", "<!-- wp:details", "<!-- wp:table")) {
+        if (-not $ComponentsRuntime.Contains($PatternToken)) {
+            Add-ContractFailure "Content Component Gutenberg runtime is missing: $PatternToken"
+        }
+    }
+    foreach ($ForbiddenMarkupToken in @("<!-- wp:html", "<style", " style=")) {
+        if ($ComponentsRuntime.IndexOf($ForbiddenMarkupToken, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            Add-ContractFailure "Content Component patterns include forbidden markup: $ForbiddenMarkupToken"
+        }
+    }
+}
+
+if (-not (Test-Path -LiteralPath $ComponentsCssPath -PathType Leaf)) {
+    Add-ContractFailure "Child Theme Content Component CSS is missing."
+} else {
+    $ComponentsCss = Get-Content -LiteralPath $ComponentsCssPath -Raw
+    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--faq", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+        if (-not $ComponentsCss.Contains($CssToken)) {
+            Add-ContractFailure "Content Component CSS is missing: $CssToken"
+        }
+    }
+    if ($ComponentsCss -match "#[0-9a-fA-F]{3,8}") {
+        Add-ContractFailure "Content Component CSS introduces raw color values instead of Design System tokens."
     }
 }
 

@@ -134,7 +134,17 @@ Saved Guides use browser `localStorage` only. They do not write to WordPress use
 
 ## Child Theme Status
 
-Current Child Theme version: `0.3.0`.
+Current Child Theme version: `0.4.0`.
+
+Content Component System Phase B is complete:
+
+- Parent Theme registers nine reusable Gutenberg component patterns: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, and FAQ.
+- Patterns use core Group, Heading, Paragraph, List, Table, and Details blocks with stable semantic classes; they contain no Custom HTML blocks, inline styles, or fixed topic/article structures.
+- Child Theme `assets/css/content-components.css` provides token-driven editorial styling, local narrow-screen table scrolling, native FAQ disclosure treatment, long-text safeguards, and responsive behavior at 840px and 599px.
+- Child Theme assets remain ordered Parent -> Child base -> Design System -> Site -> Article -> Content Components.
+- Playground fixtures moved from a giant inline Blueprint string to `scripts/playground-fixtures.php`, with three disposable Gutenberg articles and explicit guide type/Contract metadata.
+- Real rendering checks passed at 1440, 768, 390, and 375: one H1, six representative components, zero page overflow, local table overflow at phone widths, 61px FAQ summary targets, no inline style attributes, and zero console errors/warnings.
+- Verification now rejects missing semantic components, Custom HTML/inline-style patterns, raw colors in component CSS, incomplete fixture coverage, and a preview that omits the fixture mount.
 
 The first independent Child Theme foundation stage is complete:
 

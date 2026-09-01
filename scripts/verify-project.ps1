@@ -10,11 +10,13 @@ $RequiredFiles = @(
     "scripts/package-release.ps1",
     "scripts/verify-content-contract.ps1",
     "scripts/playground-blueprint.json",
+    "scripts/playground-fixtures.php",
     "scripts/start-preview.ps1",
     "wp-content/themes/solo-to-china/style.css",
     "wp-content/themes/solo-to-china/README.md",
     "wp-content/themes/solo-to-china/functions.php",
     "wp-content/themes/solo-to-china/inc/content-contract.php",
+    "wp-content/themes/solo-to-china/inc/content-components.php",
     "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json",
     "wp-content/themes/solo-to-china/header.php",
     "wp-content/themes/solo-to-china/footer.php",
@@ -69,6 +71,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china-child/assets/css/site.css",
     "wp-content/themes/solo-to-china-child/assets/css/home.css",
     "wp-content/themes/solo-to-china-child/assets/css/article.css",
+    "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
     "wp-content/themes/solo-to-china-child/assets/js/site.js",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
     "wp-content/plugins/solo-to-china-tools/README.md",
@@ -130,7 +133,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.22.0") -or (-not $PackageScript.Contains("Child Theme version: 0.3.0")) -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.22.0") -or (-not $PackageScript.Contains("Child Theme version: 0.4.0")) -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -155,7 +158,7 @@ $PreviewScriptPath = Join-Path $Root "scripts/start-preview.ps1"
 $PreviewBlueprintPath = Join-Path $Root "scripts/playground-blueprint.json"
 if (Test-Path -LiteralPath $PreviewScriptPath -PathType Leaf) {
     $PreviewScript = Get-Content -LiteralPath $PreviewScriptPath -Raw
-    foreach ($PreviewToken in @('@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', '--mount-dir', 'playground-blueprint.json')) {
+    foreach ($PreviewToken in @('@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', 'solo-to-china-scripts', '--mount-dir', 'playground-blueprint.json')) {
         if (-not $PreviewScript.Contains($PreviewToken)) {
             $Failures.Add("WordPress Playground preview script is missing: $PreviewToken")
         }
@@ -163,9 +166,24 @@ if (Test-Path -LiteralPath $PreviewScriptPath -PathType Leaf) {
 }
 if (Test-Path -LiteralPath $PreviewBlueprintPath -PathType Leaf) {
     $PreviewBlueprint = Get-Content -LiteralPath $PreviewBlueprintPath -Raw
-    foreach ($BlueprintToken in @('activateTheme', 'solo-to-china-child', 'activatePlugin', 'solo-to-china-tools/solo-to-china-tools.php', 'runPHP', 'forbidden-city-first-time-visitor-guide', 'beijing-first-time-city-guide', 'china-mobile-payment-setup', '/%postname%/')) {
+    foreach ($BlueprintToken in @('activateTheme', 'solo-to-china-child', 'activatePlugin', 'solo-to-china-tools/solo-to-china-tools.php', 'runPHP', 'playground-fixtures.php', '/%postname%/')) {
         if (-not $PreviewBlueprint.Contains($BlueprintToken)) {
             $Failures.Add("WordPress Playground blueprint is missing: $BlueprintToken")
+        }
+    }
+}
+
+$PreviewFixturesPath = Join-Path $Root "scripts/playground-fixtures.php"
+if (Test-Path -LiteralPath $PreviewFixturesPath -PathType Leaf) {
+    $PreviewFixtures = Get-Content -LiteralPath $PreviewFixturesPath -Raw
+    foreach ($FixtureToken in @('forbidden-city-first-time-visitor-guide', 'beijing-first-time-city-guide', 'china-mobile-payment-setup', '_stc_guide_type', '_stc_content_contract_version', 'stc-content-block--quick-answer', 'stc-content-block--quick-facts', 'stc-content-block--warning', 'stc-content-block--steps', 'stc-content-block--checklist', 'stc-content-block--comparison', 'stc-content-block--faq', '[stc_planner_cta', '[stc_ticket_reminder')) {
+        if (-not $PreviewFixtures.Contains($FixtureToken)) {
+            $Failures.Add("WordPress Playground content fixtures are missing: $FixtureToken")
+        }
+    }
+    foreach ($ForbiddenFixtureToken in @('<!-- wp:html', '<style', ' style=')) {
+        if ($PreviewFixtures.IndexOf($ForbiddenFixtureToken, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            $Failures.Add("WordPress Playground content fixtures include forbidden markup: $ForbiddenFixtureToken")
         }
     }
 }
@@ -323,7 +341,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.3.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.4.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -337,7 +355,7 @@ if (Test-Path -LiteralPath $ChildThemeFunctionsPath -PathType Leaf) {
             $Failures.Add("Child Theme resource loading is missing: $ChildFunctionToken")
         }
     }
-    foreach ($ChildStageToken in @("stc-child-site", "stc-child-home", "is_front_page", "stc-child-article", "is_single", "stc-child-interactions", "stc_child_render_primary_navigation", "stc_child_prepend_guide_breadcrumbs")) {
+    foreach ($ChildStageToken in @("stc-child-site", "stc-child-home", "is_front_page", "stc-child-article", "stc-child-content-components", "is_single", "stc-child-interactions", "stc_child_render_primary_navigation", "stc_child_prepend_guide_breadcrumbs")) {
         if (-not $ChildThemeFunctions.Contains($ChildStageToken)) {
             $Failures.Add("Child Theme shared/home asset stage is missing: $ChildStageToken")
         }
