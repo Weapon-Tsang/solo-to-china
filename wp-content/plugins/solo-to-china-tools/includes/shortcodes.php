@@ -25,9 +25,23 @@ function stc_tools_group_attractions_by_city( $attractions ) {
 	return $grouped_attractions;
 }
 
-function stc_tools_render_ticket_tool() {
+function stc_tools_render_ticket_tool( $attributes = array() ) {
+	$attributes = shortcode_atts(
+		array(
+			'attraction_slug' => '',
+		),
+		(array) $attributes,
+		'solo_to_china_ticket_tool'
+	);
+
 	$attractions = stc_tools_get_attractions();
 	$attractions_by_city = stc_tools_group_attractions_by_city( $attractions );
+	$requested_attraction = sanitize_title( $attributes['attraction_slug'] );
+	$available_slugs      = wp_list_pluck( $attractions, 'slug' );
+
+	if ( ! in_array( $requested_attraction, $available_slugs, true ) ) {
+		$requested_attraction = '';
+	}
 
 	ob_start();
 	?>
@@ -45,6 +59,7 @@ function stc_tools_render_ticket_tool() {
 								data-booking-note="<?php echo esc_attr( $attraction['booking_note'] ); ?>"
 								data-passport-note="<?php echo esc_attr( $attraction['passport_note'] ); ?>"
 								data-lead-days="<?php echo esc_attr( (string) $attraction['booking_lead_days'] ); ?>"
+								<?php selected( $requested_attraction, $attraction['slug'] ); ?>
 							>
 								<?php echo esc_html( $attraction['name'] ); ?>
 							</option>

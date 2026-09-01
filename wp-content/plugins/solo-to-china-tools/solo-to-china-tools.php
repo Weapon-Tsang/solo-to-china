@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SoloToChina Tools
  * Description: Project-owned tools for SoloToChina, starting with the Attraction Ticket Reservation & Reminder.
- * Version: 0.21.0
+ * Version: 0.22.0
  * Author: SoloToChina
  * Text Domain: solo-to-china-tools
  * Requires at least: 6.5
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_TOOLS_VERSION', '0.21.0' );
+define( 'STC_TOOLS_VERSION', '0.22.0' );
 define( 'STC_TOOLS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'STC_TOOLS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -33,7 +33,10 @@ function stc_tools_should_enqueue_assets() {
 
 	$post = get_post();
 
-	return $post && has_shortcode( $post->post_content, 'solo_to_china_ticket_tool' );
+	return $post && (
+		has_shortcode( $post->post_content, 'solo_to_china_ticket_tool' ) ||
+		has_shortcode( $post->post_content, 'stc_ticket_reminder' )
+	);
 }
 
 function stc_tools_enqueue_assets() {

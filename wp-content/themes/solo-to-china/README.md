@@ -2,7 +2,7 @@
 
 Project-owned WordPress theme for SoloToChina.
 
-Current version: `0.22.0`.
+Current version: `0.23.0`.
 
 The theme owns:
 

@@ -9,10 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.22.0' );
+define( 'STC_THEME_VERSION', '0.23.0' );
 
 require_once get_template_directory() . '/inc/content-contract.php';
 require_once get_template_directory() . '/inc/content-components.php';
+require_once get_template_directory() . '/inc/content-renderers.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );

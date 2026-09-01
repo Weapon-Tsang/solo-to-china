@@ -1,7 +1,7 @@
 # SoloToChina Content Component System
 
 Current Content Contract version: `1.0.0`  
-Compatible Parent Theme version: `0.22.0`
+Compatible Parent Theme version: `0.23.0`
 
 ## Ownership
 
@@ -89,6 +89,18 @@ Comparison tables scroll within their own container on narrow screens instead of
 Components marked `anchorable` accept stable public anchors suitable for section navigation and media placement such as `getting-there`. The image capability accepts a WordPress Media ID, alt text, optional caption/role, and an optional `after_block_id` relation.
 
 Internal evidence, claim, source, or authorization data must never be serialized into public HTML attributes. WordPress only renders already-ingested Media through normal responsive image and caption behavior.
+
+## Dynamic Renderers
+
+The Parent Theme exposes three shortcode adapters whose names match the Contract renderer capabilities:
+
+- `[stc_planner_cta]`
+- `[stc_ticket_reminder]`
+- `[stc_affiliate_cta]`
+
+Planner and Affiliate CTAs accept plain visible text, a stable optional anchor, and an HTTPS destination. Invalid or incomplete external actions render nothing. External actions open with `rel="sponsored nofollow noopener"`, and Affiliate CTA always renders a visible disclosure.
+
+Ticket Reminder accepts only a sanitized attraction slug plus optional contextual copy. The Theme renders the surrounding editorial component and delegates the actual form to `[solo_to_china_ticket_tool attraction_slug="..."]`. The Tools plugin validates that slug against its own attraction dataset and owns all calculations, form behavior, reminder storage, import/export, and calendar output. When the Plugin is inactive, the Theme shows a small accessible link to Tools instead of copying feature logic.
 
 ## Backward Compatibility
 

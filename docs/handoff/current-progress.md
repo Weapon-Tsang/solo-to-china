@@ -37,7 +37,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.22.0`.
+Current theme version: `0.23.0`.
 
 Content Contract Phase A is complete:
 
@@ -146,6 +146,16 @@ Content Component System Phase B is complete:
 - Real rendering checks passed at 1440, 768, 390, and 375: one H1, six representative components, zero page overflow, local table overflow at phone widths, 61px FAQ summary targets, no inline style attributes, and zero console errors/warnings.
 - Verification now rejects missing semantic components, Custom HTML/inline-style patterns, raw colors in component CSS, incomplete fixture coverage, and a preview that omits the fixture mount.
 
+Content Component System Phase C is complete:
+
+- Parent Theme adds safe renderers for Planner CTA, Ticket Reminder, and Affiliate CTA, registered as the Contract shortcodes.
+- Planner and Affiliate destinations must be absolute HTTPS URLs; output is escaped, externally opened links use `sponsored nofollow noopener`, and Affiliate CTA always includes visible relationship disclosure.
+- Ticket Reminder accepts only a sanitized attraction slug and delegates the form to the Plugin shortcode. The Theme contains no attraction data, booking lead days, reminder calculation, storage, remote request, or scheduling logic.
+- Plugin `0.22.0` validates optional `attraction_slug` context against Plugin-owned data and preselects the matching option; invalid slugs fall back to the ordinary first option.
+- Plugin asset detection now covers posts containing the Theme-level Ticket Reminder shortcode, so the delegated form loads its existing CSS/JavaScript without Theme coupling.
+- Child Theme `0.5.0` provides restrained dynamic-component layouts and contextual Ticket form containment using Design System tokens.
+- Playwright confirmed the Plugin form is delegated exactly once, Forbidden City is preselected, controls retain 46px height, Planner/Affiliate links carry the required safety attributes and disclosures, and checked desktop/mobile pages have no overflow or console errors.
+
 The first independent Child Theme foundation stage is complete:
 
 - Added a standards-compliant `solo-to-china-child` with `Template: solo-to-china`.
@@ -183,7 +193,7 @@ The Guide / Article template stage is complete:
 
 ## Plugin Status
 
-Current tools plugin version: `0.21.0`.
+Current tools plugin version: `0.22.0`.
 
 The custom plugin owns the first tool only:
 

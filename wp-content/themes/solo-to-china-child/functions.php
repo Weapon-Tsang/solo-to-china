@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.4.0' );
+define( 'STC_CHILD_VERSION', '0.5.0' );
 
 /**
  * Load Child Theme presentation after the Parent Theme stylesheet.

@@ -23,9 +23,9 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.22.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.4.0` in `wp-content/themes/solo-to-china-child/`.
-- SoloToChina Tools plugin `0.21.0` in `wp-content/plugins/solo-to-china-tools/`.
+- Custom SoloToChina theme `0.23.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.5.0` in `wp-content/themes/solo-to-china-child/`.
+- SoloToChina Tools plugin `0.22.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.

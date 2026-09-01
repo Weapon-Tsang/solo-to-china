@@ -4,6 +4,7 @@ $Root = Split-Path -Parent $PSScriptRoot
 $ContractPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json"
 $RuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-contract.php"
 $ComponentsRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-components.php"
+$RenderersRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-renderers.php"
 $ComponentsCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
 $ThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china/functions.php"
 $Failures = New-Object System.Collections.Generic.List[string]
@@ -32,8 +33,8 @@ foreach ($TopLevelKey in @("contract_version", "theme_version", "guide_types", "
 if ($Contract.contract_version -ne "1.0.0") {
     Add-ContractFailure "Content Contract version must be 1.0.0."
 }
-if ($Contract.theme_version -ne "0.22.0") {
-    Add-ContractFailure "Content Contract theme_version must be 0.22.0."
+if ($Contract.theme_version -ne "0.23.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.23.0."
 }
 
 $ExpectedGuideTypes = [ordered]@{
@@ -138,6 +139,25 @@ if (Test-Path -LiteralPath $ThemeFunctionsPath -PathType Leaf) {
     if (-not $ThemeFunctions.Contains("inc/content-components.php")) {
         Add-ContractFailure "Parent Theme does not load the Content Component runtime."
     }
+    if (-not $ThemeFunctions.Contains("inc/content-renderers.php")) {
+        Add-ContractFailure "Parent Theme does not load the dynamic Content Component renderers."
+    }
+}
+
+if (-not (Test-Path -LiteralPath $RenderersRuntimePath -PathType Leaf)) {
+    Add-ContractFailure "Dynamic Content Component renderers are missing."
+} else {
+    $RenderersRuntime = Get-Content -LiteralPath $RenderersRuntimePath -Raw
+    foreach ($RendererToken in @("stc_render_planner_cta_component", "stc_render_ticket_reminder_component", "stc_render_affiliate_cta_component", "stc_planner_cta", "stc_ticket_reminder", "stc_affiliate_cta", "wp_parse_url", "https", "sponsored nofollow noopener", "shortcode_exists", "solo_to_china_ticket_tool", "do_shortcode", "esc_html", "esc_attr", "esc_url")) {
+        if (-not $RenderersRuntime.Contains($RendererToken)) {
+            Add-ContractFailure "Dynamic Content Component runtime is missing: $RendererToken"
+        }
+    }
+    foreach ($ForbiddenRendererToken in @("stc_tools_get_attractions", "booking_lead_days", "localStorage", "wp_insert_post", "wp_remote_get")) {
+        if ($RenderersRuntime.Contains($ForbiddenRendererToken)) {
+            Add-ContractFailure "Theme renderer crosses the Ticket Plugin or data boundary: $ForbiddenRendererToken"
+        }
+    }
 }
 
 if (-not (Test-Path -LiteralPath $ComponentsRuntimePath -PathType Leaf)) {
@@ -160,7 +180,7 @@ if (-not (Test-Path -LiteralPath $ComponentsCssPath -PathType Leaf)) {
     Add-ContractFailure "Child Theme Content Component CSS is missing."
 } else {
     $ComponentsCss = Get-Content -LiteralPath $ComponentsCssPath -Raw
-    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--faq", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--faq", ".stc-dynamic-component", ".stc-dynamic-component--planner", ".stc-dynamic-component--ticket", ".stc-dynamic-component--affiliate", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
         if (-not $ComponentsCss.Contains($CssToken)) {
             Add-ContractFailure "Content Component CSS is missing: $CssToken"
         }

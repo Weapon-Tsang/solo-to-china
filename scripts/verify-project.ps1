@@ -17,6 +17,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/functions.php",
     "wp-content/themes/solo-to-china/inc/content-contract.php",
     "wp-content/themes/solo-to-china/inc/content-components.php",
+    "wp-content/themes/solo-to-china/inc/content-renderers.php",
     "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json",
     "wp-content/themes/solo-to-china/header.php",
     "wp-content/themes/solo-to-china/footer.php",
@@ -133,7 +134,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.22.0") -or (-not $PackageScript.Contains("Child Theme version: 0.4.0")) -or (-not $PackageScript.Contains("Plugin version: 0.21.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.23.0") -or (-not $PackageScript.Contains("Child Theme version: 0.5.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -201,8 +202,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.22.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.22.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.23.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.23.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -215,7 +216,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.22.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.23.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -275,8 +276,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.22.0'")) {
-		$Failures.Add("Theme asset version is not 0.22.0.")
+    if (-not $Functions.Contains("'0.23.0'")) {
+		$Failures.Add("Theme asset version is not 0.23.0.")
     }
     if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
         $Failures.Add("Theme functions are missing the article-only local save renderer.")
@@ -341,7 +342,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.4.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.5.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -598,7 +599,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.21.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.22.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
@@ -606,11 +607,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.21.0")) {
-		$Failures.Add("Tools plugin header version is not 0.21.0.")
+    if (-not $Plugin.Contains("Version: 0.22.0")) {
+		$Failures.Add("Tools plugin header version is not 0.22.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.21.0'")) {
-		$Failures.Add("Tools plugin version constant is not 0.21.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.22.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.22.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -626,6 +627,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     }
     if (-not $Plugin.Contains("solo_to_china_ticket_tool")) {
         $Failures.Add("Tools plugin does not register the solo_to_china_ticket_tool shortcode boundary.")
+    }
+    foreach ($TicketContextToken in @("stc_ticket_reminder", "attraction_slug", "shortcode_atts", "selected(")) {
+        if (-not $PluginSource.Contains($TicketContextToken)) {
+            $Failures.Add("Tools plugin is missing contextual Ticket Reminder support: $TicketContextToken")
+        }
     }
     if (-not $PluginSource.Contains("data-stc-ticket-tool")) {
         $Failures.Add("Ticket tool markup is missing the frontend behavior hook.")
