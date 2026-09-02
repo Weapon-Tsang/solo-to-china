@@ -4,10 +4,21 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 $RegistryPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json"
 $OutputPath = Join-Path $Root "docs/COMPONENT_LIBRARY.md"
+$PublishedContractPath = Join-Path $Root "contracts/component-registry.json"
+$PageSchemaPath = Join-Path $Root "contracts/page-schema.json"
 $Registry = Get-Content -LiteralPath $RegistryPath -Raw | ConvertFrom-Json
 $CmsComponents = @($Registry.components | Where-Object { $_.cms_usable -eq $true })
 $InternalComponents = @($Registry.components | Where-Object { $_.cms_usable -ne $true })
 $Builder = [System.Text.StringBuilder]::new()
+
+function Write-JsonContract([string]$Path, $Value) {
+    $Directory = Split-Path -Parent $Path
+    if (-not (Test-Path -LiteralPath $Directory -PathType Container)) {
+        New-Item -ItemType Directory -Path $Directory | Out-Null
+    }
+    $Json = $Value | ConvertTo-Json -Depth 40
+    [System.IO.File]::WriteAllText($Path, $Json + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
+}
 
 function Add-Line([string]$Line = "") {
     [void]$Builder.AppendLine($Line)
@@ -137,4 +148,131 @@ Add-Line
 Add-Line "If an ID must be retired, mark it ``deprecated`` and document the compatibility renderer before changing CMS output. Visual refactors alone never justify changing a stable component ID."
 
 [System.IO.File]::WriteAllText($OutputPath, $Builder.ToString(), [System.Text.UTF8Encoding]::new($false))
-Write-Host "Generated docs/COMPONENT_LIBRARY.md from Component Registry $($Registry.registry_version)."
+
+$PublishedComponents = @(
+    foreach ($Component in $CmsComponents) {
+        $Required = @($Component.schema.required)
+        $PropertyNames = @($Component.schema.properties.PSObject.Properties.Name)
+        $Optional = @($PropertyNames | Where-Object { $Required -notcontains $_ })
+        $ExampleData = @{}
+        foreach ($ExampleProperty in $Component.example.PSObject.Properties) {
+            if (@("type", "variant") -notcontains $ExampleProperty.Name) {
+                $ExampleData[$ExampleProperty.Name] = $ExampleProperty.Value
+            }
+        }
+
+        @{
+            id = $Component.id
+            name = $Component.name
+            category = $Component.category
+            purpose = $Component.purpose
+            status = $Component.status
+            deprecated = ($Component.status -eq "deprecated")
+            variants = @($Component.variants)
+            cmsUsable = $true
+            interface = $Component.cms_interface
+            renderMode = $Component.render_mode
+            inputSchema = $Component.schema
+            requiredFields = $Required
+            optionalFields = $Optional
+            example = @{
+                type = $Component.id
+                variant = if ($Component.example.variant) { $Component.example.variant } else { $Component.variants[0] }
+                data = $ExampleData
+            }
+        }
+    }
+)
+
+$PublishedContract = @{
+    contractVersion = $Registry.registry_version
+    schemaVersion = "2020-12"
+    generatedFrom = "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json"
+    generatedBy = "scripts/generate-component-catalog.ps1"
+    principles = @{
+        frontend = "Frontend defines what can be rendered."
+        cms = "CMS decides what should be rendered."
+    }
+    components = $PublishedComponents
+}
+
+$PageBlockComponents = @($CmsComponents | Where-Object { $_.cms_interface -eq "page_block" })
+$BlockSchemas = @(
+    foreach ($Component in $PageBlockComponents) {
+        @{
+            title = $Component.name
+            description = $Component.purpose
+            type = "object"
+            additionalProperties = $false
+            required = @("type", "variant", "data")
+            properties = @{
+                type = @{ const = $Component.id }
+                variant = @{ type = "string"; enum = @($Component.variants) }
+                data = $Component.schema
+            }
+        }
+    }
+)
+
+$HeroComponent = $CmsComponents | Where-Object { $_.id -eq "article_hero" } | Select-Object -First 1
+$PageSchema = @{
+    '$schema' = "https://json-schema.org/draft/2020-12/schema"
+    '$id' = "https://solotochina.com/contracts/page-schema.json"
+    title = "SoloToChina CMS Page Payload"
+    description = "CMS-authored page metadata and ordered content blocks for the SoloToChina frontend."
+    contractVersion = $Registry.registry_version
+    schemaVersion = "2020-12"
+    type = "object"
+    additionalProperties = $false
+    required = @("metadata", "blocks")
+    properties = @{
+        metadata = @{
+            type = "object"
+            additionalProperties = $false
+            required = @("pageId", "title", "slug", "contentType")
+            properties = @{
+                pageId = @{ type = @("string", "integer"); description = "Stable CMS page identifier." }
+                title = @{ type = "string"; minLength = 1 }
+                slug = @{ type = "string"; minLength = 1; pattern = "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+                contentType = @{ type = "string"; minLength = 1; description = "Taxonomy, not layout. It must never cause the frontend to inject editorial blocks." }
+                excerpt = @{ type = "string" }
+                canonicalUrl = @{ type = "string"; format = "uri" }
+                featuredMediaId = @{ type = @("integer", "null"); minimum = 1 }
+                taxonomy = @{ type = "object"; additionalProperties = @{ type = "array"; items = @{ type = "string" } } }
+                seo = @{
+                    type = "object"
+                    additionalProperties = $false
+                    properties = @{
+                        title = @{ type = "string" }
+                        description = @{ type = "string" }
+                        canonicalUrl = @{ type = "string"; format = "uri" }
+                        robots = @{ type = "string" }
+                    }
+                }
+                presentation = @{
+                    type = "object"
+                    additionalProperties = $false
+                    properties = @{
+                        article_hero = @{
+                            type = "object"
+                            additionalProperties = $false
+                            required = @("variant")
+                            properties = @{ variant = @{ type = "string"; enum = @($HeroComponent.variants) } }
+                        }
+                        share_this_page = @{ type = "boolean"; default = $false }
+                        table_of_contents = @{ type = "boolean"; default = $false }
+                    }
+                }
+            }
+        }
+        blocks = @{
+            type = "array"
+            description = "Array order is the final render order. The frontend must not reorder or inject editorial blocks based on contentType."
+            items = @{ oneOf = $BlockSchemas }
+        }
+    }
+}
+
+Write-JsonContract $PublishedContractPath $PublishedContract
+Write-JsonContract $PageSchemaPath $PageSchema
+Write-Host "Generated Catalog and CMS contracts from Component Registry $($Registry.registry_version)."

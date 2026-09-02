@@ -178,6 +178,14 @@ Frontend Component Registry and Catalog are complete:
 - Added an ephemeral Playground `/design-system/` Component Gallery with all capability records, all Hero variants, and real content examples. It is not auto-created in production.
 - Added `scripts/verify-component-registry.ps1`; static and runtime verification reject registry drift and unknown Contract component definitions.
 
+Formal Frontend to CMS Capability Contract is complete:
+
+- Published `contracts/component-registry.json` for the independent CMS repository. It contains only the 19 implemented `cms_usable` capabilities and exposes Contract/schema versions, status, deprecation state, semantic variants, input schemas, derived required/optional fields, and `{ type, variant, data }` examples.
+- Published `contracts/page-schema.json`, whose 16 allowed ordered block shapes and variants are generated from the same Registry. Its `blocks[]` sequence is explicitly the final render order; `contentType` is taxonomy, not layout.
+- Added `docs/CMS_FRONTEND_CONTRACT.md` with repository ownership, CMS consumption paths, versioning, rejection rules, and the publication workflow.
+- Added `docs/COMPONENT_CHANGELOG.md` for CMS-visible capability changes only; visual-only changes are explicitly excluded.
+- `scripts/generate-component-catalog.ps1` now generates both root contracts and the Component Catalog from the Theme Registry. Packaging regenerates and verifies these artifacts before creating ZIP files.
+
 The first independent Child Theme foundation stage is complete:
 
 - Added a standards-compliant `solo-to-china-child` with `Template: solo-to-china`.

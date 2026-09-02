@@ -66,6 +66,16 @@ Canonical Component Registry:
     wp-content/themes/solo-to-china/content-contract/component-registry.v1.json
     GET /wp-json/stc/v1/component-registry
 
+Published contracts for the independent CMS repository:
+
+    contracts/component-registry.json
+    contracts/page-schema.json
+
+CMS integration guidance and compatibility history:
+
+    docs/CMS_FRONTEND_CONTRACT.md
+    docs/COMPONENT_CHANGELOG.md
+
 Unknown Gutenberg blocks must degrade safely instead of breaking the page.
 
 ## Share This Page
@@ -97,7 +107,7 @@ Registry 1.0 publishes 19 stable CMS capabilities: 16 ordered page blocks and th
 
 All components are available independently of content type. The CMS decides their presence, order, data, and variants. Four additional renderer components are documented as internal and are not valid CMS types: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. The Parent Theme keeps small reusable component patterns; topic-wide Attraction, City, and Survival article patterns were removed.
 
-`docs/COMPONENT_LIBRARY.md` is generated from the Registry. Playground exposes an ephemeral `/design-system/` Gallery with all 19 capability records, the major Hero variants, and real examples for all 16 page-block components. The Theme does not auto-create this page in production.
+`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. The CMS should read the root contracts and must not scan frontend implementation code to discover capabilities. Playground exposes an ephemeral `/design-system/` Gallery with all 19 capability records, the major Hero variants, and real examples for all 16 page-block components. The Theme does not auto-create this page in production.
 
 Responsive Media, server-rendered stable H2 IDs, editor parity, semantic HTML, long-text containment, keyboard focus, reduced motion, and safe affiliate rel/disclosure behavior remain in place.
 

@@ -1,0 +1,1088 @@
+{
+  "generatedFrom": "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json",
+  "contractVersion": "1.0.0",
+  "generatedBy": "scripts/generate-component-catalog.ps1",
+  "principles": {
+    "frontend": "Frontend defines what can be rendered.",
+    "cms": "CMS decides what should be rendered."
+  },
+  "schemaVersion": "2020-12",
+  "components": [
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "interface": "page_block",
+      "name": "Paragraph",
+      "renderMode": "gutenberg_core",
+      "example": {
+        "data": {
+          "content": "Carry the passport used for the reservation."
+        },
+        "variant": "default",
+        "type": "paragraph"
+      },
+      "purpose": "Standard editable body copy with meaningful inline links.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "content",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "anchor"
+      ],
+      "id": "paragraph"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "level"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "level": {
+            "type": "integer",
+            "enum": [
+              2,
+              3
+            ]
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "text",
+        "level"
+      ],
+      "interface": "page_block",
+      "name": "Heading",
+      "renderMode": "gutenberg_core",
+      "example": {
+        "data": {
+          "level": 2,
+          "anchor": "how-to-visit",
+          "text": "How to visit"
+        },
+        "variant": "section",
+        "type": "heading"
+      },
+      "purpose": "Creates an article section in the semantic document outline.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "content",
+      "variants": [
+        "section",
+        "subsection"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "anchor"
+      ],
+      "id": "heading"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "ordered": {
+            "type": "boolean"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "items"
+      ],
+      "interface": "page_block",
+      "name": "List",
+      "renderMode": "gutenberg_core",
+      "example": {
+        "data": {
+          "items": [
+            "Confirm the date",
+            "Bring the original passport"
+          ],
+          "ordered": true
+        },
+        "variant": "ordered",
+        "type": "list"
+      },
+      "purpose": "Presents related items or a meaningful sequence.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "content",
+      "variants": [
+        "unordered",
+        "ordered"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "ordered",
+        "anchor"
+      ],
+      "id": "list"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "media_id",
+          "alt"
+        ],
+        "properties": {
+          "media_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "alt": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "evidence",
+              "context",
+              "illustration",
+              "decorative"
+            ],
+            "default": "context"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "after_block_id": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "media_id",
+        "alt"
+      ],
+      "interface": "page_block",
+      "name": "Responsive Image",
+      "renderMode": "gutenberg_core",
+      "example": {
+        "data": {
+          "media_id": 123,
+          "alt": "Visitors approaching the Forbidden City",
+          "role": "context"
+        },
+        "variant": "context",
+        "type": "image"
+      },
+      "purpose": "Renders WordPress Media with intrinsic dimensions and responsive candidates.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "media",
+      "variants": [
+        "evidence",
+        "context",
+        "illustration",
+        "decorative"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "caption",
+        "role",
+        "anchor",
+        "after_block_id"
+      ],
+      "id": "image"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "answer"
+        ],
+        "properties": {
+          "answer": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "answer"
+      ],
+      "interface": "page_block",
+      "name": "Quick Answer",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "answer": "Reserve before arrival and carry the booking passport.",
+          "title": "Quick answer"
+        },
+        "variant": "default",
+        "type": "quick_answer"
+      },
+      "purpose": "Places a direct answer before supporting detail for fast human and search scanning.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "quick_answer"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "items"
+      ],
+      "interface": "page_block",
+      "name": "Key Takeaways",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "items": [
+            "Book early",
+            "Use the correct passport"
+          ]
+        },
+        "variant": "default",
+        "type": "key_takeaways"
+      },
+      "purpose": "Summarizes the decisions that matter most.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "key_takeaways"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "value"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "items"
+      ],
+      "interface": "page_block",
+      "name": "Quick Facts",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "items": [
+            {
+              "label": "Time needed",
+              "value": "3–4 hours"
+            }
+          ]
+        },
+        "variant": "default",
+        "type": "quick_facts"
+      },
+      "purpose": "Shows practical label and value pairs without dashboard styling.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "quick_facts"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "interface": "page_block",
+      "name": "Tip",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "title": "Solo traveler tip",
+          "content": "Save an offline screenshot of the reservation."
+        },
+        "variant": "default",
+        "type": "tip"
+      },
+      "purpose": "Highlights friendly supporting advice with low urgency.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "tip"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "interface": "page_block",
+      "name": "Warning",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "title": "Passport check",
+          "content": "The reservation passport must match the visitor."
+        },
+        "variant": "default",
+        "type": "warning"
+      },
+      "purpose": "Highlights a travel risk, prerequisite, or failure condition.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "warning"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "items"
+      ],
+      "interface": "page_block",
+      "name": "Steps",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "items": [
+            "Choose the visit date",
+            "Confirm traveler details",
+            "Save the confirmation"
+          ]
+        },
+        "variant": "default",
+        "type": "steps"
+      },
+      "purpose": "Explains an ordered setup, booking, or route process.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "travel",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "steps"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "items"
+      ],
+      "interface": "page_block",
+      "name": "Checklist",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "items": [
+            "Passport",
+            "Reservation screenshot",
+            "Offline map"
+          ]
+        },
+        "variant": "default",
+        "type": "checklist"
+      },
+      "purpose": "Provides a scannable preparation list without saved completion state.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "travel",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "checklist"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "columns",
+          "rows"
+        ],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "caption": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "columns",
+        "rows"
+      ],
+      "interface": "page_block",
+      "name": "Comparison Table",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "rows": [
+            [
+              "Metro",
+              "Predictable city trips"
+            ]
+          ],
+          "caption": "Transport comparison",
+          "columns": [
+            "Option",
+            "Best for"
+          ]
+        },
+        "variant": "default",
+        "type": "comparison_table"
+      },
+      "purpose": "Compares options with native table semantics and local mobile scrolling.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "caption",
+        "anchor"
+      ],
+      "id": "comparison_table"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "question",
+                "answer"
+              ],
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string",
+                  "contentMediaType": "text/html"
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "items"
+      ],
+      "interface": "page_block",
+      "name": "FAQ",
+      "renderMode": "semantic_group",
+      "example": {
+        "data": {
+          "items": [
+            {
+              "question": "Can I buy at the entrance?",
+              "answer": "Advance reservation is the safer default."
+            }
+          ]
+        },
+        "variant": "default",
+        "type": "faq"
+      },
+      "purpose": "Presents explicit questions and complete answers through native disclosures.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "information",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "anchor"
+      ],
+      "id": "faq"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description",
+          "cta_label",
+          "target_url"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "cta_label": {
+            "type": "string"
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "disclosure": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "title",
+        "description",
+        "cta_label",
+        "target_url"
+      ],
+      "interface": "page_block",
+      "name": "Planner CTA",
+      "renderMode": "shortcode",
+      "example": {
+        "data": {
+          "description": "Keep travel time visible.",
+          "title": "Build a realistic route",
+          "cta_label": "Open planner",
+          "target_url": "https://example.com/planner"
+        },
+        "variant": "default",
+        "type": "planner_cta"
+      },
+      "purpose": "Offers a contextual trip-planning action selected by the CMS.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "travel",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "provider",
+        "disclosure",
+        "anchor"
+      ],
+      "id": "planner_cta"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attraction_slug"
+        ],
+        "properties": {
+          "attraction_slug": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "attraction_slug"
+      ],
+      "interface": "page_block",
+      "name": "Ticket Reminder",
+      "renderMode": "shortcode",
+      "example": {
+        "data": {
+          "title": "Check ticket timing",
+          "attraction_slug": "forbidden-city"
+        },
+        "variant": "default",
+        "type": "ticket_reminder"
+      },
+      "purpose": "Delegates attraction timing and reminder behavior to SoloToChina Tools.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "travel",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "title",
+        "description",
+        "anchor"
+      ],
+      "id": "ticket_reminder"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "category",
+          "provider",
+          "title",
+          "description",
+          "cta_label",
+          "target_url"
+        ],
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price_text": {
+            "type": "string"
+          },
+          "cta_label": {
+            "type": "string"
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "disclosure": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "requiredFields": [
+        "category",
+        "provider",
+        "title",
+        "description",
+        "cta_label",
+        "target_url"
+      ],
+      "interface": "page_block",
+      "name": "Affiliate CTA",
+      "renderMode": "shortcode",
+      "example": {
+        "data": {
+          "target_url": "https://example.com",
+          "cta_label": "View options",
+          "disclosure": "Sponsored link.",
+          "category": "hotel",
+          "description": "Check location before price.",
+          "provider": "Example",
+          "title": "Compare practical bases"
+        },
+        "variant": "default",
+        "type": "affiliate_cta"
+      },
+      "purpose": "Renders a restrained contextual commercial action with visible disclosure.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "commercial",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "price_text",
+        "disclosure",
+        "anchor"
+      ],
+      "id": "affiliate_cta"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "featured_media_id": {
+            "type": "integer"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "default",
+              "attraction",
+              "city",
+              "survival"
+            ]
+          }
+        }
+      },
+      "requiredFields": [
+        "title"
+      ],
+      "interface": "presentation_meta",
+      "name": "Article Hero",
+      "renderMode": "template",
+      "example": {
+        "data": {
+          "featured_media_id": 123,
+          "title": "Forbidden City: First-Time Visitor Guide"
+        },
+        "variant": "attraction",
+        "type": "article_hero"
+      },
+      "purpose": "Frames CMS-owned article identity and featured media without selecting body components.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "layout",
+      "variants": [
+        "default",
+        "attraction",
+        "city",
+        "survival"
+      ],
+      "status": "stable",
+      "optionalFields": [
+        "excerpt",
+        "featured_media_id",
+        "variant"
+      ],
+      "id": "article_hero"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "requiredFields": [
+        "enabled"
+      ],
+      "interface": "presentation_meta",
+      "name": "Share This Page",
+      "renderMode": "template_utility",
+      "example": {
+        "data": {
+          "enabled": true
+        },
+        "variant": "default",
+        "type": "share_this_page"
+      },
+      "purpose": "Shares the canonical page URL without accounts or persisted state.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "utility",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [],
+      "id": "share_this_page"
+    },
+    {
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "requiredFields": [
+        "enabled"
+      ],
+      "interface": "presentation_meta",
+      "name": "Table of Contents",
+      "renderMode": "template_utility",
+      "example": {
+        "data": {
+          "enabled": true
+        },
+        "variant": "default",
+        "type": "table_of_contents"
+      },
+      "purpose": "Builds article navigation from rendered H2 headings only when explicitly enabled.",
+      "deprecated": false,
+      "cmsUsable": true,
+      "category": "utility",
+      "variants": [
+        "default"
+      ],
+      "status": "stable",
+      "optionalFields": [],
+      "id": "table_of_contents"
+    }
+  ]
+}

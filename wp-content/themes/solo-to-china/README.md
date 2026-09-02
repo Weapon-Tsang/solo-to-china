@@ -30,7 +30,7 @@ The old topic-wide article patterns and guide-saving system have been removed. S
 
 Registry `1.0` currently exposes 19 stable CMS capabilities: 16 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
 
-`docs/COMPONENT_LIBRARY.md` is generated from the Registry. Change the Registry and implementation together, update the Gallery/tests, then regenerate the catalog with `scripts/generate-component-catalog.ps1`.
+`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. Change the Registry and implementation together, update the Gallery/tests and Component Changelog, then run `scripts/generate-component-catalog.ps1`. The independent CMS repository should read the root `contracts/` files instead of reverse-engineering Theme source.
 
 ## Tool boundary
 

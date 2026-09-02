@@ -10,6 +10,9 @@ $ChildThemeZip = Join-Path $Dist "solo-to-china-child-theme.zip"
 $PluginZip = Join-Path $Dist "solo-to-china-tools-plugin.zip"
 $Manifest = Join-Path $Dist "release-manifest.txt"
 
+& (Join-Path $PSScriptRoot "generate-component-catalog.ps1")
+& (Join-Path $PSScriptRoot "verify-component-registry.ps1")
+
 if (-not (Test-Path -LiteralPath $ThemeSource -PathType Container)) {
     throw "Theme source is missing: wp-content/themes/solo-to-china"
 }

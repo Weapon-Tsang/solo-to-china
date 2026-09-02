@@ -30,8 +30,11 @@ Current development branch deliverables:
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.
 - Content Component System architecture in `docs/architecture/content-component-system.md`.
-- Machine-readable Frontend Component Registry in `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json`.
-- Registry-generated human catalog in `docs/COMPONENT_LIBRARY.md` and an internal Playground Gallery at `/design-system/`.
+- CMS-facing generated Component Contract in `contracts/component-registry.json`.
+- CMS page payload schema in `contracts/page-schema.json`.
+- Registry-generated human catalog in `docs/COMPONENT_LIBRARY.md`, repository boundary in `docs/CMS_FRONTEND_CONTRACT.md`, capability history in `docs/COMPONENT_CHANGELOG.md`, and an internal Playground Gallery at `/design-system/`.
+
+The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
 
 Generate install artifacts with:
 

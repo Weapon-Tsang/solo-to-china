@@ -35,7 +35,7 @@ Unknown or newer Gutenberg block types use WordPress’s safe block fallback beh
 
 ## Canonical Contract And Registry
 
-The machine-readable sources have separate responsibilities:
+The authoring machine-readable sources have separate responsibilities:
 
     wp-content/themes/solo-to-china/content-contract/content-contract.v2.json
     wp-content/themes/solo-to-china/content-contract/component-registry.v1.json
@@ -45,11 +45,18 @@ CMS clients read it from:
     GET /wp-json/stc/v1/content-contract
     GET /wp-json/stc/v1/component-registry
 
-The endpoint remains public and read-only and includes ETag, Last-Modified, and public cache headers. Contract and Theme versions remain independent; Contract 2.0 is a deliberate major change because content-type-specific layout behavior was removed.
+The independent CMS repository should consume these generated repository contracts instead of scanning Theme source:
+
+    contracts/component-registry.json
+    contracts/page-schema.json
+
+The published Component Contract contains only CMS-usable capabilities. The Page Schema defines `{ type, variant, data }` blocks and makes `blocks[]` order the final render order. Both are generated from the authoring Registry by `scripts/generate-component-catalog.ps1`.
+
+The REST endpoints remain public and read-only and include ETag, Last-Modified, and public cache headers. Contract and Theme versions remain independent; Contract 2.0 is a deliberate major change because content-type-specific layout behavior was removed.
 
 The Contract publishes page/type rules and CMS-facing metadata. The Registry is the single source of truth for stable component IDs, names, categories, status, semantic variants, JSON input schemas, examples, implementation paths, accessibility, responsive behavior, and CMS availability. Contract REST output derives its backward-compatible component and per-guide allowlists from the Registry at runtime; the Contract JSON does not duplicate those lists.
 
-The human-readable catalog is generated from the Registry at `docs/COMPONENT_LIBRARY.md`. Run `scripts/generate-component-catalog.ps1` after an approved Registry change.
+The human-readable catalog is generated from the Registry at `docs/COMPONENT_LIBRARY.md`. The repository contract boundary and CMS-visible change history live in `docs/CMS_FRONTEND_CONTRACT.md` and `docs/COMPONENT_CHANGELOG.md`. Run `scripts/generate-component-catalog.ps1` after an approved Registry change.
 
 ## CMS Presentation Metadata
 
