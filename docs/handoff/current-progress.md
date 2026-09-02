@@ -1,6 +1,6 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-08-31
+Date: 2026-09-02
 
 ## Current Working Boundary
 
@@ -161,9 +161,19 @@ Content Component System Phase D is complete:
 - Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.6.0` replaces it with a Design System/Content Component editor canvas.
 - Server-side H2 anchor generation preserves explicit public anchors, adds readable IDs when absent, and suffixes duplicates before JavaScript enhancement.
 - Child Theme adds responsive WordPress Media styling for context, evidence, illustration, and decorative roles without forcing image ratios or publishing internal provenance.
-- Playground creates a real ephemeral Media attachment from a project image and inserts it through `wp_get_attachment_image`, rather than hardcoding an external image or custom HTML block.
+- Playground creates a real ephemeral Media attachment from a project image and stores Gutenberg-valid Core Image markup, rather than hardcoding an external image or Custom HTML block.
 - Raw response checks confirmed five server-rendered unique H2 IDs and Media output with intrinsic 819x1024 dimensions, responsive candidates, `sizes`, `loading="lazy"`, `decoding="async"`, alt text, and caption.
 - Playwright confirmed the browser selected a 768px candidate for a 670px desktop render and a 350px candidate for a 350px mobile render, with zero page overflow and zero console errors/warnings.
+
+Content Component System Phase E is complete:
+
+- Added `scripts/verify-content-runtime.ps1` for real WordPress integration checks against both the active Child Theme stack and the independently activated Parent Theme fallback.
+- Added dedicated Parent-only and authenticated Gutenberg editor Playground blueprints plus `-ParentOnly` and `-Editor` preview modes.
+- Runtime coverage protects Contract JSON/version/cache validators, guide mappings and required fields, REST metadata sanitization boundaries, historical category-only routing, semantic component classes, contextual renderer safety, Plugin-owned Ticket form delegation, responsive Media output, stable H2 anchors, and the absence of internal provenance or raw inline presentation.
+- The Media fixture now stores valid native Core Image block markup. The Parent render filter adds lazy/async defaults without invalidating Gutenberg block serialization.
+- Child editor assets are registered individually in Parent -> Child Design System -> Content Components -> editor order, so the iframe receives the real visual system without unresolved CSS imports.
+- Real Gutenberg checks found 24 valid blocks and four component families in both Parent and Child editor modes, with no project block-validation errors. The only editor warning is a WordPress core global-styles iframe notice.
+- Final frontend checks covered all three fixtures at 1440, 768, 390, and 375. Every viewport had one H1 and zero page overflow; mobile comparison tables scroll locally, FAQ/ticket controls retain 44px-class targets, Forbidden City is preselected through the Plugin, and reduced-motion/focus/keyboard behavior remains intact.
 
 The first independent Child Theme foundation stage is complete:
 
@@ -278,6 +288,16 @@ Primary local verification command:
 .\scripts\verify-project.ps1
 ```
 
+Content system verification commands:
+
+```powershell
+.\scripts\verify-content-contract.ps1
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
+.\scripts\start-preview.ps1 -Port 9402 -ParentOnly
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
+.\scripts\start-preview.ps1 -Port 9403 -Editor
+```
+
 Packaging command:
 
 ```powershell
@@ -301,9 +321,8 @@ For deployment, use the local zip artifacts as the source of truth.
 
 Reasonable next bounded increments:
 
-- Implement the Contract v1 core editorial Gutenberg semantic classes and Child Theme `content-components.css` without changing Home or the Article shell.
-- Add the three declared dynamic renderers while preserving SoloToChina Tools ownership of Ticket behavior.
-- Complete editor styles, structured fixtures, integration tests, and CMS-facing documentation.
+- Connect the external CMS to the public Contract endpoint and validate a non-production import round trip against the documented guide types.
+- Populate representative real guide posts on staging and re-run the runtime/browser checks against real editorial content.
 - Later renovate the City Guides / Attraction Guides / Survival Kit hub family while preserving content-first card behavior and responsive featured images.
 - Improve article spacing and touch targets after installing the Child Theme on WordPress and checking real-content screenshots.
 - Continue refining or expanding static attraction data inside the existing Ticket Tool only.

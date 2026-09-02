@@ -119,4 +119,28 @@ Ticket Reminder accepts only a sanitized attraction slug plus optional contextua
 
 ## Integration Fixtures
 
-`scripts/playground-fixtures.php` installs three disposable Gutenberg articles for Survival Kit, City Guide, and Attraction Guide flows. The fixtures set explicit guide metadata and exercise different component combinations. They are mounted only by the local WordPress Playground script, are excluded from release packages, and are not production content or a static demo.
+`scripts/playground-fixtures.php` installs three disposable Gutenberg articles for Survival Kit, City Guide, and Attraction Guide flows. The fixtures exercise different component combinations. Survival Kit and Attraction Guide use explicit Contract metadata; City Guide deliberately uses historical category-only routing to protect backward compatibility. They are mounted only by the local WordPress Playground script, are excluded from release packages, and are not production content or a static demo.
+
+## Verification And Preview Modes
+
+The static Contract and project checks are:
+
+```powershell
+.\scripts\verify-content-contract.ps1
+.\scripts\verify-project.ps1
+```
+
+The default Playground mode mounts Parent Theme, active Child Theme, Plugin, and all three fixtures. Runtime verification checks the REST Contract and validators, sanitized metadata boundaries, semantic component output, safe external link attributes, Plugin-owned Ticket form delegation, responsive Media markup, stable H2 anchors, historical taxonomy fallback, and the absence of public provenance or CMS-supplied inline styles.
+
+```powershell
+.\scripts\start-preview.ps1 -Port 9400
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
+```
+
+Parent-only mode proves that the Parent remains independently usable. Editor mode logs into the disposable Gutenberg fixture so both Parent fallback styles and Child editor parity can be inspected without changing production data.
+
+```powershell
+.\scripts\start-preview.ps1 -Port 9402 -ParentOnly
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
+.\scripts\start-preview.ps1 -Port 9403 -Editor
+```

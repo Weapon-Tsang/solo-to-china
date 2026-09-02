@@ -18,7 +18,13 @@ define( 'STC_CHILD_VERSION', '0.6.0' );
  */
 function stc_child_add_editor_styles() {
 	remove_editor_styles();
-	add_editor_style( 'assets/css/editor-style.css' );
+	add_editor_style(
+		array(
+			'assets/css/design-system.css',
+			'assets/css/content-components.css',
+			'assets/css/editor-style.css',
+		)
+	);
 }
 add_action( 'after_setup_theme', 'stc_child_add_editor_styles', 20 );
 

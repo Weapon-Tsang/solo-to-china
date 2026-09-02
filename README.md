@@ -45,6 +45,17 @@ Run a real local WordPress preview with Parent Theme, Child Theme, and Plugin mo
 
 The preview uses the official WordPress Playground CLI and defaults to `http://127.0.0.1:9400`.
 
+Content Component System verification:
+
+```powershell
+.\scripts\verify-content-contract.ps1
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
+.\scripts\start-preview.ps1 -Port 9402 -ParentOnly
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
+```
+
+Use `.\scripts\start-preview.ps1 -Port 9403 -Editor` for the authenticated Gutenberg editor fixture. Preview modes are disposable and do not create production content.
+
 The script creates:
 
 - `dist/solo-to-china-theme.zip`

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/",
+  "login": true,
+  "preferredVersions": {
+    "php": "8.3",
+    "wp": "latest"
+  },
+  "steps": [
+    {
+      "step": "activateTheme",
+      "themeFolderName": "solo-to-china"
+    },
+    {
+      "step": "activatePlugin",
+      "pluginName": "SoloToChina Tools",
+      "pluginPath": "solo-to-china-tools/solo-to-china-tools.php"
+    },
+    {
+      "step": "setSiteOptions",
+      "options": {
+        "blogname": "SoloToChina Parent Fallback",
+        "blogdescription": "Parent Theme fallback verification",
+        "show_on_front": "posts",
+        "permalink_structure": "/%postname%/"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php require_once '/wordpress/wp-load.php'; require_once '/tmp/solo-to-china-scripts/playground-fixtures.php'; stc_playground_install_fixtures(); ?>"
+    }
+  ]
+}

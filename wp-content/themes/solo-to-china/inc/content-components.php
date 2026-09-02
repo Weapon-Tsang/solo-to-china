@@ -87,3 +87,31 @@ function stc_register_content_component_patterns() {
 	}
 }
 add_action( 'init', 'stc_register_content_component_patterns', 12 );
+
+/**
+ * Keep Contract content images lazy and asynchronously decoded on the frontend.
+ *
+ * Core Image block markup stays Gutenberg-valid in post_content; presentation
+ * attributes are added only while WordPress renders the public block.
+ *
+ * @param string               $block_content Rendered Image block HTML.
+ * @param array<string, mixed> $block Parsed block data.
+ * @return string
+ */
+function stc_render_content_image_attributes( $block_content, $block ) {
+	if ( false === strpos( $block_content, 'stc-content-image' ) ) {
+		return $block_content;
+	}
+
+	if ( class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		$processor = new WP_HTML_Tag_Processor( $block_content );
+		if ( $processor->next_tag( 'img' ) ) {
+			$processor->set_attribute( 'loading', 'lazy' );
+			$processor->set_attribute( 'decoding', 'async' );
+			return $processor->get_updated_html();
+		}
+	}
+
+	return preg_replace( '/<img\b/i', '<img loading="lazy" decoding="async"', $block_content, 1 );
+}
+add_filter( 'render_block_core/image', 'stc_render_content_image_attributes', 10, 2 );

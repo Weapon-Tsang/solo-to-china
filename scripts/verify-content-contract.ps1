@@ -172,6 +172,11 @@ if (-not (Test-Path -LiteralPath $ComponentsRuntimePath -PathType Leaf)) {
             Add-ContractFailure "Content Component Gutenberg runtime is missing: $PatternToken"
         }
     }
+    foreach ($MediaRuntimeToken in @("render_block_core/image", "stc_render_content_image_attributes", "WP_HTML_Tag_Processor", "loading", "lazy", "decoding", "async")) {
+        if (-not $ComponentsRuntime.Contains($MediaRuntimeToken)) {
+            Add-ContractFailure "Content Component Media runtime is missing: $MediaRuntimeToken"
+        }
+    }
     foreach ($ForbiddenMarkupToken in @("<!-- wp:html", "<style", " style=")) {
         if ($ComponentsRuntime.IndexOf($ForbiddenMarkupToken, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
             Add-ContractFailure "Content Component patterns include forbidden markup: $ForbiddenMarkupToken"
@@ -195,7 +200,7 @@ if (-not (Test-Path -LiteralPath $ComponentsCssPath -PathType Leaf)) {
 
 foreach ($EditorCssDefinition in @(
     @{ Path = $ParentEditorCssPath; Name = "Parent"; Tokens = @(".editor-styles-wrapper", ".stc-content-block", ".stc-dynamic-component", ".stc-content-image") },
-    @{ Path = $ChildEditorCssPath; Name = "Child"; Tokens = @("design-system.css", "content-components.css", ".editor-styles-wrapper", "--stc-color-", "--stc-container-reading") }
+    @{ Path = $ChildEditorCssPath; Name = "Child"; Tokens = @(".editor-styles-wrapper", "--stc-color-", "--stc-container-reading") }
 )) {
     if (-not (Test-Path -LiteralPath $EditorCssDefinition.Path -PathType Leaf)) {
         Add-ContractFailure "$($EditorCssDefinition.Name) Theme editor stylesheet is missing."
@@ -211,7 +216,7 @@ foreach ($EditorCssDefinition in @(
 
 if (Test-Path -LiteralPath $PreviewFixturesPath -PathType Leaf) {
     $PreviewFixtures = Get-Content -LiteralPath $PreviewFixturesPath -Raw
-    foreach ($MediaFixtureToken in @("wp_upload_bits", "wp_insert_attachment", "wp_generate_attachment_metadata", "wp_get_attachment_image", "stc-content-image--context", "'loading'", "'lazy'", "'sizes'")) {
+    foreach ($MediaFixtureToken in @("wp_upload_bits", "wp_insert_attachment", "wp_generate_attachment_metadata", "wp_get_attachment_image_url", "stc-content-image--context", "wp-image-", "wp-element-caption")) {
         if (-not $PreviewFixtures.Contains($MediaFixtureToken)) {
             Add-ContractFailure "Playground Media fixture is missing: $MediaFixtureToken"
         }

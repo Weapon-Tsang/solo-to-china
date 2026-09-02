@@ -9,7 +9,10 @@ $RequiredFiles = @(
     "docs/architecture/content-component-system.md",
     "scripts/package-release.ps1",
     "scripts/verify-content-contract.ps1",
+    "scripts/verify-content-runtime.ps1",
     "scripts/playground-blueprint.json",
+    "scripts/playground-editor-blueprint.json",
+    "scripts/playground-parent-blueprint.json",
     "scripts/playground-fixtures.php",
     "scripts/start-preview.ps1",
     "wp-content/themes/solo-to-china/style.css",
@@ -161,9 +164,39 @@ $PreviewScriptPath = Join-Path $Root "scripts/start-preview.ps1"
 $PreviewBlueprintPath = Join-Path $Root "scripts/playground-blueprint.json"
 if (Test-Path -LiteralPath $PreviewScriptPath -PathType Leaf) {
     $PreviewScript = Get-Content -LiteralPath $PreviewScriptPath -Raw
-    foreach ($PreviewToken in @('@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', 'solo-to-china-scripts', '--mount-dir', 'playground-blueprint.json')) {
+    foreach ($PreviewToken in @('@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', 'solo-to-china-scripts', '--mount-dir', 'playground-blueprint.json', 'playground-editor-blueprint.json', 'playground-parent-blueprint.json', 'ParentOnly', 'Editor')) {
         if (-not $PreviewScript.Contains($PreviewToken)) {
             $Failures.Add("WordPress Playground preview script is missing: $PreviewToken")
+        }
+    }
+}
+
+$EditorPreviewBlueprintPath = Join-Path $Root "scripts/playground-editor-blueprint.json"
+if (Test-Path -LiteralPath $EditorPreviewBlueprintPath -PathType Leaf) {
+    $EditorPreviewBlueprint = Get-Content -LiteralPath $EditorPreviewBlueprintPath -Raw
+    foreach ($EditorBlueprintToken in @('"login": true', 'activateTheme', 'solo-to-china-child', 'activatePlugin', 'playground-fixtures.php', '/wp-admin/edit.php')) {
+        if (-not $EditorPreviewBlueprint.Contains($EditorBlueprintToken)) {
+            $Failures.Add("Child editor Playground blueprint is missing: $EditorBlueprintToken")
+        }
+    }
+}
+
+$ParentPreviewBlueprintPath = Join-Path $Root "scripts/playground-parent-blueprint.json"
+if (Test-Path -LiteralPath $ParentPreviewBlueprintPath -PathType Leaf) {
+    $ParentPreviewBlueprint = Get-Content -LiteralPath $ParentPreviewBlueprintPath -Raw
+    foreach ($ParentBlueprintToken in @('activateTheme', '"themeFolderName": "solo-to-china"', 'activatePlugin', 'playground-fixtures.php', '/%postname%/')) {
+        if (-not $ParentPreviewBlueprint.Contains($ParentBlueprintToken)) {
+            $Failures.Add("Parent fallback Playground blueprint is missing: $ParentBlueprintToken")
+        }
+    }
+}
+
+$RuntimeVerificationPath = Join-Path $Root "scripts/verify-content-runtime.ps1"
+if (Test-Path -LiteralPath $RuntimeVerificationPath -PathType Leaf) {
+    $RuntimeVerification = Get-Content -LiteralPath $RuntimeVerificationPath -Raw
+    foreach ($RuntimeVerificationToken in @('stc/v1/content-contract', 'contract_version', 'guide_types', 'required_fields', '_stc_guide_type', 'china-mobile-payment-setup', 'beijing-first-time-city-guide', 'forbidden-city-first-time-visitor-guide', 'stc-content-block--quick-answer', 'stc-content-block--warning', 'stc-content-block--faq', 'stc-dynamic-component--planner', 'stc-dynamic-component--ticket', 'stc-dynamic-component--affiliate', 'sponsored nofollow noopener', 'srcset=', 'loading="lazy"', 'claim_keys', 'ParentOnly')) {
+        if (-not $RuntimeVerification.Contains($RuntimeVerificationToken)) {
+            $Failures.Add("Content runtime verification is missing: $RuntimeVerificationToken")
         }
     }
 }
@@ -368,7 +401,7 @@ if (Test-Path -LiteralPath $ChildThemeFunctionsPath -PathType Leaf) {
             $Failures.Add("Child Theme shared/home asset stage is missing: $ChildStageToken")
         }
     }
-    foreach ($ChildEditorToken in @("stc_child_add_editor_styles", "add_editor_style", "assets/css/editor-style.css")) {
+    foreach ($ChildEditorToken in @("stc_child_add_editor_styles", "add_editor_style", "assets/css/design-system.css", "assets/css/content-components.css", "assets/css/editor-style.css")) {
         if (-not $ChildThemeFunctions.Contains($ChildEditorToken)) {
             $Failures.Add("Child Theme editor visual parity is missing: $ChildEditorToken")
         }

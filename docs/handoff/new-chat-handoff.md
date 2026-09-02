@@ -1,6 +1,6 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-08-31
+Date: 2026-09-02
 
 Use this document to continue the SoloToChina WordPress project in a new Codex/ChatGPT conversation.
 
@@ -211,6 +211,11 @@ wp-content/themes/solo-to-china-child/
 
 Implemented:
 
+- Content Component System v1 Phases A-E, including runtime integration coverage for the Contract, REST metadata, semantic components, contextual renderers, responsive Media, anchors, historical routing, and public-output hygiene.
+- Disposable Parent-only and authenticated Gutenberg editor preview modes; the Parent remains independently usable and the Child editor receives the Design System and component styles in the correct order.
+- Gutenberg-valid Core Image fixture markup with lazy/async defaults applied safely on the Parent render path.
+- Parent and Child Gutenberg editor checks with 24 valid blocks and four component families, with no project block-validation errors.
+- Three fixture articles checked at 1440, 768, 390, and 375 with one H1, zero page overflow, safe local table scrolling, accessible controls, correct Plugin preselection, and working focus/keyboard/reduced-motion behavior.
 - Parent/Child Gutenberg editor styles with a Parent fallback and Child Design System parity.
 - Server-rendered stable H2 IDs that preserve explicit anchors and resolve duplicate IDs.
 - Native responsive WordPress Media presentation with intrinsic ratios, alt/caption treatment, and public image roles.
@@ -223,7 +228,7 @@ Implemented:
 - Nine reusable Parent Theme Gutenberg content patterns with stable semantic classes and no fixed topic templates.
 - Token-driven Child Theme component visuals for answer, takeaway, fact, tip, warning, steps, checklist, comparison, and FAQ families.
 - Responsive comparison-table containment, native accessible FAQ disclosures, long-text safety, and reduced-motion-compatible presentation.
-- Reusable local Playground fixtures for Survival Kit, City Guide, and Attraction Guide structures with explicit Contract metadata.
+- Reusable local Playground fixtures for Survival Kit, City Guide, and Attraction Guide structures; City deliberately exercises historical category-only routing while the other two use explicit Contract metadata.
 - Phase B Playwright checks at 1440, 768, 390, and 375 with no page overflow or console errors/warnings.
 - Versioned Content Contract `1.0.0` in `content-contract/content-contract.v1.json`.
 - Public read-only `GET /wp-json/stc/v1/content-contract` endpoint with cache validators.
@@ -251,7 +256,7 @@ Implemented:
 - Ephemeral Playground article fixtures for all three guide families; these do not alter production content or add a static demo.
 - Article Playwright QA at 1440, 768, 390, and 375, plus City and Survival Kit branch checks at 390, with one H1, correct navigation/Breadcrumb state, zero overflow, and zero console errors/warnings.
 
-The active Content Component System work is at Phase E: final integration/regression coverage, Parent fallback verification, documentation cleanup, release packaging, and final push. Do not change the completed Home or Article shell renovation, and do not copy Ticket logic from the Plugin into either Theme.
+Content Component System v1 Phases A-E are complete. The next safe boundary is external CMS integration or staging content validation; do not change the completed Home or Article shell renovation, and do not copy Ticket logic from the Plugin into either Theme.
 
 ## Current Plugin Status
 
@@ -354,13 +359,13 @@ dist/release-manifest.txt
 Latest manifest at the time of this handoff:
 
 ```text
-Generated: 2026-08-31 23:10:52 +08:00
-Theme version: 0.21.0
-Theme SHA256: F558FB30C89027329B59A539A84F8946DFC523A08B78B027389DC4796D605FC5
-Child Theme version: 0.3.0
-Child Theme SHA256: 02448C8B5FF15161319F0CFE1EE59FC136F1E17BF1408618EC0983897ABA53A1
-Plugin version: 0.21.0
-Plugin SHA256: 62F6726E925E5C945C73C32ED80F07178745F9A10E054183393C05DA9B91429B
+Generated: 2026-09-02 20:10:06 +08:00
+Theme version: 0.24.0
+Theme SHA256: 5D5A2C4EC758F57BC65730AFF32DD9E90DA96C669A3E01F2471A256EEF05983D
+Child Theme version: 0.6.0
+Child Theme SHA256: 8223C0BF387DA10A9EB97456D5C31568714E1ABE25E4573A0AD0B11FD98721AD
+Plugin version: 0.22.0
+Plugin SHA256: E6BD162F03151A2E98FBD832921F3B5CC0353A31F90E89D3708985A846CAC65C
 ```
 
 Regenerate artifacts with:
@@ -403,6 +408,16 @@ Primary verification command:
 
 ```powershell
 .\scripts\verify-project.ps1
+```
+
+Content system verification:
+
+```powershell
+.\scripts\verify-content-contract.ps1
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
+.\scripts\start-preview.ps1 -Port 9402 -ParentOnly
+.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
+.\scripts\start-preview.ps1 -Port 9403 -Editor
 ```
 
 Expected current result:
@@ -484,10 +499,10 @@ After installing on WordPress, check:
 
 Good next increments:
 
-1. Install the theme/plugin on the live WordPress site and capture desktop/mobile screenshots.
-2. Fix real install spacing, header, and mobile issues based on screenshots.
-3. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-4. Populate real guide posts and check landing-page/archive/search card density on mobile screenshots.
+1. Connect the external CMS to `GET /wp-json/stc/v1/content-contract` and validate a non-production import round trip.
+2. Install the three packages on staging and capture desktop/mobile screenshots with representative real guide content.
+3. Fix any staging-only spacing, header, editor, or Media issues found by those checks.
+4. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
 5. Improve FAQ content and internal links.
 6. Add lightweight analytics/event tracking only after deciding privacy approach.
 
