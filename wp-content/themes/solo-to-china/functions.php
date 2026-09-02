@@ -9,8 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.24.0' );
+define( 'STC_THEME_VERSION', '0.25.0' );
 
+require_once get_template_directory() . '/inc/component-registry.php';
 require_once get_template_directory() . '/inc/content-contract.php';
 require_once get_template_directory() . '/inc/content-components.php';
 require_once get_template_directory() . '/inc/content-renderers.php';
@@ -333,19 +334,42 @@ function stc_render_guide_toc( $modifier_class = '' ) {
 	echo '</nav>';
 }
 
-function stc_render_article_save_button( $guide_type ) {
-	$post_id = get_the_ID();
+/**
+ * Render the reusable Share This Page utility.
+ *
+ * The CMS decides whether it is present; the Theme only renders and enhances it.
+ *
+ * @param array<string, mixed> $args Optional post, title, and description values.
+ */
+function stc_render_share_this_page( $args = array() ) {
+	$post_id     = isset( $args['post_id'] ) ? (int) $args['post_id'] : (int) get_the_ID();
+	$title       = isset( $args['title'] ) ? sanitize_text_field( $args['title'] ) : get_the_title( $post_id );
+	$description = isset( $args['description'] ) ? sanitize_text_field( $args['description'] ) : get_the_excerpt( $post_id );
+	$canonical   = $post_id ? wp_get_canonical_url( $post_id ) : '';
+	$canonical   = $canonical ? $canonical : ( $post_id ? get_permalink( $post_id ) : home_url( '/' ) );
+	$panel_id    = 'stc-share-panel-' . ( $post_id ? $post_id : wp_unique_id() );
+	$heading_id  = $panel_id . '-title';
 
-	if ( ! $post_id ) {
+	if ( ! $title || ! wp_http_validate_url( $canonical ) ) {
 		return;
 	}
 
-	$title   = get_the_title( $post_id );
-	$excerpt = get_the_excerpt( $post_id );
-	$copy    = $excerpt ? wp_trim_words( $excerpt, 24 ) : __( 'Saved for practical trip planning.', 'solo-to-china' );
-	$id      = sanitize_title( $guide_type . '-' . $title );
-
-	echo '<button class="stc-save-guide stc-article-save" type="button" aria-pressed="false" data-stc-save-guide data-guide-id="' . esc_attr( $id ) . '" data-guide-type="' . esc_attr( $guide_type ) . '" data-guide-title="' . esc_attr( $title ) . '" data-guide-copy="' . esc_attr( $copy ) . '">' . esc_html__( 'Save guide', 'solo-to-china' ) . '</button>';
+	echo '<div class="stc-share" data-stc-share data-share-title="' . esc_attr( $title ) . '" data-share-description="' . esc_attr( wp_trim_words( $description, 28 ) ) . '" data-share-canonical="' . esc_url( $canonical ) . '">';
+	echo '<button class="stc-share__trigger" type="button" aria-expanded="false" aria-controls="' . esc_attr( $panel_id ) . '" aria-label="' . esc_attr__( 'Share this page', 'solo-to-china' ) . '" data-stc-share-trigger>';
+	echo '<span class="stc-share__trigger-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></span>';
+	echo '<span class="stc-share__trigger-copy"><strong>' . esc_html__( 'Share this page', 'solo-to-china' ) . '</strong><small>' . esc_html__( 'Send it to a travel companion', 'solo-to-china' ) . '</small></span>';
+	echo '<span class="stc-share__trigger-arrow" aria-hidden="true">&#8599;</span></button>';
+	echo '<div id="' . esc_attr( $panel_id ) . '" class="stc-share__panel" role="dialog" aria-labelledby="' . esc_attr( $heading_id ) . '" data-stc-share-panel hidden>';
+	echo '<div class="stc-share__panel-heading"><div><span>' . esc_html__( 'Share the useful part', 'solo-to-china' ) . '</span><strong id="' . esc_attr( $heading_id ) . '">' . esc_html__( 'Pass this guide along', 'solo-to-china' ) . '</strong></div>';
+	echo '<button class="stc-share__close" type="button" aria-label="' . esc_attr__( 'Close sharing options', 'solo-to-china' ) . '" data-stc-share-close><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>';
+	echo '<p class="stc-share__panel-copy">' . esc_html__( 'Good plans travel further when they are easy to share.', 'solo-to-china' ) . '</p>';
+	echo '<div class="stc-share__channels">';
+	echo '<a class="stc-share__channel" href="#" data-stc-share-whatsapp><span aria-hidden="true">WA</span>' . esc_html__( 'WhatsApp', 'solo-to-china' ) . '</a>';
+	echo '<a class="stc-share__channel" href="#" data-stc-share-email><span aria-hidden="true">@</span>' . esc_html__( 'Email', 'solo-to-china' ) . '</a>';
+	echo '</div>';
+	echo '<div class="stc-share__copy-row"><input type="text" value="' . esc_attr( $canonical ) . '" readonly aria-label="' . esc_attr__( 'Canonical page link', 'solo-to-china' ) . '" data-stc-share-url><button class="stc-share__copy" type="button" data-stc-share-copy>' . esc_html__( 'Copy link', 'solo-to-china' ) . '</button></div>';
+	echo '<p class="stc-share__status" role="status" aria-live="polite" data-stc-share-status></p>';
+	echo '</div></div>';
 }
 
 function stc_core_page_latest_guides_config( $slug ) {
@@ -415,113 +439,6 @@ function stc_render_core_page_latest_guides( $slug ) {
 
 	echo '</section>';
 }
-
-function stc_register_block_patterns() {
-	if ( ! function_exists( 'register_block_pattern' ) ) {
-		return;
-	}
-
-	if ( function_exists( 'register_block_pattern_category' ) ) {
-		register_block_pattern_category(
-			'solo-to-china',
-			[ 'label' => __( 'SoloToChina', 'solo-to-china' ) ]
-		);
-	}
-
-	$attraction_guide_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the practical answer: who should visit, how much time to allow, and what travelers should decide before they go.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:group {"className":"stc-guide-quick-facts"} --><div class="wp-block-group stc-guide-quick-facts">'
-		. '<!-- wp:heading {"level":2} --><h2>At a glance</h2><!-- /wp:heading -->'
-		. '<!-- wp:group {"className":"stc-guide-facts-grid"} --><div class="wp-block-group stc-guide-facts-grid">'
-		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Best time</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Example: April-May or September-October for calmer weather and lighter crowds.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
-		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Time needed</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Example: 3-4 hours, half day, or full day depending on route and queues.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
-		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Reservation window</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Example: check tickets 7 days ahead, earlier during Chinese public holidays.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
-		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Passport note</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Explain whether foreign visitors need passport details, real-name booking, or ID checks at entry.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
-		. '<!-- wp:group {"className":"stc-guide-fact"} --><div class="wp-block-group stc-guide-fact"><!-- wp:paragraph --><p><strong>Best base area</strong></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Name the easiest nearby district, metro area, or city base for first-time visitors.</p><!-- /wp:paragraph --></div><!-- /wp:group -->'
-		. '</div><!-- /wp:group --></div><!-- /wp:group -->'
-		. '<!-- wp:group {"className":"stc-guide-warning"} --><div class="wp-block-group stc-guide-warning">'
-		. '<!-- wp:heading {"level":2} --><h2>Before you book</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Call out the one or two decisions travelers should make before paying: ticket type, entry time, passport requirement, transport home, or weather risk.</p><!-- /wp:paragraph -->'
-		. '</div><!-- /wp:group -->'
-		. '<!-- wp:heading {"level":2} --><h2>Best time to visit</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Cover seasons, weather, crowd levels, photography windows, and when solo or first-time visitors should avoid peak pressure.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>How to get there</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Explain metro, taxi, high-speed rail, airport, walking, and last-mile details in plain English.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Tickets and prices</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>List price ranges, common ticket types, what is included, and passport or real-name entry notes.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Opening and booking timing</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Explain opening hours, closed days, how many days ahead to check tickets, and when to use the reminder tool.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Where to stay</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Recommend the best nearby or connected areas for first-time visitors, with tradeoffs for price, transit, and late arrivals.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Common mistakes</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Call out traps, confusing entrances, timing mistakes, overpacked routes, taxi issues, and holiday crowd risks.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:group {"className":"stc-guide-route"} --><div class="wp-block-group stc-guide-route">'
-		. '<!-- wp:heading {"level":2} --><h2>Suggested route</h2><!-- /wp:heading -->'
-		. '<!-- wp:list {"ordered":true} --><ol><!-- wp:list-item --><li>Start with the easiest gate, metro exit, or visitor center for foreign travelers.</li><!-- /wp:list-item --><!-- wp:list-item --><li>Visit the must-see section before peak crowds or harsh weather.</li><!-- /wp:list-item --><!-- wp:list-item --><li>Add one slower stop for food, shade, views, or a clean restroom break.</li><!-- /wp:list-item --><!-- wp:list-item --><li>Exit through the transport-friendly side and avoid a late taxi bottleneck.</li><!-- /wp:list-item --></ol><!-- /wp:list -->'
-		. '</div><!-- /wp:group -->'
-		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Answer the most likely first-time visitor questions in short, direct blocks.</p><!-- /wp:paragraph -->';
-
-	register_block_pattern(
-		'solo-to-china/attraction-guide-v1',
-		[
-			'title'       => __( 'Attraction Guide v1', 'solo-to-china' ),
-			'description' => __( 'A practical SoloToChina article structure for scenic spot and attraction guides.', 'solo-to-china' ),
-			'categories'  => [ 'solo-to-china' ],
-			'content'     => $attraction_guide_content,
-		]
-	);
-
-	$city_guide_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the city answer: who this city is best for, how many days to stay, and what first-time visitors should plan before arrival.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Best areas to stay</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Compare the best neighborhoods or districts for first-time visitors, solo travelers, transport access, price, nightlife, and early departures.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Getting around</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Explain metro, taxi, ride-hailing, airport or railway station transfers, walkability, and language friction in plain English.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>First-time itinerary</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Give a simple 1-3 day route for a calm first visit, with realistic travel time and room for meals or rest.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Food and neighborhoods</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Introduce food areas, useful local dishes, market or street-food expectations, and how to avoid tourist-only traps.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Day trips and nearby attractions</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>List nearby scenic spots, ancient towns, museums, mountains, or transit-friendly extensions that pair naturally with this city.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Common city mistakes</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Call out rushed routes, wrong station choices, late-night arrival issues, holiday crowding, weather surprises, and payment or app friction.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Answer the most likely first-time city questions in short, practical blocks.</p><!-- /wp:paragraph -->';
-
-	register_block_pattern(
-		'solo-to-china/city-guide-v1',
-		[
-			'title'       => __( 'City Guide v1', 'solo-to-china' ),
-			'description' => __( 'A practical SoloToChina article structure for city guides.', 'solo-to-china' ),
-			'categories'  => [ 'solo-to-china' ],
-			'content'     => $city_guide_content,
-		]
-	);
-
-	$survival_kit_content = '<!-- wp:paragraph {"className":"stc-guide-intro"} --><p>Start with the practical answer: what the traveler should do, when to do it, and what to prepare before arriving in China.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Quick answer</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Give the short, confidence-building answer first, including who this applies to and the safest default choice.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>What to set up before arrival</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>List the items to prepare before departure, such as payment setup, Essential Apps, eSIM and internet, Visa and entry documents, VPN and access needs.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Step-by-step setup</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Break the setup into simple steps a first-time visitor can follow without Chinese language confidence.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>What can go wrong</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Explain the common failure points, confusing app screens, payment issues, passport checks, blocked services, or arrival-day friction.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>Backup plan</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Give a fallback route if the main setup fails, including cash/card options, hotel help, airport counters, offline screenshots, and alternate apps.</p><!-- /wp:paragraph -->'
-		. '<!-- wp:heading {"level":2} --><h2>FAQ</h2><!-- /wp:heading -->'
-		. '<!-- wp:paragraph --><p>Answer the most likely first-time visitor questions in short, practical blocks.</p><!-- /wp:paragraph -->';
-
-	register_block_pattern(
-		'solo-to-china/survival-kit-v1',
-		[
-			'title'       => __( 'Survival Kit v1', 'solo-to-china' ),
-			'description' => __( 'A practical SoloToChina article structure for first-time China travel survival topics.', 'solo-to-china' ),
-			'categories'  => [ 'solo-to-china' ],
-			'content'     => $survival_kit_content,
-		]
-	);
-}
-add_action( 'init', 'stc_register_block_patterns' );
 
 function stc_render_survival_icon( $icon ) {
 	$paths = [

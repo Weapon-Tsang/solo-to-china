@@ -1,7 +1,8 @@
 $ErrorActionPreference = "Stop"
 
 $Root = Split-Path -Parent $PSScriptRoot
-$ContractPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json"
+$ContractPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/content-contract.v2.json"
+$RegistryPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json"
 $RuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-contract.php"
 $ComponentsRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-components.php"
 $RenderersRuntimePath = Join-Path $Root "wp-content/themes/solo-to-china/inc/content-renderers.php"
@@ -17,27 +18,42 @@ function Add-ContractFailure([string]$Message) {
 }
 
 if (-not (Test-Path -LiteralPath $ContractPath -PathType Leaf)) {
-    throw "Content Contract is missing: wp-content/themes/solo-to-china/content-contract/content-contract.v1.json"
+    throw "Content Contract is missing: wp-content/themes/solo-to-china/content-contract/content-contract.v2.json"
 }
 
 try {
     $ContractRaw = Get-Content -LiteralPath $ContractPath -Raw
     $Contract = $ContractRaw | ConvertFrom-Json
+    $RegistryRaw = Get-Content -LiteralPath $RegistryPath -Raw
+    $Registry = $RegistryRaw | ConvertFrom-Json
 } catch {
-    throw "Content Contract is not valid JSON: $($_.Exception.Message)"
+    throw "Content Contract or Component Registry is not valid JSON: $($_.Exception.Message)"
 }
 
-foreach ($TopLevelKey in @("contract_version", "theme_version", "guide_types", "components", "capabilities")) {
+foreach ($TopLevelKey in @("contract_version", "theme_version", "principles", "presentation", "guide_types", "component_registry", "capabilities")) {
     if (-not $Contract.PSObject.Properties.Name.Contains($TopLevelKey)) {
         Add-ContractFailure "Content Contract is missing top-level key: $TopLevelKey"
     }
 }
-
-if ($Contract.contract_version -ne "1.0.0") {
-    Add-ContractFailure "Content Contract version must be 1.0.0."
+if ($Contract.component_registry.version -ne "1.0.0" -or $Registry.registry_version -ne "1.0.0") {
+    Add-ContractFailure "Content Contract must reference Component Registry 1.0.0."
 }
-if ($Contract.theme_version -ne "0.24.0") {
-    Add-ContractFailure "Content Contract theme_version must be 0.24.0."
+if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.Contains('"allowed_components"')) {
+    Add-ContractFailure "Content Contract duplicates the canonical Component Registry list."
+}
+
+if ($Contract.contract_version -ne "2.0.0") {
+    Add-ContractFailure "Content Contract version must be 2.0.0."
+}
+if ($Contract.theme_version -ne "0.25.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.25.0."
+}
+
+if ($Contract.principles.frontend -ne "Render what CMS requests." -or $Contract.principles.cms -ne "Decide what the page contains." -or $Contract.principles.content_type -ne "Content type is taxonomy, not layout.") {
+    Add-ContractFailure "Content Contract responsibility principles are incomplete."
+}
+if ($Contract.presentation.post_meta.show_share -ne "_stc_show_share" -or $Contract.presentation.post_meta.show_toc -ne "_stc_show_toc" -or $Contract.presentation.post_meta.hero_variant -ne "_stc_hero_variant") {
+    Add-ContractFailure "Content Contract presentation metadata mapping is incomplete."
 }
 
 $ExpectedGuideTypes = [ordered]@{
@@ -46,7 +62,7 @@ $ExpectedGuideTypes = [ordered]@{
     "attraction-guide" = "attraction-guides"
     "travel-guide" = "travel-guides"
 }
-$RequiredGuideKeys = @("slug", "label", "category_slug", "shell_behavior", "allowed_components", "optional_dynamic_components")
+$RequiredGuideKeys = @("slug", "label", "category_slug", "shell_behavior", "component_policy")
 
 foreach ($GuideType in $ExpectedGuideTypes.Keys) {
     $GuideProperty = $Contract.guide_types.PSObject.Properties[$GuideType]
@@ -67,6 +83,9 @@ foreach ($GuideType in $ExpectedGuideTypes.Keys) {
     if ($Guide.category_slug -ne $ExpectedGuideTypes[$GuideType]) {
         Add-ContractFailure "Guide type $GuideType has the wrong category_slug."
     }
+    if ($Guide.shell_behavior -ne "taxonomy-only") {
+        Add-ContractFailure "Guide type $GuideType still encodes a page layout."
+    }
 }
 
 $ExpectedComponents = @(
@@ -75,11 +94,11 @@ $ExpectedComponents = @(
     "steps", "checklist", "comparison_table", "faq",
     "planner_cta", "ticket_reminder", "affiliate_cta"
 )
-$RequiredComponentKeys = @("type", "description", "fields", "required_fields", "optional_fields", "allowed_guide_types", "render_mode", "anchorable", "accessibility_notes")
-$Components = @($Contract.components)
+$RequiredComponentKeys = @("id", "name", "category", "purpose", "status", "variants", "schema", "implementation_paths", "cms_usable", "cms_interface", "render_mode", "accessibility", "responsive", "example")
+$Components = @($Registry.components | Where-Object { $_.cms_usable -eq $true -and $_.cms_interface -eq "page_block" })
 
 foreach ($ComponentType in $ExpectedComponents) {
-    $Matches = @($Components | Where-Object { $_.type -eq $ComponentType })
+    $Matches = @($Components | Where-Object { $_.id -eq $ComponentType })
     if ($Matches.Count -ne 1) {
         Add-ContractFailure "Content Contract must define component exactly once: $ComponentType"
     }
@@ -88,32 +107,22 @@ foreach ($ComponentType in $ExpectedComponents) {
 foreach ($Component in $Components) {
     foreach ($ComponentKey in $RequiredComponentKeys) {
         if (-not $Component.PSObject.Properties.Name.Contains($ComponentKey)) {
-            Add-ContractFailure "Component $($Component.type) is missing: $ComponentKey"
+            Add-ContractFailure "Component $($Component.id) is missing: $ComponentKey"
         }
     }
 
-    $FieldNames = @($Component.fields.PSObject.Properties.Name)
-    foreach ($FieldName in @($Component.required_fields) + @($Component.optional_fields)) {
+    $FieldNames = @($Component.schema.properties.PSObject.Properties.Name)
+    foreach ($FieldName in @($Component.schema.required)) {
         if (-not $FieldNames.Contains([string]$FieldName)) {
-            Add-ContractFailure "Component $($Component.type) references undefined field: $FieldName"
+            Add-ContractFailure "Component $($Component.id) references undefined required field: $FieldName"
         }
-    }
-
-    foreach ($AllowedGuideType in @($Component.allowed_guide_types)) {
-        if (-not $ExpectedGuideTypes.Contains([string]$AllowedGuideType)) {
-            Add-ContractFailure "Component $($Component.type) allows unknown guide type: $AllowedGuideType"
-        }
-    }
-
-    if (-not $Component.PSObject.Properties.Name.Contains("semantic_class") -and -not $Component.PSObject.Properties.Name.Contains("block_name") -and -not $Component.PSObject.Properties.Name.Contains("renderer")) {
-        Add-ContractFailure "Component $($Component.type) needs a semantic_class, block_name, or renderer."
     }
 }
 
 foreach ($DynamicType in @("planner_cta", "ticket_reminder", "affiliate_cta")) {
-    $DynamicComponent = $Components | Where-Object { $_.type -eq $DynamicType } | Select-Object -First 1
-    if (-not $DynamicComponent.dynamic -or -not $DynamicComponent.renderer) {
-        Add-ContractFailure "Dynamic component $DynamicType must declare dynamic=true and a renderer."
+    $DynamicComponent = $Components | Where-Object { $_.id -eq $DynamicType } | Select-Object -First 1
+    if ($DynamicComponent.render_mode -ne "shortcode") {
+        Add-ContractFailure "Dynamic component $DynamicType must declare its shortcode render mode."
     }
 }
 
@@ -127,7 +136,7 @@ if (-not (Test-Path -LiteralPath $RuntimePath -PathType Leaf)) {
     Add-ContractFailure "Content Contract runtime is missing."
 } else {
     $Runtime = Get-Content -LiteralPath $RuntimePath -Raw
-    foreach ($RuntimeToken in @("STC_CONTENT_CONTRACT_VERSION", "register_rest_route", "stc/v1", "content-contract", "WP_REST_Server::READABLE", "permission_callback", "__return_true", "ETag", "Last-Modified", "Cache-Control", "register_post_meta", "_stc_guide_type", "_stc_content_contract_version", "show_in_rest", "sanitize_callback", "auth_callback", "current_user_can", "edit_post", "stc_get_explicit_guide_type")) {
+    foreach ($RuntimeToken in @("STC_CONTENT_CONTRACT_VERSION", "register_rest_route", "stc/v1", "content-contract", "WP_REST_Server::READABLE", "permission_callback", "__return_true", "ETag", "Last-Modified", "Cache-Control", "register_post_meta", "_stc_guide_type", "_stc_content_contract_version", "_stc_show_share", "_stc_show_toc", "_stc_hero_variant", "stc_page_presentation_enabled", "show_in_rest", "sanitize_callback", "auth_callback", "current_user_can", "edit_post", "stc_get_explicit_guide_type")) {
         if (-not $Runtime.Contains($RuntimeToken)) {
             Add-ContractFailure "Content Contract runtime is missing: $RuntimeToken"
         }
@@ -138,6 +147,9 @@ if (Test-Path -LiteralPath $ThemeFunctionsPath -PathType Leaf) {
     $ThemeFunctions = Get-Content -LiteralPath $ThemeFunctionsPath -Raw
     if (-not $ThemeFunctions.Contains("inc/content-contract.php")) {
         Add-ContractFailure "Parent Theme does not load the Content Contract runtime."
+    }
+    if (-not $ThemeFunctions.Contains("inc/component-registry.php")) {
+        Add-ContractFailure "Parent Theme does not load the Component Registry runtime."
     }
     if (-not $ThemeFunctions.Contains("inc/content-components.php")) {
         Add-ContractFailure "Parent Theme does not load the Content Component runtime."

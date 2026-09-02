@@ -7,9 +7,13 @@ $RequiredFiles = @(
     "docs/handoff/new-chat-handoff.md",
     "docs/deployment/wordpress-install.md",
     "docs/architecture/content-component-system.md",
+    "docs/COMPONENT_LIBRARY.md",
     "scripts/package-release.ps1",
+    "scripts/generate-component-catalog.ps1",
+    "scripts/verify-component-registry.ps1",
     "scripts/verify-content-contract.ps1",
     "scripts/verify-content-runtime.ps1",
+    "scripts/verify-page-architecture.ps1",
     "scripts/playground-blueprint.json",
     "scripts/playground-editor-blueprint.json",
     "scripts/playground-parent-blueprint.json",
@@ -19,9 +23,11 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/README.md",
     "wp-content/themes/solo-to-china/functions.php",
     "wp-content/themes/solo-to-china/inc/content-contract.php",
+    "wp-content/themes/solo-to-china/inc/component-registry.php",
     "wp-content/themes/solo-to-china/inc/content-components.php",
     "wp-content/themes/solo-to-china/inc/content-renderers.php",
-    "wp-content/themes/solo-to-china/content-contract/content-contract.v1.json",
+    "wp-content/themes/solo-to-china/content-contract/content-contract.v2.json",
+    "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json",
     "wp-content/themes/solo-to-china/header.php",
     "wp-content/themes/solo-to-china/footer.php",
     "wp-content/themes/solo-to-china/index.php",
@@ -31,6 +37,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/search.php",
     "wp-content/themes/solo-to-china/searchform.php",
     "wp-content/themes/solo-to-china/page.php",
+    "wp-content/themes/solo-to-china/page-design-system.php",
     "wp-content/themes/solo-to-china/front-page.php",
     "wp-content/themes/solo-to-china/screenshot.png",
     "wp-content/themes/solo-to-china/assets/css/main.css",
@@ -77,6 +84,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china-child/assets/css/home.css",
     "wp-content/themes/solo-to-china-child/assets/css/article.css",
     "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+    "wp-content/themes/solo-to-china-child/assets/css/component-gallery.css",
     "wp-content/themes/solo-to-china-child/assets/css/editor-style.css",
     "wp-content/themes/solo-to-china-child/assets/js/site.js",
     "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php",
@@ -139,7 +147,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.24.0") -or (-not $PackageScript.Contains("Child Theme version: 0.6.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.25.0") -or (-not $PackageScript.Contains("Child Theme version: 0.7.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -194,7 +202,7 @@ if (Test-Path -LiteralPath $ParentPreviewBlueprintPath -PathType Leaf) {
 $RuntimeVerificationPath = Join-Path $Root "scripts/verify-content-runtime.ps1"
 if (Test-Path -LiteralPath $RuntimeVerificationPath -PathType Leaf) {
     $RuntimeVerification = Get-Content -LiteralPath $RuntimeVerificationPath -Raw
-    foreach ($RuntimeVerificationToken in @('stc/v1/content-contract', 'contract_version', 'guide_types', 'required_fields', '_stc_guide_type', 'china-mobile-payment-setup', 'beijing-first-time-city-guide', 'forbidden-city-first-time-visitor-guide', 'stc-content-block--quick-answer', 'stc-content-block--warning', 'stc-content-block--faq', 'stc-dynamic-component--planner', 'stc-dynamic-component--ticket', 'stc-dynamic-component--affiliate', 'sponsored nofollow noopener', 'srcset=', 'loading="lazy"', 'claim_keys', 'ParentOnly')) {
+    foreach ($RuntimeVerificationToken in @('stc/v1/content-contract', 'stc/v1/component-registry', 'contract_version', 'registry_version', 'guide_types', 'schema.required', 'design-system', '_stc_guide_type', 'china-mobile-payment-setup', 'beijing-first-time-city-guide', 'forbidden-city-first-time-visitor-guide', 'stc-content-block--quick-answer', 'stc-content-block--warning', 'stc-content-block--faq', 'stc-dynamic-component--planner', 'stc-dynamic-component--ticket', 'stc-dynamic-component--affiliate', 'sponsored nofollow noopener', 'srcset=', 'loading="lazy"', 'claim_keys', 'ParentOnly')) {
         if (-not $RuntimeVerification.Contains($RuntimeVerificationToken)) {
             $Failures.Add("Content runtime verification is missing: $RuntimeVerificationToken")
         }
@@ -237,8 +245,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.24.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.24.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.25.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.25.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -251,7 +259,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.24.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.25.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -311,16 +319,18 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.24.0'")) {
-		$Failures.Add("Theme asset version is not 0.24.0.")
+    if (-not $Functions.Contains("'0.25.0'")) {
+		$Failures.Add("Theme asset version is not 0.25.0.")
     }
     foreach ($ContentEditorToken in @("editor-styles", "add_editor_style", "assets/css/editor-style.css", "stc_add_stable_content_heading_ids", "sanitize_title", "preg_replace_callback")) {
         if (-not $Functions.Contains($ContentEditorToken)) {
             $Failures.Add("Theme is missing stable content anchors or editor style support: $ContentEditorToken")
         }
     }
-    if (-not $Functions.Contains("stc_render_article_save_button") -or (-not $Functions.Contains("data-stc-save-guide")) -or (-not $Functions.Contains("stc-article-save"))) {
-        $Failures.Add("Theme functions are missing the article-only local save renderer.")
+    foreach ($ShareRendererToken in @("stc_render_share_this_page", "data-stc-share", "data-stc-share-trigger", "data-stc-share-panel")) {
+        if (-not $Functions.Contains($ShareRendererToken)) {
+            $Failures.Add("Theme functions are missing the reusable ShareThisPage renderer: $ShareRendererToken")
+        }
     }
     if (-not $Functions.Contains("stc_is_attraction_guide_post")) {
         $Failures.Add("Theme functions are missing the Attraction Guide post detector.")
@@ -346,35 +356,6 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if ($Functions.Contains("stc_render_home_latest_guides")) {
         $Failures.Add("Theme functions still include the removed homepage latest guides renderer.")
     }
-    if (-not $Functions.Contains("register_block_pattern") -or (-not $Functions.Contains("solo-to-china/attraction-guide-v1"))) {
-        $Failures.Add("Theme does not register the Attraction Guide content pattern.")
-    }
-    foreach ($PatternText in @("Best time to visit", "How to get there", "Tickets and prices", "Opening and booking timing", "Where to stay", "Common mistakes")) {
-        if (-not $Functions.Contains($PatternText)) {
-            $Failures.Add("Attraction Guide content pattern is missing section: $PatternText")
-        }
-    }
-    foreach ($PatternText in @("stc-guide-quick-facts", "stc-guide-warning", "Time needed", "Reservation window", "Passport note", "Best base area", "Suggested route")) {
-        if (-not $Functions.Contains($PatternText)) {
-            $Failures.Add("Attraction Guide content pattern is missing structured article module: $PatternText")
-        }
-    }
-    if (-not $Functions.Contains("solo-to-china/city-guide-v1")) {
-        $Failures.Add("Theme does not register the City Guide content pattern.")
-    }
-    foreach ($PatternText in @("Best areas to stay", "Getting around", "First-time itinerary", "Food and neighborhoods", "Day trips and nearby attractions", "Common city mistakes")) {
-        if (-not $Functions.Contains($PatternText)) {
-            $Failures.Add("City Guide content pattern is missing section: $PatternText")
-        }
-    }
-    if (-not $Functions.Contains("solo-to-china/survival-kit-v1")) {
-        $Failures.Add("Theme does not register the Survival Kit content pattern.")
-    }
-    foreach ($PatternText in @("Quick answer", "What to set up before arrival", "Step-by-step setup", "What can go wrong", "Backup plan", "FAQ")) {
-        if (-not $Functions.Contains($PatternText)) {
-            $Failures.Add("Survival Kit content pattern is missing section: $PatternText")
-        }
-    }
 }
 
 $ChildThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china-child/style.css"
@@ -382,7 +363,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.6.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.7.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -453,7 +434,7 @@ if (Test-Path -LiteralPath $ChildThemeHomeCssPath -PathType Leaf) {
 $ChildThemeArticleCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/article.css"
 if (Test-Path -LiteralPath $ChildThemeArticleCssPath -PathType Leaf) {
     $ChildThemeArticleCss = Get-Content -LiteralPath $ChildThemeArticleCssPath -Raw
-    foreach ($ChildArticleCssToken in @(".single .stc-content", ".stc-single--attraction-guide", ".stc-entry-content--guide", ".stc-guide-breadcrumb", ".stc-guide-toc", ".stc-guide-quick-facts", ".stc-guide-warning", ".stc-guide-route", ".stc-article-save", "card-forbidden-city-hd.webp", "card-beijing-hd.webp", "card-hangzhou-hd.webp", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+    foreach ($ChildArticleCssToken in @(".single .stc-content", ".stc-article-hero", ".stc-article-layout", ".stc-entry-content--guide", ".stc-guide-breadcrumb", ".stc-guide-toc", ".stc-guide-quick-facts", ".stc-guide-warning", ".stc-guide-route", ".stc-share__trigger", ".stc-share__panel", "card-forbidden-city-hd.webp", "card-beijing-hd.webp", "card-hangzhou-hd.webp", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
         if (-not $ChildThemeArticleCss.Contains($ChildArticleCssToken)) {
             $Failures.Add("Child Theme article CSS is missing: $ChildArticleCssToken")
         }
@@ -506,26 +487,13 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     if (-not $PageTemplate.Contains("solo_to_china_ticket_tool")) {
         $Failures.Add("Tools page template does not render the guest-first ticket tool shortcode.")
     }
-    if ($PageTemplate.Contains("data-stc-save-guide") -or $PageTemplate.Contains("stc-save-guide--image-card")) {
-        $Failures.Add("Core landing cards still expose save actions before the guide is opened.")
+    foreach ($RemovedGuideSaveToken in @("data-stc-save-guide", "data-stc-saved-guides", "data-stc-export-guides", "data-stc-import-guides", "data-stc-clear-guides", "Saved on this device")) {
+        if ($PageTemplate.Contains($RemovedGuideSaveToken)) {
+            $Failures.Add("Core page template still contains removed guide-saving UI: $RemovedGuideSaveToken")
+        }
     }
-    if (-not $PageTemplate.Contains("data-stc-saved-guides")) {
-        $Failures.Add("Core page template is missing the local saved guides list.")
-    }
-    if (-not $PageTemplate.Contains("data-stc-export-guides")) {
-        $Failures.Add("Core page template is missing the local saved guides export action.")
-    }
-    if (-not $PageTemplate.Contains("data-stc-clear-guides")) {
-        $Failures.Add("Core page template is missing the local saved guides clear action.")
-    }
-    if (-not $PageTemplate.Contains("data-stc-import-guides")) {
-        $Failures.Add("Core page template is missing the local saved guides import action.")
-    }
-    if (-not $PageTemplate.Contains("Stored only on this device")) {
-        $Failures.Add("Core page template is missing local-only saved guide privacy copy.")
-    }
-    if (-not $PageTemplate.Contains("data-stc-share-page")) {
-        $Failures.Add("Core page template is missing no-account page sharing.")
+    if (-not $PageTemplate.Contains("stc_render_share_this_page")) {
+        $Failures.Add("Core page template is missing reusable no-account page sharing.")
     }
     if (-not $PageTemplate.Contains("stc_render_faq_chevron") -or (-not $PageTemplate.Contains("stc-faq__answer"))) {
         $Failures.Add("FAQ page template is missing the shared SVG chevron or answer wrapper.")
@@ -546,74 +514,29 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
             $Failures.Add("Core page template is missing utility-page presentation token: $UtilityPageToken")
         }
     }
-    if (-not $PageTemplate.Contains("in_array( `$slug, `$guide_landing_slugs, true )")) {
-        $Failures.Add("Saved Guides are not limited to the three content landing pages.")
-    }
-    foreach ($LandingToken in @("stc-page-primary", "stc-saved-guides", "stc_render_core_page_latest_guides")) {
+    foreach ($LandingToken in @("stc-page-primary", "stc_render_core_page_latest_guides")) {
         if (-not $PageTemplate.Contains($LandingToken)) {
             $Failures.Add("Core landing page is missing content-first structure token: $LandingToken")
         }
     }
     $PrimaryContentIndex = $PageTemplate.IndexOf("stc-page-primary")
-    $SavedGuidesIndex = $PageTemplate.IndexOf('<section class="stc-saved-guides"')
     $LatestGuidesIndex = $PageTemplate.IndexOf("stc_render_core_page_latest_guides")
-    if ($PrimaryContentIndex -lt 0 -or $SavedGuidesIndex -le $PrimaryContentIndex -or $LatestGuidesIndex -le $SavedGuidesIndex) {
-        $Failures.Add("Core landing page does not keep primary content before Saved Guides and latest posts.")
+    if ($PrimaryContentIndex -lt 0 -or $LatestGuidesIndex -le $PrimaryContentIndex) {
+        $Failures.Add("Core landing page does not keep primary content before latest posts.")
     }
 }
 
 $SingleTemplatePath = Join-Path $Root "wp-content/themes/solo-to-china/single.php"
 if (Test-Path -LiteralPath $SingleTemplatePath -PathType Leaf) {
     $SingleTemplate = Get-Content -LiteralPath $SingleTemplatePath -Raw
-    if (-not $SingleTemplate.Contains("stc_is_attraction_guide_post")) {
-        $Failures.Add("Single template does not route Attraction Guide posts.")
-    }
-    if (-not $SingleTemplate.Contains("stc_is_city_guide_post")) {
-        $Failures.Add("Single template does not route City Guide posts.")
-    }
-    if (-not $SingleTemplate.Contains("stc_is_survival_kit_post")) {
-        $Failures.Add("Single template does not route Survival Kit posts.")
-    }
-    if (-not $SingleTemplate.Contains("stc-single--attraction-guide")) {
-        $Failures.Add("Single template is missing the Attraction Guide article layout class.")
-    }
-    if (-not $SingleTemplate.Contains("stc-attraction-guide__checklist")) {
-        $Failures.Add("Single template is missing the Attraction Guide planning checklist.")
-    }
-    if (-not $SingleTemplate.Contains("stc-single--city-guide")) {
-        $Failures.Add("Single template is missing the City Guide article layout class.")
-    }
-    if (-not $SingleTemplate.Contains("stc-city-guide__checklist")) {
-        $Failures.Add("Single template is missing the City Guide planning checklist.")
-    }
-    if (-not $SingleTemplate.Contains("stc_render_article_save_button")) {
-        $Failures.Add("Guide articles do not provide the post-open local save action.")
-    }
-    if (-not $SingleTemplate.Contains("stc-guide-toc--mobile") -or (-not $SingleTemplate.Contains("stc-guide-toc--desktop"))) {
-        $Failures.Add("Guide article templates do not provide separate mobile and desktop table-of-contents positions.")
-    }
-    if (-not $SingleTemplate.Contains("stc-single--survival-kit")) {
-        $Failures.Add("Single template is missing the Survival Kit article layout class.")
-    }
-    if (-not $SingleTemplate.Contains("stc-survival-kit__checklist")) {
-        $Failures.Add("Single template is missing the Survival Kit planning checklist.")
-    }
-    if (-not $SingleTemplate.Contains("stc_render_guide_toc")) {
-        $Failures.Add("Single guide templates do not render the automatic table of contents.")
-    }
-    foreach ($GuideTopic in @("Best time", "Transport", "Ticket price", "Booking window", "Where to stay", "Common mistakes")) {
-        if (-not $SingleTemplate.Contains($GuideTopic)) {
-            $Failures.Add("Attraction Guide template is missing planning topic: $GuideTopic")
+    foreach ($GenericShellToken in @("stc-article-hero", "stc-article-layout", "stc-entry-content--guide", "stc_get_hero_variant", "stc_page_presentation_enabled( 'share'", "stc_page_presentation_enabled( 'toc'", "stc_render_share_this_page", "stc_render_guide_toc", "the_content()")) {
+        if (-not $SingleTemplate.Contains($GenericShellToken)) {
+            $Failures.Add("Generic single article shell is missing: $GenericShellToken")
         }
     }
-    foreach ($GuideTopic in @("Where to stay", "Getting around", "Itinerary", "Food", "Neighborhoods", "Common mistakes")) {
-        if (-not $SingleTemplate.Contains($GuideTopic)) {
-            $Failures.Add("City Guide template is missing planning topic: $GuideTopic")
-        }
-    }
-    foreach ($GuideTopic in @("Before arrival", "Setup steps", "Required apps", "Documents", "Connectivity", "Backup plan")) {
-        if (-not $SingleTemplate.Contains($GuideTopic)) {
-            $Failures.Add("Survival Kit template is missing planning topic: $GuideTopic")
+    foreach ($FixedEditorialToken in @("stc_is_attraction_guide_post", "stc_is_city_guide_post", "stc_is_survival_kit_post", "Planning checklist", "City planning checklist", "Setup checklist", "stc_render_article_save_button")) {
+        if ($SingleTemplate.Contains($FixedEditorialToken)) {
+            $Failures.Add("Single template still binds editorial layout to content type: $FixedEditorialToken")
         }
     }
 }
@@ -936,14 +859,10 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if (-not $ThemeCss.Contains(".stc-header.is-menu-open")) {
         $Failures.Add("Theme CSS is missing the mobile navigation open state.")
     }
-    if (-not $ThemeCss.Contains(".stc-saved-guides")) {
-        $Failures.Add("Theme CSS is missing local saved guides styling.")
-    }
-    if (-not $ThemeCss.Contains(".stc-saved-guides__actions")) {
-        $Failures.Add("Theme CSS is missing local saved guides action styling.")
-    }
-    if (-not $ThemeCss.Contains(".stc-local-note")) {
-        $Failures.Add("Theme CSS is missing local-only saved guide note styling.")
+    foreach ($RemovedGuideSaveStyle in @(".stc-saved-guides", ".stc-save-guide", ".stc-article-save")) {
+        if ($ThemeCss.Contains($RemovedGuideSaveStyle)) {
+            $Failures.Add("Theme CSS still includes removed guide-saving presentation: $RemovedGuideSaveStyle")
+        }
     }
     if (-not $ThemeCss.Contains(".stc-page-actions")) {
         $Failures.Add("Theme CSS is missing page sharing action styling.")
@@ -986,9 +905,9 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing secondary-page responsive style: $SecondaryPageStyleToken")
         }
     }
-    foreach ($MobileGridStyleToken in @(".stc-survival-card::after", ".stc-article-save", ".stc-guide-grid-shell", ".stc-guide-grid-reveal", "grid-template-columns: repeat(2", "max-height: var(--stc-guide-collapsed-height)", "max-height: var(--stc-guide-expanded-height)", "backdrop-filter: blur")) {
+    foreach ($MobileGridStyleToken in @(".stc-survival-card::after", ".stc-share__trigger", ".stc-guide-grid-shell", ".stc-guide-grid-reveal", "grid-template-columns: repeat(2", "max-height: var(--stc-guide-collapsed-height)", "max-height: var(--stc-guide-expanded-height)", "backdrop-filter: blur")) {
         if (-not $ThemeCss.Contains($MobileGridStyleToken)) {
-            $Failures.Add("Theme CSS is missing requested four-card fold or article-save style: $MobileGridStyleToken")
+            $Failures.Add("Theme CSS is missing requested four-card fold or page-utility style: $MobileGridStyleToken")
         }
     }
     foreach ($RefinedGuideCardToken in @(".stc-section__view-all", "linear-gradient(to top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .35) 40%, transparent 100%)", "background: rgba(0, 0, 0, .45)", "-webkit-backdrop-filter: blur(8px)", "border: 1px solid rgba(255, 255, 255, .18)", "aspect-ratio: 3 / 4", "border-radius: 14px", "gap: 12px", "color: rgba(255, 255, 255, .85)", "font-size: 12px", "text-shadow: 0 2px 8px rgba(0, 0, 0, .65)", "box-shadow: 0 2px 8px rgba(0, 0, 0, .06)", "transform: scale(.96)")) {
@@ -1036,32 +955,10 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing structured Attraction Guide content styling: $GuideClass")
         }
     }
-    if (-not $ThemeCss.Contains(".stc-single--attraction-guide")) {
-        $Failures.Add("Theme CSS is missing the Attraction Guide single layout.")
-    }
-    if (-not $ThemeCss.Contains(".stc-attraction-guide__layout")) {
-        $Failures.Add("Theme CSS is missing the Attraction Guide content/sidebar layout.")
-    }
-    if (-not $ThemeCss.Contains(".stc-attraction-guide__checklist")) {
-        $Failures.Add("Theme CSS is missing the Attraction Guide checklist styling.")
-    }
-    if (-not $ThemeCss.Contains(".stc-single--city-guide")) {
-        $Failures.Add("Theme CSS is missing the City Guide single layout.")
-    }
-    if (-not $ThemeCss.Contains(".stc-city-guide__layout")) {
-        $Failures.Add("Theme CSS is missing the City Guide content/sidebar layout.")
-    }
-    if (-not $ThemeCss.Contains(".stc-city-guide__checklist")) {
-        $Failures.Add("Theme CSS is missing the City Guide checklist styling.")
-    }
-    if (-not $ThemeCss.Contains(".stc-single--survival-kit")) {
-        $Failures.Add("Theme CSS is missing the Survival Kit single layout.")
-    }
-    if (-not $ThemeCss.Contains(".stc-survival-kit__layout")) {
-        $Failures.Add("Theme CSS is missing the Survival Kit content/sidebar layout.")
-    }
-    if (-not $ThemeCss.Contains(".stc-survival-kit__checklist")) {
-        $Failures.Add("Theme CSS is missing the Survival Kit checklist styling.")
+    foreach ($GenericArticleStyle in @(".stc-article-hero", ".stc-article-layout--with-toc", ".stc-article-sidebar", ".stc-share__panel")) {
+        if (-not $ThemeCss.Contains($GenericArticleStyle)) {
+            $Failures.Add("Theme CSS is missing generic article or ShareThisPage styling: $GenericArticleStyle")
+        }
     }
 }
 
@@ -1071,55 +968,10 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     if (-not $ThemeJs.Contains("stcMobileNav")) {
         $Failures.Add("Theme JavaScript is missing the mobile navigation controller.")
     }
-    if (-not $ThemeJs.Contains("stcSavedGuides")) {
-        $Failures.Add("Theme JavaScript is missing the local saved guides controller.")
-    }
-    if ($ThemeJs.Contains("stcCollapsibleGuideGrid") -or $ThemeJs.Contains("data-stc-grid-toggle")) {
-        $Failures.Add("Theme JavaScript still includes the removed mobile city grid collapse controller.")
-    }
-    foreach ($GuideRevealScriptToken in @("stcGuideGridReveal", "data-stc-guide-grid", "data-stc-guide-reveal", "data-stc-guide-label", "More ", "--stc-guide-collapsed-height", "--stc-guide-expanded-height")) {
-        if (-not $ThemeJs.Contains($GuideRevealScriptToken)) {
-            $Failures.Add("Theme JavaScript is missing the shared four-card reveal behavior: $GuideRevealScriptToken")
+    foreach ($RemovedGuideSaveScript in @("stcSavedGuides", "data-stc-delete-guide", "data-stc-save-guide", "data-stc-saved-guides", "data-stc-export-guides", "data-stc-import-guides", "data-stc-clear-guides", "window.localStorage")) {
+        if ($ThemeJs.Contains($RemovedGuideSaveScript)) {
+            $Failures.Add("Theme JavaScript still contains removed guide-saving behavior: $RemovedGuideSaveScript")
         }
-    }
-    if ($ThemeJs.Contains("stcCityGridReveal") -or $ThemeJs.Contains("data-stc-city-grid")) {
-        $Failures.Add("Theme JavaScript still includes the removed City-only reveal controller.")
-    }
-    if (-not $ThemeJs.Contains("localStorage")) {
-        $Failures.Add("Theme JavaScript does not persist saved guides locally.")
-    }
-    if (-not $ThemeJs.Contains("data-stc-delete-guide")) {
-        $Failures.Add("Theme JavaScript is missing the delete saved guide action.")
-    }
-    if (-not $ThemeJs.Contains("document.querySelectorAll('[data-stc-save-guide]')")) {
-        $Failures.Add("Theme JavaScript is missing article guide save button binding.")
-    }
-    if (-not $ThemeJs.Contains("if (list)")) {
-        $Failures.Add("Theme JavaScript does not guard saved guide list-only behavior on the homepage.")
-    }
-    if (-not $ThemeJs.Contains("data-stc-export-guides")) {
-        $Failures.Add("Theme JavaScript is missing saved guides export binding.")
-    }
-    if (-not $ThemeJs.Contains("data-stc-clear-guides")) {
-        $Failures.Add("Theme JavaScript is missing saved guides clear binding.")
-    }
-    if (-not $ThemeJs.Contains("application/json")) {
-        $Failures.Add("Theme JavaScript does not create a saved guides JSON export.")
-    }
-    if (-not $ThemeJs.Contains("data-stc-import-guides")) {
-        $Failures.Add("Theme JavaScript is missing saved guides import binding.")
-    }
-    if (-not $ThemeJs.Contains("FileReader")) {
-        $Failures.Add("Theme JavaScript does not read saved guides JSON imports.")
-    }
-    if (-not $ThemeJs.Contains("stcImportGuides")) {
-        $Failures.Add("Theme JavaScript is missing the saved guides import handler.")
-    }
-    if (-not $ThemeJs.Contains("stcClampText")) {
-        $Failures.Add("Theme JavaScript does not clamp imported saved guide text.")
-    }
-    if (-not $ThemeJs.Contains("stcGuideType")) {
-        $Failures.Add("Theme JavaScript does not validate imported saved guide types.")
     }
     if (-not $ThemeJs.Contains("stcGuideToc")) {
         $Failures.Add("Theme JavaScript is missing the automatic Guide table of contents controller.")
@@ -1130,11 +982,10 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     if (-not $ThemeJs.Contains("querySelectorAll('[data-stc-guide-toc]')")) {
         $Failures.Add("Theme JavaScript does not populate both desktop and mobile Guide tables of contents.")
     }
-    if (-not $ThemeJs.Contains("navigator.share")) {
-        $Failures.Add("Theme JavaScript is missing native page share behavior.")
-    }
-    if (-not $ThemeJs.Contains("navigator.clipboard")) {
-        $Failures.Add("Theme JavaScript is missing share fallback copy behavior.")
+    foreach ($ShareScriptToken in @("navigator.share", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-copy", "data-stc-share-close", "AbortError", "Link copied", "Escape")) {
+        if (-not $ThemeJs.Contains($ShareScriptToken)) {
+            $Failures.Add("Theme JavaScript is missing accessible ShareThisPage behavior: $ShareScriptToken")
+        }
     }
 }
 

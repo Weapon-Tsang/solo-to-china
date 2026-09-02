@@ -34,12 +34,24 @@ function Get-FixturePost([string]$Slug) {
 $ContractResponse = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/content-contract"
 $ContractAgain = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/content-contract"
 $Contract = $ContractResponse.Content | ConvertFrom-Json
+$RegistryResponse = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/component-registry"
+$RegistryAgain = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/component-registry"
+$Registry = $RegistryResponse.Content | ConvertFrom-Json
 
 Assert-Runtime ($ContractResponse.StatusCode -eq 200) "Content Contract endpoint did not return HTTP 200."
 Assert-Runtime ($ContractResponse.Content -eq $ContractAgain.Content) "Content Contract JSON changed between consecutive reads."
 Assert-Runtime ([string]$ContractResponse.Headers.ETag -eq [string]$ContractAgain.Headers.ETag) "Content Contract ETag is not stable."
-Assert-Runtime ($Contract.contract_version -eq "1.0.0") "Content Contract version is not 1.0.0."
-Assert-Runtime ($Contract.theme_version -eq "0.24.0") "Content Contract Theme version is not 0.24.0."
+Assert-Runtime ($Contract.contract_version -eq "2.0.0") "Content Contract version is not 2.0.0."
+Assert-Runtime ($Contract.theme_version -eq "0.25.0") "Content Contract Theme version is not 0.25.0."
+Assert-Runtime ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."
+Assert-Runtime ($Contract.principles.cms -eq "Decide what the page contains.") "CMS responsibility principle is missing."
+Assert-Runtime ($Contract.principles.content_type -eq "Content type is taxonomy, not layout.") "Content type boundary principle is missing."
+Assert-Runtime ($RegistryResponse.StatusCode -eq 200) "Component Registry endpoint did not return HTTP 200."
+Assert-Runtime ($RegistryResponse.Content -eq $RegistryAgain.Content) "Component Registry JSON changed between consecutive reads."
+Assert-Runtime ([string]$RegistryResponse.Headers.ETag -eq [string]$RegistryAgain.Headers.ETag) "Component Registry ETag is not stable."
+Assert-Runtime ($Registry.registry_version -eq "1.0.0") "Component Registry version is not 1.0.0."
+$CmsRegistryComponents = @($Registry.components | Where-Object { $_.cms_usable -eq $true })
+Assert-Runtime ($CmsRegistryComponents.Count -eq 19) "Component Registry does not expose exactly 19 current CMS capabilities."
 Assert-Runtime ($Contract.guide_types."survival-kit".category_slug -eq "survival-kit") "Survival Kit category mapping is wrong."
 Assert-Runtime ($Contract.guide_types."city-guide".category_slug -eq "city-guides") "City Guide category mapping is wrong."
 Assert-Runtime ($Contract.guide_types."attraction-guide".category_slug -eq "attraction-guides") "Attraction Guide category mapping is wrong."
@@ -58,10 +70,10 @@ $ExpectedRequiredFields = @{
 }
 
 foreach ($ComponentType in $ExpectedRequiredFields.Keys) {
-    $Component = @($Contract.components | Where-Object { $_.type -eq $ComponentType })
+    $Component = @($Contract.components | Where-Object { $_.id -eq $ComponentType })
     Assert-Runtime ($Component.Count -eq 1) "Contract component missing or duplicated: $ComponentType"
     if ($Component.Count -eq 1) {
-        $ActualFields = @($Component[0].required_fields)
+        $ActualFields = @($Component[0].schema.required)
         foreach ($RequiredField in $ExpectedRequiredFields[$ComponentType]) {
             Assert-Runtime ($ActualFields -contains $RequiredField) "Contract component $ComponentType is missing required field: $RequiredField"
         }
@@ -69,7 +81,7 @@ foreach ($ComponentType in $ExpectedRequiredFields.Keys) {
 }
 
 $ContractRuntime = Get-Content -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/inc/content-contract.php") -Raw
-foreach ($MetadataToken in @("register_post_meta", "_stc_guide_type", "_stc_content_contract_version", "sanitize_callback", "auth_callback", "current_user_can", "edit_post")) {
+foreach ($MetadataToken in @("register_post_meta", "_stc_guide_type", "_stc_content_contract_version", "_stc_show_share", "_stc_show_toc", "_stc_hero_variant", "sanitize_callback", "auth_callback", "current_user_can", "edit_post")) {
     Assert-Runtime ($ContractRuntime.Contains($MetadataToken)) "REST metadata sanitize/validation boundary is missing: $MetadataToken"
 }
 
@@ -79,6 +91,7 @@ $AttractionSlug = "forbidden-city-first-time-visitor-guide"
 $SurvivalHtml = Get-FixtureHtml $SurvivalSlug
 $CityHtml = Get-FixtureHtml $CitySlug
 $AttractionHtml = Get-FixtureHtml $AttractionSlug
+$GalleryHtml = Get-FixtureHtml "design-system"
 $SurvivalPost = Get-FixturePost $SurvivalSlug
 $CityPost = Get-FixturePost $CitySlug
 $AttractionPost = Get-FixturePost $AttractionSlug
@@ -90,6 +103,7 @@ foreach ($Fixture in @(
 )) {
     Assert-Runtime (([regex]::Matches($Fixture.Html, "<h1\b")).Count -eq 1) "Fixture must render exactly one H1: $($Fixture.Slug)"
     Assert-Runtime (-not [regex]::IsMatch($Fixture.Html, "\sstyle=", "IgnoreCase")) "Fixture renders an inline style attribute: $($Fixture.Slug)"
+    Assert-Runtime (-not $Fixture.Html.Contains("data-stc-save-guide")) "Fixture still renders removed Save Guide UI: $($Fixture.Slug)"
     foreach ($ForbiddenPublicToken in @("claim_keys", "source_ids", "source_asset_id")) {
         Assert-Runtime (-not $Fixture.Html.Contains($ForbiddenPublicToken)) "Fixture exposes internal provenance token ${ForbiddenPublicToken}: $($Fixture.Slug)"
     }
@@ -130,6 +144,16 @@ Assert-Runtime ($SurvivalGuideType -eq "survival-kit") "Survival fixture REST gu
 Assert-Runtime ($AttractionGuideType -eq "attraction-guide") "Attraction fixture REST guide type metadata is wrong."
 Assert-Runtime ([string]::IsNullOrEmpty([string]$CityGuideType)) "Historical City fixture should rely on category fallback without explicit guide metadata."
 Assert-Runtime ($CityHtml.Contains("stc-single--city-guide")) "Historical category-only City fixture did not retain the City Guide shell."
+Assert-Runtime ($SurvivalHtml.Contains("data-stc-share-trigger")) "Survival fixture did not render explicitly enabled ShareThisPage."
+Assert-Runtime ($CityHtml.Contains("data-stc-share-trigger")) "City fixture did not render explicitly enabled ShareThisPage."
+Assert-Runtime ($AttractionHtml.Contains("data-stc-share-trigger")) "Attraction fixture did not render explicitly enabled ShareThisPage."
+Assert-Runtime (-not $CityHtml.Contains("data-stc-guide-toc")) "City fixture rendered TOC even though CMS presentation metadata disabled it."
+Assert-Runtime ($AttractionHtml.Contains("data-stc-guide-toc")) "Attraction fixture did not render its explicitly enabled TOC."
+Assert-Runtime ($GalleryHtml.Contains("stc-component-gallery")) "Internal Component Gallery did not render its dedicated template."
+Assert-Runtime (([regex]::Matches($GalleryHtml, 'data-component-id="')).Count -eq 19) "Component Gallery Registry cards do not match the 19 CMS capabilities."
+foreach ($GalleryComponentId in @("paragraph", "heading", "list", "image", "quick_answer", "key_takeaways", "quick_facts", "tip", "warning", "steps", "checklist", "comparison_table", "faq", "planner_cta", "ticket_reminder", "affiliate_cta", "article_hero", "share_this_page", "table_of_contents")) {
+    Assert-Runtime ($GalleryHtml.Contains('data-component-id="' + $GalleryComponentId + '"')) "Component Gallery is missing Registry card: $GalleryComponentId"
+}
 
 $RendererRuntime = Get-Content -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/inc/content-renderers.php") -Raw
 Assert-Runtime ($RendererRuntime.Contains("do_shortcode")) "Ticket Reminder is not delegated through the Plugin shortcode."

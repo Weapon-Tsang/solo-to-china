@@ -1,43 +1,12 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-09-02
+Date: 2026-09-03
 
-Use this document to continue the SoloToChina WordPress project in a new Codex/ChatGPT conversation.
+## Product Boundary
 
-## Suggested New Chat Opening Message
+SoloToChina is a guest-first, content-first, mobile-first independent China travel guide for international visitors.
 
-Continue the SoloToChina WordPress project from `docs/handoff/new-chat-handoff.md`. First read `README.md`, `docs/handoff/current-progress.md`, `docs/handoff/new-chat-handoff.md`, and `docs/deployment/wordpress-install.md`. Preserve all product, IA, guest-first, affiliate, Ticket Reminder, theme/plugin responsibility, and handoff constraints. Continue with small verified development increments; do not start high-risk backend/account/deployment changes without explicit approval.
-
-## Project Goal
-
-SoloToChina is a practical China independent travel platform for international travelers, especially solo travelers and first-time non-Chinese visitors.
-
-Long-term product formula:
-
-```text
-CONTENT
-+
-UTILITY
-+
-PERSONALIZATION
-```
-
-Core principles:
-
-- Guest-first
-- Content-first
-- Mobile-first
-- Utility-driven
-- Low friction
-- High trust
-
-Users should be able to browse content, use the first tool, save locally, share, and set local reminders without registering.
-
-Accounts are not an access gate. Accounts may be added later only for cross-device saved guides, reminder management, comment history, and personal libraries after a separate product/storage/consent design.
-
-## Fixed Information Architecture
-
-Top-level navigation is fixed:
+Fixed top-level navigation:
 
 - Home
 - Survival Kit
@@ -47,492 +16,176 @@ Top-level navigation is fixed:
 - Tools
 - FAQ
 
-Do not add top-level:
+Do not add top-level Hotels, Tickets, Flights, Trains, or Book.
 
-- Hotels
-- Tickets
-- Flights
-- Trains
-- Book
+Project-owned code:
 
-Affiliate and booking links are a transaction layer behind content/tools, not a top-level navigation system.
+- wp-content/themes/solo-to-china/
+- wp-content/themes/solo-to-china-child/
+- wp-content/plugins/solo-to-china-tools/
 
-## Content Structure Rules
+Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/database files, or wp-config.php.
 
-Survival Kit:
+## Current Versions
 
-- Payment
-- Essential Apps
-- eSIM
-- Visa
-- VPN / Internet
+- Parent Theme: 0.25.0
+- Child Theme: 0.7.0
+- SoloToChina Tools Plugin: 0.22.0
+- Content Contract: 2.0.0
+- Component Registry: 1.0.0
 
-City Guides:
+## Architecture Rule
 
-- City Guides is a city hub/card grid.
-- Each city should later have child guide content such as itinerary, food, where to stay, transport, neighborhoods, and other practical guides.
-- Do not turn City Guides into one huge generic article.
+Frontend responsibility: “Render what CMS requests.”
 
-Attraction Guides:
+CMS responsibility: “Decide what the page contains.”
 
-- Attraction content supports practical booking timing, passport notes, best time, and planning reminders.
-- Real inventory checking is out of scope.
+Content type is taxonomy, not layout.
 
-Planner:
+The Parent Theme now uses one generic single.php article shell. It renders post content in CMS/Gutenberg order and does not infer or inject FAQ, checklist, quick facts, warning, steps, ticket reminder, affiliate CTA, Share, or TOC from guide taxonomy.
 
-- For now, Planner is a Trip.com CTA/landing layer.
-- Do not build a custom itinerary engine yet.
+Guide type remains useful for category/archive routing, URL hierarchy, breadcrumbs, labels, related-content discovery, and restrained visual context.
 
-Tools:
+CMS-facing presentation metadata:
 
-- The first and only current tool is Attraction Ticket Reservation & Reminder.
-- Do not add unrelated calculators, checklists, app selectors, or new tools until real user demand or explicit approval.
+- _stc_guide_type
+- _stc_content_contract_version
+- _stc_show_share
+- _stc_show_toc
+- _stc_hero_variant
 
-## Current Repository And Code Boundary
+Share and TOC are off when their explicit metadata is absent. Hero variant supports default, attraction, city, and survival. Featured image remains the CMS-owned Hero media source.
 
-Work from:
+Canonical Contract:
 
-```text
-repo-staging/
-```
+    wp-content/themes/solo-to-china/content-contract/content-contract.v2.json
+    GET /wp-json/stc/v1/content-contract
 
-Project-owned WordPress code lives only in:
+Canonical Component Registry:
 
-```text
-wp-content/themes/solo-to-china/
-wp-content/themes/solo-to-china-child/
-wp-content/plugins/solo-to-china-tools/
-```
+    wp-content/themes/solo-to-china/content-contract/component-registry.v1.json
+    GET /wp-json/stc/v1/component-registry
 
-Do not edit:
+Unknown Gutenberg blocks must degrade safely instead of breaking the page.
 
-- WordPress core
-- third-party themes
-- third-party cache plugins
-- `wp-config.php`
-- uploads
-- cache folders
-- language files
-- database dumps/backups
-- server-local files
+## Share This Page
 
-`sources/` in the ChatGPT project mirror is read-only reference material.
-
-## Current Theme Status
-
-Theme: `SoloToChina`
-
-Version: `0.24.0`
-
-Location:
-
-```text
-wp-content/themes/solo-to-china/
-```
-
-Implemented:
-
-- Approved image-led homepage direction.
-- Homepage-reference visual system applied across core landing pages, guide article heroes, image cards, header states, and CTA bands.
-- Transparent header over selected banner image.
-- Readable white-surface header on non-home pages.
-- Reduced hero text density.
-- Mobile Hero uses bounded 75vh framing (480-580px), bottom-positioned 32px copy over a smooth dark scrim, a 46px vermilion CTA, and a glass menu button so Survival Kit begins within the first viewport.
-- Survival Kit strip.
-- City Guides image cards.
-- Attraction Guides image cards.
-- Homepage order strictly follows the approved reference and does not insert Latest Guides before Planner.
-- Mobile Survival Kit uses a single-row, five-column app shortcut strip with compact one-line labels and full-item touch targets from 360px upward.
-- City Guides and Attraction Guides use matching two-column mobile grids that show four complete cards before a compact frosted capsule button below the second row.
-- Both reveal buttons show the remaining count, expand smoothly, fade away, and move focus to the first newly revealed card.
-- Mobile Planner and Ticket Tool bands use tuned line heights, text-column widths, and paragraph spacing.
-- Guide-list cards do not expose save controls. Local Save Guide appears only after a guide article is opened.
-- Survival Kit subtitles remain one line with centered 60%-height dividers, and attraction badges use compact type.
-- Homepage and landing guide cards use 960x1200 WebP assets, centered cover positioning, smooth scrims, and 3:4 mobile framing to avoid low-resolution over-zoom.
-- Mobile City and Attraction cards use 14px corners, 12px grid gaps, glass attraction badges, compact green View all links, and tactile reveal buttons.
-- WordPress post cards request the responsive 960px `stc-guide-card-2x` featured-image size with `srcset`/`sizes`.
-- Planner and Ticket homepage bands use dedicated reference-style icons and non-overlapping content columns.
-- Planner and Ticket cards use concise hierarchy, 44px CTAs, one-line feature labels, and restrained 11px disclosure/trust copy.
-- Planner band.
-- Homepage Planner CTA opens Trip.com externally with `rel="sponsored noopener"`.
-- Ticket Date & Availability homepage band.
-- FAQ section.
-- Footer.
-- Mobile menu.
-- Keyboard focus styling.
-- Skip-to-content link.
-- Local Saved Guides UI.
-- No-account page sharing on core guide pages.
-- Attraction Guide article layout and editor content pattern.
-- Structured Attraction Guide modules for quick facts, reservation window, passport note, best base area, before-booking warning, and suggested route.
-- City Guide article layout and editor content pattern.
-- Survival Kit article layout and editor content pattern.
-- Automatic table of contents for guide articles based on H2 sections.
-- Shared Guide card rendering for archive, search, and default post lists.
-- Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
-- Core landing pages keep primary guide content before Saved Guides and category-matched latest posts.
-- Attraction Guides uses the same complete four-card phone/tablet fold as City Guides so image, title, subtitle, and badge space remains readable.
-- Guide articles use a horizontal pre-content table of contents on mobile and the sidebar table of contents on desktop.
-- Planner uses the approved homepage calendar icon, partner disclosure, and watercolor artwork.
-- FAQ uses responsive accordions with related internal links.
-- FAQ uses a borderless divided-list treatment with animated 18px SVG chevrons and comfortable answer typography.
-- Footer uses a solid deep-ink surface, accessible text contrast, 36px social circles, two-column mobile navigation, and a legal row.
-- Saved Guides remain on the three content landing pages and do not appear on Planner, Tools, or FAQ.
-- Core guide category setup on theme activation.
-- Core IA page rendering by slug.
-- Core IA page auto-creation on theme activation if missing.
-- `single.php` for guide/article posts.
-- `archive.php` for category/tag archives.
-- `search.php` for search results.
-- `searchform.php` for controlled search form copy.
-- `404.php` with links back to key travel sections.
-- WordPress support for title tag, featured images, wide alignment, HTML5 markup, and automatic feed links.
-
-Homepage image assets:
-
-```text
-wp-content/themes/solo-to-china/assets/images/hero-home.png
-wp-content/themes/solo-to-china/assets/images/guide-card-bg.png
-```
-
-The current homepage design should not be replaced casually. User approved this direction after multiple visual iterations.
-
-## Current Child Theme Status
-
-Child Theme: `SoloToChina Child`
-
-Version: `0.6.0`
-
-Location:
-
-```text
-wp-content/themes/solo-to-china-child/
-```
-
-Implemented:
-
-- Content Component System v1 Phases A-E, including runtime integration coverage for the Contract, REST metadata, semantic components, contextual renderers, responsive Media, anchors, historical routing, and public-output hygiene.
-- Disposable Parent-only and authenticated Gutenberg editor preview modes; the Parent remains independently usable and the Child editor receives the Design System and component styles in the correct order.
-- Gutenberg-valid Core Image fixture markup with lazy/async defaults applied safely on the Parent render path.
-- Parent and Child Gutenberg editor checks with 24 valid blocks and four component families, with no project block-validation errors.
-- Three fixture articles checked at 1440, 768, 390, and 375 with one H1, zero page overflow, safe local table scrolling, accessible controls, correct Plugin preselection, and working focus/keyboard/reduced-motion behavior.
-- Parent/Child Gutenberg editor styles with a Parent fallback and Child Design System parity.
-- Server-rendered stable H2 IDs that preserve explicit anchors and resolve duplicate IDs.
-- Native responsive WordPress Media presentation with intrinsic ratios, alt/caption treatment, and public image roles.
-- A real ephemeral Media fixture whose output is verified for `srcset`, `sizes`, lazy loading, async decoding, and stable dimensions.
-- Safe Parent Theme dynamic renderers for Planner CTA, Ticket Reminder, and Affiliate CTA.
-- HTTPS-only external CTA validation, escaped output, stable anchors, safe external rel attributes, and visible affiliate disclosure.
-- Ticket Reminder presentation delegates to the Plugin shortcode and has an accessible Plugin-inactive fallback.
-- Plugin-owned attraction slug validation and preselection without moving Ticket data or reminder logic into the Theme.
-- Token-driven dynamic component visuals with contained desktop/mobile Ticket form layouts.
-- Nine reusable Parent Theme Gutenberg content patterns with stable semantic classes and no fixed topic templates.
-- Token-driven Child Theme component visuals for answer, takeaway, fact, tip, warning, steps, checklist, comparison, and FAQ families.
-- Responsive comparison-table containment, native accessible FAQ disclosures, long-text safety, and reduced-motion-compatible presentation.
-- Reusable local Playground fixtures for Survival Kit, City Guide, and Attraction Guide structures; City deliberately exercises historical category-only routing while the other two use explicit Contract metadata.
-- Phase B Playwright checks at 1440, 768, 390, and 375 with no page overflow or console errors/warnings.
-- Versioned Content Contract `1.0.0` in `content-contract/content-contract.v1.json`.
-- Public read-only `GET /wp-json/stc/v1/content-contract` endpoint with cache validators.
-- Four stable guide types and category-compatible explicit REST metadata.
-- Sixteen component capability definitions without CSS values or internal provenance.
-- Contract verification through `scripts/verify-content-contract.ps1` and the primary verifier.
-
-- Standards-compliant `Template: solo-to-china` metadata.
-- Parent -> Child -> design-system enqueue order without duplicate Parent loading.
-- Foundation tokens for colors, type, spacing, containers, grids, radii, shadows, controls, media ratios, breakpoints, motion, focus, reduced-motion, and forced-colors.
-- Initial component foundations for buttons, forms, cards, and media frames.
-- Child Theme responsibility documentation and a dated KEEP / REFACTOR / REPLACE / REMOVE audit.
-- Shared Header, navigation, mobile menu, image-card, FAQ, and Footer renovation.
-- Current-page navigation semantics across core pages, guide posts, and guide archives.
-- Mobile menu label synchronization, Escape close, navigation-link close, and desktop-breakpoint cleanup.
-- Homepage Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket CTA, FAQ, and Footer responsive renovation without copying the Parent `front-page.php`.
-- Two-line Hero title and first-viewport Survival Kit continuity at 390 and 375 widths.
-- Real local WordPress preview through `scripts/start-preview.ps1` and the official WordPress Playground CLI.
-- Playwright screenshots at 1440, 768, 390, and 375 with zero horizontal overflow and zero browser console errors/warnings.
-- Guide / Article presentation in `assets/css/article.css`, loaded only for single posts.
-- Distinct image-led Attraction Guide, City Guide, and Survival Kit heroes using existing high-resolution Parent Theme imagery.
-- Controlled editorial reading width, sticky desktop TOC, horizontal mobile TOC, differentiated checklist and structured content modules, and responsive article rhythm.
-- Semantic Home / Hub / Current Article breadcrumbs from a narrowly scoped Child filter without copying `single.php` or emitting competing SEO schema.
-- Parent TOC and local Save Guide behavior preserved; article interaction checks pass.
-- Ephemeral Playground article fixtures for all three guide families; these do not alter production content or add a static demo.
-- Article Playwright QA at 1440, 768, 390, and 375, plus City and Survival Kit branch checks at 390, with one H1, correct navigation/Breadcrumb state, zero overflow, and zero console errors/warnings.
-
-Content Component System v1 Phases A-E are complete. The next safe boundary is external CMS integration or staging content validation; do not change the completed Home or Article shell renovation, and do not copy Ticket logic from the Plugin into either Theme.
-
-## Current Plugin Status
-
-Plugin: `SoloToChina Tools`
-
-Version: `0.22.0`
-
-Location:
-
-```text
-wp-content/plugins/solo-to-china-tools/
-```
-
-Shortcode:
-
-```text
-[solo_to_china_ticket_tool]
-```
-
-Current tool:
-
-- Attraction Ticket Reservation & Reminder.
+Share This Page replaced the discontinued Save Guide system.
 
 Current behavior:
 
-- Select attraction.
-- Attraction select is grouped by city for easier scanning on mobile.
-- Select visit date.
-- Visit date is required.
-- Calculate recommended ticket-check/reminder date from `booking_lead_days`.
-- Show booking-window status:
-  - `Book now`
-  - `Set reminder`
-  - `Date has passed`
-- Prevent saving reminders for past visit dates.
-- Save reminders locally without login.
-- View saved reminders on the current device.
-- Export saved reminders to `solotochina-ticket-reminders.json`.
-- Import reminders from exported JSON.
-- Clear reminders from the current device.
-- Delete individual reminders.
-- Download an `.ics` calendar file for individual reminders.
-- Clamp imported reminder text before saving locally.
-- Validate imported reminder dates before saving locally.
-- Load frontend assets only on the homepage, Tools page, or pages containing the shortcode.
+- No account, localStorage, saved state, or cross-device implication
+- Uses page title, excerpt, and canonical URL
+- Prioritizes navigator.share()
+- Falls back to WhatsApp, email, and Copy link
+- Includes clipboard fallback and manual-selection error path
+- Uses ARIA live status, busy state, Escape, outside click, close button, and focus return
+- Appears as a refined translucent Hero utility
+- Uses a lightweight desktop popover and mobile bottom panel
+- Remains visually quieter than booking, availability, and planner CTAs
 
-Static first-phase attraction data currently covers 18 attractions across:
+The Theme no longer contains Save guide, Saved, Unsave, Saved Guides, guide export/import/clear/delete, or guide localStorage behavior.
 
-- Beijing
-- Shanghai
-- Xi'an
-- Zhangjiajie
-- Hangzhou
-- Chengdu
-- Guangzhou
-- Luoyang
-- Dunhuang
-- Leshan
-- Huangshan
-- Jiuzhaigou
-- Guilin
+## Component System
 
-Ticket reminders use browser `localStorage` only. They do not send email/SMS and do not write to the database.
+Registry 1.0 publishes 19 stable CMS capabilities: 16 ordered page blocks and three explicit presentation controls.
 
-## Local Personalization Status
+- Core: Paragraph, Heading, List, Image
+- Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
+- Contextual: Planner CTA, Ticket Reminder, Affiliate CTA
+- Presentation: Article Hero, Share This Page, Table of Contents
 
-Saved Guides:
+All components are available independently of content type. The CMS decides their presence, order, data, and variants. Four additional renderer components are documented as internal and are not valid CMS types: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. The Parent Theme keeps small reusable component patterns; topic-wide Attraction, City, and Survival article patterns were removed.
 
-- Available on homepage/core guide pages.
-- Stored in browser `localStorage` only.
-- No login required.
-- Export to `solotochina-saved-guides.json`.
-- Import from exported JSON.
-- Clear all on current device.
-- Delete individual saved guides.
-- Imported guide text is clamped.
-- Imported guide types are validated against current allowed types:
-  - Survival Kit
-  - City Guide
-  - Attraction Guide
+`docs/COMPONENT_LIBRARY.md` is generated from the Registry. Playground exposes an ephemeral `/design-system/` Gallery with all 19 capability records, the major Hero variants, and real examples for all 16 page-block components. The Theme does not auto-create this page in production.
 
-Page sharing:
+Responsive Media, server-rendered stable H2 IDs, editor parity, semantic HTML, long-text containment, keyboard focus, reduced motion, and safe affiliate rel/disclosure behavior remain in place.
 
-- Available on core guide pages.
-- Uses native share where supported.
-- Falls back to copying the page link.
-- No account required.
+## Plugin Boundary
 
-## Install Artifacts
+SoloToChina Tools continues to own Attraction Ticket Reservation & Reminder:
 
-Current generated artifacts:
+- Attraction data
+- Booking lead days and date calculations
+- Form validation
+- Reminder localStorage
+- Reminder import/export/delete/clear
+- Calendar file output
 
-```text
-dist/solo-to-china-theme.zip
-dist/solo-to-china-child-theme.zip
-dist/solo-to-china-tools-plugin.zip
-dist/release-manifest.txt
-```
+The Theme only renders contextual presentation and delegates the form shortcode. Do not move Plugin data or reminder logic into either Theme.
 
-Latest manifest at the time of this handoff:
+## Local Fixtures And QA
 
-```text
-Generated: 2026-09-02 20:10:06 +08:00
-Theme version: 0.24.0
-Theme SHA256: 5D5A2C4EC758F57BC65730AFF32DD9E90DA96C669A3E01F2471A256EEF05983D
-Child Theme version: 0.6.0
-Child Theme SHA256: 8223C0BF387DA10A9EB97456D5C31568714E1ABE25E4573A0AD0B11FD98721AD
-Plugin version: 0.22.0
-Plugin SHA256: E6BD162F03151A2E98FBD832921F3B5CC0353A31F90E89D3708985A846CAC65C
-```
+scripts/playground-fixtures.php creates disposable Survival, City, and Attraction articles.
 
-Regenerate artifacts with:
+- All three explicitly enable Share.
+- Survival and Attraction explicitly enable TOC.
+- City explicitly disables TOC, proving taxonomy does not dictate layout.
+- City retains category-only historical classification coverage.
+- Attraction contains the Plugin-delegated Ticket Reminder and responsive Media fixture.
 
-```powershell
-.\scripts\package-release.ps1
-```
+Static verification:
 
-## Install Path
+    .\scripts\verify-page-architecture.ps1
+    .\scripts\verify-component-registry.ps1
+    .\scripts\verify-content-contract.ps1
+    .\scripts\verify-project.ps1
+    .\.tools\php\php.exe scripts\verify-project.php
 
-Preferred install:
+Runtime preview:
 
-1. WordPress Admin > Appearance > Themes > Add New > Upload Theme.
-2. Upload `dist/solo-to-china-theme.zip` and keep the Parent Theme installed.
-3. Upload `dist/solo-to-china-child-theme.zip` and activate SoloToChina Child.
-4. WordPress Admin > Plugins > Add New > Upload Plugin.
-5. Upload `dist/solo-to-china-tools-plugin.zip`.
-6. Activate SoloToChina Tools plugin.
+    .\scripts\start-preview.ps1 -Port 9400
+    .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
 
-aaPanel fallback if WordPress upload fails:
+Parent-only fallback:
 
-```text
-/www/wwwroot/solotochina.com/wp-content/themes/
-/www/wwwroot/solotochina.com/wp-content/plugins/
-```
+    .\scripts\start-preview.ps1 -Port 9402 -ParentOnly
+    .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
 
-Final directories must be:
+Playground content is disposable and is not a static demo or production content.
 
-```text
-/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china/
-/www/wwwroot/solotochina.com/wp-content/themes/solo-to-china-child/
-/www/wwwroot/solotochina.com/wp-content/plugins/solo-to-china-tools/
-```
+## Installation
 
-Do not extract either zip directly inside `/www/wwwroot/solotochina.com/wp-content/`.
+Generate packages with:
 
-## Verification
+    .\scripts\package-release.ps1
 
-Primary verification command:
+Install in this order:
 
-```powershell
-.\scripts\verify-project.ps1
-```
+1. Install SoloToChina Parent Theme and keep it installed.
+2. Install and activate SoloToChina Child Theme.
+3. Install and activate SoloToChina Tools Plugin.
 
-Content system verification:
+Artifacts:
 
-```powershell
-.\scripts\verify-content-contract.ps1
-.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
-.\scripts\start-preview.ps1 -Port 9402 -ParentOnly
-.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
-.\scripts\start-preview.ps1 -Port 9403 -Editor
-```
+- dist/solo-to-china-theme.zip
+- dist/solo-to-china-child-theme.zip
+- dist/solo-to-china-tools-plugin.zip
+- dist/release-manifest.txt
 
-Expected current result:
+No production deployment is authorized by this handoff.
 
-```text
-SoloToChina project verification passed.
-```
+## Next Safe Work
 
-Local environment note:
+- Connect the external CMS to Contract 2.0 in a non-production environment.
+- Verify CMS writes the explicit Share, TOC, Hero variant, guide type, and Contract version metadata.
+- Import three deliberately different block combinations and confirm exact order.
+- Run staging screenshots and accessibility checks with representative real content.
 
-- PHP CLI is installed locally in `.tools/php/`.
-- The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
-- Static project checks and PHP syntax checks pass.
+Do not start accounts, cross-device sync, email/SMS reminders, custom tables, real inventory checks, payments, new tools, or new top-level navigation without a separate approved design.
 
-The verification scripts protect:
+## Fixed Information Architecture
 
-- required files
-- fixed IA labels
-- banned transaction-first nav labels
-- theme/plugin version consistency
-- selected homepage visual style assets and header states
-- structured Attraction Guide content modules
-- automatic guide article table of contents
-- content-first landing-page order and responsive attraction-card widths
-- mobile-before-content and desktop-sidebar table-of-contents states
-- utility-page Saved Guides boundaries, Planner visual continuity, and FAQ accordion styling
-- matching City/Attraction two-column four-card folds, compact frosted reveal buttons, responsive Survival Kit columns, mobile tool typography, article-only save actions, compact subtitles, and centered Survival Kit dividers
-- shared Guide card rendering for archives and search
-- latest guide rendering on the three core content landing pages
-- latest guide rendering on the homepage
-- core guide category setup on theme activation
-- theme/plugin responsibility boundaries
-- local saved guide behavior
-- ticket reminder behavior
-- import/export/clear behavior
-- keyboard accessibility basics
-- aaPanel install warnings
-- release manifest generation
-- artifact version/hash output
-- generated artifact ignore rules
-
-## GitHub / Source Control Status
-
-This continuation was cloned from:
-
-```text
-https://github.com/Weapon-Tsang/solo-to-china
-```
-
-At the start of the 2026-08-23 continuation, the local checkout was clean on `main` and `.\scripts\verify-project.ps1` passed. Regenerate local zip artifacts after plugin or theme changes and use the fresh `dist/` output for deployment.
-
-## Post-Install Manual QA
-
-After installing on WordPress, check:
-
-- Home loads with the approved image-led banner and transparent header.
-- Mobile menu opens and closes.
-- Header does not obscure content on mobile.
-- Survival Kit page renders without list-card save controls.
-- City Guides page renders its complete mobile four-card fold without list-card save controls.
-- Attraction Guides page renders the same complete mobile four-card fold without list-card save controls.
-- Attraction, City, and Survival Kit articles each show one H1, the correct image-led Hero, semantic Breadcrumb, mobile/desktop On this page navigation, and the matching planning checklist.
-- Article Save Guide changes to a pressed Saved state and persists locally; article TOC links place headings below the Header.
-- Saved Guides export/import/clear works in current browser.
-- Share page works or copies link.
-- Planner page Trip.com CTA opens in a new tab.
-- Homepage Planner CTA opens Trip.com in a new tab.
-- Tools page renders Ticket Date & Availability.
-- Ticket Tool requires visit date.
-- Past visit date cannot be saved as reminder.
-- Saved reminders export/import/clear/delete works in current browser.
-- `.ics` calendar download works.
-- FAQ details open and close.
-- Keyboard Tab shows visible focus states.
-- Search page/search form works.
-- 404 page links back to core sections.
-
-## Next Safe Development Steps
-
-Good next increments:
-
-1. Connect the external CMS to `GET /wp-json/stc/v1/content-contract` and validate a non-production import round trip.
-2. Install the three packages on staging and capture desktop/mobile screenshots with representative real guide content.
-3. Fix any staging-only spacing, header, editor, or Media issues found by those checks.
-4. Continue refining or expanding static attraction data inside the existing Ticket Tool only.
-5. Improve FAQ content and internal links.
-6. Add lightweight analytics/event tracking only after deciding privacy approach.
-
-## Do Not Start Without Explicit Approval
-
-Do not start these in the next chat unless the user explicitly approves a separate design/spec:
-
-- Account system.
-- Cross-device sync.
-- Email/SMS/push reminder delivery.
-- Custom database tables.
-- Real ticket inventory checking.
-- Payment processing.
-- New top-level navigation.
-- New tools beyond Attraction Ticket Reservation & Reminder.
-- Heavy affiliate marketplace or booking-first redesign.
-- Replacing the approved homepage direction.
-- Editing third-party themes/plugins directly.
-- Deploying to production without user approval.
+Keep Home / Survival Kit / City Guides / Attraction Guides / Planner / Tools / FAQ as the complete top-level navigation. Content types classify and route content; they must not select fixed article layouts.
 
 ## Development Style For Next Chat
 
-- Continue small bounded increments.
-- Before each feature, add/update verification checks, then implement, then verify.
-- Run `.\scripts\verify-project.ps1` after each meaningful change.
-- Run `.\scripts\package-release.ps1` after changes that affect installable artifacts.
-- Keep updating `docs/handoff/current-progress.md`.
-- Keep this `new-chat-handoff.md` updated if major decisions change.
-- Preserve guest-first behavior.
-- Preserve theme/plugin responsibility split:
-  - Theme owns presentation/layout/templates.
-  - Plugin owns Ticket Tool logic and data.
+Work in small, independently verifiable commits. Update verification first, implement within the Parent/Child/Plugin ownership boundary, run static and real Playground checks, inspect 1440 / 768 / 390 / 375 layouts, package only after validation, and update the existing handoff instead of starting a parallel status document.
 
+## Do Not Start Without Explicit Approval
+
+Do not deploy to production, change WordPress Core or third-party packages, introduce accounts or cross-device sync, add email/SMS delivery, create database tables, add live inventory checks, add tools, or expand the top-level navigation without a separate approved scope.
+
+## Suggested New Chat Opening Message
+
+Continue the existing SoloToChina WordPress repository from Contract 2.0. Read the current handoff and architecture document first, preserve the generic CMS-driven article shell and explicit Share/TOC metadata, keep Ticket Reminder logic in the Plugin, verify changes in real WordPress Playground at all required widths, and do not create a static replacement project.

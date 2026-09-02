@@ -101,6 +101,9 @@ function stc_playground_fixture_definitions() {
 			'category'       => 'survival-kit',
 			'category_label' => 'Survival Kit',
 			'guide_type'     => 'survival-kit',
+			'show_share'     => true,
+			'show_toc'       => true,
+			'hero_variant'   => 'survival',
 			'excerpt'        => 'A calm pre-arrival checklist for setting up mobile payment and keeping a reliable backup.',
 			'content'        => <<<'HTML'
 <!-- wp:paragraph {"className":"stc-guide-intro"} -->
@@ -133,6 +136,9 @@ HTML,
 			'category'       => 'city-guides',
 			'category_label' => 'City Guides',
 			'guide_type'     => 'city-guide',
+			'show_share'     => true,
+			'show_toc'       => false,
+			'hero_variant'   => 'city',
 			'legacy_category_only' => true,
 			'excerpt'        => 'Where to stay, how to move around, and how to build a realistic first Beijing itinerary.',
 			'content'        => <<<'HTML'
@@ -151,6 +157,9 @@ HTML,
 			'category'       => 'attraction-guides',
 			'category_label' => 'Attraction Guides',
 			'guide_type'     => 'attraction-guide',
+			'show_share'     => true,
+			'show_toc'       => true,
+			'hero_variant'   => 'attraction',
 			'excerpt'        => 'A practical route through the Forbidden City, with booking timing, passport checks, transport, and a calmer first visit.',
 			'content'        => <<<'HTML'
 <!-- wp:paragraph {"className":"stc-guide-intro"} --><p class="stc-guide-intro">The Forbidden City rewards a little preparation. Prioritize clear entry logistics and enough breathing room for a first visit.</p><!-- /wp:paragraph -->
@@ -167,12 +176,81 @@ HTML,
 }
 
 /**
+ * Build the internal Gallery from the actual registered component patterns.
+ *
+ * @param string $media_block Real WordPress Media block markup.
+ * @return string
+ */
+function stc_playground_component_gallery_content( $media_block ) {
+	$patterns = stc_content_component_patterns();
+	$content  = '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--paragraph","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--paragraph"><!-- wp:heading --><h2 class="wp-block-heading">Paragraph</h2><!-- /wp:heading --><!-- wp:paragraph --><p>A useful paragraph answers one traveler question at a time and links with descriptive language.</p><!-- /wp:paragraph --></div><!-- /wp:group -->';
+	$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--heading","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--heading"><!-- wp:heading --><h2 class="wp-block-heading">Section heading</h2><!-- /wp:heading --><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Subsection heading</h3><!-- /wp:heading --></div><!-- /wp:group -->';
+	$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--list","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--list"><!-- wp:heading --><h2 class="wp-block-heading">List variants</h2><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Related preparation item</li><!-- /wp:list-item --><!-- wp:list-item --><li>Useful fallback</li><!-- /wp:list-item --></ul><!-- /wp:list --><!-- wp:list {"ordered":true} --><ol class="wp-block-list"><!-- wp:list-item --><li>First required action</li><!-- /wp:list-item --><!-- wp:list-item --><li>Verify before continuing</li><!-- /wp:list-item --></ol><!-- /wp:list --></div><!-- /wp:group -->';
+
+	if ( $media_block ) {
+		$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--image","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--image"><!-- wp:heading --><h2 class="wp-block-heading">Responsive Image roles</h2><!-- /wp:heading -->';
+		foreach ( array( 'evidence', 'context', 'illustration', 'decorative' ) as $role ) {
+			$content .= str_replace( 'stc-content-image--context', 'stc-content-image--' . $role, $media_block );
+		}
+		$content .= '</div><!-- /wp:group -->';
+	}
+
+	$pattern_ids = array(
+		'quick-answer'  => 'quick_answer',
+		'key-takeaways' => 'key_takeaways',
+		'quick-facts'   => 'quick_facts',
+		'tip'           => 'tip',
+		'warning'       => 'warning',
+		'steps'         => 'steps',
+		'checklist'     => 'checklist',
+		'comparison'    => 'comparison_table',
+		'faq'           => 'faq',
+	);
+
+	foreach ( $pattern_ids as $pattern_slug => $component_id ) {
+		if ( isset( $patterns[ $pattern_slug ]['content'] ) ) {
+			$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--' . esc_attr( $component_id ) . '","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--' . esc_attr( $component_id ) . '">' . $patterns[ $pattern_slug ]['content'] . '</div><!-- /wp:group -->';
+		}
+	}
+
+	$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--planner_cta","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--planner_cta"><!-- wp:shortcode -->[stc_planner_cta title="Build a realistic route" description="Keep transfer time visible before committing each day." cta_label="Open the trip planner" target_url="https://www.trip.com/" provider="Trip.com" disclosure="Partner link. SoloToChina may earn a commission at no extra cost to you."]<!-- /wp:shortcode --></div><!-- /wp:group -->';
+	$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--ticket_reminder","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--ticket_reminder"><!-- wp:shortcode -->[stc_ticket_reminder attraction_slug="forbidden-city" title="Check ticket timing"]<!-- /wp:shortcode --></div><!-- /wp:group -->';
+	$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--affiliate_cta","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--affiliate_cta"><!-- wp:shortcode -->[stc_affiliate_cta category="Stay" provider="Trip.com" title="Compare practical base areas" description="Check location and late-arrival access before price." cta_label="View options" target_url="https://www.trip.com/" disclosure="Affiliate link. SoloToChina may earn a commission at no extra cost to you."]<!-- /wp:shortcode --></div><!-- /wp:group -->';
+
+	return $content;
+}
+
+/**
+ * Install the opt-in internal Component Gallery in disposable Playground only.
+ *
+ * @param string $media_block Real WordPress Media block markup.
+ */
+function stc_playground_install_component_gallery( $media_block ) {
+	$existing = get_page_by_path( 'design-system', OBJECT, 'page' );
+	$page_id  = wp_insert_post(
+		array(
+			'ID'           => $existing ? $existing->ID : 0,
+			'post_title'   => 'Frontend Component Gallery',
+			'post_name'    => 'design-system',
+			'post_content' => stc_playground_component_gallery_content( $media_block ),
+			'post_status'  => 'publish',
+			'post_type'    => 'page',
+		)
+	);
+
+	if ( $page_id && ! is_wp_error( $page_id ) ) {
+		update_post_meta( $page_id, '_wp_page_template', 'page-design-system.php' );
+	}
+}
+
+/**
  * Install or refresh the disposable fixtures.
  *
  * @return void
  */
 function stc_playground_install_fixtures() {
 	$media_block = stc_playground_render_media_block( stc_playground_install_media_fixture() );
+	stc_playground_install_component_gallery( $media_block );
 
 	foreach ( stc_playground_fixture_definitions() as $fixture ) {
 		$term = get_term_by( 'slug', $fixture['category'], 'category' );
@@ -207,6 +285,9 @@ function stc_playground_install_fixtures() {
 				update_post_meta( $post_id, '_stc_guide_type', $fixture['guide_type'] );
 				update_post_meta( $post_id, '_stc_content_contract_version', STC_CONTENT_CONTRACT_VERSION );
 			}
+			update_post_meta( $post_id, '_stc_show_share', (bool) $fixture['show_share'] );
+			update_post_meta( $post_id, '_stc_show_toc', (bool) $fixture['show_toc'] );
+			update_post_meta( $post_id, '_stc_hero_variant', $fixture['hero_variant'] );
 		}
 	}
 

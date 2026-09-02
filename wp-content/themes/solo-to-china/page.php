@@ -14,6 +14,7 @@ $core_pages = [
 	'survival-kit'      => [
 		'title' => 'Survival Kit',
 		'copy'  => 'Start here before your first independent trip to China.',
+		'share' => true,
 		'items' => [
 			[ 'title' => 'Payment', 'copy' => 'Cards, Alipay, WeChat Pay, and cash backup.', 'icon' => 'payment' ],
 			[ 'title' => 'Essential Apps', 'copy' => 'Maps, translation, ride hailing, and transport.', 'icon' => 'apps' ],
@@ -25,6 +26,7 @@ $core_pages = [
 	'city-guides'       => [
 		'title' => 'City Guides',
 		'copy'  => 'City hubs for planning where to stay, how to move, and what to do.',
+		'share' => true,
 		'items' => [
 			[ 'title' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing', 'image' => 'card-beijing-hd.webp' ],
 			[ 'title' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai', 'image' => 'card-shanghai-hd.webp' ],
@@ -39,6 +41,7 @@ $core_pages = [
 	'attraction-guides' => [
 		'title' => 'Attraction Guides',
 		'copy'  => 'Ticket timing, passport notes, best seasons, and practical visit planning.',
+		'share' => true,
 		'items' => [
 			[ 'title' => 'Forbidden City', 'copy' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city', 'image' => 'card-forbidden-city-hd.webp' ],
 			[ 'title' => 'Great Wall', 'copy' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall', 'image' => 'card-great-wall-hd.webp' ],
@@ -51,14 +54,17 @@ $core_pages = [
 	'planner'           => [
 		'title' => 'Planner',
 		'copy'  => 'Use SoloToChina content to decide, then book travel products with a clear plan.',
+		'share' => true,
 	],
 	'tools'             => [
 		'title' => 'Tools',
 		'copy'  => 'Free tools for practical China travel decisions. No login required.',
+		'share' => true,
 	],
 	'faq'               => [
 		'title' => 'FAQ',
 		'copy'  => 'Short answers to common first-trip questions.',
+		'share' => true,
 		'items' => [
 			[ 'title' => 'Do I need a visa to visit China?', 'copy' => 'Check the latest entry rules for your passport before booking.', 'link' => '/survival-kit/', 'link_label' => 'Review entry preparation' ],
 			[ 'title' => 'How can I pay in China?', 'copy' => 'Set up mobile payment before arrival and keep a backup card or cash.', 'link' => '/survival-kit/', 'link_label' => 'Open the payment setup guide' ],
@@ -80,11 +86,11 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 			<p><?php esc_html_e( 'SoloToChina', 'solo-to-china' ); ?></p>
 			<h1><?php echo esc_html( $page['title'] ); ?></h1>
 			<span><?php echo esc_html( $page['copy'] ); ?></span>
-			<div class="stc-page-actions">
-				<button type="button" data-stc-share-page data-share-title="<?php echo esc_attr( $page['title'] ); ?>" data-share-url="<?php echo esc_url( get_permalink() ); ?>">
-					<?php esc_html_e( 'Share page', 'solo-to-china' ); ?>
-				</button>
-			</div>
+			<?php if ( ! empty( $page['share'] ) ) : ?>
+				<div class="stc-page-actions">
+					<?php stc_render_share_this_page( array( 'title' => $page['title'], 'description' => $page['copy'] ) ); ?>
+				</div>
+			<?php endif; ?>
 		</section>
 
 		<div class="stc-page-primary">
@@ -184,24 +190,6 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 		</div>
 
 		<?php if ( in_array( $slug, $guide_landing_slugs, true ) ) : ?>
-			<section class="stc-saved-guides" aria-labelledby="stc-saved-guides-title">
-				<div>
-					<div class="stc-saved-guides__header">
-						<h2 id="stc-saved-guides-title"><?php esc_html_e( 'Saved on this device', 'solo-to-china' ); ?></h2>
-						<div class="stc-saved-guides__actions">
-							<button type="button" data-stc-export-guides><?php esc_html_e( 'Export', 'solo-to-china' ); ?></button>
-							<label>
-								<span><?php esc_html_e( 'Import', 'solo-to-china' ); ?></span>
-								<input type="file" accept="application/json,.json" data-stc-import-guides>
-							</label>
-							<button type="button" data-stc-clear-guides><?php esc_html_e( 'Clear all', 'solo-to-china' ); ?></button>
-						</div>
-					</div>
-					<p class="stc-local-note"><?php esc_html_e( 'Stored only on this device. Export or clear it anytime.', 'solo-to-china' ); ?></p>
-					<div data-stc-saved-guides></div>
-				</div>
-			</section>
-
 			<?php stc_render_core_page_latest_guides( $slug ); ?>
 		<?php endif; ?>
 	<?php else : ?>

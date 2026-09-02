@@ -156,7 +156,7 @@ body {
 	gap: var(--stc-grid-gap);
 }
 
-:where(.stc-button, .stc-page-actions button, .stc-saved-guides__actions button) {
+:where(.stc-button, .stc-page-actions button) {
 	align-items: center;
 	border: 1px solid transparent;
 	border-radius: var(--stc-radius-sm);
@@ -175,7 +175,7 @@ body {
 		transform var(--stc-motion-duration-fast) var(--stc-motion-ease-standard);
 }
 
-:where(.stc-button, .stc-page-actions button, .stc-saved-guides__actions button):active {
+:where(.stc-button, .stc-page-actions button):active {
 	transform: translateY(1px);
 }
 
@@ -261,7 +261,7 @@ body {
 		--stc-space-section: clamp(3.5rem, 13vw, 5rem);
 	}
 
-	:where(.stc-button, .stc-page-actions button, .stc-saved-guides__actions button) {
+	:where(.stc-button, .stc-page-actions button) {
 		inline-size: auto;
 		max-inline-size: 100%;
 	}

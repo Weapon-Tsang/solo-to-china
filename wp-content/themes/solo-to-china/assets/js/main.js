@@ -72,275 +72,168 @@
 		});
 	}
 
-	function stcGuideType(value) {
-		var guideType = stcClampText(value, 40);
-		var allowedTypes = ['Survival Kit', 'City Guide', 'Attraction Guide'];
-
-		return allowedTypes.indexOf(guideType) === -1 ? '' : guideType;
-	}
-
-	function stcSavedGuides() {
-		var list = document.querySelector('[data-stc-saved-guides]');
-		var buttons = document.querySelectorAll('[data-stc-save-guide]');
-		var exportButton = document.querySelector('[data-stc-export-guides]');
-		var importInput = document.querySelector('[data-stc-import-guides]');
-		var clearButton = document.querySelector('[data-stc-clear-guides]');
-		var storageKey = 'stcSavedGuides';
-
-		if (!list && !buttons.length && !exportButton && !importInput && !clearButton) {
-			return;
-		}
-
-		function readGuides() {
-			try {
-				return JSON.parse(window.localStorage.getItem(storageKey) || '[]');
-			} catch (error) {
-				return [];
-			}
-		}
-
-		function writeGuides(guides) {
-			window.localStorage.setItem(storageKey, JSON.stringify(guides));
-		}
-
-		function stcExportGuides() {
-			var payload = {
-				source: 'SoloToChina',
-				exportedAt: new Date().toISOString(),
-				guides: readGuides()
-			};
-			var url = window.URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' }));
-			var link = document.createElement('a');
-
-			link.href = url;
-			link.download = 'solotochina-saved-guides.json';
-			document.body.append(link);
-			link.click();
-			link.remove();
-			window.URL.revokeObjectURL(url);
-		}
-
-		function normalizeImportedGuides(payload) {
-			var importedGuides = Array.isArray(payload) ? payload : payload.guides;
-
-			if (!Array.isArray(importedGuides)) {
-				return [];
-			}
-
-			return importedGuides.filter(function (guide) {
-				return guide && guide.id && stcGuideType(guide.type) && guide.title && guide.copy;
-			}).map(function (guide) {
-				return {
-					id: stcClampText(guide.id, 96),
-					type: stcGuideType(guide.type),
-					title: stcClampText(guide.title, 120),
-					copy: stcClampText(guide.copy, 220)
-				};
-			});
-		}
-
-		function stcImportGuides(file) {
-			var reader = new FileReader();
-
-			reader.addEventListener('load', function () {
-				var importedGuides = [];
-
-				try {
-					importedGuides = normalizeImportedGuides(JSON.parse(String(reader.result || '{}')));
-				} catch (error) {
-					window.alert('This saved guides file could not be imported.');
-					return;
-				}
-
-				if (!importedGuides.length) {
-					window.alert('No saved guides were found in this file.');
-					return;
-				}
-
-				var merged = importedGuides.concat(readGuides()).filter(function (guide, index, guides) {
-					return guides.findIndex(function (candidate) {
-						return candidate.id === guide.id;
-					}) === index;
-				});
-
-				writeGuides(merged.slice(0, 24));
-				renderGuides();
-				updateButtons();
-			});
-
-			reader.readAsText(file);
-		}
-
-		function updateButtons() {
-			var savedIds = readGuides().map(function (guide) {
-				return guide.id;
-			});
-
-			buttons.forEach(function (button) {
-				var isSaved = savedIds.indexOf(button.getAttribute('data-guide-id')) !== -1;
-
-				button.textContent = isSaved ? 'Saved' : 'Save guide';
-				button.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
-			});
-		}
-
-		function renderGuides() {
-			if (!list) {
-				updateButtons();
-				return;
-			}
-
-			var guides = readGuides();
-			list.replaceChildren();
-
-			if (!guides.length) {
-				var empty = document.createElement('p');
-				empty.textContent = 'No saved guides on this device yet.';
-				list.append(empty);
-				return;
-			}
-
-			guides.forEach(function (guide) {
-				var item = document.createElement('article');
-				item.className = 'stc-saved-guide-item';
-
-				var copy = document.createElement('div');
-				var type = document.createElement('span');
-				type.textContent = guide.type;
-
-				var title = document.createElement('strong');
-				title.textContent = guide.title;
-
-				var summary = document.createElement('p');
-				summary.textContent = guide.copy;
-
-				var button = document.createElement('button');
-				button.type = 'button';
-				button.setAttribute('data-stc-delete-guide', guide.id);
-				button.textContent = 'Delete';
-
-				copy.append(type, title, summary);
-				item.append(copy, button);
-				list.append(item);
-			});
-		}
-
-		buttons.forEach(function (button) {
-			button.addEventListener('click', function (event) {
-				event.preventDefault();
-				event.stopPropagation();
-
-				var guide = {
-					id: button.getAttribute('data-guide-id'),
-					type: button.getAttribute('data-guide-type'),
-					title: button.getAttribute('data-guide-title'),
-					copy: button.getAttribute('data-guide-copy')
-				};
-				var guides = readGuides().filter(function (savedGuide) {
-					return savedGuide.id !== guide.id;
-				});
-
-				guides.unshift(guide);
-				writeGuides(guides.slice(0, 24));
-				renderGuides();
-				updateButtons();
-			});
-		});
-
-		if (exportButton) {
-			exportButton.addEventListener('click', stcExportGuides);
-		}
-
-		if (importInput) {
-			importInput.addEventListener('change', function () {
-				if (importInput.files && importInput.files[0]) {
-					stcImportGuides(importInput.files[0]);
-				}
-
-				importInput.value = '';
-			});
-		}
-
-		if (clearButton) {
-			clearButton.addEventListener('click', function () {
-				if (!readGuides().length || !window.confirm('Clear all saved guides on this device?')) {
-					return;
-				}
-
-				writeGuides([]);
-				renderGuides();
-				updateButtons();
-			});
-		}
-
-		if (list) {
-			list.addEventListener('click', function (event) {
-				var button = event.target.closest('[data-stc-delete-guide]');
-
-				if (!button) {
-					return;
-				}
-
-				writeGuides(readGuides().filter(function (guide) {
-					return guide.id !== button.getAttribute('data-stc-delete-guide');
-				}));
-				renderGuides();
-				updateButtons();
-			});
-		}
-
-		renderGuides();
-		updateButtons();
-	}
-
 	function stcPageShare() {
-		var buttons = document.querySelectorAll('[data-stc-share-page]');
+		var shareUtilities = document.querySelectorAll('[data-stc-share]');
 
 		function copyToClipboard(text) {
 			if (navigator.clipboard && navigator.clipboard.writeText) {
 				return navigator.clipboard.writeText(text);
 			}
 
-			var input = document.createElement('textarea');
-			input.value = text;
-			input.setAttribute('readonly', '');
-			input.style.position = 'fixed';
-			input.style.top = '-999px';
-			document.body.append(input);
-			input.select();
-			document.execCommand('copy');
-			input.remove();
-			return Promise.resolve();
+			return new Promise(function (resolve, reject) {
+				var input = document.createElement('textarea');
+
+				input.className = 'stc-share__clipboard-proxy';
+				input.value = text;
+				input.setAttribute('readonly', '');
+				document.body.append(input);
+				input.select();
+
+				try {
+					if (!document.execCommand('copy')) {
+						throw new Error('Copy command was rejected.');
+					}
+					resolve();
+				} catch (error) {
+					reject(error);
+				} finally {
+					input.remove();
+				}
+			});
 		}
 
-		function markCopied(button) {
-			var originalText = button.textContent;
-			button.textContent = 'Link copied';
+		shareUtilities.forEach(function (utility) {
+			var trigger = utility.querySelector('[data-stc-share-trigger]');
+			var panel = utility.querySelector('[data-stc-share-panel]');
+			var closeButton = utility.querySelector('[data-stc-share-close]');
+			var copyButton = utility.querySelector('[data-stc-share-copy]');
+			var urlInput = utility.querySelector('[data-stc-share-url]');
+			var status = utility.querySelector('[data-stc-share-status]');
+			var whatsapp = utility.querySelector('[data-stc-share-whatsapp]');
+			var email = utility.querySelector('[data-stc-share-email]');
+			var title = utility.getAttribute('data-share-title') || document.title;
+			var description = utility.getAttribute('data-share-description') || '';
+			var canonicalUrl = utility.getAttribute('data-share-canonical') || window.location.href;
+			var copyLabel = copyButton ? copyButton.textContent : 'Copy link';
 
-			window.setTimeout(function () {
-				button.textContent = originalText;
-			}, 1800);
-		}
+			if (!trigger || !panel) {
+				return;
+			}
 
-		buttons.forEach(function (button) {
-			button.addEventListener('click', function () {
+			if (urlInput) {
+				urlInput.value = canonicalUrl;
+			}
+			if (whatsapp) {
+				whatsapp.href = 'https://wa.me/?text=' + encodeURIComponent(title + ' — ' + canonicalUrl);
+				whatsapp.target = '_blank';
+				whatsapp.rel = 'noopener';
+			}
+			if (email) {
+				email.href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent((description ? description + '\n\n' : '') + canonicalUrl);
+			}
+
+			function announce(message) {
+				if (status) {
+					status.textContent = message;
+				}
+			}
+
+			function setBusy(isBusy) {
+				trigger.disabled = isBusy;
+				trigger.setAttribute('aria-busy', isBusy ? 'true' : 'false');
+				utility.classList.toggle('is-sharing', isBusy);
+			}
+
+			function openPanel(message) {
+				panel.hidden = false;
+				trigger.setAttribute('aria-expanded', 'true');
+				utility.classList.add('is-open');
+				announce(message || '');
+				window.requestAnimationFrame(function () {
+					(closeButton || copyButton || urlInput).focus();
+				});
+			}
+
+			function closePanel(restoreFocus) {
+				panel.hidden = true;
+				trigger.setAttribute('aria-expanded', 'false');
+				utility.classList.remove('is-open');
+				announce('');
+				if (restoreFocus) {
+					trigger.focus();
+				}
+			}
+
+			trigger.addEventListener('click', function () {
 				var shareData = {
-					title: button.getAttribute('data-share-title') || document.title,
-					url: button.getAttribute('data-share-url') || window.location.href
+					title: title,
+					text: description,
+					url: canonicalUrl
 				};
 
 				if (navigator.share) {
-					navigator.share(shareData).catch(function () {});
+					setBusy(true);
+					announce('Opening sharing options');
+					navigator.share(shareData).then(function () {
+						announce('Page shared');
+					}).catch(function (error) {
+						if (!error || error.name !== 'AbortError') {
+							openPanel('Choose another way to share');
+						}
+					}).finally(function () {
+						setBusy(false);
+					});
 					return;
 				}
 
-				copyToClipboard(shareData.url).then(function () {
-					markCopied(button);
+				if (panel.hidden) {
+					openPanel('');
+				} else {
+					closePanel(false);
+				}
+			});
+
+			if (copyButton) {
+				copyButton.addEventListener('click', function () {
+					copyButton.disabled = true;
+					copyToClipboard(canonicalUrl).then(function () {
+						copyButton.textContent = 'Link copied';
+						announce('Link copied');
+						window.setTimeout(function () {
+							copyButton.textContent = copyLabel;
+							copyButton.disabled = false;
+						}, 1800);
+					}).catch(function () {
+						copyButton.disabled = false;
+						announce('Copy failed. Select the link and copy it manually.');
+						if (urlInput) {
+							urlInput.focus();
+							urlInput.select();
+						}
+					});
 				});
+			}
+
+			if (closeButton) {
+				closeButton.addEventListener('click', function () {
+					closePanel(true);
+				});
+			}
+
+			document.addEventListener('keydown', function (event) {
+				if (event.key === 'Escape' && !panel.hidden) {
+					event.preventDefault();
+					closePanel(true);
+				}
+			});
+
+			document.addEventListener('click', function (event) {
+				if (!panel.hidden && !utility.contains(event.target)) {
+					closePanel(false);
+				}
 			});
 		});
 	}
-
 	function stcTocSlug(text, index) {
 		var slug = String(text || '')
 			.toLowerCase()
@@ -414,7 +307,6 @@
 
 	stcMobileNav();
 	stcGuideGridReveal();
-	stcSavedGuides();
 	stcPageShare();
 	stcGuideToc();
 })();

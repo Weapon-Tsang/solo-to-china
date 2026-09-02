@@ -1,6 +1,6 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-09-02
+Date: 2026-09-03
 
 ## Current Working Boundary
 
@@ -37,18 +37,18 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.24.0`.
+Current theme version: `0.25.0`.
 
-Content Contract Phase A is complete:
+Content Contract Phase A is complete and has been superseded by the Contract 2.0 responsibility model documented below:
 
-- Added the canonical `content-contract/content-contract.v1.json` at Contract version `1.0.0`, independent from the Theme version.
+- The canonical contract is now `content-contract/content-contract.v2.json` at Contract version `2.0.0`, independent from the Theme version.
 - Defined four stable guide types, category mappings, shell behaviors, component allowlists, and optional dynamic capabilities.
-- Defined 16 machine-readable core, editorial, image, and contextual component capabilities without exposing CSS values or internal research provenance.
+- Defined 16 ordered core, editorial, image, and contextual page-block capabilities without exposing CSS values or internal research provenance.
 - Added the public read-only `GET /wp-json/stc/v1/content-contract` endpoint with ETag, Last-Modified, and Cache-Control headers.
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks returned Contract `1.0.0`, Theme `0.22.0`, four guide types, 16 components, both REST meta fields, and the expected cache headers.
+- Real Playground REST checks cover Contract `2.0.0`, Registry `1.0.0`, Theme `0.25.0`, four taxonomy-only guide types, 19 CMS capabilities, five REST meta fields, and the expected cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
@@ -65,19 +65,19 @@ The custom theme implements the approved image-led homepage direction:
 - City Guides and Attraction Guides share a two-column mobile grid that displays four complete cards before a compact frosted capsule button placed below the second row.
 - Each guide-grid button reports the remaining item count, moves focus to the first newly revealed card, and fades away as the remaining cards expand smoothly.
 - Survival Kit and city subtitles stay on one line, Survival Kit dividers are centered at 60% height, and attraction badges use smaller type.
-- Guide-list cards do not show save controls; the local Save Guide action appears only after a guide article is opened.
+- Guide-list cards and articles do not expose guide-saving controls; Share This Page is the stateless article utility.
 - Homepage and landing guide cards now use distinct 960x1200 WebP assets with centered `object-fit: cover`, smooth contrast scrims, and 3:4 mobile framing.
 - Mobile City and Attraction cards share 14px corners, 12px grid gaps, 12px subtitles, glass attraction badges, compact green View all links, and tactile reveal buttons.
 - WordPress featured guide cards request the responsive 960px `stc-guide-card-2x` size with `srcset`/`sizes` instead of low-resolution thumbnail presets.
 - Core landing pages and guide article heroes now inherit the selected homepage visual style.
-- Core landing pages render their primary guide content before Saved Guides and category-matched latest posts.
+- Core landing pages render their primary guide content before category-matched latest posts.
 - Attraction Guides preserves full title, subtitle, and badge space in the same four-card mobile fold used by City Guides.
 - Mobile Planner and Ticket cards use concise copy, 20-24px padding, 16px module gaps, 44px CTAs, simplified one-line features, and restrained 11px disclosures.
 - Planner reuses the approved homepage calendar icon, Trip.com disclosure block, and watercolor artwork on desktop and mobile.
 - FAQ uses polished two-column desktop and one-column mobile accordions with related internal links.
 - FAQ now uses borderless single-line dividers, 16px medium-weight titles, 18px rotating SVG chevrons, and 1.6-line-height answers.
 - Footer now uses solid deep ink, higher-contrast text, 36px social icon circles, two-column mobile navigation, and a centered legal/copyright area.
-- Saved Guides and category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
+- Category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
 - Planner band.
 - Homepage Planner CTA opens Trip.com as a sponsored external link.
 - Ticket Date & Availability band.
@@ -85,14 +85,9 @@ The custom theme implements the approved image-led homepage direction:
 - Footer.
 - Keyboard focus styling and skip-to-content link.
 - Basic single article template for future guide posts.
-- Attraction Guide article layout for scenic spot strategy pages.
-- Attraction Guide editor content pattern covering best time, transport, ticket prices, opening and booking timing, where to stay, and common mistakes.
-- Attraction Guide editor content pattern now includes structured quick facts, reservation window, passport note, best base area, before-booking warning, and suggested route modules.
-- City Guide article layout for city strategy pages.
-- City Guide editor content pattern covering where to stay, getting around, first-time itineraries, food, neighborhoods, day trips, and common city mistakes.
-- Survival Kit article layout for practical setup and troubleshooting pages.
-- Survival Kit editor content pattern covering quick answers, pre-arrival setup, step-by-step setup, failure cases, backup plans, and FAQ.
-- Guide articles automatically show an On this page table of contents generated from H2 sections: a compact horizontal navigator before content on mobile and the existing sidebar navigator on desktop.
+- One generic article layout renders City, Attraction, Survival Kit, and uncategorized guide content in its CMS-authored order.
+- Reusable component patterns remain available to editors without imposing topic-wide article structures.
+- Guide articles show an H2-derived On this page navigator only when the CMS explicitly enables `_stc_show_toc`.
 - Shared Guide card rendering for archive, search, and default post lists, with guide type badges and consistent CTAs.
 - Survival Kit, City Guides, and Attraction Guides landing pages automatically show latest published posts from their matching categories.
 - Core guide categories are created on theme activation if missing.
@@ -118,23 +113,11 @@ Core guide categories are created on theme activation if missing:
 - City Guides
 - Attraction Guides
 
-Core guide pages support local Saved Guides:
-
-- Share the current page without login, using native share where available and link-copy fallback.
-- Save an opened guide article without login.
-- View saved guides on the current device.
-- Export saved guides to `solotochina-saved-guides.json`.
-- Import saved guides from the exported JSON format.
-- Clear saved guides from the current device.
-- Show local-only saved-data copy near the Saved Guides controls.
-- Clamp imported saved-guide text before writing to browser storage.
-- Validate imported saved-guide types before writing to browser storage.
-
-Saved Guides use browser `localStorage` only. They do not write to WordPress users, custom tables, post meta, or remote services.
+Share This Page is available without login when the CMS explicitly enables `_stc_show_share`. It uses the canonical URL, prioritizes the Web Share API, and provides an accessible copy/channel fallback without account or browser-storage state.
 
 ## Child Theme Status
 
-Current Child Theme version: `0.6.0`.
+Current Child Theme version: `0.7.0`.
 
 Content Component System Phase B is complete:
 
@@ -158,7 +141,7 @@ Content Component System Phase C is complete:
 
 Content Component System Phase D is complete:
 
-- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.6.0` replaces it with a Design System/Content Component editor canvas.
+- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.7.0` replaces it with a Design System/Content Component editor canvas.
 - Server-side H2 anchor generation preserves explicit public anchors, adds readable IDs when absent, and suffixes duplicates before JavaScript enhancement.
 - Child Theme adds responsive WordPress Media styling for context, evidence, illustration, and decorative roles without forcing image ratios or publishing internal provenance.
 - Playground creates a real ephemeral Media attachment from a project image and stores Gutenberg-valid Core Image markup, rather than hardcoding an external image or Custom HTML block.
@@ -174,6 +157,26 @@ Content Component System Phase E is complete:
 - Child editor assets are registered individually in Parent -> Child Design System -> Content Components -> editor order, so the iframe receives the real visual system without unresolved CSS imports.
 - Real Gutenberg checks found 24 valid blocks and four component families in both Parent and Child editor modes, with no project block-validation errors. The only editor warning is a WordPress core global-styles iframe notice.
 - Final frontend checks covered all three fixtures at 1440, 768, 390, and 375. Every viewport had one H1 and zero page overflow; mobile comparison tables scroll locally, FAQ/ticket controls retain 44px-class targets, Forbidden City is preselected through the Plugin, and reduced-motion/focus/keyboard behavior remains intact.
+
+Page Architecture Responsibility Refactor is complete:
+
+- Contract `2.0.0` records the governing boundary: Frontend renders what the CMS requests; CMS decides what the page contains; content type is taxonomy, not layout.
+- Parent Theme `single.php` is one generic article shell. It no longer branches by City, Attraction, or Survival type and no longer injects checklists, CTA modules, Share, or TOC based on taxonomy.
+- REST-enabled `_stc_show_share`, `_stc_show_toc`, and `_stc_hero_variant` metadata explicitly control optional presentation. Missing flags render no optional utility.
+- Topic-wide fixed Gutenberg article patterns were removed; reusable component patterns remain.
+- The complete Save/Saved Guides UI, state, import/export, and Parent Theme localStorage behavior were removed. Plugin-owned Ticket Reminder storage is unchanged.
+- Share This Page replaces Save Guide as a stateless utility. It prioritizes `navigator.share()`, uses the canonical URL, and falls back to an accessible lightweight channel/copy panel with status, error, Escape, outside-click, and focus-return behavior.
+- Child Theme `0.7.0` uses generic Hero/Layout/TOC selectors and a refined translucent Share trigger with desktop popover and mobile bottom-panel presentation.
+
+Frontend Component Registry and Catalog are complete:
+
+- Added `component-registry.v1.json` as the single capability source for 19 stable CMS-callable IDs: 16 ordered `page_block` components plus Article Hero, Share This Page, and Table of Contents as explicit `presentation_meta` capabilities.
+- Each capability declares purpose, category, status, supported semantic variants, JSON Schema, example, implementation paths, accessibility, responsive behavior, and CMS availability.
+- The Contract REST response derives its component definitions and guide allowlists from the Registry; `content-contract.v2.json` does not maintain a duplicate list.
+- Added the cached public read-only `GET /wp-json/stc/v1/component-registry` endpoint.
+- Added generated `docs/COMPONENT_LIBRARY.md`, including available/internal/legacy/not-yet-componentized/proposed sections and the nine-step publication workflow.
+- Added an ephemeral Playground `/design-system/` Component Gallery with all capability records, all Hero variants, and real content examples. It is not auto-created in production.
+- Added `scripts/verify-component-registry.ps1`; static and runtime verification reject registry drift and unknown Contract component definitions.
 
 The first independent Child Theme foundation stage is complete:
 
@@ -197,17 +200,17 @@ The shared-component and homepage stage is also complete:
 - Playwright QA passed at 1440, 768, 390, and 375 widths with no horizontal overflow, no browser console errors/warnings, working menu/Escape behavior, current-page navigation semantics, guide reveal focus transfer, and FAQ expansion.
 - Final screenshots are stored locally in ignored `output/playwright/`.
 
-The Guide / Article template stage is complete:
+The original Guide / Article styling stage below is historical and has been superseded by the generic Contract 2.0 article shell:
 
 - Added `assets/css/article.css`, loaded only on single posts after the shared Child assets.
-- Renovated Attraction Guide, City Guide, and Survival Kit article heroes with distinct restrained accents and existing high-resolution destination imagery.
-- Added a measured desktop reading column, sticky On this page sidebar, differentiated planning checklists, and editorial quick-fact, warning, and route modules.
+- Renovated the shared article Hero with explicit, CMS-selected restrained visual variants and existing high-resolution destination imagery.
+- Added a measured desktop reading column, an explicitly enabled On this page sidebar, and reusable editorial component styling.
 - Added a horizontal mobile On this page navigator, edge-to-edge mobile article rhythm, single-column fact modules, 44px-class controls, and heading anchor offsets below the Header.
 - Added semantic Home / Hub / Current Article breadcrumbs through a narrowly scoped Child `the_content` filter, avoiding a copied Parent `single.php` and avoiding duplicate SEO-plugin schema or metadata.
-- Preserved Parent Theme TOC generation and local Save Guide logic; the Theme still owns presentation only and the Plugin remains unchanged.
+- The current implementation no longer contains guide-saving logic; Share and TOC render only when explicitly enabled by CMS metadata.
 - Added temporary Playground-only Attraction, City, and Survival Kit article fixtures to the preview Blueprint. They write only to the ephemeral preview database and are not production content or a static demo.
 - Playwright QA passed for the Attraction article at 1440, 768, 390, and 375 widths; City and Survival Kit branches were also checked at 390. All checked pages had one H1, correct guide navigation state, correct Breadcrumb hub, no horizontal overflow, and zero browser console errors/warnings.
-- Save Guide correctly reached `aria-pressed="true"`; mobile TOC navigation reached the target heading with the Header offset preserved.
+- The current Share utility is stateless; mobile TOC navigation reaches the target heading with the Header offset preserved when `_stc_show_toc` is enabled.
 - Child PHP remains compatible with the declared PHP 7.4 minimum.
 
 ## Plugin Status
@@ -309,7 +312,7 @@ Current environment note:
 - PHP CLI is installed locally in `.tools/php/`.
 - The PowerShell verifier uses local PHP for syntax checks when a global `php` command is not available.
 - Static project checks and PHP syntax checks pass before packaging.
-- Browser preview checks protect homepage reference alignment, both four-card guide folds and expansion, responsive Survival Kit columns, mobile tool-band line heights, article-only save behavior, semantic breadcrumbs, article table-of-contents breakpoints, utility-page content scope, FAQ expansion, and horizontal overflow.
+- Browser preview checks protect homepage reference alignment, both four-card guide folds and expansion, responsive Survival Kit columns, mobile tool-band line heights, explicit Share/TOC behavior, semantic breadcrumbs, utility-page content scope, FAQ expansion, and horizontal overflow.
 
 ## GitHub / Source Control Status
 

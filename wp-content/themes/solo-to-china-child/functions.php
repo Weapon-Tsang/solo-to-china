@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.6.0' );
+define( 'STC_CHILD_VERSION', '0.7.0' );
 
 /**
  * Replace the Parent fallback editor stylesheet with the Child visual system.
@@ -36,6 +36,8 @@ add_action( 'after_setup_theme', 'stc_child_add_editor_styles', 20 );
  * parent -> child -> design-system cascade without loading the parent twice.
  */
 function stc_child_enqueue_assets() {
+	$is_component_gallery = is_page_template( 'page-design-system.php' ) || is_page( 'design-system' );
+
 	wp_enqueue_style(
 		'stc-child-style',
 		get_stylesheet_uri(),
@@ -66,7 +68,7 @@ function stc_child_enqueue_assets() {
 		);
 	}
 
-	if ( is_single() ) {
+	if ( is_single() || $is_component_gallery ) {
 		wp_enqueue_style(
 			'stc-child-article',
 			get_stylesheet_directory_uri() . '/assets/css/article.css',
@@ -78,6 +80,15 @@ function stc_child_enqueue_assets() {
 			'stc-child-content-components',
 			get_stylesheet_directory_uri() . '/assets/css/content-components.css',
 			[ 'stc-child-article' ],
+			STC_CHILD_VERSION
+		);
+	}
+
+	if ( $is_component_gallery ) {
+		wp_enqueue_style(
+			'stc-child-component-gallery',
+			get_stylesheet_directory_uri() . '/assets/css/component-gallery.css',
+			[ 'stc-child-content-components' ],
 			STC_CHILD_VERSION
 		);
 	}

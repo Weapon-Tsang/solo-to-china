@@ -1,0 +1,72 @@
+{
+  "contract_version": "2.0.0",
+  "theme_version": "0.25.0",
+  "principles": {
+    "frontend": "Render what CMS requests.",
+    "cms": "Decide what the page contains.",
+    "content_type": "Content type is taxonomy, not layout.",
+    "components": "Frontend defines what can be rendered. CMS decides what should be rendered."
+  },
+  "presentation": {
+    "post_meta": {
+      "show_share": "_stc_show_share",
+      "show_toc": "_stc_show_toc",
+      "hero_variant": "_stc_hero_variant"
+    },
+    "rules": {
+      "component_order": "post_content order",
+      "unknown_blocks": "gracefully preserve safe Gutenberg fallback output",
+      "implicit_components": false
+    }
+  },
+  "guide_types": {
+    "survival-kit": {
+      "slug": "survival-kit",
+      "label": "Survival Kit",
+      "category_slug": "survival-kit",
+      "shell_behavior": "taxonomy-only",
+      "component_policy": "component_registry"
+    },
+    "city-guide": {
+      "slug": "city-guide",
+      "label": "City Guide",
+      "category_slug": "city-guides",
+      "shell_behavior": "taxonomy-only",
+      "component_policy": "component_registry"
+    },
+    "attraction-guide": {
+      "slug": "attraction-guide",
+      "label": "Attraction Guide",
+      "category_slug": "attraction-guides",
+      "shell_behavior": "taxonomy-only",
+      "component_policy": "component_registry"
+    },
+    "travel-guide": {
+      "slug": "travel-guide",
+      "label": "Travel Guide",
+      "category_slug": "travel-guides",
+      "shell_behavior": "taxonomy-only",
+      "component_policy": "component_registry"
+    }
+  },
+  "capabilities": {
+    "free_component_order": true,
+    "native_gutenberg_content": true,
+    "stable_block_anchors": true,
+    "media_anchor_relations": true,
+    "responsive_wordpress_media": true,
+    "explicit_article_navigation": true,
+    "explicit_page_utilities": true,
+    "editor_styles": true,
+    "dynamic_component_renderers": true,
+    "historical_gutenberg_fallback": true,
+    "internal_research_metadata_rendered": false
+  },
+  "component_registry": {
+    "version": "1.0.0",
+    "source": "content-contract/component-registry.v1.json",
+    "endpoint": "/wp-json/stc/v1/component-registry",
+    "page_block_policy": "All components where cms_usable is true and cms_interface is page_block.",
+    "presentation_policy": "Only registered presentation_meta components may be selected explicitly."
+  }
+}

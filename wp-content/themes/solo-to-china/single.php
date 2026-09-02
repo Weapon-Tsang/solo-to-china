@@ -1,6 +1,9 @@
 <?php
 /**
- * Single guide/article template.
+ * Generic single article shell.
+ *
+ * Content type supplies taxonomy and presentation context only. The CMS controls
+ * content blocks, their order, Share, and TOC visibility through post data.
  *
  * @package SoloToChina
  */
@@ -13,138 +16,65 @@ get_header();
 		<?php
 		while ( have_posts() ) :
 			the_post();
-			$is_attraction_guide = stc_is_attraction_guide_post();
-			$is_city_guide       = stc_is_city_guide_post();
-			$is_survival_kit     = stc_is_survival_kit_post();
-			$article_classes     = 'stc-single';
 
-			if ( $is_attraction_guide ) {
-				$article_classes .= ' stc-single--attraction-guide';
-			} elseif ( $is_city_guide ) {
-				$article_classes .= ' stc-single--city-guide';
-			} elseif ( $is_survival_kit ) {
-				$article_classes .= ' stc-single--survival-kit';
-			}
+			$guide_type  = stc_get_guide_type_slug();
+			$guide_label = stc_get_guide_type_label();
+			$hero_variant = stc_get_hero_variant();
+			$show_share  = stc_page_presentation_enabled( 'share' );
+			$show_toc    = stc_page_presentation_enabled( 'toc' );
 			?>
-			<article <?php post_class( $article_classes ); ?>>
-				<?php if ( $is_attraction_guide ) : ?>
-					<header class="stc-attraction-guide__hero">
-						<p class="stc-attraction-guide__eyebrow">Attraction Guide</p>
+			<article <?php post_class( array( 'stc-single', 'stc-single--' . $guide_type ) ); ?>>
+				<header class="stc-article-hero stc-article-hero--<?php echo esc_attr( $hero_variant ); ?>">
+					<?php if ( has_post_thumbnail() ) : ?>
+						<div class="stc-article-hero__media">
+							<?php
+							echo wp_get_attachment_image(
+								get_post_thumbnail_id(),
+								'full',
+								false,
+								array(
+									'class'    => 'stc-article-hero__image',
+									'decoding' => 'async',
+									'fetchpriority' => 'high',
+									'sizes'    => '(max-width: 840px) 100vw, 1180px',
+								)
+							);
+							?>
+						</div>
+					<?php endif; ?>
+
+					<div class="stc-article-hero__content">
+						<p class="stc-article-hero__eyebrow"><?php echo esc_html( $guide_label ); ?></p>
 						<h1><?php the_title(); ?></h1>
 						<?php if ( has_excerpt() ) : ?>
-							<p class="stc-attraction-guide__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
+							<p class="stc-article-hero__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
 						<?php endif; ?>
-						<p class="stc-attraction-guide__meta"><?php echo esc_html( get_the_date() ); ?></p>
-						<?php stc_render_article_save_button( 'Attraction Guide' ); ?>
-					</header>
-
-					<div class="stc-attraction-guide__layout">
-						<?php stc_render_guide_toc( 'stc-guide-toc--mobile' ); ?>
-						<div class="stc-entry-content stc-entry-content--guide">
-							<?php the_content(); ?>
-						</div>
-						<aside class="stc-attraction-guide__sidebar" aria-label="Attraction guide planning topics">
-							<?php stc_render_guide_toc( 'stc-guide-toc--desktop' ); ?>
-							<section class="stc-attraction-guide__checklist">
-								<h2>Planning checklist</h2>
-								<ul>
-									<li><span>Best time</span><small>Season, weather, crowds</small></li>
-									<li><span>Transport</span><small>Metro, taxi, rail, last mile</small></li>
-									<li><span>Ticket price</span><small>Price ranges and entry notes</small></li>
-									<li><span>Booking window</span><small>When to check or reserve</small></li>
-									<li><span>Where to stay</span><small>Best base areas nearby</small></li>
-									<li><span>Common mistakes</span><small>Timing, entrances, holidays</small></li>
-								</ul>
-								<a class="stc-button stc-button--secondary" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Use ticket reminder</a>
-							</section>
-						</aside>
-					</div>
-
-					<footer class="stc-attraction-guide__footer">
-						<a href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">Back to Attraction Guides</a>
-					</footer>
-				<?php elseif ( $is_city_guide ) : ?>
-					<header class="stc-city-guide__hero">
-						<p class="stc-city-guide__eyebrow">City Guide</p>
-						<h1><?php the_title(); ?></h1>
-						<?php if ( has_excerpt() ) : ?>
-							<p class="stc-city-guide__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
+						<p class="stc-article-hero__meta">
+							<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+						</p>
+						<?php if ( $show_share ) : ?>
+							<div class="stc-article-hero__utilities">
+								<?php stc_render_share_this_page(); ?>
+							</div>
 						<?php endif; ?>
-						<p class="stc-city-guide__meta"><?php echo esc_html( get_the_date() ); ?></p>
-						<?php stc_render_article_save_button( 'City Guide' ); ?>
-					</header>
-
-					<div class="stc-city-guide__layout">
-						<?php stc_render_guide_toc( 'stc-guide-toc--mobile' ); ?>
-						<div class="stc-entry-content stc-entry-content--guide">
-							<?php the_content(); ?>
-						</div>
-						<aside class="stc-city-guide__sidebar" aria-label="City guide planning topics">
-							<?php stc_render_guide_toc( 'stc-guide-toc--desktop' ); ?>
-							<section class="stc-city-guide__checklist">
-								<h2>City planning checklist</h2>
-								<ul>
-									<li><span>Where to stay</span><small>Best base areas and tradeoffs</small></li>
-									<li><span>Getting around</span><small>Metro, taxi, airport, rail</small></li>
-									<li><span>Itinerary</span><small>Realistic first-time route</small></li>
-									<li><span>Food</span><small>Local dishes and easy areas</small></li>
-									<li><span>Neighborhoods</span><small>What each area is best for</small></li>
-									<li><span>Common mistakes</span><small>Station, timing, crowd risks</small></li>
-								</ul>
-								<a class="stc-button stc-button--secondary" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">Browse city guides</a>
-							</section>
-						</aside>
 					</div>
+				</header>
 
-					<footer class="stc-city-guide__footer">
-						<a href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">Back to City Guides</a>
-					</footer>
-				<?php elseif ( $is_survival_kit ) : ?>
-					<header class="stc-survival-kit__hero">
-						<p class="stc-survival-kit__eyebrow">Survival Kit</p>
-						<h1><?php the_title(); ?></h1>
-						<?php if ( has_excerpt() ) : ?>
-							<p class="stc-survival-kit__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
-						<?php endif; ?>
-						<p class="stc-survival-kit__meta"><?php echo esc_html( get_the_date() ); ?></p>
-						<?php stc_render_article_save_button( 'Survival Kit' ); ?>
-					</header>
-
-					<div class="stc-survival-kit__layout">
+				<div class="stc-article-layout<?php echo $show_toc ? ' stc-article-layout--with-toc' : ''; ?>">
+					<?php if ( $show_toc ) : ?>
 						<?php stc_render_guide_toc( 'stc-guide-toc--mobile' ); ?>
-						<div class="stc-entry-content stc-entry-content--guide">
-							<?php the_content(); ?>
-						</div>
-						<aside class="stc-survival-kit__sidebar" aria-label="Survival kit setup topics">
-							<?php stc_render_guide_toc( 'stc-guide-toc--desktop' ); ?>
-							<section class="stc-survival-kit__checklist">
-								<h2>Setup checklist</h2>
-								<ul>
-									<li><span>Before arrival</span><small>Prepare before the flight</small></li>
-									<li><span>Setup steps</span><small>Simple order of actions</small></li>
-									<li><span>Required apps</span><small>Install and verify access</small></li>
-									<li><span>Documents</span><small>Passport, visa, screenshots</small></li>
-									<li><span>Connectivity</span><small>eSIM, VPN, airport fallback</small></li>
-									<li><span>Backup plan</span><small>What to do if setup fails</small></li>
-								</ul>
-								<a class="stc-button stc-button--secondary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Browse Survival Kit</a>
-							</section>
-						</aside>
-					</div>
+					<?php endif; ?>
 
-					<footer class="stc-survival-kit__footer">
-						<a href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Back to Survival Kit</a>
-					</footer>
-				<?php else : ?>
-					<header class="stc-content__header">
-						<p><?php echo esc_html( get_the_date() ); ?></p>
-						<h1><?php the_title(); ?></h1>
-					</header>
-
-					<div class="stc-entry-content">
+					<div class="stc-entry-content stc-entry-content--guide">
 						<?php the_content(); ?>
 					</div>
-				<?php endif; ?>
+
+					<?php if ( $show_toc ) : ?>
+						<aside class="stc-article-sidebar" aria-label="<?php esc_attr_e( 'Article navigation', 'solo-to-china' ); ?>">
+							<?php stc_render_guide_toc( 'stc-guide-toc--desktop' ); ?>
+						</aside>
+					<?php endif; ?>
+				</div>
 			</article>
 		<?php endwhile; ?>
 	</section>

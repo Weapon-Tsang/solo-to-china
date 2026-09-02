@@ -1,48 +1,41 @@
 # SoloToChina Theme
 
-Project-owned WordPress theme for SoloToChina.
+Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.24.0`.
+Current version: `0.25.0`.
 
-The theme owns:
+## Responsibility
 
-- The versioned Content Component Capability Contract and public read-only REST endpoint.
-- Stable guide type metadata, Contract version metadata, and category-compatible guide shell routing.
+The Parent Theme owns:
 
-- Approved image-led homepage layout.
-- Homepage-reference visual system for landing pages, guide articles, image cards, header states, and CTA bands.
-- Fixed top-level IA navigation.
-- Survival Kit, City Guides, Attraction Guides, Planner, Tools, and FAQ landing-page presentation.
-- Local Saved Guides browser UI.
-- No-account page sharing UI.
-- Single article and 404 templates.
-- Attraction Guide article layout and editor content pattern.
-- Structured Attraction Guide quick facts, reservation, passport, base-area, warning, and route modules.
-- City Guide article layout and editor content pattern.
-- Survival Kit article layout and editor content pattern.
-- Automatic table of contents for guide articles based on H2 sections.
-- Shared Guide card rendering for archive, search, and default post lists.
-- Latest published guide posts on Survival Kit, City Guides, and Attraction Guides landing pages.
-- Core landing pages keep their primary guide content before Saved Guides and category-matched latest posts.
-- City and Attraction landing cards use matching two-column mobile grids that show four complete cards before a compact frosted reveal button.
-- Featured guide cards request the responsive 960px `stc-guide-card-2x` WordPress image size instead of low-resolution thumbnails.
-- Homepage and landing guide cards use 960x1200 WebP media, centered `object-fit: cover`, mobile 3:4 framing, a smooth contrast scrim, and glass attraction badges.
-- Guide articles place a compact horizontal table of contents before mobile content while retaining the desktop sidebar table of contents.
-- Planner reuses the approved homepage icon, partner disclosure, and watercolor artwork across desktop and mobile.
-- FAQ uses responsive two-column/one-column accordions with related internal links.
-- FAQ uses borderless single-line dividers, 16px medium-weight titles, comfortable answer typography, and animated 18px SVG chevrons.
-- Footer uses a solid deep-ink background, higher-contrast links, 36px social icon circles, two-column mobile navigation, and a centered legal row.
-- Saved Guides remain limited to Survival Kit, City Guides, and Attraction Guides instead of appearing on Planner, Tools, or FAQ.
-- Reference-locked homepage order from Survival Kit through FAQ, without an inserted latest-post section.
-- Single-row mobile Survival Kit shortcuts plus matching two-column City Guides and Attraction Guides grids with complete four-card previews and compact frosted reveal buttons.
-- Mobile Planner and Ticket Tool bands use tuned line heights, spacing, and text-column widths.
-- Guide-list cards stay focused on opening content; local save actions appear only after a guide article is opened.
-- Mobile Hero uses bounded 75vh framing, bottom-weighted readable copy, a vermilion CTA, and a glass menu control.
-- Reference-style Planner and Ticket bands with dedicated icons and non-overlapping content columns.
-- Planner and Ticket cards use concise copy, 44px CTAs, restrained disclosures, and simplified one-line feature labels.
-- Core guide category setup on theme activation.
-- Theme design system, responsive layout, keyboard focus, and skip-to-content behavior.
+- The versioned Content Contract and public read-only REST endpoint.
+- The canonical Frontend Component Registry and public read-only `/wp-json/stc/v1/component-registry` endpoint.
+- A generic article shell that renders CMS/Gutenberg content in stored order.
+- Reusable semantic components and safe dynamic renderer adapters.
+- Explicit CMS presentation metadata for Share, TOC, and Hero variant.
+- Taxonomy, URL, breadcrumb, SEO, archive, search, and site-shell infrastructure.
+- Accessible Share This Page behavior with Web Share API, canonical-link copy fallback, and graceful errors.
+- Parent-only fallback presentation.
+- The fixed top-level information architecture and current core landing-page presentation.
 
-The theme should not own tool business logic. Project-owned tools belong in `wp-content/plugins/solo-to-china-tools/`.
+The governing boundary is:
 
-Do not edit third-party theme source directly for project-specific UI work.
+- Frontend responsibility: “Render what CMS requests.”
+- CMS responsibility: “Decide what the page contains.”
+- Content type is taxonomy, not layout.
+
+City, Attraction, Survival, and Travel guide types may inform labels, URLs, breadcrumbs, discovery, and visual context. They do not inject FAQ, checklist, ticket, TOC, Share, or other editorial modules. The CMS chooses components and order through post content, and explicitly controls page utilities through registered REST metadata.
+
+The old topic-wide article patterns and guide-saving system have been removed. Share This Page replaces Save Guide without accounts, browser storage, or saved state.
+
+Registry `1.0` currently exposes 19 stable CMS capabilities: 16 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
+
+`docs/COMPONENT_LIBRARY.md` is generated from the Registry. Change the Registry and implementation together, update the Gallery/tests, then regenerate the catalog with `scripts/generate-component-catalog.ps1`.
+
+## Tool boundary
+
+The Theme does not own Ticket data, booking-window calculations, reminder storage, scheduling, consent, or validation. Those responsibilities remain in `wp-content/plugins/solo-to-china-tools/`.
+
+The theme should not own tool business logic.
+
+Do not edit third-party Theme source directly for SoloToChina-specific work.

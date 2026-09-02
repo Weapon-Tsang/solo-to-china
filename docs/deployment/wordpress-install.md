@@ -76,10 +76,10 @@ Then activate the theme and plugin inside WordPress Admin.
 After activation, check these pages in WordPress:
 
 - Home: image-led homepage loads with transparent header.
-- Survival Kit: opened guide articles can be saved locally; listing cards do not show save controls.
-- City Guides: opened city-guide articles can be saved locally; listing cards do not show save controls.
-- Attraction Guides: opened attraction-guide articles can be saved locally; listing cards do not show save controls.
-- Guide articles: Attraction, City, and Survival Kit posts show the correct image-led Hero, one H1, Home / Hub / Article Breadcrumb, On this page navigation, and matching planning checklist.
+- Survival Kit: guide articles use the shared article shell and render CMS-authored blocks in stored order.
+- City Guides: guide articles use the same shared shell; guide type affects taxonomy and breadcrumb context, not layout.
+- Attraction Guides: guide articles use the same shared shell and retain responsive featured-image output.
+- Guide articles: verify one H1, Home / Hub / Article Breadcrumb, CMS-authored component order, and no automatically injected checklist, FAQ, CTA, Share, or TOC.
 - Planner: Trip.com CTA opens in a new tab.
 - Tools: Ticket Date & Availability renders, requires a visit date, and can save a local reminder.
 - FAQ: FAQ items open and close normally.
@@ -93,8 +93,9 @@ Also check:
 - Mobile Hero stays within 480-580px at 75vh, keeps its title to two readable lines, and reveals the top of the Survival Kit shortcuts in the first viewport.
 - Mobile Hero uses the vermilion Start Exploring CTA and the translucent glass menu button.
 - Keyboard Tab shows visible focus states.
-- Saved Guides and Saved Reminders show local-only copy.
-- Export/import/clear actions work only on the current browser.
+- Share This Page uses the canonical URL, prefers the device share sheet, and exposes the channel/copy fallback when native sharing is unavailable or fails.
+- Share fallback supports keyboard focus, Escape close, visible status, and manual URL selection if clipboard access fails.
+- Saved Reminders show local-only copy; their export/import/clear actions work only on the current browser.
 - City and Attraction cards are sharp on a high-DPI phone, use centered 3:4 framing, and retain a readable smooth bottom scrim without image blur.
 - Article reading width stays controlled on desktop; the mobile article has no horizontal overflow at 375-390px, and TOC links stop below the Header.
 
@@ -122,6 +123,6 @@ This release includes the approved homepage direction, the renovated Child Theme
 
 The reminder feature is currently local-device only. It shows a simple booking-window status, stores saved reminders in the visitor's browser, can export/import a `.json` backup, can clear saved reminders from the current device, and can download an `.ics` calendar file for each reminder date. It does not require login, email, SMS, or database storage.
 
-Saved Guides are also local-device only. They store guides selected after opening an article in the visitor's browser, can export/import a `.json` backup, and can be cleared from the current device. They do not require login or database storage.
+Share This Page is stateless. It does not save a guide, create an account, imply cross-device persistence, or write page state to browser storage or WordPress. It shares the canonical URL through `navigator.share()` when available and otherwise offers WhatsApp, email, and Copy link actions.
 
 Email/SMS reminder delivery and cross-device sync should be added later as plugin features, after deciding storage, notification provider, consent copy, and anti-spam rules.

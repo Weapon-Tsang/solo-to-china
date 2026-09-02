@@ -1,146 +1,133 @@
 # SoloToChina Content Component System
 
-Current Content Contract version: `1.0.0`  
-Compatible Parent Theme version: `0.24.0`
+Current Content Contract version: 2.0.0
+Current Component Registry version: 1.0.0
+Compatible Parent Theme version: 0.25.0
 
-## Ownership
+## Governing Boundary
 
-WordPress owns component capability, rendering, design, the article shell, responsive behavior, and accessibility. The external `solo-to-china-CMS` owns article content, structure, component selection/order/data, and canonical content types.
+Frontend responsibility: “Render what CMS requests.”
 
-The Tools plugin continues to own Ticket data, date calculations, reminder storage, scheduling, consent, and any future notification delivery. Neither the Parent nor Child Theme may duplicate that business logic.
+CMS responsibility: “Decide what the page contains.”
 
-## Canonical Contract
+Content type is taxonomy, not layout.
 
-The single machine-readable source of truth is:
+The frontend owns the component library, Design System, responsive behavior, accessibility, interactions, generic page rendering, WordPress site shell, SEO rendering infrastructure, and safe mapping from CMS data to WordPress output.
 
-```text
-wp-content/themes/solo-to-china/content-contract/content-contract.v1.json
-```
+Frontend capability rule: "Frontend defines what can be rendered." The CMS may select only IDs and semantic variants published by the canonical Component Registry.
 
-It contains only semantic capability information:
+The CMS owns content strategy, article structure, component selection, component order, component data, component variants, and whether optional utilities such as Share or TOC appear.
 
-- `contract_version`
-- compatible `theme_version`
-- stable guide types and category routing
-- component definitions, fields, required/optional fields, render modes, renderer keys, anchor support, and accessibility notes
-- runtime capability flags
+## Rendering Pipeline
 
-It deliberately excludes design token values, CSS decisions, arbitrary CMS classes, internal research identifiers, source authorization records, and publishing history.
+    CMS
+    → post content and presentation metadata
+    → WordPress generic article shell
+    → Gutenberg/component renderer
+    → reusable component library
+    → rendered page
 
-## Public REST Endpoint
+WordPress post_content is the ordered page schema in the current integration. Native Gutenberg blocks and approved shortcode adapters are rendered in exactly the stored order. The frontend does not automatically insert, reorder, or infer FAQ, checklist, ticket reminder, quick facts, warning, steps, comparison, affiliate, or other editorial components.
 
-CMS clients read the Contract from:
+There are no separate CityGuideRenderer, AttractionGuideRenderer, or SurvivalGuideRenderer implementations. single.php provides one semantic shell. Guide type may influence taxonomy labels, archive routing, breadcrumbs, related-content discovery, and visual context, but never the page’s component composition.
 
-```text
-GET /wp-json/stc/v1/content-contract
-```
+Unknown or newer Gutenberg block types use WordPress’s safe block fallback behavior. A component mismatch must not crash the article.
 
-The endpoint is public and read-only. It returns the canonical JSON without configuration or mutation APIs. Responses include `ETag`, `Last-Modified`, and a short public cache policy so a CMS can synchronize capabilities without reading the GitHub repository or copying CSS.
+## Canonical Contract And Registry
 
-## Versioning
+The machine-readable sources have separate responsibilities:
 
-Contract and Theme versions are independent:
+    wp-content/themes/solo-to-china/content-contract/content-contract.v2.json
+    wp-content/themes/solo-to-china/content-contract/component-registry.v1.json
 
-- PATCH: non-breaking corrections, descriptions, or visual implementation changes.
-- MINOR: backward-compatible components or optional fields.
-- MAJOR: removed/renamed components, required-field changes, or field-type changes.
+CMS clients read it from:
 
-The Theme version identifies the runtime release that implements the Contract; it is not the Contract version.
+    GET /wp-json/stc/v1/content-contract
+    GET /wp-json/stc/v1/component-registry
 
-## Guide Types And Routing
+The endpoint remains public and read-only and includes ETag, Last-Modified, and public cache headers. Contract and Theme versions remain independent; Contract 2.0 is a deliberate major change because content-type-specific layout behavior was removed.
 
-| Guide type | WordPress category | Shell behavior |
+The Contract publishes page/type rules and CMS-facing metadata. The Registry is the single source of truth for stable component IDs, names, categories, status, semantic variants, JSON input schemas, examples, implementation paths, accessibility, responsive behavior, and CMS availability. Contract REST output derives its backward-compatible component and per-guide allowlists from the Registry at runtime; the Contract JSON does not duplicate those lists.
+
+The human-readable catalog is generated from the Registry at `docs/COMPONENT_LIBRARY.md`. Run `scripts/generate-component-catalog.ps1` after an approved Registry change.
+
+## CMS Presentation Metadata
+
+The CMS explicitly controls optional article presentation through REST-enabled post metadata:
+
+| Purpose | Post meta | Values |
 | --- | --- | --- |
-| `survival-kit` | `survival-kit` | Survival Kit shell |
-| `city-guide` | `city-guides` | City Guide shell |
-| `attraction-guide` | `attraction-guides` | Attraction Guide shell |
-| `travel-guide` | `travel-guides` | Default article shell |
+| Guide taxonomy | _stc_guide_type | Stable guide-type slug |
+| Contract version | _stc_content_contract_version | 2.0.0 |
+| Share utility | _stc_show_share | Boolean |
+| On This Page | _stc_show_toc | Boolean |
+| Hero visual variant | _stc_hero_variant | default, attraction, city, or survival |
 
-REST-enabled post metadata:
+Missing Share or TOC metadata means the utility is not rendered. The Theme does not infer either flag from category, tag, title, or content type. When TOC is explicitly enabled, the frontend may derive its links from the H2 elements in the CMS-provided content.
 
-- `_stc_guide_type`
-- `_stc_content_contract_version`
+The Hero consumes title, excerpt, date, featured image, taxonomy label, and explicit visual variant. It never adds ticket, checklist, booking, Save, or Share actions implicitly.
 
-Both fields have allowlist schemas, sanitization, and authenticated edit capability checks. `_stc_guide_type` is checked before taxonomy fallback. Existing category/tag-based articles therefore remain compatible, while new CMS posts can select a guide shell explicitly without title guessing.
+## Component Library
 
-## Component Definitions
+Registry 1.0 exposes 19 CMS-selectable capabilities: 16 ordered page blocks plus three explicit presentation capabilities.
 
-Contract v1 exposes 16 capabilities:
+- Core: Paragraph, Heading, List, Image
+- Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
+- Contextual: Planner CTA, Ticket Reminder, Affiliate CTA
+- Presentation: Article Hero, Share This Page, and TOC through explicit page metadata
 
-- Core Gutenberg: `paragraph`, `heading`, `list`, `image`
-- Editorial/GEO: `quick_answer`, `key_takeaways`, `quick_facts`, `tip`, `warning`, `steps`, `checklist`, `comparison_table`, `faq`
-- Dynamic/contextual: `planner_cta`, `ticket_reminder`, `affiliate_cta`
+Every editorial/contextual component is available to every guide taxonomy. The CMS chooses whether and where it appears. The Parent Theme registers small component patterns only; the former topic-wide Attraction, City, and Survival article patterns were removed.
 
-Core and editorial components use native Gutenberg blocks plus stable `stc-content-block--*` semantic classes. Dynamic components declare renderer keys; the CMS stores only intent and safe parameters, never copied feature HTML.
+Four additional frontend components are recorded with `cms_usable: false`: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. They exist in the renderer but are not valid `page.blocks[].type` values.
 
-The Parent Theme registers nine reusable, unlocked Gutenberg patterns under the `SoloToChina Content` category. They are component starters rather than fixed topic templates: editors and CMS clients may combine them in any valid order and quantity. The Child Theme owns their visual treatment in `assets/css/content-components.css`; the Contract never publishes those CSS decisions.
+Images remain native WordPress Media with intrinsic dimensions, srcset, sizes, lazy loading, async decoding, alt text, and captions. Public roles affect presentation only and never expose research provenance.
 
-The shared editorial families are:
+## Share This Page
 
-- Answer and summary: Quick Answer, Key Takeaways, Quick Facts
-- Guidance: Tip, Warning, Steps, Checklist
-- Structured comparison: Comparison Table
-- Disclosure: FAQ using native `details` and `summary`
+Share This Page replaces the discontinued Save Guide feature. It has no login requirement, account state, local storage, saved state, or cross-device implication.
 
-Comparison tables scroll within their own container on narrow screens instead of widening the page. FAQ rows retain native keyboard behavior. Component CSS uses the established design tokens and reduced-motion behavior, with no CMS-supplied inline styles.
+When the browser supports the Web Share API, the utility first calls navigator.share() with the page title, optional excerpt, and canonical URL. Otherwise it opens a lightweight accessible share panel with:
 
-## Block Anchors And Images
+- WhatsApp and email links
+- A read-only canonical URL
+- Copy link with clipboard and legacy-copy fallback
+- Visible success/error status through an ARIA live region
+- Escape, outside-click, close-button, and focus-return behavior
+- Busy state while the native share sheet is opening
 
-Components marked `anchorable` accept stable public anchors suitable for section navigation and media placement such as `getting-there`. The image capability accepts a WordPress Media ID, alt text, optional caption/role, and an optional `after_block_id` relation.
+Its visual weight stays below booking, availability, and planner CTAs. The Child Theme presents it as a refined translucent Hero utility and a compact desktop popover/mobile bottom panel.
 
-Internal evidence, claim, source, or authorization data must never be serialized into public HTML attributes. WordPress only renders already-ingested Media through normal responsive image and caption behavior.
+## Ticket Boundary
 
-The Parent Theme adds missing H2 IDs on the server after block and shortcode rendering. Explicit Gutenberg/CMS anchors are preserved; missing and duplicate IDs receive deterministic readable suffixes. The existing JavaScript TOC therefore enhances already-addressable HTML instead of being the only source of section IDs.
+The Parent Theme’s Ticket Reminder adapter delegates to [solo_to_china_ticket_tool]. The SoloToChina Tools Plugin continues to own attraction data, booking lead days, calculations, validation, reminder storage, import/export, and calendar output. The architecture refactor does not move or duplicate any Ticket logic.
 
-Content images remain native WordPress Media. Core attachment rendering provides intrinsic `width`/`height`, `srcset`, `sizes`, lazy loading, async decoding, alt text, and semantic captions. The Child Theme styles the shared `.stc-content-image` family without overriding intrinsic aspect ratios; optional public roles (`evidence`, `context`, `illustration`, `decorative`) only affect presentation.
+## Removed Behavior
 
-## Editor Parity
+The Theme no longer contains:
 
-The Parent Theme ships a small independent editor stylesheet so it stays usable when activated alone. When the Child Theme is active, it replaces that fallback with an editor stylesheet that imports the Child Design System and Content Component visuals. The editor canvas uses the same reading width, typography, semantic component classes, responsive Media treatment, and accessible color hierarchy as the public article surface.
+- Save guide, Saved, Unsave, or Saved Guides interfaces
+- stcSavedGuides browser storage
+- Saved-guide export/import/clear/delete behavior
+- Content-type-specific article markup branches
+- Automatically injected planning checklists
+- Topic-wide fixed Gutenberg article templates
+- Automatic Share or TOC decisions based on guide type
 
-## Dynamic Renderers
+Ticket reminders still use Plugin-owned local storage; that is a separate explicitly scoped tool behavior.
 
-The Parent Theme exposes three shortcode adapters whose names match the Contract renderer capabilities:
+## Integration Fixtures And Verification
 
-- `[stc_planner_cta]`
-- `[stc_ticket_reminder]`
-- `[stc_affiliate_cta]`
+scripts/playground-fixtures.php creates disposable Survival, City, and Attraction articles. Each explicitly enables Share and selects a Hero variant. Survival and Attraction enable TOC; City disables it to prove that taxonomy does not control layout. City also retains historical category-only guide classification coverage.
 
-Planner and Affiliate CTAs accept plain visible text, a stable optional anchor, and an HTTPS destination. Invalid or incomplete external actions render nothing. External actions open with `rel="sponsored nofollow noopener"`, and Affiliate CTA always renders a visible disclosure.
+The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 19 capability cards and renders real Gutenberg/shortcode examples for the 16 page-block components, plus the three presentation capabilities and every published Hero variant. The Theme does not create this page in production.
 
-Ticket Reminder accepts only a sanitized attraction slug plus optional contextual copy. The Theme renders the surrounding editorial component and delegates the actual form to `[solo_to_china_ticket_tool attraction_slug="..."]`. The Tools plugin validates that slug against its own attraction dataset and owns all calculations, form behavior, reminder storage, import/export, and calendar output. When the Plugin is inactive, the Theme shows a small accessible link to Tools instead of copying feature logic.
+Verification commands:
 
-## Backward Compatibility
+    .\scripts\verify-page-architecture.ps1
+    .\scripts\verify-component-registry.ps1
+    .\scripts\verify-content-contract.ps1
+    .\scripts\verify-project.ps1
+    .\scripts\start-preview.ps1 -Port 9400
+    .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
 
-- The existing `single.php` and unrestricted `the_content()` flow remain in place.
-- Historical Gutenberg posts require no Contract metadata and continue using taxonomy fallback.
-- The Parent Theme remains a functional fallback without the Child Theme.
-- Content structure is intentionally free; components may appear in different counts and orders without creating topic-specific templates.
-
-## Integration Fixtures
-
-`scripts/playground-fixtures.php` installs three disposable Gutenberg articles for Survival Kit, City Guide, and Attraction Guide flows. The fixtures exercise different component combinations. Survival Kit and Attraction Guide use explicit Contract metadata; City Guide deliberately uses historical category-only routing to protect backward compatibility. They are mounted only by the local WordPress Playground script, are excluded from release packages, and are not production content or a static demo.
-
-## Verification And Preview Modes
-
-The static Contract and project checks are:
-
-```powershell
-.\scripts\verify-content-contract.ps1
-.\scripts\verify-project.ps1
-```
-
-The default Playground mode mounts Parent Theme, active Child Theme, Plugin, and all three fixtures. Runtime verification checks the REST Contract and validators, sanitized metadata boundaries, semantic component output, safe external link attributes, Plugin-owned Ticket form delegation, responsive Media markup, stable H2 anchors, historical taxonomy fallback, and the absence of public provenance or CMS-supplied inline styles.
-
-```powershell
-.\scripts\start-preview.ps1 -Port 9400
-.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
-```
-
-Parent-only mode proves that the Parent remains independently usable. Editor mode logs into the disposable Gutenberg fixture so both Parent fallback styles and Child editor parity can be inspected without changing production data.
-
-```powershell
-.\scripts\start-preview.ps1 -Port 9402 -ParentOnly
-.\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
-.\scripts\start-preview.ps1 -Port 9403 -Editor
-```
+Parent-only fallback remains available through -ParentOnly. All Playground data is ephemeral and excluded from release packages.

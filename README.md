@@ -23,13 +23,15 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.24.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.6.0` in `wp-content/themes/solo-to-china-child/`.
+- Custom SoloToChina theme `0.25.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.7.0` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.22.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.
 - Content Component System architecture in `docs/architecture/content-component-system.md`.
+- Machine-readable Frontend Component Registry in `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json`.
+- Registry-generated human catalog in `docs/COMPONENT_LIBRARY.md` and an internal Playground Gallery at `/design-system/`.
 
 Generate install artifacts with:
 
@@ -48,6 +50,8 @@ The preview uses the official WordPress Playground CLI and defaults to `http://1
 Content Component System verification:
 
 ```powershell
+.\scripts\verify-page-architecture.ps1
+.\scripts\verify-component-registry.ps1
 .\scripts\verify-content-contract.ps1
 .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
 .\scripts\start-preview.ps1 -Port 9402 -ParentOnly

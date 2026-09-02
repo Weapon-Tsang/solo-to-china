@@ -7,7 +7,7 @@ Scope: SoloToChina Parent Theme `0.21.0`, SoloToChina Tools `0.21.0`, existing t
 ## KEEP
 
 - Fixed guest-first information architecture and the seven approved top-level navigation items.
-- Parent Theme semantic templates, WordPress feature support, core-page/category creation, guide classification, responsive featured-image output, article TOC, local Saved Guides, native share fallback, and content block patterns.
+- Parent Theme semantic templates, WordPress feature support, core-page/category creation, guide classification, responsive featured-image output, explicit article utilities, native share fallback, and reusable content block patterns. The local Saved Guides behavior recorded in the initial audit was removed by the Contract 2.0 responsibility refactor.
 - Plugin ownership of attraction data, booking-window calculations, local reminders, import/export, calendar downloads, validation, and storage behavior.
 - Existing high-resolution destination imagery: 14 distinct 960x1200 WebP card assets plus the approved hero/planner/ticket artwork.
 - Existing page order and content-first separation between guides, restrained affiliate CTA, tools, FAQ, and footer.
