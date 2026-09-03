@@ -1,6 +1,6 @@
 # SoloToChina CMS / Frontend Capability Contract
 
-Current Component Contract version: `1.0.0`
+Current Component Contract version: `1.1.0`
 
 This document defines the integration boundary between the independent `solo-to-china` frontend repository and `solo-to-china-CMS` repository.
 
@@ -87,11 +87,35 @@ Verification compares IDs, order, versions, fields, variants, deprecation state,
 
 Internal components and proposed future components are not included. An unknown component ID or variant is invalid CMS output and must be rejected before publication.
 
-The live WordPress runtime also exposes the richer implementation Registry at:
+The live WordPress runtime exposes the richer authoring Registry for frontend inspection at:
 
     GET /wp-json/stc/v1/component-registry
 
-The repository Contract is the preferred input for build-time CMS synchronization; the REST endpoint is available for runtime capability inspection.
+CMS synchronization should consume the generated shape from:
+
+    GET /wp-json/stc/v1/component-registry/generated
+    GET /wp-json/stc/v1/page-schema
+
+Both generated endpoints return the same shapes as the repository artifacts and include stable ETag, Last-Modified, and public Cache-Control headers. The repository Contract remains the preferred build-time source; the generated endpoints support deployed runtime synchronization.
+
+Production CMS configuration should use the deployed frontend origin and exact deployed commit:
+
+```text
+FRONTEND_CONTRACT_SOURCE_REPOSITORY=https://github.com/Weapon-Tsang/solo-to-china
+FRONTEND_COMPONENT_REGISTRY_SOURCE=https://solotochina.com/wp-json/stc/v1/component-registry/generated
+FRONTEND_PAGE_SCHEMA_SOURCE=https://solotochina.com/wp-json/stc/v1/page-schema
+FRONTEND_CONTRACT_COMMIT_SHA=<deployed frontend commit>
+```
+
+Do not set the commit value to an uncommitted working tree or a commit that has not been deployed.
+
+## Commercial Capability Boundary
+
+Registry 1.1 adds `affiliate_booking_card`, `affiliate_search_card`, `affiliate_banner`, and `affiliate_promotion_card`. The CMS may select them only after QA and must pass a complete Commercial Block; the frontend never infers commercial placement from title, content type, body text, taxonomy, or template.
+
+New affiliate destinations and embed sources must be HTTPS and resolve to `trip.com`, `tripcdn.com`, `ctrip.com`, or a legitimate subdomain. Raw HTML, script, srcdoc, data/javascript URLs, credentials in URLs, inline event handlers, and unknown fields are rejected. Search boxes and dynamic banners accept only the documented structured `embed_config` fields and enums.
+
+The browser sends privacy-minimal impression/click events only to the same-origin `POST /wp-json/stc/v1/commercial-events` relay. The relay validates a 4 KiB maximum payload, allowlisted fields/enums, same-origin requests, rate limits, and deduplication before forwarding. Configure `STC_COMMERCIAL_EVENTS_ENDPOINT` and `STC_COMMERCIAL_EVENTS_TOKEN` only in the server process environment. The relay does not persist or return the token, and forwarding failures do not interrupt visitor navigation.
 
 ## Page Payload
 

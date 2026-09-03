@@ -23,8 +23,8 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.25.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.7.0` in `wp-content/themes/solo-to-china-child/`.
+- Custom SoloToChina theme `0.26.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.8.0` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.22.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
@@ -35,6 +35,8 @@ Current development branch deliverables:
 - Registry-generated human catalog in `docs/COMPONENT_LIBRARY.md`, repository boundary in `docs/CMS_FRONTEND_CONTRACT.md`, capability history in `docs/COMPONENT_CHANGELOG.md`, and an internal Playground Gallery at `/design-system/`.
 
 The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
+
+Registry `1.1.0` adds four QA-selected Commercial Blocks: Affiliate Booking Card, Search Card, Banner, and Promotion Card. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`. Privacy-minimal impression/click events post only to the same-origin `POST /wp-json/stc/v1/commercial-events` relay; server forwarding is disabled until its environment variables are configured.
 
 Generate install artifacts with:
 

@@ -28,11 +28,11 @@ Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/
 
 ## Current Versions
 
-- Parent Theme: 0.25.0
-- Child Theme: 0.7.0
+- Parent Theme: 0.26.0
+- Child Theme: 0.8.0
 - SoloToChina Tools Plugin: 0.22.0
-- Content Contract: 2.0.0
-- Component Registry: 1.0.0
+- Content Contract: 2.1.0
+- Component Registry: 1.1.0
 
 ## Architecture Rule
 
@@ -98,16 +98,19 @@ The Theme no longer contains Save guide, Saved, Unsave, Saved Guides, guide expo
 
 ## Component System
 
-Registry 1.0 publishes 19 stable CMS capabilities: 16 ordered page blocks and three explicit presentation controls.
+Registry 1.1 publishes 23 stable CMS capabilities: 20 ordered page blocks and three explicit presentation controls.
 
 - Core: Paragraph, Heading, List, Image
 - Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
 - Contextual: Planner CTA, Ticket Reminder, Affiliate CTA
+- Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
 - Presentation: Article Hero, Share This Page, Table of Contents
 
 All components are available independently of content type. The CMS decides their presence, order, data, and variants. Four additional renderer components are documented as internal and are not valid CMS types: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. The Parent Theme keeps small reusable component patterns; topic-wide Attraction, City, and Survival article patterns were removed.
 
-`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. The CMS should read the root contracts and must not scan frontend implementation code to discover capabilities. Playground exposes an ephemeral `/design-system/` Gallery with all 19 capability records, the major Hero variants, and real examples for all 16 page-block components. The Theme does not auto-create this page in production.
+`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. The CMS should read the root contracts or deployed generated endpoints and must not scan frontend implementation code to discover capabilities. Playground exposes an ephemeral `/design-system/` Gallery with all 23 capability records, the major Hero variants, and real examples for all 20 page-block components. The Theme does not auto-create this page in production.
+
+Commercial blocks are rendered only when the CMS explicitly supplies them after QA. Official HTTPS hostname validation, structured embeds, visible disclosure, promotion date windows, privacy-minimal event attributes, and a same-origin WordPress relay are implemented. Server forwarding requires `STC_COMMERCIAL_EVENTS_ENDPOINT` and `STC_COMMERCIAL_EVENTS_TOKEN` in the PHP process environment; neither value belongs in Git, Theme files, WordPress options, browser output, or logs.
 
 Responsive Media, server-rendered stable H2 IDs, editor parity, semantic HTML, long-text containment, keyboard focus, reduced motion, and safe affiliate rel/disclosure behavior remain in place.
 

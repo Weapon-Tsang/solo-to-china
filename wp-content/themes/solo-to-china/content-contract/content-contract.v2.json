@@ -1,6 +1,6 @@
 {
-  "contract_version": "2.0.0",
-  "theme_version": "0.25.0",
+  "contract_version": "2.1.0",
+  "theme_version": "0.26.0",
   "principles": {
     "frontend": "Render what CMS requests.",
     "cms": "Decide what the page contains.",
@@ -63,7 +63,7 @@
     "internal_research_metadata_rendered": false
   },
   "component_registry": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "source": "content-contract/component-registry.v1.json",
     "endpoint": "/wp-json/stc/v1/component-registry",
     "page_block_policy": "All components where cms_usable is true and cms_interface is page_block.",

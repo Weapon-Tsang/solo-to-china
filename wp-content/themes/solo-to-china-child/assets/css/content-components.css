@@ -382,6 +382,45 @@
 	box-shadow: none;
 }
 
+.stc-commercial-component {
+	background: color-mix(in srgb, var(--stc-color-gold-muted) 5%, var(--stc-color-surface));
+	border-inline-start: var(--stc-space-1) solid var(--stc-color-gold-muted);
+	box-shadow: none;
+}
+
+.stc-commercial-component__media {
+	margin-top: var(--stc-space-5);
+	max-width: 100%;
+	overflow: clip;
+}
+
+.stc-commercial-component__media img,
+.stc-commercial-component__embed {
+	border: 0;
+	display: block;
+	height: auto;
+	max-width: 100%;
+	width: 100%;
+}
+
+.stc-commercial-component__embed {
+	background: var(--stc-color-surface);
+	min-height: 8rem;
+}
+
+.stc-commercial-component--affiliate_banner {
+	display: block;
+}
+
+.stc-commercial-component--affiliate_banner .stc-dynamic-component__action {
+	display: inline-flex;
+	margin-top: var(--stc-space-5);
+}
+
+.stc-commercial-component--affiliate_promotion_card {
+	border-color: color-mix(in srgb, var(--stc-color-gold-muted) 45%, var(--stc-color-line));
+}
+
 .stc-dynamic-component--ticket {
 	align-items: stretch;
 	background: var(--stc-color-surface-muted);
@@ -491,4 +530,17 @@
 		width: 100%;
 	}
 
+	.stc-commercial-component__embed {
+		aspect-ratio: 4 / 3;
+		height: auto;
+	}
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.stc-commercial-component,
+	.stc-commercial-component * {
+		scroll-behavior: auto;
+		transition-duration: 0.01ms !important;
+	}
 }

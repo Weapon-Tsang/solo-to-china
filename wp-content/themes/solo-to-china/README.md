@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.25.0`.
+Current version: `0.26.0`.
 
 ## Responsibility
 
@@ -28,7 +28,7 @@ City, Attraction, Survival, and Travel guide types may inform labels, URLs, brea
 
 The old topic-wide article patterns and guide-saving system have been removed. Share This Page replaces Save Guide without accounts, browser storage, or saved state.
 
-Registry `1.0` currently exposes 19 stable CMS capabilities: 16 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
+Registry `1.1` exposes 23 stable CMS capabilities: 20 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). The four new commercial blocks render only explicit CMS data, enforce official affiliate host and structured-embed allowlists, expose privacy-minimal event attributes, and fail closed on incomplete input. `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
 
 `contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. Change the Registry and implementation together, update the Gallery/tests and Component Changelog, then run `scripts/generate-component-catalog.ps1`. The independent CMS repository should read the root `contracts/` files instead of reverse-engineering Theme source.
 

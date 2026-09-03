@@ -2,9 +2,9 @@
 
 Generated from `component-registry.v1.json`. Do not edit component capability details here by hand; update the Registry, implementations, Gallery, and tests, then run `.\scripts\generate-component-catalog.ps1`.
 
-Registry version: `1.0.0`
+Registry version: `1.1.0`
 
-CMS-usable capabilities: `19`
+CMS-usable capabilities: `23`
 
 Internal rendering components recorded: `4`
 
@@ -45,6 +45,10 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `planner_cta` | Planner CTA | travel | `page_block` | `stable` | default | Offers a contextual trip-planning action selected by the CMS. |
 | `ticket_reminder` | Ticket Reminder | travel | `page_block` | `stable` | default | Delegates attraction timing and reminder behavior to SoloToChina Tools. |
 | `affiliate_cta` | Affiliate CTA | commercial | `page_block` | `stable` | default | Renders a restrained contextual commercial action with visible disclosure. |
+| `affiliate_booking_card` | Affiliate Booking Card | commercial | `page_block` | `stable` | default | Renders a CMS-selected high-intent Trip.com deep or category link after QA. |
+| `affiliate_search_card` | Affiliate Search Card | commercial | `page_block` | `stable` | link, search_box | Renders a CMS-selected Trip.com search link or allowlisted structured search box. |
+| `affiliate_banner` | Affiliate Banner | commercial | `page_block` | `stable` | static, dynamic | Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback. |
+| `affiliate_promotion_card` | Affiliate Promotion Card | commercial | `page_block` | `stable` | default | Renders a time-bounded CMS-selected Trip.com promotion without changing editorial conclusions. |
 | `article_hero` | Article Hero | layout | `presentation_meta` | `stable` | default, attraction, city, survival | Frames CMS-owned article identity and featured media without selecting body components. |
 | `share_this_page` | Share This Page | utility | `presentation_meta` | `stable` | default | Shares the canonical page URL without accounts or persisted state. |
 | `table_of_contents` | Table of Contents | utility | `presentation_meta` | `stable` | default | Builds article navigation from rendered H2 headings only when explicitly enabled. |
@@ -972,6 +976,841 @@ Example:
 }
 ```
 
+### `affiliate_booking_card` — Affiliate Booking Card
+
+- Category: `commercial`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Renders a CMS-selected high-intent Trip.com deep or category link after QA.
+- Variants: `default`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `price_text`, `entity`, `route`, `destination`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
+- Accessibility: Uses a labeled aside, visible disclosure, and a descriptive sponsored link.
+- Responsive behavior: Stacks copy and action without horizontal overflow or urgency treatment.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "affiliate_asset_id",
+    "provider",
+    "asset_type",
+    "product_category",
+    "title",
+    "description",
+    "cta_label",
+    "target_url",
+    "disclosure",
+    "scope_type",
+    "scope_key",
+    "slot_key",
+    "placement",
+    "strategy_version"
+  ],
+  "properties": {
+    "affiliate_asset_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "DEEP_LINK",
+        "CATEGORY_LINK"
+      ]
+    },
+    "product_category": {
+      "type": "string",
+      "enum": [
+        "HOTEL",
+        "FLIGHT",
+        "TRAIN",
+        "ATTRACTION",
+        "TOUR_ACTIVITY",
+        "FLIGHT_HOTEL",
+        "CAR_RENTAL",
+        "AIRPORT_TRANSFER",
+        "PLANNER"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "price_text": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "cta_label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "target_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "disclosure": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "ENTITY",
+        "ROUTE",
+        "AREA",
+        "DESTINATION",
+        "COUNTRY",
+        "CATEGORY",
+        "GLOBAL"
+      ]
+    },
+    "scope_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "slot_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "placement": {
+      "type": "string",
+      "enum": [
+        "contextual",
+        "end_resource"
+      ]
+    },
+    "strategy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "entity": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "route": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "destination": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "affiliate_booking_card",
+  "variant": "default",
+  "affiliate_asset_id": "trip-forbidden-city",
+  "provider": "Trip.com",
+  "asset_type": "DEEP_LINK",
+  "product_category": "ATTRACTION",
+  "title": "Check Forbidden City ticket options",
+  "description": "Review the official listing details before booking.",
+  "cta_label": "View ticket options",
+  "target_url": "https://www.trip.com/",
+  "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+  "scope_type": "ENTITY",
+  "scope_key": "forbidden-city",
+  "slot_key": "tickets-contextual-1",
+  "placement": "contextual",
+  "strategy_version": "commercial-v1"
+}
+```
+
+### `affiliate_search_card` — Affiliate Search Card
+
+- Category: `commercial`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Renders a CMS-selected Trip.com search link or allowlisted structured search box.
+- Variants: `link, search_box`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `target_url`, `embed_config`, `entity`, `route`, `destination`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
+- Accessibility: Keeps instructions and disclosure visible; structured embeds include a descriptive title.
+- Responsive behavior: Uses a bounded responsive iframe or a full-width link action on phones.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "affiliate_asset_id",
+    "provider",
+    "asset_type",
+    "product_category",
+    "title",
+    "description",
+    "cta_label",
+    "disclosure",
+    "scope_type",
+    "scope_key",
+    "slot_key",
+    "placement",
+    "strategy_version"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "target_url"
+      ]
+    },
+    {
+      "required": [
+        "embed_config"
+      ]
+    }
+  ],
+  "properties": {
+    "affiliate_asset_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "asset_type": {
+      "const": "SEARCH_BOX"
+    },
+    "product_category": {
+      "type": "string",
+      "enum": [
+        "HOTEL",
+        "FLIGHT",
+        "TRAIN",
+        "ATTRACTION",
+        "TOUR_ACTIVITY",
+        "FLIGHT_HOTEL",
+        "CAR_RENTAL",
+        "AIRPORT_TRANSFER",
+        "PLANNER"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "cta_label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "target_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "embed_config": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "embed_type",
+        "src",
+        "width",
+        "height",
+        "language",
+        "theme",
+        "variant"
+      ],
+      "properties": {
+        "embed_type": {
+          "const": "search_box"
+        },
+        "src": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 240,
+          "maximum": 1600
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 80,
+          "maximum": 800
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh-CN",
+            "zh-TW"
+          ]
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "enum": [
+            "compact",
+            "standard"
+          ]
+        }
+      }
+    },
+    "disclosure": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "ENTITY",
+        "ROUTE",
+        "AREA",
+        "DESTINATION",
+        "COUNTRY",
+        "CATEGORY",
+        "GLOBAL"
+      ]
+    },
+    "scope_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "slot_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "placement": {
+      "type": "string",
+      "enum": [
+        "contextual",
+        "end_resource"
+      ]
+    },
+    "strategy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "entity": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "route": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "destination": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "affiliate_search_card",
+  "variant": "link",
+  "affiliate_asset_id": "trip-hotel-search",
+  "provider": "Trip.com",
+  "asset_type": "SEARCH_BOX",
+  "product_category": "HOTEL",
+  "title": "Search hotel options",
+  "description": "Compare location and arrival access for your dates.",
+  "cta_label": "Search hotels",
+  "target_url": "https://www.trip.com/hotels/",
+  "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+  "scope_type": "DESTINATION",
+  "scope_key": "beijing",
+  "slot_key": "hotel-search-1",
+  "placement": "contextual",
+  "strategy_version": "commercial-v1"
+}
+```
+
+### `affiliate_banner` — Affiliate Banner
+
+- Category: `commercial`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback.
+- Variants: `static, dynamic`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `image_url`, `alt_text`, `embed_config`, `entity`, `route`, `destination`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
+- Accessibility: Static images require alt text; dynamic embeds have titles and disclosure outside the frame.
+- Responsive behavior: Banner media is width-bounded and cannot overflow the article.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "affiliate_asset_id",
+    "provider",
+    "asset_type",
+    "product_category",
+    "title",
+    "description",
+    "cta_label",
+    "target_url",
+    "disclosure",
+    "scope_type",
+    "scope_key",
+    "slot_key",
+    "placement",
+    "strategy_version"
+  ],
+  "oneOf": [
+    {
+      "properties": {
+        "asset_type": {
+          "const": "STATIC_BANNER"
+        }
+      },
+      "required": [
+        "image_url",
+        "alt_text"
+      ]
+    },
+    {
+      "properties": {
+        "asset_type": {
+          "const": "DYNAMIC_BANNER"
+        }
+      },
+      "required": [
+        "embed_config"
+      ]
+    }
+  ],
+  "properties": {
+    "affiliate_asset_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "STATIC_BANNER",
+        "DYNAMIC_BANNER"
+      ]
+    },
+    "product_category": {
+      "type": "string",
+      "enum": [
+        "HOTEL",
+        "FLIGHT",
+        "TRAIN",
+        "ATTRACTION",
+        "TOUR_ACTIVITY",
+        "FLIGHT_HOTEL",
+        "CAR_RENTAL",
+        "AIRPORT_TRANSFER",
+        "PLANNER"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "cta_label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "target_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "image_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "alt_text": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "embed_config": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "embed_type",
+        "src",
+        "width",
+        "height",
+        "language",
+        "theme",
+        "variant"
+      ],
+      "properties": {
+        "embed_type": {
+          "const": "dynamic_banner"
+        },
+        "src": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 240,
+          "maximum": 1600
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 80,
+          "maximum": 800
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh-CN",
+            "zh-TW"
+          ]
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "enum": [
+            "compact",
+            "standard"
+          ]
+        }
+      }
+    },
+    "disclosure": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "ENTITY",
+        "ROUTE",
+        "AREA",
+        "DESTINATION",
+        "COUNTRY",
+        "CATEGORY",
+        "GLOBAL"
+      ]
+    },
+    "scope_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "slot_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "placement": {
+      "const": "end_resource"
+    },
+    "strategy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "entity": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "route": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "destination": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "affiliate_banner",
+  "variant": "static",
+  "affiliate_asset_id": "trip-planner-banner",
+  "provider": "Trip.com",
+  "asset_type": "STATIC_BANNER",
+  "product_category": "PLANNER",
+  "title": "Continue planning with Trip.com",
+  "description": "Check current options and provider terms.",
+  "cta_label": "Open Trip.com",
+  "target_url": "https://www.trip.com/",
+  "image_url": "https://pages.trip.com/banner.jpg",
+  "alt_text": "Trip.com travel planning",
+  "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+  "scope_type": "GLOBAL",
+  "scope_key": "global",
+  "slot_key": "end-resource-banner-1",
+  "placement": "end_resource",
+  "strategy_version": "commercial-v1"
+}
+```
+
+### `affiliate_promotion_card` — Affiliate Promotion Card
+
+- Category: `commercial`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Renders a time-bounded CMS-selected Trip.com promotion without changing editorial conclusions.
+- Variants: `default`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `price_text`, `valid_from`, `valid_until`, `entity`, `route`, `destination`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
+- Accessibility: States the provider relationship and validity without false urgency.
+- Responsive behavior: Stacks copy and action while preserving readable conditions and dates.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "affiliate_asset_id",
+    "provider",
+    "asset_type",
+    "product_category",
+    "title",
+    "description",
+    "cta_label",
+    "target_url",
+    "disclosure",
+    "scope_type",
+    "scope_key",
+    "slot_key",
+    "placement",
+    "strategy_version"
+  ],
+  "properties": {
+    "affiliate_asset_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "asset_type": {
+      "const": "PROMOTION"
+    },
+    "product_category": {
+      "type": "string",
+      "enum": [
+        "HOTEL",
+        "FLIGHT",
+        "TRAIN",
+        "ATTRACTION",
+        "TOUR_ACTIVITY",
+        "FLIGHT_HOTEL",
+        "CAR_RENTAL",
+        "AIRPORT_TRANSFER",
+        "PLANNER"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "price_text": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "cta_label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "target_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "disclosure": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "ENTITY",
+        "ROUTE",
+        "AREA",
+        "DESTINATION",
+        "COUNTRY",
+        "CATEGORY",
+        "GLOBAL"
+      ]
+    },
+    "scope_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "slot_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "placement": {
+      "type": "string",
+      "enum": [
+        "contextual",
+        "end_resource"
+      ]
+    },
+    "strategy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entity": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "route": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "destination": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "affiliate_promotion_card",
+  "variant": "default",
+  "affiliate_asset_id": "trip-autumn-campaign",
+  "provider": "Trip.com",
+  "asset_type": "PROMOTION",
+  "product_category": "HOTEL",
+  "title": "Review the current campaign",
+  "description": "Confirm dates and provider terms before booking.",
+  "cta_label": "View promotion",
+  "target_url": "https://www.trip.com/",
+  "disclosure": "Affiliate promotion. SoloToChina may earn a commission at no extra cost to you.",
+  "scope_type": "COUNTRY",
+  "scope_key": "china",
+  "slot_key": "promotion-end-1",
+  "placement": "end_resource",
+  "strategy_version": "commercial-v1"
+}
+```
+
 ### `article_hero` — Article Hero
 
 - Category: `layout`
@@ -1262,6 +2101,9 @@ Possible future content needs, intentionally not implemented or registered in th
 - `source_citations` for structured public references and last-checked dates.
 - `related_guides` for CMS-curated internal reading paths.
 - `transport_option` for repeated route comparisons that need more structure than a table.
+- `affiliate_product_card` for a future structured single-product offer.
+- `affiliate_comparison_card` for a future CMS-authored comparison of commercial options.
+- `affiliate_disclosure` for a future standalone disclosure when composition requires one.
 
 These names are proposals, not stable IDs, and the CMS must not use them.
 

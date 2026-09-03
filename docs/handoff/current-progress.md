@@ -37,18 +37,18 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.25.0`.
+Current theme version: `0.26.0`.
 
-Content Contract Phase A is complete and has been superseded by the Contract 2.0 responsibility model documented below:
+Content Contract Phase A is complete and has been superseded by the Contract 2.1 responsibility model documented below:
 
-- The canonical contract is now `content-contract/content-contract.v2.json` at Contract version `2.0.0`, independent from the Theme version.
+- The canonical contract is now `content-contract/content-contract.v2.json` at Contract version `2.1.0`, independent from the Theme version.
 - Defined four stable guide types, category mappings, shell behaviors, component allowlists, and optional dynamic capabilities.
-- Defined 16 ordered core, editorial, image, and contextual page-block capabilities without exposing CSS values or internal research provenance.
+- Defined 20 ordered core, editorial, image, contextual, and commercial page-block capabilities without exposing CSS values or internal research provenance.
 - Added the public read-only `GET /wp-json/stc/v1/content-contract` endpoint with ETag, Last-Modified, and Cache-Control headers.
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks cover Contract `2.0.0`, Registry `1.0.0`, Theme `0.25.0`, four taxonomy-only guide types, 19 CMS capabilities, five REST meta fields, and the expected cache headers.
+- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.26.0`, four taxonomy-only guide types, 23 CMS capabilities, five REST meta fields, generated artifacts, and the expected cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
@@ -117,7 +117,7 @@ Share This Page is available without login when the CMS explicitly enables `_stc
 
 ## Child Theme Status
 
-Current Child Theme version: `0.7.0`.
+Current Child Theme version: `0.8.0`.
 
 Content Component System Phase B is complete:
 
@@ -141,7 +141,7 @@ Content Component System Phase C is complete:
 
 Content Component System Phase D is complete:
 
-- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.7.0` replaces it with a Design System/Content Component editor canvas.
+- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.8.0` replaces it with a Design System/Content Component editor canvas.
 - Server-side H2 anchor generation preserves explicit public anchors, adds readable IDs when absent, and suffixes duplicates before JavaScript enhancement.
 - Child Theme adds responsive WordPress Media styling for context, evidence, illustration, and decorative roles without forcing image ratios or publishing internal provenance.
 - Playground creates a real ephemeral Media attachment from a project image and stores Gutenberg-valid Core Image markup, rather than hardcoding an external image or Custom HTML block.
@@ -160,17 +160,17 @@ Content Component System Phase E is complete:
 
 Page Architecture Responsibility Refactor is complete:
 
-- Contract `2.0.0` records the governing boundary: Frontend renders what the CMS requests; CMS decides what the page contains; content type is taxonomy, not layout.
+- Contract `2.1.0` records the governing boundary: Frontend renders what the CMS requests; CMS decides what the page contains; content type is taxonomy, not layout.
 - Parent Theme `single.php` is one generic article shell. It no longer branches by City, Attraction, or Survival type and no longer injects checklists, CTA modules, Share, or TOC based on taxonomy.
 - REST-enabled `_stc_show_share`, `_stc_show_toc`, and `_stc_hero_variant` metadata explicitly control optional presentation. Missing flags render no optional utility.
 - Topic-wide fixed Gutenberg article patterns were removed; reusable component patterns remain.
 - The complete Save/Saved Guides UI, state, import/export, and Parent Theme localStorage behavior were removed. Plugin-owned Ticket Reminder storage is unchanged.
 - Share This Page replaces Save Guide as a stateless utility. It prioritizes `navigator.share()`, uses the canonical URL, and falls back to an accessible lightweight channel/copy panel with status, error, Escape, outside-click, and focus-return behavior.
-- Child Theme `0.7.0` uses generic Hero/Layout/TOC selectors and a refined translucent Share trigger with desktop popover and mobile bottom-panel presentation.
+- Child Theme `0.8.0` uses generic Hero/Layout/TOC selectors and a refined translucent Share trigger with desktop popover and mobile bottom-panel presentation.
 
 Frontend Component Registry and Catalog are complete:
 
-- Added `component-registry.v1.json` as the single capability source for 19 stable CMS-callable IDs: 16 ordered `page_block` components plus Article Hero, Share This Page, and Table of Contents as explicit `presentation_meta` capabilities.
+- Added `component-registry.v1.json` as the single capability source for 23 stable CMS-callable IDs: 20 ordered `page_block` components plus Article Hero, Share This Page, and Table of Contents as explicit `presentation_meta` capabilities.
 - Each capability declares purpose, category, status, supported semantic variants, JSON Schema, example, implementation paths, accessibility, responsive behavior, and CMS availability.
 - The Contract REST response derives its component definitions and guide allowlists from the Registry; `content-contract.v2.json` does not maintain a duplicate list.
 - Added the cached public read-only `GET /wp-json/stc/v1/component-registry` endpoint.
@@ -180,8 +180,18 @@ Frontend Component Registry and Catalog are complete:
 
 Formal Frontend to CMS Capability Contract is complete:
 
-- Published `contracts/component-registry.json` for the independent CMS repository. It contains only the 19 implemented `cms_usable` capabilities and exposes Contract/schema versions, status, deprecation state, semantic variants, input schemas, derived required/optional fields, and `{ type, variant, data }` examples.
-- Published `contracts/page-schema.json`, whose 16 allowed ordered block shapes and variants are generated from the same Registry. Its `blocks[]` sequence is explicitly the final render order; `contentType` is taxonomy, not layout.
+- Published `contracts/component-registry.json` for the independent CMS repository. It contains only the 23 implemented `cms_usable` capabilities and exposes Contract/schema versions, status, deprecation state, semantic variants, input schemas, derived required/optional fields, and `{ type, variant, data }` examples.
+- Published `contracts/page-schema.json`, whose 20 allowed ordered block shapes and variants are generated from the same Registry. Its `blocks[]` sequence is explicitly the final render order; `contentType` is taxonomy, not layout.
+
+Affiliate Capability Upgrade is complete in the working tree:
+
+- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.26.0`, and Child Theme `0.8.0` publish 23 CMS capabilities, including 20 ordered page blocks.
+- Added real renderers for `affiliate_booking_card`, `affiliate_search_card`, `affiliate_banner`, and `affiliate_promotion_card`; the historical `affiliate_cta` remains unchanged and stable.
+- New renderers fail closed on incomplete, unknown, HTML-bearing, non-HTTPS, credential-bearing, or non-allowlisted URL input. Search Box and Dynamic Banner accept only structured fixed-field embeds.
+- Added generated CMS-shape REST endpoints at `/wp-json/stc/v1/component-registry/generated` and `/wp-json/stc/v1/page-schema` with reproducible JSON and stable cache validators.
+- Added privacy-minimal 50%-visibility impressions, non-blocking click delivery, and a same-origin `/wp-json/stc/v1/commercial-events` relay with payload/field/enum limits, rate limiting, deduplication, and environment-only forwarding credentials.
+- Updated the Playground Gallery, generated contracts/catalog, standalone behavior tests, deployment notes, and CMS integration documentation. No production configuration, commit, push, or deployment was performed.
+- A read-only compatibility run against the local CMS 1.11.x `FrontendContractConsumer` reached `healthy`, validated legacy `affiliate_cta` plus all four new examples, rejected JavaScript URLs/unknown HTML, kept pre-QA resolution commercial-free, and reported the intentionally unimplemented `affiliate_product_card` as missing. Live deployed sync and authenticated Engine forwarding remain production-configuration tasks.
 - Added `docs/CMS_FRONTEND_CONTRACT.md` with repository ownership, CMS consumption paths, versioning, rejection rules, and the publication workflow.
 - Added `docs/COMPONENT_CHANGELOG.md` for CMS-visible capability changes only; visual-only changes are explicitly excluded.
 - `scripts/generate-component-catalog.ps1` now generates both root contracts and the Component Catalog from the Theme Registry. Packaging regenerates and verifies these artifacts before creating ZIP files.

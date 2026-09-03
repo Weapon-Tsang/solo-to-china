@@ -1,8 +1,8 @@
 # SoloToChina Child Theme
 
-Current version: `0.7.0`
+Current version: `0.8.0`
 
-This Child Theme is the presentation layer for the SoloToChina `0.25.0` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
+This Child Theme is the presentation layer for the SoloToChina `0.26.0` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
 
 ## Installation
 

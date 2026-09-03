@@ -1,8 +1,8 @@
 # SoloToChina Content Component System
 
-Current Content Contract version: 2.0.0
-Current Component Registry version: 1.0.0
-Compatible Parent Theme version: 0.25.0
+Current Content Contract version: 2.1.0
+Current Component Registry version: 1.1.0
+Compatible Parent Theme version: 0.26.0
 
 ## Governing Boundary
 
@@ -44,6 +44,8 @@ CMS clients read it from:
 
     GET /wp-json/stc/v1/content-contract
     GET /wp-json/stc/v1/component-registry
+    GET /wp-json/stc/v1/component-registry/generated
+    GET /wp-json/stc/v1/page-schema
 
 The independent CMS repository should consume these generated repository contracts instead of scanning Theme source:
 
@@ -65,7 +67,7 @@ The CMS explicitly controls optional article presentation through REST-enabled p
 | Purpose | Post meta | Values |
 | --- | --- | --- |
 | Guide taxonomy | _stc_guide_type | Stable guide-type slug |
-| Contract version | _stc_content_contract_version | 2.0.0 |
+| Contract version | _stc_content_contract_version | 2.1.0 |
 | Share utility | _stc_show_share | Boolean |
 | On This Page | _stc_show_toc | Boolean |
 | Hero visual variant | _stc_hero_variant | default, attraction, city, or survival |
@@ -76,14 +78,17 @@ The Hero consumes title, excerpt, date, featured image, taxonomy label, and expl
 
 ## Component Library
 
-Registry 1.0 exposes 19 CMS-selectable capabilities: 16 ordered page blocks plus three explicit presentation capabilities.
+Registry 1.1 exposes 23 CMS-selectable capabilities: 20 ordered page blocks plus three explicit presentation capabilities.
 
 - Core: Paragraph, Heading, List, Image
 - Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
 - Contextual: Planner CTA, Ticket Reminder, Affiliate CTA
+- Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
 - Presentation: Article Hero, Share This Page, and TOC through explicit page metadata
 
 Every editorial/contextual component is available to every guide taxonomy. The CMS chooses whether and where it appears. The Parent Theme registers small component patterns only; the former topic-wide Attraction, City, and Survival article patterns were removed.
+
+Commercial components are available only as explicit post-QA CMS blocks. Their renderers require complete typed data, visible disclosure, official HTTPS destinations, and structured allowlisted embeds; invalid or incomplete input renders nothing. The frontend never inserts or reorders a commercial component. Impression and click attribution is privacy-minimal, client-side failures are non-blocking, and the public browser talks only to a same-origin WordPress relay whose forwarding credentials live in server environment variables.
 
 Four additional frontend components are recorded with `cms_usable: false`: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. They exist in the renderer but are not valid `page.blocks[].type` values.
 
@@ -126,7 +131,7 @@ Ticket reminders still use Plugin-owned local storage; that is a separate explic
 
 scripts/playground-fixtures.php creates disposable Survival, City, and Attraction articles. Each explicitly enables Share and selects a Hero variant. Survival and Attraction enable TOC; City disables it to prove that taxonomy does not control layout. City also retains historical category-only guide classification coverage.
 
-The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 19 capability cards and renders real Gutenberg/shortcode examples for the 16 page-block components, plus the three presentation capabilities and every published Hero variant. The Theme does not create this page in production.
+The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 23 capability cards and renders real Gutenberg/shortcode examples for the 20 page-block components, plus the three presentation capabilities and every published Hero variant. The Theme does not create this page in production.
 
 Verification commands:
 

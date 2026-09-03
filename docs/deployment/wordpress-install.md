@@ -99,6 +99,26 @@ Also check:
 - City and Attraction cards are sharp on a high-DPI phone, use centered 3:4 framing, and retain a readable smooth bottom scrim without image blur.
 - Article reading width stays controlled on desktop; the mobile article has no horizontal overflow at 375-390px, and TOC links stop below the Header.
 
+## Generated Contract And Commercial Event Configuration
+
+After installing Parent Theme `0.26.0`, verify these public read-only endpoints:
+
+- `/wp-json/stc/v1/component-registry/generated`
+- `/wp-json/stc/v1/page-schema`
+
+Configure the independent CMS with the deployed frontend commit and these generated endpoints. Do not point CMS synchronization at PHP/React source files or the internal authoring Registry shape.
+
+The public browser event endpoint is `/wp-json/stc/v1/commercial-events`. Forwarding is disabled safely unless both server process environment variables are present:
+
+```text
+STC_COMMERCIAL_EVENTS_ENDPOINT=https://cms-engine.example/api/commercial/events
+STC_COMMERCIAL_EVENTS_TOKEN=<server-only token>
+```
+
+Set them in the PHP-FPM/hosting process environment, never in Theme files, JavaScript, WordPress options, the database, Git, response bodies, or logs. Restart PHP-FPM after changing the service environment, then send one same-origin test event and confirm the endpoint returns `202` without exposing the token.
+
+Rollback by reinstalling the previous Parent and Child Theme packages together and restoring the CMS Contract endpoint/commit settings to their previous values. Remove the two event environment variables only after the previous frontend is active; no database rollback is required because this feature adds no custom tables or persisted commercial payloads.
+
 ## Do Not Overwrite
 
 Do not upload the whole repository into the server root.

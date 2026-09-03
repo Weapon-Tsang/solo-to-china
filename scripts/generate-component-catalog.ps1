@@ -6,6 +6,8 @@ $RegistryPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contrac
 $OutputPath = Join-Path $Root "docs/COMPONENT_LIBRARY.md"
 $PublishedContractPath = Join-Path $Root "contracts/component-registry.json"
 $PageSchemaPath = Join-Path $Root "contracts/page-schema.json"
+$ThemePublishedContractPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json"
+$ThemePageSchemaPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/page-schema.generated.json"
 $Registry = Get-Content -LiteralPath $RegistryPath -Raw | ConvertFrom-Json
 $CmsComponents = @($Registry.components | Where-Object { $_.cms_usable -eq $true })
 $InternalComponents = @($Registry.components | Where-Object { $_.cms_usable -ne $true })
@@ -130,6 +132,9 @@ Add-Line
 Add-Line "- ``source_citations`` for structured public references and last-checked dates."
 Add-Line "- ``related_guides`` for CMS-curated internal reading paths."
 Add-Line "- ``transport_option`` for repeated route comparisons that need more structure than a table."
+Add-Line "- ``affiliate_product_card`` for a future structured single-product offer."
+Add-Line "- ``affiliate_comparison_card`` for a future CMS-authored comparison of commercial options."
+Add-Line "- ``affiliate_disclosure`` for a future standalone disclosure when composition requires one."
 Add-Line
 Add-Line "These names are proposals, not stable IDs, and the CMS must not use them."
 Add-Line
@@ -275,4 +280,6 @@ $PageSchema = @{
 
 Write-JsonContract $PublishedContractPath $PublishedContract
 Write-JsonContract $PageSchemaPath $PageSchema
+Write-JsonContract $ThemePublishedContractPath $PublishedContract
+Write-JsonContract $ThemePageSchemaPath $PageSchema
 Write-Host "Generated Catalog and CMS contracts from Component Registry $($Registry.registry_version)."

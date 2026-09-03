@@ -17,6 +17,7 @@ $RequiredFiles = @(
     "scripts/verify-component-registry.ps1",
     "scripts/verify-content-contract.ps1",
     "scripts/verify-content-runtime.ps1",
+    "scripts/verify-commercial-components.php",
     "scripts/verify-page-architecture.ps1",
     "scripts/playground-blueprint.json",
     "scripts/playground-editor-blueprint.json",
@@ -30,8 +31,11 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/inc/component-registry.php",
     "wp-content/themes/solo-to-china/inc/content-components.php",
     "wp-content/themes/solo-to-china/inc/content-renderers.php",
+    "wp-content/themes/solo-to-china/inc/commercial-events.php",
     "wp-content/themes/solo-to-china/content-contract/content-contract.v2.json",
     "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json",
+    "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json",
+    "wp-content/themes/solo-to-china/content-contract/page-schema.generated.json",
     "wp-content/themes/solo-to-china/header.php",
     "wp-content/themes/solo-to-china/footer.php",
     "wp-content/themes/solo-to-china/index.php",
@@ -47,6 +51,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/assets/css/main.css",
     "wp-content/themes/solo-to-china/assets/css/editor-style.css",
     "wp-content/themes/solo-to-china/assets/js/main.js",
+    "wp-content/themes/solo-to-china/assets/js/commercial-events.js",
     "wp-content/themes/solo-to-china/assets/images/hero-home.png",
     "wp-content/themes/solo-to-china/assets/images/guide-card-bg.png",
     "wp-content/themes/solo-to-china/assets/images/card-beijing.png",
@@ -151,7 +156,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.25.0") -or (-not $PackageScript.Contains("Child Theme version: 0.7.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.26.0") -or (-not $PackageScript.Contains("Child Theme version: 0.8.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -249,8 +254,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.25.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.25.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.26.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.26.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -263,7 +268,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.25.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.26.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -323,8 +328,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.25.0'")) {
-		$Failures.Add("Theme asset version is not 0.25.0.")
+    if (-not $Functions.Contains("'0.26.0'")) {
+		$Failures.Add("Theme asset version is not 0.26.0.")
     }
     foreach ($ContentEditorToken in @("editor-styles", "add_editor_style", "assets/css/editor-style.css", "stc_add_stable_content_heading_ids", "sanitize_title", "preg_replace_callback")) {
         if (-not $Functions.Contains($ContentEditorToken)) {
@@ -367,7 +372,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.7.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.8.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -1012,6 +1017,10 @@ if ($PhpExecutable) {
             }
         }
     }
+	& $PhpExecutable (Join-Path $Root "scripts/verify-commercial-components.php")
+	if ($LASTEXITCODE -ne 0) {
+		$Failures.Add("Commercial component behavior verification failed.")
+	}
 } else {
     Write-Host "PHP CLI not found; skipped PHP syntax checks."
 }

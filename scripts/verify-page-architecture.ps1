@@ -55,7 +55,7 @@ foreach ($ShareStyleToken in @(".stc-share", ".stc-share__trigger", ".stc-share_
     Assert-Architecture (($ParentCss + $ChildCss).Contains($ShareStyleToken)) "ShareThisPage presentation is missing: $ShareStyleToken"
 }
 
-Assert-Architecture ($Contract.contract_version -eq "2.0.0") "Content Contract must be version 2.0.0 after the layout-boundary change."
+Assert-Architecture ($Contract.contract_version -eq "2.1.0") "Content Contract must be version 2.1.0 after the commercial capability addition."
 Assert-Architecture ($Contract.presentation.post_meta.show_share -eq "_stc_show_share") "Contract does not expose explicit Share metadata."
 Assert-Architecture ($Contract.presentation.post_meta.show_toc -eq "_stc_show_toc") "Contract does not expose explicit TOC metadata."
 Assert-Architecture ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."

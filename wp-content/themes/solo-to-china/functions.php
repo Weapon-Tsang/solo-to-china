@@ -9,12 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.25.0' );
+define( 'STC_THEME_VERSION', '0.26.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
 require_once get_template_directory() . '/inc/content-contract.php';
 require_once get_template_directory() . '/inc/content-components.php';
 require_once get_template_directory() . '/inc/content-renderers.php';
+require_once get_template_directory() . '/inc/commercial-events.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -102,6 +103,19 @@ function stc_enqueue_assets() {
 		[],
 		STC_THEME_VERSION,
 		true
+	);
+
+	wp_enqueue_script(
+		'stc-commercial-events',
+		get_template_directory_uri() . '/assets/js/commercial-events.js',
+		array(),
+		STC_THEME_VERSION,
+		true
+	);
+	wp_localize_script(
+		'stc-commercial-events',
+		'stcCommercialEvents',
+		array( 'endpoint' => esc_url_raw( rest_url( 'stc/v1/commercial-events' ) ) )
 	);
 }
 add_action( 'wp_enqueue_scripts', 'stc_enqueue_assets' );

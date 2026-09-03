@@ -22,6 +22,9 @@ function Read-ProjectFile([string]$Path) {
 $RegistryRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json"
 $ContractRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/content-contract.v2.json"
 $Runtime = Read-ProjectFile "wp-content/themes/solo-to-china/inc/component-registry.php"
+$Renderers = Read-ProjectFile "wp-content/themes/solo-to-china/inc/content-renderers.php"
+$CommercialEvents = Read-ProjectFile "wp-content/themes/solo-to-china/inc/commercial-events.php"
+$CommercialEventsJs = Read-ProjectFile "wp-content/themes/solo-to-china/assets/js/commercial-events.js"
 $Patterns = Read-ProjectFile "wp-content/themes/solo-to-china/inc/content-components.php"
 $Gallery = Read-ProjectFile "wp-content/themes/solo-to-china/page-design-system.php"
 $GalleryCss = Read-ProjectFile "wp-content/themes/solo-to-china-child/assets/css/component-gallery.css"
@@ -29,6 +32,8 @@ $Catalog = Read-ProjectFile "docs/COMPONENT_LIBRARY.md"
 $Fixtures = Read-ProjectFile "scripts/playground-fixtures.php"
 $PublishedContractRaw = Read-ProjectFile "contracts/component-registry.json"
 $PageSchemaRaw = Read-ProjectFile "contracts/page-schema.json"
+$ThemePublishedContractRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json"
+$ThemePageSchemaRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/page-schema.generated.json"
 $CmsContractDoc = Read-ProjectFile "docs/CMS_FRONTEND_CONTRACT.md"
 $ComponentChangelog = Read-ProjectFile "docs/COMPONENT_CHANGELOG.md"
 $Generator = Read-ProjectFile "scripts/generate-component-catalog.ps1"
@@ -42,13 +47,16 @@ if ($RegistryRaw) {
 }
 
 if ($Registry) {
-    Assert-Registry ($Registry.registry_version -eq "1.0.0") "Component Registry version must be 1.0.0."
+	Assert-Registry ($PublishedContractRaw -ceq $ThemePublishedContractRaw) "Theme generated Component Contract must exactly match the repository artifact."
+	Assert-Registry ($PageSchemaRaw -ceq $ThemePageSchemaRaw) "Theme generated Page Schema must exactly match the repository artifact."
+    Assert-Registry ($Registry.registry_version -eq "1.1.0") "Component Registry version must be 1.1.0."
     Assert-Registry ($Registry.principles.frontend -eq "Frontend defines what can be rendered.") "Frontend component capability principle is missing."
     Assert-Registry ($Registry.principles.cms -eq "CMS decides what should be rendered.") "CMS selection principle is missing."
 
     $ExpectedCmsIds = @(
         "paragraph", "heading", "list", "image", "quick_answer", "key_takeaways", "quick_facts", "tip", "warning",
         "steps", "checklist", "comparison_table", "faq", "planner_cta", "ticket_reminder", "affiliate_cta",
+        "affiliate_booking_card", "affiliate_search_card", "affiliate_banner", "affiliate_promotion_card",
         "article_hero", "share_this_page", "table_of_contents"
     )
     $CmsComponents = @($Registry.components | Where-Object { $_.cms_usable -eq $true })
@@ -56,7 +64,7 @@ if ($Registry) {
     $DuplicateIds = @($ActualIds | Group-Object | Where-Object { $_.Count -gt 1 })
 
     Assert-Registry ($DuplicateIds.Count -eq 0) "Component IDs must be unique stable API values."
-    Assert-Registry ($CmsComponents.Count -eq 19) "Registry must expose exactly the 19 capabilities that currently exist for CMS selection."
+    Assert-Registry ($CmsComponents.Count -eq 23) "Registry must expose exactly the 23 capabilities that currently exist for CMS selection."
     foreach ($ExpectedId in $ExpectedCmsIds) {
         Assert-Registry ($CmsComponents.id -contains $ExpectedId) "CMS component is missing from Registry: $ExpectedId"
     }
@@ -73,6 +81,7 @@ if ($Registry) {
         Assert-Registry (@("page_block", "presentation_meta", "internal") -contains $Component.cms_interface) "Component $($Component.id) has an unsupported CMS interface."
         if ($Component.cms_usable) {
             Assert-Registry ($Component.cms_interface -ne "internal") "CMS component $($Component.id) cannot use the internal interface."
+            Assert-Registry ($Component.schema.additionalProperties -eq $false) "CMS component $($Component.id) must reject unknown data fields."
         }
     }
 
@@ -89,7 +98,7 @@ if ($Registry) {
     if ($PublishedContract) {
         Assert-Registry ($PublishedContract.contractVersion -eq $Registry.registry_version) "Published Contract version must match the canonical Registry."
         Assert-Registry ($PublishedContract.schemaVersion -eq "2020-12") "Published Contract must declare schemaVersion 2020-12."
-        Assert-Registry ($PublishedContract.components.Count -eq 19) "Published Contract must contain only the 19 CMS-usable capabilities."
+        Assert-Registry ($PublishedContract.components.Count -eq 23) "Published Contract must contain only the 23 CMS-usable capabilities."
         Assert-Registry (-not ($PublishedContract.components.cmsUsable -contains $false)) "Published Contract must not include internal components."
         Assert-Registry ((@($PublishedContract.components.id) -join ",") -eq (@($CmsComponents.id) -join ",")) "Published Contract component IDs/order must derive from the canonical Registry."
 
@@ -118,7 +127,7 @@ if ($Registry) {
         $BlockTypeIds = @($BlockSchemas | ForEach-Object { $_.properties.type.const })
         Assert-Registry ($PageSchema.contractVersion -eq $Registry.registry_version) "Page Schema Contract version must match the Registry."
         Assert-Registry ($PageSchema.schemaVersion -eq "2020-12") "Page Schema must declare schemaVersion 2020-12."
-        Assert-Registry ($BlockSchemas.Count -eq 16) "Page Schema must expose exactly the 16 ordered page-block components."
+        Assert-Registry ($BlockSchemas.Count -eq 20) "Page Schema must expose exactly the 20 ordered page-block components."
         Assert-Registry (($BlockTypeIds -join ",") -eq (@($PageBlockComponents.id) -join ",")) "Page Schema block types must derive from the Registry."
         Assert-Registry ($PageSchema.properties.blocks.description -match "final render order") "Page Schema must define blocks array order as final render order."
         Assert-Registry ($PageSchema.properties.metadata.properties.contentType.description -match "taxonomy, not layout") "Page Schema must define content type as taxonomy, not layout."
@@ -135,6 +144,19 @@ Assert-Registry (-not $ContractRaw.Contains('"allowed_components"')) "Guide type
 foreach ($Token in @("STC_COMPONENT_REGISTRY_VERSION", "stc_get_component_registry", "stc_get_cms_component_definitions", "component-registry", "register_rest_route")) {
     Assert-Registry ($Runtime.Contains($Token)) "Component Registry runtime is missing: $Token"
 }
+foreach ($Token in @("component-registry/generated", "page-schema", "stc_rest_get_generated_component_registry", "stc_rest_get_page_schema", "ETag", "Last-Modified", "Cache-Control")) {
+    Assert-Registry ($Runtime.Contains($Token)) "Generated Contract REST publishing is missing: $Token"
+}
+foreach ($Token in @("stc_render_affiliate_booking_card_component", "stc_render_affiliate_search_card_component", "stc_render_affiliate_banner_component", "stc_render_affiliate_promotion_card_component", "stc_validate_affiliate_url", "stc_affiliate_allowed_hosts", "trip.com", "tripcdn.com", "ctrip.com", "sponsored nofollow noopener", 'loading="lazy"')) {
+    Assert-Registry ($Renderers.Contains($Token)) "Commercial renderer safety implementation is missing: $Token"
+}
+Assert-Registry (-not $Renderers.Contains("strpos( `$host")) "Affiliate hostname checks must not use substring matching."
+foreach ($Token in @("commercial-events", "payload", "rate", "dedup", "getenv", "wp_remote_post")) {
+    Assert-Registry ($CommercialEvents.Contains($Token)) "Commercial event relay is missing: $Token"
+}
+foreach ($Token in @("IntersectionObserver", "sendBeacon", "keepalive", "impression", "click")) {
+    Assert-Registry ($CommercialEventsJs.Contains($Token)) "Commercial event client is missing: $Token"
+}
 Assert-Registry ($Patterns.Contains("stc_get_component_definition")) "Gutenberg component registration must read metadata from the Registry."
 Assert-Registry ($Gallery.Contains("stc_get_cms_component_definitions")) "Component Gallery must enumerate the Registry."
 Assert-Registry ($Gallery.Contains("the_content()")) "Component Gallery must render real CMS-authored examples."
@@ -147,10 +169,13 @@ Assert-Registry ($Catalog.Contains("Proposed, Not Available")) "Component Catalo
 foreach ($Token in @("Frontend defines what CAN be rendered", "CMS decides what SHOULD be rendered", "contracts/component-registry.json", "contracts/page-schema.json", "docs/COMPONENT_LIBRARY.md", "docs/COMPONENT_CHANGELOG.md")) {
     Assert-Registry ($CmsContractDoc.Contains($Token)) "CMS/Frontend Contract documentation is missing: $Token"
 }
-Assert-Registry ($ComponentChangelog.Contains("## 1.0.0")) "Component Changelog must record Registry 1.0.0."
+Assert-Registry ($ComponentChangelog.Contains("## 1.1.0")) "Component Changelog must record Registry 1.1.0."
 Assert-Registry ($ComponentChangelog.Contains("Pure visual changes are excluded")) "Component Changelog must exclude visual-only changes."
 foreach ($Token in @("contracts/component-registry.json", "contracts/page-schema.json", "docs/COMPONENT_LIBRARY.md")) {
     Assert-Registry ($Generator.Contains($Token)) "Registry generator must publish: $Token"
+}
+foreach ($Token in @("component-registry.generated.json", "page-schema.generated.json")) {
+    Assert-Registry ($Generator.Contains($Token)) "Registry generator must publish Theme runtime artifact: $Token"
 }
 
 if ($Failures.Count -gt 0) {

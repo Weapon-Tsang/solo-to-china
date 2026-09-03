@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CONTENT_CONTRACT_VERSION', '2.0.0' );
+define( 'STC_CONTENT_CONTRACT_VERSION', '2.1.0' );
 
 /**
  * Return the absolute path to the canonical machine-readable contract.

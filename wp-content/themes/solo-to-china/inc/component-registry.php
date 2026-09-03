@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_COMPONENT_REGISTRY_VERSION', '1.0.0' );
+define( 'STC_COMPONENT_REGISTRY_VERSION', '1.1.0' );
 
 /**
  * Return the canonical Component Registry path.
@@ -18,6 +18,16 @@ define( 'STC_COMPONENT_REGISTRY_VERSION', '1.0.0' );
  */
 function stc_component_registry_path() {
 	return get_template_directory() . '/content-contract/component-registry.v1.json';
+}
+
+/**
+ * Return a generated CMS artifact path bundled with the Theme.
+ *
+ * @param string $artifact Artifact filename.
+ * @return string
+ */
+function stc_generated_component_artifact_path( $artifact ) {
+	return get_template_directory() . '/content-contract/' . $artifact;
 }
 
 /**
@@ -136,6 +146,57 @@ function stc_rest_get_component_registry( $request ) {
 }
 
 /**
+ * Serve a deterministic generated JSON artifact with stable cache validators.
+ *
+ * @param WP_REST_Request $request REST request.
+ * @param string          $path Artifact path.
+ * @param string          $error_code Error code.
+ * @return WP_REST_Response|WP_Error
+ */
+function stc_rest_get_generated_artifact( $request, $path, $error_code ) {
+	if ( ! is_readable( $path ) ) {
+		return new WP_Error( $error_code, __( 'The requested SoloToChina Contract artifact is unavailable.', 'solo-to-china' ), array( 'status' => 500 ) );
+	}
+
+	$raw     = file_get_contents( $path );
+	$decoded = json_decode( $raw, true );
+	if ( ! is_array( $decoded ) ) {
+		return new WP_Error( $error_code, __( 'The requested SoloToChina Contract artifact is invalid.', 'solo-to-china' ), array( 'status' => 500 ) );
+	}
+
+	$modified = filemtime( $path );
+	$etag     = '"' . hash( 'sha256', $raw ) . '"';
+	$response = $etag === trim( (string) $request->get_header( 'if-none-match' ) )
+		? new WP_REST_Response( null, 304 )
+		: new WP_REST_Response( $decoded, 200 );
+	$response->header( 'ETag', $etag );
+	$response->header( 'Last-Modified', gmdate( 'D, d M Y H:i:s', $modified ) . ' GMT' );
+	$response->header( 'Cache-Control', 'public, max-age=300, stale-while-revalidate=86400' );
+
+	return $response;
+}
+
+/**
+ * Serve the generated CMS Component Contract shape.
+ *
+ * @param WP_REST_Request $request REST request.
+ * @return WP_REST_Response|WP_Error
+ */
+function stc_rest_get_generated_component_registry( $request ) {
+	return stc_rest_get_generated_artifact( $request, stc_generated_component_artifact_path( 'component-registry.generated.json' ), 'stc_generated_component_registry_unavailable' );
+}
+
+/**
+ * Serve the generated CMS Page Schema.
+ *
+ * @param WP_REST_Request $request REST request.
+ * @return WP_REST_Response|WP_Error
+ */
+function stc_rest_get_page_schema( $request ) {
+	return stc_rest_get_generated_artifact( $request, stc_generated_component_artifact_path( 'page-schema.generated.json' ), 'stc_page_schema_unavailable' );
+}
+
+/**
  * Register the public Component Registry endpoint.
  */
 function stc_register_component_registry_route() {
@@ -145,6 +206,24 @@ function stc_register_component_registry_route() {
 		array(
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => 'stc_rest_get_component_registry',
+			'permission_callback' => '__return_true',
+		)
+	);
+	register_rest_route(
+		'stc/v1',
+		'/component-registry/generated',
+		array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => 'stc_rest_get_generated_component_registry',
+			'permission_callback' => '__return_true',
+		)
+	);
+	register_rest_route(
+		'stc/v1',
+		'/page-schema',
+		array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => 'stc_rest_get_page_schema',
 			'permission_callback' => '__return_true',
 		)
 	);
