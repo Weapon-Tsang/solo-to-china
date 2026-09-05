@@ -516,39 +516,3 @@
 		grid-template-columns: 1fr;
 	}
 }
-
-
-/* ==========================================================================
-   Mobile Card Grid Expand Fix (Cities & Attractions)
-   ========================================================================== */
-@media (max-width: 767px) {
-  /* 当展开时，解除最大高度限制并隐藏遮罩伪元素 */
-  .stc-featured-cities.is-expanded,
-  .stc-grid--featured-attractions.is-expanded,
-  .stc-city-grid.is-expanded,
-  .stc-attractions-grid.is-expanded {
-    max-height: none !important;
-    height: auto !important;
-    overflow: visible !important;
-    padding-bottom: 8px;
-  }
-
-  /* 移除蒙层遮盖渐变 */
-  .stc-featured-cities.is-expanded::after,
-  .stc-grid--featured-attractions.is-expanded::after,
-  .stc-city-grid.is-expanded::after,
-  .stc-attractions-grid.is-expanded::after {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* 确保卡片内的图文在展开后正常显示且阴影完整 */
-  .stc-grid--featured-attractions.is-expanded .stc-card,
-  .stc-featured-cities.is-expanded .stc-card {
-    display: flex !important;
-    opacity: 1 !important;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-}
