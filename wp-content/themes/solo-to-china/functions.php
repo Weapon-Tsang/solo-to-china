@@ -9,13 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.26.0' );
+define( 'STC_THEME_VERSION', '0.27.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
 require_once get_template_directory() . '/inc/content-contract.php';
 require_once get_template_directory() . '/inc/content-components.php';
 require_once get_template_directory() . '/inc/content-renderers.php';
 require_once get_template_directory() . '/inc/commercial-events.php';
+require_once get_template_directory() . '/inc/cms-articles.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );

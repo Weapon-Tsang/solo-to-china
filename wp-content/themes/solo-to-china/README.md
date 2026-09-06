@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.26.0`.
+Current version: `0.27.0`.
 
 ## Responsibility
 
@@ -13,6 +13,7 @@ The Parent Theme owns:
 - A generic article shell that renders CMS/Gutenberg content in stored order.
 - Reusable semantic components and safe dynamic renderer adapters.
 - Explicit CMS presentation metadata for Share, TOC, and Hero variant.
+- An authenticated, Contract-aware CMS Article API that writes draft-only, editable Gutenberg content and private provenance/SEO/GEO metadata.
 - Taxonomy, URL, breadcrumb, SEO, archive, search, and site-shell infrastructure.
 - Accessible Share This Page behavior with Web Share API, canonical-link copy fallback, and graceful errors.
 - Parent-only fallback presentation.
@@ -31,6 +32,8 @@ The old topic-wide article patterns and guide-saving system have been removed. S
 Registry `1.1` exposes 23 stable CMS capabilities: 20 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). The four new commercial blocks render only explicit CMS data, enforce official affiliate host and structured-embed allowlists, expose privacy-minimal event attributes, and fail closed on incomplete input. `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
 
 `contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. Change the Registry and implementation together, update the Gallery/tests and Component Changelog, then run `scripts/generate-component-catalog.ps1`. The independent CMS repository should read the root `contracts/` files instead of reverse-engineering Theme source.
+
+The CMS delivery adapter accepts `contracts/cms-publish-package.schema.json` at `POST /wp-json/stc/v1/cms-articles`, supports explicit draft updates at `PUT /wp-json/stc/v1/cms-articles/{post_id}`, and publishes its schema at `GET /wp-json/stc/v1/cms-publish-package-schema`. WordPress Application Password authentication and `edit_posts`/`edit_post` capabilities are required. Public Contract endpoints remain read-only.
 
 ## Tool boundary
 

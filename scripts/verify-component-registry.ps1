@@ -34,6 +34,8 @@ $PublishedContractRaw = Read-ProjectFile "contracts/component-registry.json"
 $PageSchemaRaw = Read-ProjectFile "contracts/page-schema.json"
 $ThemePublishedContractRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json"
 $ThemePageSchemaRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/page-schema.generated.json"
+$PublishPackageSchemaRaw = Read-ProjectFile "contracts/cms-publish-package.schema.json"
+$ThemePublishPackageSchemaRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/cms-publish-package.generated.json"
 $CmsContractDoc = Read-ProjectFile "docs/CMS_FRONTEND_CONTRACT.md"
 $ComponentChangelog = Read-ProjectFile "docs/COMPONENT_CHANGELOG.md"
 $Generator = Read-ProjectFile "scripts/generate-component-catalog.ps1"
@@ -49,6 +51,7 @@ if ($RegistryRaw) {
 if ($Registry) {
 	Assert-Registry ($PublishedContractRaw -ceq $ThemePublishedContractRaw) "Theme generated Component Contract must exactly match the repository artifact."
 	Assert-Registry ($PageSchemaRaw -ceq $ThemePageSchemaRaw) "Theme generated Page Schema must exactly match the repository artifact."
+	Assert-Registry ($PublishPackageSchemaRaw -ceq $ThemePublishPackageSchemaRaw) "Theme generated Publish Package Schema must exactly match the repository artifact."
     Assert-Registry ($Registry.registry_version -eq "1.1.0") "Component Registry version must be 1.1.0."
     Assert-Registry ($Registry.principles.frontend -eq "Frontend defines what can be rendered.") "Frontend component capability principle is missing."
     Assert-Registry ($Registry.principles.cms -eq "CMS decides what should be rendered.") "CMS selection principle is missing."
@@ -132,6 +135,19 @@ if ($Registry) {
         Assert-Registry ($PageSchema.properties.blocks.description -match "final render order") "Page Schema must define blocks array order as final render order."
         Assert-Registry ($PageSchema.properties.metadata.properties.contentType.description -match "taxonomy, not layout") "Page Schema must define content type as taxonomy, not layout."
     }
+
+    if ($PublishPackageSchemaRaw) {
+        try {
+            $PublishPackageSchema = $PublishPackageSchemaRaw | ConvertFrom-Json
+            $ContractHash = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json")).Hash.ToLowerInvariant()
+            Assert-Registry ($PublishPackageSchema.publishPackageVersion -eq "1.0.0") "Publish Package Schema version must be 1.0.0."
+            Assert-Registry ($PublishPackageSchema.contractVersion -eq $Registry.registry_version) "Publish Package Schema Contract version must match the Registry."
+            Assert-Registry ($PublishPackageSchema.properties.contract.properties.contractChecksum.const -eq $ContractHash) "Publish Package checksum must match the generated Component Contract."
+            Assert-Registry ($PublishPackageSchema.properties.publication.properties.status.const -eq "draft") "Publish Package must be draft-only."
+        } catch {
+            $Failures.Add("Publish Package Schema is not valid JSON: $($_.Exception.Message)")
+        }
+    }
 }
 
 Assert-Registry ($ContractRaw.Contains('"component_registry"')) "Content Contract must reference the Component Registry."
@@ -171,10 +187,10 @@ foreach ($Token in @("Frontend defines what CAN be rendered", "CMS decides what 
 }
 Assert-Registry ($ComponentChangelog.Contains("## 1.1.0")) "Component Changelog must record Registry 1.1.0."
 Assert-Registry ($ComponentChangelog.Contains("Pure visual changes are excluded")) "Component Changelog must exclude visual-only changes."
-foreach ($Token in @("contracts/component-registry.json", "contracts/page-schema.json", "docs/COMPONENT_LIBRARY.md")) {
+foreach ($Token in @("contracts/component-registry.json", "contracts/page-schema.json", "contracts/cms-publish-package.schema.json", "docs/COMPONENT_LIBRARY.md", "ConvertTo-CanonicalJson")) {
     Assert-Registry ($Generator.Contains($Token)) "Registry generator must publish: $Token"
 }
-foreach ($Token in @("component-registry.generated.json", "page-schema.generated.json")) {
+foreach ($Token in @("component-registry.generated.json", "page-schema.generated.json", "cms-publish-package.generated.json")) {
     Assert-Registry ($Generator.Contains($Token)) "Registry generator must publish Theme runtime artifact: $Token"
 }
 

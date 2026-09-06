@@ -45,8 +45,20 @@ if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.C
 if ($Contract.contract_version -ne "2.1.0") {
     Add-ContractFailure "Content Contract version must be 2.1.0."
 }
-if ($Contract.theme_version -ne "0.26.0") {
-    Add-ContractFailure "Content Contract theme_version must be 0.26.0."
+if ($Contract.theme_version -ne "0.27.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.27.0."
+}
+
+$CmsAdapterPath = Join-Path $Root "wp-content/themes/solo-to-china/inc/cms-articles.php"
+if (-not (Test-Path -LiteralPath $CmsAdapterPath -PathType Leaf)) {
+    Add-ContractFailure "CMS Article adapter is missing."
+} else {
+    $CmsAdapter = Get-Content -Raw -LiteralPath $CmsAdapterPath
+    foreach ($CmsToken in @("STC_CMS_PUBLISH_PACKAGE_VERSION", "stc_validate_cms_publish_package", "stc_serialize_cms_page_to_post_content", "stc_cms_component_contract_checksum", "cms-publish-package-schema", "cms-articles", "wp_insert_post", "wp_update_post", "POST_NOT_DRAFT", "UNKNOWN_COMPONENT", "UNSUPPORTED_VARIANT", "UNSAFE_AFFILIATE_URL", "_stc_page_payload", "_stc_cms_page_id", "_stc_schema_jsonld", "application/ld+json")) {
+        if (-not $CmsAdapter.Contains($CmsToken)) {
+            Add-ContractFailure "CMS Article adapter is missing: $CmsToken"
+        }
+    }
 }
 
 if ($Contract.principles.frontend -ne "Render what CMS requests." -or $Contract.principles.cms -ne "Decide what the page contains." -or $Contract.principles.content_type -ne "Content type is taxonomy, not layout.") {

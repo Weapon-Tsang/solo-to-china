@@ -1,0 +1,1827 @@
+{
+  "$id": "https://solotochina.com/contracts/cms-publish-package.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "contractVersion": "1.1.0",
+  "description": "Authenticated CMS-to-WordPress draft delivery package. WordPress validates and serializes page.blocks[] in the supplied order.",
+  "properties": {
+    "contract": {
+      "additionalProperties": false,
+      "properties": {
+        "componentContractVersion": {
+          "const": "1.1.0"
+        },
+        "contractChecksum": {
+          "const": "8e4621da1d2bc96884ef4f28dce338f3f4809a544b416e811ad916649bf4d4a2",
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "pageSchemaVersion": {
+          "const": "1.1.0"
+        }
+      },
+      "required": [
+        "componentContractVersion",
+        "pageSchemaVersion",
+        "contractChecksum"
+      ],
+      "type": "object"
+    },
+    "media": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "alt": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "caption": {
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "media_id": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "placement": {
+            "maxLength": 160,
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "featured",
+              "evidence",
+              "context",
+              "illustration",
+              "decorative"
+            ],
+            "type": "string"
+          },
+          "url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "media_id",
+          "alt",
+          "role",
+          "placement"
+        ],
+        "type": "object"
+      },
+      "maxItems": 200,
+      "type": "array"
+    },
+    "page": {
+      "$id": "https://solotochina.com/contracts/page-schema.json",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "contractVersion": "1.1.0",
+      "description": "CMS-authored page metadata and ordered content blocks for the SoloToChina frontend.",
+      "properties": {
+        "blocks": {
+          "description": "Array order is the final render order. The frontend must not reorder or inject editorial blocks based on contentType.",
+          "items": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "description": "Standard editable body copy with meaningful inline links.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "contentMediaType": "text/html",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "content"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "paragraph"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Paragraph",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Creates an article section in the semantic document outline.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "level": {
+                        "enum": [
+                          {},
+                          {}
+                        ],
+                        "type": "integer"
+                      },
+                      "text": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "level"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "heading"
+                  },
+                  "variant": {
+                    "enum": [
+                      "section",
+                      "subsection"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Heading",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Presents related items or a meaningful sequence.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "ordered": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "list"
+                  },
+                  "variant": {
+                    "enum": [
+                      "unordered",
+                      "ordered"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "List",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders WordPress Media with intrinsic dimensions and responsive candidates.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "after_block_id": {
+                        "type": "string"
+                      },
+                      "alt": {
+                        "type": "string"
+                      },
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "caption": {
+                        "type": "string"
+                      },
+                      "media_id": {
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "role": {
+                        "default": "context",
+                        "enum": [
+                          "evidence",
+                          "context",
+                          "illustration",
+                          "decorative"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "media_id",
+                      "alt"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "image"
+                  },
+                  "variant": {
+                    "enum": [
+                      "evidence",
+                      "context",
+                      "illustration",
+                      "decorative"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Responsive Image",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Places a direct answer before supporting detail for fast human and search scanning.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "answer": {
+                        "contentMediaType": "text/html",
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "answer"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "quick_answer"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Quick Answer",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Summarizes the decisions that matter most.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "key_takeaways"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Key Takeaways",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Shows practical label and value pairs without dashboard styling.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "items": {
+                          "properties": {
+                            "label": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "label",
+                            "value"
+                          ],
+                          "type": "object"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "quick_facts"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Quick Facts",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Highlights friendly supporting advice with low urgency.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "contentMediaType": "text/html",
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "content"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "tip"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Tip",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Highlights a travel risk, prerequisite, or failure condition.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "contentMediaType": "text/html",
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "content"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "warning"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Warning",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Explains an ordered setup, booking, or route process.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "steps"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Steps",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Provides a scannable preparation list without saved completion state.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "checklist"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Checklist",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Compares options with native table semantics and local mobile scrolling.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "caption": {
+                        "type": "string"
+                      },
+                      "columns": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 2,
+                        "type": "array"
+                      },
+                      "rows": {
+                        "items": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "columns",
+                      "rows"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "comparison_table"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Comparison Table",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Presents explicit questions and complete answers through native disclosures.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "items": {
+                          "properties": {
+                            "answer": {
+                              "contentMediaType": "text/html",
+                              "type": "string"
+                            },
+                            "question": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "question",
+                            "answer"
+                          ],
+                          "type": "object"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "faq"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "FAQ",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Offers a contextual trip-planning action selected by the CMS.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "cta_label": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "disclosure": {
+                        "type": "string"
+                      },
+                      "provider": {
+                        "type": "string"
+                      },
+                      "target_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "description",
+                      "cta_label",
+                      "target_url"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "planner_cta"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Planner CTA",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Delegates attraction timing and reminder behavior to SoloToChina Tools.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "attraction_slug": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "attraction_slug"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "ticket_reminder"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Ticket Reminder",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders a restrained contextual commercial action with visible disclosure.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "cta_label": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "disclosure": {
+                        "type": "string"
+                      },
+                      "price_text": {
+                        "type": "string"
+                      },
+                      "provider": {
+                        "type": "string"
+                      },
+                      "target_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "category",
+                      "provider",
+                      "title",
+                      "description",
+                      "cta_label",
+                      "target_url"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "affiliate_cta"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Affiliate CTA",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders a CMS-selected high-intent Trip.com deep or category link after QA.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "affiliate_asset_id": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "anchor": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "asset_type": {
+                        "enum": [
+                          "DEEP_LINK",
+                          "CATEGORY_LINK"
+                        ],
+                        "type": "string"
+                      },
+                      "cta_label": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "description": {
+                        "maxLength": 500,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "destination": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "disclosure": {
+                        "maxLength": 300,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "entity": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "placement": {
+                        "enum": [
+                          "contextual",
+                          "end_resource"
+                        ],
+                        "type": "string"
+                      },
+                      "price_text": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "product_category": {
+                        "enum": [
+                          "HOTEL",
+                          "FLIGHT",
+                          "TRAIN",
+                          "ATTRACTION",
+                          "TOUR_ACTIVITY",
+                          "FLIGHT_HOTEL",
+                          "CAR_RENTAL",
+                          "AIRPORT_TRANSFER",
+                          "PLANNER"
+                        ],
+                        "type": "string"
+                      },
+                      "provider": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "route": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "scope_key": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "ENTITY",
+                          "ROUTE",
+                          "AREA",
+                          "DESTINATION",
+                          "COUNTRY",
+                          "CATEGORY",
+                          "GLOBAL"
+                        ],
+                        "type": "string"
+                      },
+                      "slot_key": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "strategy_version": {
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "target_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "title": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "affiliate_asset_id",
+                      "provider",
+                      "asset_type",
+                      "product_category",
+                      "title",
+                      "description",
+                      "cta_label",
+                      "target_url",
+                      "disclosure",
+                      "scope_type",
+                      "scope_key",
+                      "slot_key",
+                      "placement",
+                      "strategy_version"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "affiliate_booking_card"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Affiliate Booking Card",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders a CMS-selected Trip.com search link or allowlisted structured search box.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "oneOf": [
+                      {
+                        "required": [
+                          "target_url"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "embed_config"
+                        ]
+                      }
+                    ],
+                    "properties": {
+                      "affiliate_asset_id": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "anchor": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "asset_type": {
+                        "const": "SEARCH_BOX"
+                      },
+                      "cta_label": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "description": {
+                        "maxLength": 500,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "destination": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "disclosure": {
+                        "maxLength": 300,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "embed_config": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "embed_type": {
+                            "const": "search_box"
+                          },
+                          "height": {
+                            "maximum": 800,
+                            "minimum": 80,
+                            "type": "integer"
+                          },
+                          "language": {
+                            "enum": [
+                              "en",
+                              "zh-CN",
+                              "zh-TW"
+                            ],
+                            "type": "string"
+                          },
+                          "src": {
+                            "format": "uri",
+                            "pattern": "^https://",
+                            "type": "string"
+                          },
+                          "theme": {
+                            "enum": [
+                              "light",
+                              "dark"
+                            ],
+                            "type": "string"
+                          },
+                          "variant": {
+                            "enum": [
+                              "compact",
+                              "standard"
+                            ],
+                            "type": "string"
+                          },
+                          "width": {
+                            "maximum": 1600,
+                            "minimum": 240,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "embed_type",
+                          "src",
+                          "width",
+                          "height",
+                          "language",
+                          "theme",
+                          "variant"
+                        ],
+                        "type": "object"
+                      },
+                      "entity": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "placement": {
+                        "enum": [
+                          "contextual",
+                          "end_resource"
+                        ],
+                        "type": "string"
+                      },
+                      "product_category": {
+                        "enum": [
+                          "HOTEL",
+                          "FLIGHT",
+                          "TRAIN",
+                          "ATTRACTION",
+                          "TOUR_ACTIVITY",
+                          "FLIGHT_HOTEL",
+                          "CAR_RENTAL",
+                          "AIRPORT_TRANSFER",
+                          "PLANNER"
+                        ],
+                        "type": "string"
+                      },
+                      "provider": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "route": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "scope_key": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "ENTITY",
+                          "ROUTE",
+                          "AREA",
+                          "DESTINATION",
+                          "COUNTRY",
+                          "CATEGORY",
+                          "GLOBAL"
+                        ],
+                        "type": "string"
+                      },
+                      "slot_key": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "strategy_version": {
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "target_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "title": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "affiliate_asset_id",
+                      "provider",
+                      "asset_type",
+                      "product_category",
+                      "title",
+                      "description",
+                      "cta_label",
+                      "disclosure",
+                      "scope_type",
+                      "scope_key",
+                      "slot_key",
+                      "placement",
+                      "strategy_version"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "affiliate_search_card"
+                  },
+                  "variant": {
+                    "enum": [
+                      "link",
+                      "search_box"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Affiliate Search Card",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "asset_type": {
+                            "const": "STATIC_BANNER"
+                          }
+                        },
+                        "required": [
+                          "image_url",
+                          "alt_text"
+                        ]
+                      },
+                      {
+                        "properties": {
+                          "asset_type": {
+                            "const": "DYNAMIC_BANNER"
+                          }
+                        },
+                        "required": [
+                          "embed_config"
+                        ]
+                      }
+                    ],
+                    "properties": {
+                      "affiliate_asset_id": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "alt_text": {
+                        "maxLength": 200,
+                        "type": "string"
+                      },
+                      "anchor": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "asset_type": {
+                        "enum": [
+                          "STATIC_BANNER",
+                          "DYNAMIC_BANNER"
+                        ],
+                        "type": "string"
+                      },
+                      "cta_label": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "description": {
+                        "maxLength": 500,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "destination": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "disclosure": {
+                        "maxLength": 300,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "embed_config": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "embed_type": {
+                            "const": "dynamic_banner"
+                          },
+                          "height": {
+                            "maximum": 800,
+                            "minimum": 80,
+                            "type": "integer"
+                          },
+                          "language": {
+                            "enum": [
+                              "en",
+                              "zh-CN",
+                              "zh-TW"
+                            ],
+                            "type": "string"
+                          },
+                          "src": {
+                            "format": "uri",
+                            "pattern": "^https://",
+                            "type": "string"
+                          },
+                          "theme": {
+                            "enum": [
+                              "light",
+                              "dark"
+                            ],
+                            "type": "string"
+                          },
+                          "variant": {
+                            "enum": [
+                              "compact",
+                              "standard"
+                            ],
+                            "type": "string"
+                          },
+                          "width": {
+                            "maximum": 1600,
+                            "minimum": 240,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "embed_type",
+                          "src",
+                          "width",
+                          "height",
+                          "language",
+                          "theme",
+                          "variant"
+                        ],
+                        "type": "object"
+                      },
+                      "entity": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "image_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "placement": {
+                        "const": "end_resource"
+                      },
+                      "product_category": {
+                        "enum": [
+                          "HOTEL",
+                          "FLIGHT",
+                          "TRAIN",
+                          "ATTRACTION",
+                          "TOUR_ACTIVITY",
+                          "FLIGHT_HOTEL",
+                          "CAR_RENTAL",
+                          "AIRPORT_TRANSFER",
+                          "PLANNER"
+                        ],
+                        "type": "string"
+                      },
+                      "provider": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "route": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "scope_key": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "ENTITY",
+                          "ROUTE",
+                          "AREA",
+                          "DESTINATION",
+                          "COUNTRY",
+                          "CATEGORY",
+                          "GLOBAL"
+                        ],
+                        "type": "string"
+                      },
+                      "slot_key": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "strategy_version": {
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "target_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "title": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "affiliate_asset_id",
+                      "provider",
+                      "asset_type",
+                      "product_category",
+                      "title",
+                      "description",
+                      "cta_label",
+                      "target_url",
+                      "disclosure",
+                      "scope_type",
+                      "scope_key",
+                      "slot_key",
+                      "placement",
+                      "strategy_version"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "affiliate_banner"
+                  },
+                  "variant": {
+                    "enum": [
+                      "static",
+                      "dynamic"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Affiliate Banner",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders a time-bounded CMS-selected Trip.com promotion without changing editorial conclusions.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "affiliate_asset_id": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "anchor": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "asset_type": {
+                        "const": "PROMOTION"
+                      },
+                      "cta_label": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "description": {
+                        "maxLength": 500,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "destination": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "disclosure": {
+                        "maxLength": 300,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "entity": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "placement": {
+                        "enum": [
+                          "contextual",
+                          "end_resource"
+                        ],
+                        "type": "string"
+                      },
+                      "price_text": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "product_category": {
+                        "enum": [
+                          "HOTEL",
+                          "FLIGHT",
+                          "TRAIN",
+                          "ATTRACTION",
+                          "TOUR_ACTIVITY",
+                          "FLIGHT_HOTEL",
+                          "CAR_RENTAL",
+                          "AIRPORT_TRANSFER",
+                          "PLANNER"
+                        ],
+                        "type": "string"
+                      },
+                      "provider": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "route": {
+                        "maxLength": 160,
+                        "type": "string"
+                      },
+                      "scope_key": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "ENTITY",
+                          "ROUTE",
+                          "AREA",
+                          "DESTINATION",
+                          "COUNTRY",
+                          "CATEGORY",
+                          "GLOBAL"
+                        ],
+                        "type": "string"
+                      },
+                      "slot_key": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "strategy_version": {
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "target_url": {
+                        "format": "uri",
+                        "pattern": "^https://",
+                        "type": "string"
+                      },
+                      "title": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "valid_from": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "valid_until": {
+                        "format": "date-time",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "affiliate_asset_id",
+                      "provider",
+                      "asset_type",
+                      "product_category",
+                      "title",
+                      "description",
+                      "cta_label",
+                      "target_url",
+                      "disclosure",
+                      "scope_type",
+                      "scope_key",
+                      "slot_key",
+                      "placement",
+                      "strategy_version"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "affiliate_promotion_card"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Affiliate Promotion Card",
+                "type": "object"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "metadata": {
+          "additionalProperties": false,
+          "properties": {
+            "canonicalUrl": {
+              "format": "uri",
+              "type": "string"
+            },
+            "contentType": {
+              "description": "Taxonomy, not layout. It must never cause the frontend to inject editorial blocks.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "excerpt": {
+              "type": "string"
+            },
+            "featuredMediaId": {
+              "minimum": 1,
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pageId": {
+              "description": "Stable CMS page identifier.",
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "presentation": {
+              "additionalProperties": false,
+              "properties": {
+                "article_hero": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "variant": {
+                      "enum": [
+                        "default",
+                        "attraction",
+                        "city",
+                        "survival"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "variant"
+                  ],
+                  "type": "object"
+                },
+                "share_this_page": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "table_of_contents": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "seo": {
+              "additionalProperties": false,
+              "properties": {
+                "canonicalUrl": {
+                  "format": "uri",
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "robots": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "slug": {
+              "minLength": 1,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            "taxonomy": {
+              "additionalProperties": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "type": "object"
+            },
+            "title": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "pageId",
+            "title",
+            "slug",
+            "contentType"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "metadata",
+        "blocks"
+      ],
+      "schemaVersion": "2020-12",
+      "title": "SoloToChina CMS Page Payload",
+      "type": "object"
+    },
+    "publication": {
+      "additionalProperties": false,
+      "properties": {
+        "cms_draft_id": {
+          "description": "Optional stable CMS draft identifier used with page.metadata.pageId for idempotent upserts.",
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "existing_post_id": {
+          "minimum": 1,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "status": {
+          "const": "draft"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
+    "schema_jsonld": {
+      "description": "Structured JSON only. Executable HTML and JavaScript are never accepted.",
+      "type": "object"
+    },
+    "seo": {
+      "additionalProperties": false,
+      "properties": {
+        "focus_keyword": {
+          "maxLength": 160,
+          "type": "string"
+        },
+        "meta_description": {
+          "maxLength": 500,
+          "type": "string"
+        },
+        "meta_title": {
+          "maxLength": 200,
+          "type": "string"
+        },
+        "search_intent": {
+          "maxLength": 160,
+          "type": "string"
+        },
+        "secondary_keywords": {
+          "items": {
+            "maxLength": 160,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "type": "array"
+        },
+        "strategy_version": {
+          "maxLength": 80,
+          "type": "string"
+        }
+      },
+      "required": [
+        "meta_title",
+        "meta_description"
+      ],
+      "type": "object"
+    }
+  },
+  "publishPackageVersion": "1.0.0",
+  "required": [
+    "contract",
+    "page",
+    "seo",
+    "schema_jsonld",
+    "media",
+    "publication"
+  ],
+  "schemaVersion": "2020-12",
+  "title": "SoloToChina CMS WordPress Publish Package",
+  "type": "object"
+}

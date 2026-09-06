@@ -8,17 +8,75 @@ $PublishedContractPath = Join-Path $Root "contracts/component-registry.json"
 $PageSchemaPath = Join-Path $Root "contracts/page-schema.json"
 $ThemePublishedContractPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json"
 $ThemePageSchemaPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/page-schema.generated.json"
+$PublishPackageSchemaPath = Join-Path $Root "contracts/cms-publish-package.schema.json"
+$ThemePublishPackageSchemaPath = Join-Path $Root "wp-content/themes/solo-to-china/content-contract/cms-publish-package.generated.json"
 $Registry = Get-Content -LiteralPath $RegistryPath -Raw | ConvertFrom-Json
 $CmsComponents = @($Registry.components | Where-Object { $_.cms_usable -eq $true })
 $InternalComponents = @($Registry.components | Where-Object { $_.cms_usable -ne $true })
 $Builder = [System.Text.StringBuilder]::new()
+
+function ConvertTo-CanonicalJson($Value, [int]$Level = 0) {
+    if ($null -eq $Value) {
+        return "null"
+    }
+    if ($Value -is [bool]) {
+        return $(if ($Value) { "true" } else { "false" })
+    }
+    if ($Value -is [string] -or $Value -is [char]) {
+        return ($Value.ToString() | ConvertTo-Json -Compress)
+    }
+    if ($Value -is [System.Collections.IDictionary]) {
+        $Keys = @($Value.Keys | ForEach-Object { $_.ToString() } | Sort-Object)
+        if ($Keys.Count -eq 0) {
+            return "{}"
+        }
+        $Indent = "  " * $Level
+        $ChildIndent = "  " * ($Level + 1)
+        $Entries = @(
+            foreach ($Key in $Keys) {
+                $EncodedKey = $Key | ConvertTo-Json -Compress
+                "$ChildIndent${EncodedKey}: $(ConvertTo-CanonicalJson $Value[$Key] ($Level + 1))"
+            }
+        )
+        return "{`n$($Entries -join ",`n")`n$Indent}"
+    }
+    if ($Value -is [pscustomobject]) {
+        $Properties = @($Value.PSObject.Properties | Sort-Object Name)
+        if ($Properties.Count -eq 0) {
+            return "{}"
+        }
+        $Indent = "  " * $Level
+        $ChildIndent = "  " * ($Level + 1)
+        $Entries = @(
+            foreach ($Property in $Properties) {
+                $EncodedKey = $Property.Name | ConvertTo-Json -Compress
+                "$ChildIndent${EncodedKey}: $(ConvertTo-CanonicalJson $Property.Value ($Level + 1))"
+            }
+        )
+        return "{`n$($Entries -join ",`n")`n$Indent}"
+    }
+    if ($Value -is [System.Collections.IEnumerable]) {
+        $Items = @($Value)
+        if ($Items.Count -eq 0) {
+            return "[]"
+        }
+        $Indent = "  " * $Level
+        $ChildIndent = "  " * ($Level + 1)
+        $Entries = @($Items | ForEach-Object { "$ChildIndent$(ConvertTo-CanonicalJson $_ ($Level + 1))" })
+        return "[`n$($Entries -join ",`n")`n$Indent]"
+    }
+    if ($Value -is [System.IFormattable]) {
+        return $Value.ToString($null, [System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    return ($Value.ToString() | ConvertTo-Json -Compress)
+}
 
 function Write-JsonContract([string]$Path, $Value) {
     $Directory = Split-Path -Parent $Path
     if (-not (Test-Path -LiteralPath $Directory -PathType Container)) {
         New-Item -ItemType Directory -Path $Directory | Out-Null
     }
-    $Json = $Value | ConvertTo-Json -Depth 40
+    $Json = ConvertTo-CanonicalJson $Value
     [System.IO.File]::WriteAllText($Path, $Json + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
 }
 
@@ -282,4 +340,76 @@ Write-JsonContract $PublishedContractPath $PublishedContract
 Write-JsonContract $PageSchemaPath $PageSchema
 Write-JsonContract $ThemePublishedContractPath $PublishedContract
 Write-JsonContract $ThemePageSchemaPath $PageSchema
+$ContractChecksum = (Get-FileHash -LiteralPath $ThemePublishedContractPath -Algorithm SHA256).Hash.ToLowerInvariant()
+$PublishPackageSchema = @{
+    '$schema' = "https://json-schema.org/draft/2020-12/schema"
+    '$id' = "https://solotochina.com/contracts/cms-publish-package.schema.json"
+    title = "SoloToChina CMS WordPress Publish Package"
+    description = "Authenticated CMS-to-WordPress draft delivery package. WordPress validates and serializes page.blocks[] in the supplied order."
+    publishPackageVersion = "1.0.0"
+    contractVersion = $Registry.registry_version
+    schemaVersion = "2020-12"
+    type = "object"
+    additionalProperties = $false
+    required = @("contract", "page", "seo", "schema_jsonld", "media", "publication")
+    properties = @{
+        contract = @{
+            type = "object"
+            additionalProperties = $false
+            required = @("componentContractVersion", "pageSchemaVersion", "contractChecksum")
+            properties = @{
+                componentContractVersion = @{ const = $Registry.registry_version }
+                pageSchemaVersion = @{ const = $Registry.registry_version }
+                contractChecksum = @{ type = "string"; const = $ContractChecksum; pattern = "^[a-f0-9]{64}$" }
+            }
+        }
+        page = $PageSchema
+        seo = @{
+            type = "object"
+            additionalProperties = $false
+            required = @("meta_title", "meta_description")
+            properties = @{
+                meta_title = @{ type = "string"; maxLength = 200 }
+                meta_description = @{ type = "string"; maxLength = 500 }
+                focus_keyword = @{ type = "string"; maxLength = 160 }
+                secondary_keywords = @{ type = "array"; maxItems = 30; items = @{ type = "string"; maxLength = 160 } }
+                search_intent = @{ type = "string"; maxLength = 160 }
+                strategy_version = @{ type = "string"; maxLength = 80 }
+            }
+        }
+        schema_jsonld = @{
+            type = "object"
+            description = "Structured JSON only. Executable HTML and JavaScript are never accepted."
+        }
+        media = @{
+            type = "array"
+            maxItems = 200
+            items = @{
+                type = "object"
+                additionalProperties = $false
+                required = @("media_id", "alt", "role", "placement")
+                properties = @{
+                    media_id = @{ type = "integer"; minimum = 1 }
+                    url = @{ type = "string"; format = "uri" }
+                    alt = @{ type = "string"; maxLength = 500 }
+                    caption = @{ type = "string"; maxLength = 2000 }
+                    role = @{ type = "string"; enum = @("featured", "evidence", "context", "illustration", "decorative") }
+                    placement = @{ type = "string"; maxLength = 160 }
+                }
+            }
+        }
+        publication = @{
+            type = "object"
+            additionalProperties = $false
+            required = @("status")
+            properties = @{
+                status = @{ const = "draft" }
+                existing_post_id = @{ type = @("integer", "null"); minimum = 1 }
+                cms_draft_id = @{ type = @("string", "integer"); description = "Optional stable CMS draft identifier used with page.metadata.pageId for idempotent upserts." }
+            }
+        }
+    }
+}
+Write-JsonContract $PublishPackageSchemaPath $PublishPackageSchema
+Write-JsonContract $ThemePublishPackageSchemaPath $PublishPackageSchema
 Write-Host "Generated Catalog and CMS contracts from Component Registry $($Registry.registry_version)."

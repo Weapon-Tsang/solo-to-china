@@ -8,6 +8,28 @@ Versioning follows semantic compatibility:
 - Minor: backward-compatible component, optional field, or variant additions.
 - Major: removed/renamed capabilities, newly required fields, incompatible schemas, or changed semantics.
 
+## CMS Publish Adapter 1.0.0 - 2026-09-06
+
+### Added
+
+- Added a formal CMS WordPress Publish Package Schema generated with the current Page Schema and exact Component Contract checksum.
+- Added authenticated `POST /wp-json/stc/v1/cms-articles` upsert and `PUT /wp-json/stc/v1/cms-articles/{post_id}` draft-update endpoints.
+- Added strict PHP Contract validation, Registry-driven Gutenberg/shortcode serialization, presentation mapping, SEO/GEO/provenance storage, structured JSON-LD output, and CMS page/draft ID idempotency.
+- Added real WordPress Playground E2E coverage for all 20 page-block strategies, successful draft creation/update/rendering, invalid package rejection, and published-post protection.
+
+### Changed
+
+- Parent Theme is now `0.27.0`. Component Registry remains `1.1.0` and Content Contract remains `2.1.0`; no component ID, variant, or input schema changed.
+- Generated JSON artifacts now use deterministic canonical key ordering so checksum provenance is reproducible.
+
+### Deprecated
+
+- None.
+
+### Removed
+
+- None.
+
 ## 1.1.0 - 2026-09-03
 
 ### Added

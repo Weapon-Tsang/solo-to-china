@@ -43,12 +43,15 @@ $GeneratedRegistry = $GeneratedRegistryResponse.Content | ConvertFrom-Json
 $PageSchemaResponse = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/page-schema"
 $PageSchemaAgain = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/page-schema"
 $PageSchema = $PageSchemaResponse.Content | ConvertFrom-Json
+$PublishSchemaResponse = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/cms-publish-package-schema"
+$PublishSchemaAgain = Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/cms-publish-package-schema"
+$PublishSchema = $PublishSchemaResponse.Content | ConvertFrom-Json
 
 Assert-Runtime ($ContractResponse.StatusCode -eq 200) "Content Contract endpoint did not return HTTP 200."
 Assert-Runtime ($ContractResponse.Content -eq $ContractAgain.Content) "Content Contract JSON changed between consecutive reads."
 Assert-Runtime ([string]$ContractResponse.Headers.ETag -eq [string]$ContractAgain.Headers.ETag) "Content Contract ETag is not stable."
 Assert-Runtime ($Contract.contract_version -eq "2.1.0") "Content Contract version is not 2.1.0."
-Assert-Runtime ($Contract.theme_version -eq "0.26.0") "Content Contract Theme version is not 0.26.0."
+Assert-Runtime ($Contract.theme_version -eq "0.27.0") "Content Contract Theme version is not 0.27.0."
 Assert-Runtime ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."
 Assert-Runtime ($Contract.principles.cms -eq "Decide what the page contains.") "CMS responsibility principle is missing."
 Assert-Runtime ($Contract.principles.content_type -eq "Content type is taxonomy, not layout.") "Content type boundary principle is missing."
@@ -71,6 +74,21 @@ Assert-Runtime ($PageSchemaResponse.Content -eq $PageSchemaAgain.Content) "Gener
 Assert-Runtime ([string]$PageSchemaResponse.Headers.ETag -eq [string]$PageSchemaAgain.Headers.ETag) "Generated Page Schema ETag is not stable."
 Assert-Runtime (-not [string]::IsNullOrWhiteSpace([string]$PageSchemaResponse.Headers."Last-Modified")) "Generated Page Schema Last-Modified is missing."
 Assert-Runtime ([string]$PageSchemaResponse.Headers."Cache-Control" -match "public") "Generated Page Schema public Cache-Control is missing."
+Assert-Runtime ($PublishSchemaResponse.StatusCode -eq 200) "Publish Package Schema endpoint did not return HTTP 200."
+Assert-Runtime ($PublishSchema.publishPackageVersion -eq "1.0.0") "Publish Package Schema version is wrong."
+Assert-Runtime ($PublishSchema.contractVersion -eq "1.1.0") "Publish Package Component Contract version is wrong."
+Assert-Runtime ($PublishSchemaResponse.Content -eq $PublishSchemaAgain.Content) "Publish Package Schema JSON is not reproducible."
+Assert-Runtime ([string]$PublishSchemaResponse.Headers.ETag -eq [string]$PublishSchemaAgain.Headers.ETag) "Publish Package Schema ETag is not stable."
+$ExpectedChecksum = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json")).Hash.ToLowerInvariant()
+Assert-Runtime ($PublishSchema.properties.contract.properties.contractChecksum.const -eq $ExpectedChecksum) "Publish Package Schema checksum does not match the deployed Component Contract."
+if (-not $ParentOnly) {
+    try {
+        Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/cms-articles" -Method Post -ContentType "application/json" -Body "{}" | Out-Null
+        Add-RuntimeFailure "Anonymous CMS Article POST was not rejected."
+    } catch {
+        Assert-Runtime ($_.Exception.Response.StatusCode.value__ -eq 403) "Anonymous CMS Article POST did not return HTTP 403."
+    }
+}
 Assert-Runtime ($Contract.guide_types."survival-kit".category_slug -eq "survival-kit") "Survival Kit category mapping is wrong."
 Assert-Runtime ($Contract.guide_types."city-guide".category_slug -eq "city-guides") "City Guide category mapping is wrong."
 Assert-Runtime ($Contract.guide_types."attraction-guide".category_slug -eq "attraction-guides") "Attraction Guide category mapping is wrong."

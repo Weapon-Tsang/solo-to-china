@@ -37,7 +37,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.26.0`.
+Current theme version: `0.27.0`.
 
 Content Contract Phase A is complete and has been superseded by the Contract 2.1 responsibility model documented below:
 
@@ -48,7 +48,7 @@ Content Contract Phase A is complete and has been superseded by the Contract 2.1
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.26.0`, four taxonomy-only guide types, 23 CMS capabilities, five REST meta fields, generated artifacts, and the expected cache headers.
+- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.27.0`, four taxonomy-only guide types, 23 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
@@ -185,7 +185,10 @@ Formal Frontend to CMS Capability Contract is complete:
 
 Affiliate Capability Upgrade is complete in the working tree:
 
-- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.26.0`, and Child Theme `0.8.0` publish 23 CMS capabilities, including 20 ordered page blocks.
+- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.27.0`, and Child Theme `0.8.0` publish 23 CMS capabilities, including 20 ordered page blocks.
+- Publish Package `1.0.0` is available at `contracts/cms-publish-package.schema.json` and `GET /wp-json/stc/v1/cms-publish-package-schema`.
+- Authenticated `POST /wp-json/stc/v1/cms-articles` and `PUT /wp-json/stc/v1/cms-articles/{post_id}` now create or update draft-only WordPress articles from CMS Page Payloads.
+- The adapter revalidates the deployed Contract, serializes static/semantic content to editable Gutenberg blocks and dynamic content to renderer-owned shortcode blocks, maps presentation metadata, stores SEO/GEO/provenance, and rejects non-draft overwrites.
 - Added real renderers for `affiliate_booking_card`, `affiliate_search_card`, `affiliate_banner`, and `affiliate_promotion_card`; the historical `affiliate_cta` remains unchanged and stable.
 - New renderers fail closed on incomplete, unknown, HTML-bearing, non-HTTPS, credential-bearing, or non-allowlisted URL input. Search Box and Dynamic Banner accept only structured fixed-field embeds.
 - Added generated CMS-shape REST endpoints at `/wp-json/stc/v1/component-registry/generated` and `/wp-json/stc/v1/page-schema` with reproducible JSON and stable cache validators.

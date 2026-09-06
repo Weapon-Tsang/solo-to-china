@@ -1,6 +1,6 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-09-03
+Date: 2026-09-06
 
 ## Product Boundary
 
@@ -28,7 +28,7 @@ Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/
 
 ## Current Versions
 
-- Parent Theme: 0.26.0
+- Parent Theme: 0.27.0
 - Child Theme: 0.8.0
 - SoloToChina Tools Plugin: 0.22.0
 - Content Contract: 2.1.0
@@ -70,6 +70,15 @@ Published contracts for the independent CMS repository:
 
     contracts/component-registry.json
     contracts/page-schema.json
+    contracts/cms-publish-package.schema.json
+
+CMS-to-WordPress draft delivery:
+
+    GET /wp-json/stc/v1/cms-publish-package-schema
+    POST /wp-json/stc/v1/cms-articles
+    PUT /wp-json/stc/v1/cms-articles/{post_id}
+
+The write endpoints require WordPress Application Password authentication plus `edit_posts`/`edit_post`. They are draft-only, idempotent by CMS page/draft IDs, serialize `page.blocks[]` to editable Gutenberg/shortcode content in exact order, and refuse to overwrite published posts.
 
 CMS integration guidance and compatibility history:
 

@@ -2,7 +2,7 @@
 
 Current Content Contract version: 2.1.0
 Current Component Registry version: 1.1.0
-Compatible Parent Theme version: 0.26.0
+Compatible Parent Theme version: 0.27.0
 
 ## Governing Boundary
 
@@ -19,6 +19,17 @@ Frontend capability rule: "Frontend defines what can be rendered." The CMS may s
 The CMS owns content strategy, article structure, component selection, component order, component data, component variants, and whether optional utilities such as Share or TOC appear.
 
 ## Rendering Pipeline
+
+The implemented CMS-to-WordPress path is:
+
+    CMS Publish Package
+    -> POST /wp-json/stc/v1/cms-articles
+    -> WordPress Contract validation
+    -> exact-order Gutenberg/shortcode serialization
+    -> idempotent WordPress draft + private provenance metadata
+    -> generic single.php article shell
+    -> Theme/component renderer
+    -> preview
 
     CMS
     → post content and presentation metadata
@@ -46,11 +57,20 @@ CMS clients read it from:
     GET /wp-json/stc/v1/component-registry
     GET /wp-json/stc/v1/component-registry/generated
     GET /wp-json/stc/v1/page-schema
+    GET /wp-json/stc/v1/cms-publish-package-schema
+
+Authenticated CMS delivery uses:
+
+    POST /wp-json/stc/v1/cms-articles
+    PUT /wp-json/stc/v1/cms-articles/{post_id}
 
 The independent CMS repository should consume these generated repository contracts instead of scanning Theme source:
 
     contracts/component-registry.json
     contracts/page-schema.json
+    contracts/cms-publish-package.schema.json
+
+The CMS Article API is the Contract-aware publication boundary; generic `wp-json/wp/v2/posts` is not the primary CMS delivery interface. WordPress Application Passwords authenticate requests, then the adapter requires `edit_posts` or `edit_post`. The endpoint accepts only `publication.status=draft`, uses CMS page/draft IDs for idempotency, and refuses to overwrite a non-draft post.
 
 The published Component Contract contains only CMS-usable capabilities. The Page Schema defines `{ type, variant, data }` blocks and makes `blocks[]` order the final render order. Both are generated from the authoring Registry by `scripts/generate-component-catalog.ps1`.
 

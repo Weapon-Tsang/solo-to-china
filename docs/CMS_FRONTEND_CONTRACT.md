@@ -44,6 +44,10 @@ When the CMS needs the page payload and ordered block schema, read:
 
     contracts/page-schema.json
 
+When the CMS needs the authenticated WordPress delivery envelope, read:
+
+    contracts/cms-publish-package.schema.json
+
 When a developer or content designer needs component purposes, variants, schemas, examples, accessibility notes, and responsive behavior, read:
 
     docs/COMPONENT_LIBRARY.md
@@ -68,6 +72,7 @@ It includes implemented CMS capabilities and explicitly marked internal-only ren
 
 - `contracts/component-registry.json`, filtered to `cms_usable: true` capabilities only.
 - `contracts/page-schema.json`, with its `blocks[].type`, variants, and `data` schemas derived from the page-block capabilities.
+- `contracts/cms-publish-package.schema.json`, which embeds the generated Page Schema and exact deployed Component Contract checksum.
 - `docs/COMPONENT_LIBRARY.md`, containing both published and internal implementation records.
 
 The PHP renderer and REST Contract read the same authoring Registry. The repository does not maintain a separate handwritten renderer list or TypeScript component union. A consumer may generate types from the published JSON contracts.
@@ -95,6 +100,7 @@ CMS synchronization should consume the generated shape from:
 
     GET /wp-json/stc/v1/component-registry/generated
     GET /wp-json/stc/v1/page-schema
+    GET /wp-json/stc/v1/cms-publish-package-schema
 
 Both generated endpoints return the same shapes as the repository artifacts and include stable ETag, Last-Modified, and public Cache-Control headers. The repository Contract remains the preferred build-time source; the generated endpoints support deployed runtime synchronization.
 
@@ -108,6 +114,71 @@ FRONTEND_CONTRACT_COMMIT_SHA=<deployed frontend commit>
 ```
 
 Do not set the commit value to an uncommitted working tree or a commit that has not been deployed.
+
+## CMS WordPress Publish Package
+
+The primary Contract-aware delivery API is:
+
+    POST /wp-json/stc/v1/cms-articles
+    PUT /wp-json/stc/v1/cms-articles/{post_id}
+
+Do not use generic `wp-json/wp/v2/posts` as the normal CMS publication path. The dedicated adapter validates the complete package, preserves `page.blocks[]` order, maps presentation metadata, and owns all `_stc_*` storage details.
+
+Requests use WordPress Application Password authentication over HTTPS. The authenticated WordPress user must have `edit_posts` for create/upsert and `edit_post` for an explicit update. Public Contract endpoints remain read-only.
+
+The formal package shape is generated at `contracts/cms-publish-package.schema.json` and served from `GET /wp-json/stc/v1/cms-publish-package-schema`. Its top-level fields are exactly:
+
+```json
+{
+  "contract": {
+    "componentContractVersion": "1.1.0",
+    "pageSchemaVersion": "1.1.0",
+    "contractChecksum": "<sha256 of deployed generated Component Contract>"
+  },
+  "page": {
+    "metadata": {},
+    "blocks": []
+  },
+  "seo": {
+    "meta_title": "",
+    "meta_description": "",
+    "focus_keyword": "",
+    "secondary_keywords": [],
+    "search_intent": "",
+    "strategy_version": ""
+  },
+  "schema_jsonld": {},
+  "media": [],
+  "publication": {
+    "status": "draft",
+    "existing_post_id": null,
+    "cms_draft_id": "optional-stable-id"
+  }
+}
+```
+
+WordPress validates Contract version, schema version, checksum, component ID, stable/deprecated state, variant, required/unknown fields, presentation values, media references, commercial fields, affiliate hosts, URLs, and structured embeds before writing. Errors use structured 4xx codes including `INVALID_PAGE_SCHEMA`, `UNKNOWN_COMPONENT`, `UNSUPPORTED_VARIANT`, `INVALID_COMPONENT_DATA`, `CONTRACT_VERSION_MISMATCH`, `INVALID_PRESENTATION`, `INVALID_COMMERCIAL_COMPONENT`, `UNSAFE_AFFILIATE_URL`, and `POST_NOT_DRAFT`.
+
+The endpoint is draft-only. `POST` uses `page.metadata.pageId` plus optional `publication.cms_draft_id` to update the same draft instead of creating duplicates. `PUT` and `publication.existing_post_id` are explicit update paths. A non-draft WordPress post is never overwritten. `pageSchemaVersion` is the Page Schema `contractVersion`; JSON Schema dialect remains separately declared as `schemaVersion: 2020-12`.
+
+For runtime synchronization, use the unquoted ETag returned by `GET /wp-json/stc/v1/component-registry/generated` as `contractChecksum`. That ETag is the SHA256 of the exact bundled generated Contract bytes and matches the constant published in the Publish Package Schema.
+
+Successful responses include `post_id`, `status`, `edit_url`, `preview_url`, `slug`, `contract_version`, and `updated`.
+
+Static and semantic components become native editable Gutenberg blocks/groups. Dynamic and commercial components become one Shortcode block per component and are rendered through the existing Theme renderer; CMS-provided HTML is never used as commercial output. The adapter stores a Page Payload provenance snapshot, not a page-wide runtime rendering blob.
+
+Presentation mappings are frontend-owned:
+
+| CMS field | WordPress storage |
+| --- | --- |
+| `metadata.contentType` | `_stc_guide_type` |
+| `metadata.presentation.article_hero.variant` | `_stc_hero_variant` |
+| `metadata.presentation.share_this_page` | `_stc_show_share` |
+| `metadata.presentation.table_of_contents` | `_stc_show_toc` |
+
+Provenance uses `_stc_page_payload`, `_stc_component_contract_version`, `_stc_page_schema_version`, `_stc_contract_checksum`, `_stc_cms_page_id`, and `_stc_cms_draft_id`. SEO/GEO uses stable `_stc_seo_*`, `_stc_focus_keyword`, `_stc_secondary_keywords`, `_stc_search_intent`, `_stc_strategy_version`, `_stc_schema_jsonld`, and `_stc_media_manifest` storage. A future SEO plugin adapter may map these canonical values to plugin-specific keys without changing the CMS API.
+
+JSON-LD is stored as structured JSON and encoded by the Theme into `application/ld+json`; raw scripts and executable HTML are not accepted.
 
 ## Commercial Capability Boundary
 
@@ -138,12 +209,12 @@ The browser sends privacy-minimal impression/click events only to the same-origi
     {
       "type": "paragraph",
       "variant": "default",
-      "data": { "text": "Reserve before arrival and carry the booking passport." }
+      "data": { "content": "Reserve before arrival and carry the booking passport." }
     },
     {
       "type": "tip",
       "variant": "default",
-      "data": { "body": "Use the signed entrance shown on your reservation." }
+      "data": { "content": "Use the signed entrance shown on your reservation." }
     }
   ]
 }

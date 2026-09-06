@@ -101,12 +101,37 @@ Also check:
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.26.0`, verify these public read-only endpoints:
+After installing Parent Theme `0.27.0`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`
+- `/wp-json/stc/v1/cms-publish-package-schema`
 
 Configure the independent CMS with the deployed frontend commit and these generated endpoints. Do not point CMS synchronization at PHP/React source files or the internal authoring Registry shape.
+
+## CMS Draft Delivery Configuration
+
+Create a dedicated least-privilege WordPress user that can edit posts, then create a WordPress Application Password for the CMS. Send credentials only over HTTPS and keep them in the CMS server secret store.
+
+Configure the CMS to use:
+
+```text
+WORDPRESS_BASE_URL=https://solotochina.com
+WORDPRESS_CMS_ARTICLE_ENDPOINT=https://solotochina.com/wp-json/stc/v1/cms-articles
+WORDPRESS_CMS_PUBLISH_PACKAGE_SCHEMA=https://solotochina.com/wp-json/stc/v1/cms-publish-package-schema
+WORDPRESS_APPLICATION_USERNAME=<dedicated CMS user>
+WORDPRESS_APPLICATION_PASSWORD=<server-only Application Password>
+```
+
+The CMS must fetch the deployed generated Component Contract, strip quotes from its ETag and use that SHA256 as `contract.contractChecksum`, set `pageSchemaVersion` to the deployed Page Schema `contractVersion`, and send `publication.status=draft`. Do not send the package to generic `/wp-json/wp/v2/posts`; that route does not run the SoloToChina Contract validator or serializer.
+
+After configuration, send one validated package and confirm:
+
+- HTTP `201` creates a WordPress draft.
+- The response contains non-empty `edit_url` and `preview_url`.
+- Repeating the same `page.metadata.pageId`/`publication.cms_draft_id` returns HTTP `200` with `updated: true` and does not create a duplicate.
+- The Gutenberg editor shows native blocks/groups plus individual Shortcode blocks for dynamic components.
+- Attempts to send `publication.status=publish` or overwrite a published post return `POST_NOT_DRAFT`.
 
 The public browser event endpoint is `/wp-json/stc/v1/commercial-events`. Forwarding is disabled safely unless both server process environment variables are present:
 
