@@ -65,8 +65,8 @@
           },
           "level": {
             "enum": [
-              {},
-              {}
+              2,
+              3
             ],
             "type": "integer"
           },
@@ -609,19 +609,10 @@
             "Best for"
           ],
           "rows": [
-            {
-              "Count": 2,
-              "IsFixedSize": true,
-              "IsReadOnly": false,
-              "IsSynchronized": false,
-              "Length": 2,
-              "LongLength": 2,
-              "Rank": 1,
-              "SyncRoot": [
-                "Metro",
-                "Predictable city trips"
-              ]
-            }
+            [
+              "Metro",
+              "Predictable city trips"
+            ]
           ]
         },
         "type": "comparison_table",

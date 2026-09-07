@@ -8,6 +8,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$PlaygroundCliVersion = "3.1.52"
 
 $Root = Split-Path -Parent $PSScriptRoot
 if ($ParentOnly -and $Editor) {
@@ -35,7 +36,7 @@ Write-Host "Starting SoloToChina WordPress Playground at http://127.0.0.1:$Port 
 
 $PlaygroundArguments = @(
     "--yes"
-    "@wp-playground/cli@latest"
+    "@wp-playground/cli@$PlaygroundCliVersion"
     "server"
     "--port=$Port"
     "--blueprint=$Blueprint"
@@ -59,3 +60,6 @@ if (-not $ParentOnly) {
 }
 
 & $NpxCommand.Source @PlaygroundArguments
+if ($LASTEXITCODE -ne 0) {
+    throw "WordPress Playground CLI $PlaygroundCliVersion exited with code $LASTEXITCODE."
+}

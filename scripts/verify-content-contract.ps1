@@ -45,8 +45,8 @@ if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.C
 if ($Contract.contract_version -ne "2.1.0") {
     Add-ContractFailure "Content Contract version must be 2.1.0."
 }
-if ($Contract.theme_version -ne "0.27.0") {
-    Add-ContractFailure "Content Contract theme_version must be 0.27.0."
+if ($Contract.theme_version -ne "0.28.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.28.0."
 }
 
 $CmsAdapterPath = Join-Path $Root "wp-content/themes/solo-to-china/inc/cms-articles.php"

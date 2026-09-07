@@ -8,6 +8,14 @@ Versioning follows semantic compatibility:
 - Minor: backward-compatible component, optional field, or variant additions.
 - Major: removed/renamed capabilities, newly required fields, incompatible schemas, or changed semantics.
 
+## Parent Theme 0.28.0 - 2026-09-08
+
+### Changed
+
+- Serialized concurrent CMS create requests with a per-identity WordPress database lock and persisted CMS identifiers immediately after the draft row is created.
+- Bound canonical and structured-data output to the final WordPress permalink/title, suppressed duplicate SEO output when a supported SEO plugin owns it, and withheld stale JSON-LD after a manual post edit.
+- Kept Component Registry `1.1.0` and Content Contract `2.1.0`; the public component interface remains backward compatible.
+
 ## CMS Publish Adapter 1.0.0 - 2026-09-06
 
 ### Added
@@ -19,7 +27,6 @@ Versioning follows semantic compatibility:
 
 ### Changed
 
-- Parent Theme is now `0.27.0`. Component Registry remains `1.1.0` and Content Contract remains `2.1.0`; no component ID, variant, or input schema changed.
 - Generated JSON artifacts now use deterministic canonical key ordering so checksum provenance is reproducible.
 
 ### Deprecated
@@ -73,4 +80,3 @@ Versioning follows semantic compatibility:
 ### Removed
 
 - None. Topic-wide article patterns and Save Guide behavior were removed before Contract 1.0 and were never published as CMS capability IDs.
-

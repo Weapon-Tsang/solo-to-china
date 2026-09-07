@@ -23,7 +23,7 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.27.0` in `wp-content/themes/solo-to-china/`.
+- Custom SoloToChina theme `0.28.0` in `wp-content/themes/solo-to-china/`.
 - SoloToChina Child Theme `0.8.0` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.22.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
@@ -39,7 +39,7 @@ The Theme Registry at `wp-content/themes/solo-to-china/content-contract/componen
 
 Registry `1.1.0` adds four QA-selected Commercial Blocks: Affiliate Booking Card, Search Card, Banner, and Promotion Card. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`. Privacy-minimal impression/click events post only to the same-origin `POST /wp-json/stc/v1/commercial-events` relay; server forwarding is disabled until its environment variables are configured.
 
-Parent Theme `0.27.0` adds the authenticated, draft-only CMS delivery path. The CMS submits a validated Publish Package to `POST /wp-json/stc/v1/cms-articles` or explicitly updates a draft with `PUT /wp-json/stc/v1/cms-articles/{post_id}`. WordPress revalidates the deployed Contract, serializes `page.blocks[]` to editable Gutenberg/shortcode content in exact order, stores provenance plus SEO/GEO metadata, and refuses implicit publication or updates to non-draft posts. The formal package schema is available at `GET /wp-json/stc/v1/cms-publish-package-schema`.
+Parent Theme `0.28.0` adds the authenticated, draft-only CMS delivery path. The CMS submits a validated Publish Package to `POST /wp-json/stc/v1/cms-articles` or explicitly updates a draft with `PUT /wp-json/stc/v1/cms-articles/{post_id}`. WordPress revalidates the deployed Contract, serializes `page.blocks[]` to editable Gutenberg/shortcode content in exact order, stores provenance plus SEO/GEO metadata, and refuses implicit publication or updates to non-draft posts. The formal package schema is available at `GET /wp-json/stc/v1/cms-publish-package-schema`.
 
 Generate install artifacts with:
 

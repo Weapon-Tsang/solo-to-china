@@ -4,7 +4,7 @@
   "login": false,
   "preferredVersions": {
     "php": "8.3",
-    "wp": "latest"
+    "wp": "7.0.4"
   },
   "steps": [
     {

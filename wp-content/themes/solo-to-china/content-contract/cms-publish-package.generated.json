@@ -12,7 +12,7 @@
           "const": "1.1.0"
         },
         "contractChecksum": {
-          "const": "8e4621da1d2bc96884ef4f28dce338f3f4809a544b416e811ad916649bf4d4a2",
+          "const": "2e8da42b4fa86f8e717b992d648cae222bbbbe59a2b9d78848f0181bb9415fd3",
           "pattern": "^[a-f0-9]{64}$",
           "type": "string"
         },
@@ -134,8 +134,8 @@
                       },
                       "level": {
                         "enum": [
-                          {},
-                          {}
+                          2,
+                          3
                         ],
                         "type": "integer"
                       },

@@ -910,6 +910,7 @@ function stc_register_cms_article_meta() {
 		'_stc_strategy_version',
 		'_stc_canonical_url',
 		'_stc_robots',
+		'_stc_cms_synced_post_modified_gmt',
 	);
 	foreach ( $text_keys as $meta_key ) {
 		register_post_meta(
@@ -962,6 +963,7 @@ function stc_cms_find_mapped_post_id( $page_id, $draft_id = '' ) {
 			'fields'           => 'ids',
 			'orderby'          => 'ID',
 			'order'            => 'ASC',
+			'cache_results'    => false,
 			'suppress_filters' => true,
 			'meta_query'       => $clauses,
 		)
@@ -1130,20 +1132,141 @@ function stc_cms_store_publish_metadata( $post_id, $package ) {
 	update_post_meta( $post_id, '_stc_secondary_keywords', wp_json_encode( isset( $seo['secondary_keywords'] ) ? $seo['secondary_keywords'] : array() ) );
 	update_post_meta( $post_id, '_stc_search_intent', isset( $seo['search_intent'] ) ? $seo['search_intent'] : '' );
 	update_post_meta( $post_id, '_stc_strategy_version', isset( $seo['strategy_version'] ) ? $seo['strategy_version'] : '' );
-	update_post_meta( $post_id, '_stc_schema_jsonld', wp_json_encode( $package['schema_jsonld'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+	$final_schema = stc_cms_finalize_schema( $package['schema_jsonld'], $post_id, $page );
+	update_post_meta( $post_id, '_stc_schema_jsonld', wp_json_encode( $final_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
 	update_post_meta( $post_id, '_stc_media_manifest', wp_json_encode( $package['media'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
-	update_post_meta( $post_id, '_stc_canonical_url', isset( $page_seo['canonicalUrl'] ) ? $page_seo['canonicalUrl'] : ( isset( $metadata['canonicalUrl'] ) ? $metadata['canonicalUrl'] : '' ) );
+	update_post_meta( $post_id, '_stc_canonical_url', get_permalink( $post_id ) );
 	update_post_meta( $post_id, '_stc_robots', isset( $page_seo['robots'] ) ? $page_seo['robots'] : '' );
+	update_post_meta( $post_id, '_stc_cms_synced_post_modified_gmt', (string) get_post_field( 'post_modified_gmt', $post_id ) );
 }
 
 /**
- * Create or update a CMS-managed WordPress draft.
+ * Bind generated schema to the WordPress title, permalink and modification time.
+ *
+ * @param array<string, mixed> $schema JSON-LD graph.
+ * @param int                  $post_id WordPress post ID.
+ * @param array<string, mixed> $page Final visible Page Payload.
+ * @return array<string, mixed>
+ */
+function stc_cms_finalize_schema( $schema, $post_id, $page ) {
+	if ( ! is_array( $schema ) ) {
+		return array();
+	}
+	$permalink = get_permalink( $post_id );
+	$title     = get_the_title( $post_id );
+	$modified  = get_post_modified_time( DATE_W3C, true, $post_id );
+	if ( empty( $schema['@graph'] ) || ! is_array( $schema['@graph'] ) ) {
+		return $schema;
+	}
+	foreach ( $schema['@graph'] as &$node ) {
+		$type = isset( $node['@type'] ) ? $node['@type'] : '';
+		if ( 'WebPage' === $type ) {
+			$node['@id'] = $permalink;
+			$node['name'] = $title;
+		}
+		if ( 'Article' === $type ) {
+			$node['headline']     = $title;
+			$node['dateModified'] = $modified;
+			$node['mainEntityOfPage'] = array( '@type' => 'WebPage', '@id' => $permalink );
+		}
+		if ( 'BreadcrumbList' === $type && ! empty( $node['itemListElement'] ) ) {
+			$last = count( $node['itemListElement'] ) - 1;
+			$node['itemListElement'][ $last ]['item'] = $permalink;
+		}
+	}
+	unset( $node );
+	return $schema;
+}
+
+/**
+ * Serialize first-write resolution for one CMS identity across PHP workers.
  *
  * @param array<string, mixed> $package Validated Publish Package.
  * @param int                  $route_post_id Optional PUT route post ID.
  * @return WP_REST_Response|WP_Error
  */
 function stc_cms_upsert_article( $package, $route_post_id = 0 ) {
+	$draft_id = isset( $package['publication']['cms_draft_id'] ) ? (string) $package['publication']['cms_draft_id'] : '';
+	$lock     = stc_cms_acquire_write_lock( (string) $package['page']['metadata']['pageId'] . '|' . $draft_id, 10 );
+	if ( ! $lock ) {
+		return stc_cms_publish_error( 'CMS_WRITE_BUSY', __( 'Another delivery for this CMS page is still in progress. Retry this request.', 'solo-to-china' ), 409 );
+	}
+	try {
+		return stc_cms_upsert_article_locked( $package, $route_post_id );
+	} finally {
+		stc_cms_release_write_lock( $lock );
+	}
+}
+
+/**
+ * Acquire a portable cross-worker lock through the unique options index.
+ *
+ * @param string $identity Stable CMS page/draft identity.
+ * @param int    $timeout_seconds Maximum wait.
+ * @return array<string, string>|false
+ */
+function stc_cms_acquire_write_lock( $identity, $timeout_seconds = 10 ) {
+	global $wpdb;
+	$key      = '_stc_cms_lock_' . substr( hash( 'sha256', $identity ), 0, 48 );
+	$token    = wp_generate_uuid4();
+	$deadline = microtime( true ) + max( 1, (int) $timeout_seconds );
+	do {
+		$value = wp_json_encode(
+			array(
+				'token'      => $token,
+				'expires_at' => time() + 30,
+			)
+		);
+		if ( add_option( $key, $value, '', false ) ) {
+			return array( 'key' => $key, 'value' => $value );
+		}
+		$current_value = (string) get_option( $key, '' );
+		$current       = json_decode( $current_value, true );
+		if ( is_array( $current ) && isset( $current['expires_at'] ) && (int) $current['expires_at'] < time() ) {
+			stc_cms_delete_write_lock_value( $key, $current_value );
+		}
+		usleep( 100000 );
+	} while ( microtime( true ) < $deadline );
+	return false;
+}
+
+/**
+ * Release only the lock value owned by this request.
+ *
+ * @param array<string, string> $lock Acquired lock identity.
+ */
+function stc_cms_release_write_lock( $lock ) {
+	if ( empty( $lock['key'] ) || empty( $lock['value'] ) ) {
+		return;
+	}
+	stc_cms_delete_write_lock_value( $lock['key'], $lock['value'] );
+}
+
+/**
+ * Conditionally delete one lock value and invalidate WordPress option caches.
+ *
+ * @param string $key Option name.
+ * @param string $value Exact owner value.
+ * @return bool
+ */
+function stc_cms_delete_write_lock_value( $key, $value ) {
+	global $wpdb;
+	$deleted = $wpdb->delete( $wpdb->options, array( 'option_name' => $key, 'option_value' => $value ), array( '%s', '%s' ) );
+	if ( $deleted ) {
+		wp_cache_delete( $key, 'options' );
+		wp_cache_delete( 'notoptions', 'options' );
+	}
+	return (bool) $deleted;
+}
+
+/**
+ * Create or update a CMS-managed WordPress draft while holding its identity lock.
+ *
+ * @param array<string, mixed> $package Validated Publish Package.
+ * @param int                  $route_post_id Optional PUT route post ID.
+ * @return WP_REST_Response|WP_Error
+ */
+function stc_cms_upsert_article_locked( $package, $route_post_id = 0 ) {
 	$references = stc_cms_validate_wordpress_references( $package );
 	if ( is_wp_error( $references ) ) {
 		return $references;
@@ -1177,6 +1300,11 @@ function stc_cms_upsert_article( $package, $route_post_id = 0 ) {
 	if ( is_wp_error( $post_id ) ) {
 		return $post_id;
 	}
+	// Persist the stable identity immediately. If taxonomy, thumbnail, or later
+	// metadata work fails, a retry resolves this exact draft instead of creating
+	// a second post.
+	update_post_meta( $post_id, '_stc_cms_page_id', (string) $metadata['pageId'] );
+	update_post_meta( $post_id, '_stc_cms_draft_id', isset( $package['publication']['cms_draft_id'] ) ? (string) $package['publication']['cms_draft_id'] : '' );
 
 	$taxonomy_result = stc_cms_apply_taxonomy( $post_id, $metadata );
 	if ( is_wp_error( $taxonomy_result ) ) {
@@ -1289,6 +1417,14 @@ add_action( 'rest_api_init', 'stc_register_cms_article_routes' );
  * @return string
  */
 function stc_get_cms_jsonld_markup( $post_id ) {
+	if ( stc_cms_seo_plugin_active() ) {
+		return '';
+	}
+	$synced_modified = (string) get_post_meta( $post_id, '_stc_cms_synced_post_modified_gmt', true );
+	$current_modified = (string) get_post_field( 'post_modified_gmt', $post_id );
+	if ( $synced_modified && $current_modified && $synced_modified !== $current_modified ) {
+		return '';
+	}
 	$decoded = json_decode( (string) get_post_meta( $post_id, '_stc_schema_jsonld', true ), true );
 	if ( ! is_array( $decoded ) || ! $decoded ) {
 		return '';
@@ -1311,7 +1447,7 @@ add_action( 'wp_head', 'stc_output_cms_jsonld', 20 );
  * Output the adapter-owned SEO description until an SEO plugin mapper is selected.
  */
 function stc_output_cms_meta_description() {
-	if ( ! is_singular( 'post' ) ) {
+	if ( ! is_singular( 'post' ) || stc_cms_seo_plugin_active() ) {
 		return;
 	}
 	$description = get_post_meta( get_the_ID(), '_stc_seo_description', true );
@@ -1320,6 +1456,62 @@ function stc_output_cms_meta_description() {
 	}
 }
 add_action( 'wp_head', 'stc_output_cms_meta_description', 19 );
+
+/**
+ * Detect SEO plugins that own canonical, social and structured metadata output.
+ *
+ * @return bool
+ */
+function stc_cms_seo_plugin_active() {
+	return defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) || defined( 'AIOSEO_VERSION' ) || function_exists( 'aioseo' );
+}
+
+/**
+ * Output social metadata for CMS-managed posts when no SEO plugin owns it.
+ */
+function stc_output_cms_social_meta() {
+	if ( ! is_singular( 'post' ) || stc_cms_seo_plugin_active() ) {
+		return;
+	}
+	$post_id     = get_the_ID();
+	$title       = get_post_meta( $post_id, '_stc_seo_title', true );
+	$description = get_post_meta( $post_id, '_stc_seo_description', true );
+	$canonical   = get_permalink( $post_id );
+	$image       = get_the_post_thumbnail_url( $post_id, 'full' );
+	echo '<meta property="og:type" content="article">' . "\n";
+	echo '<meta property="og:title" content="' . esc_attr( $title ? $title : get_the_title( $post_id ) ) . '">' . "\n";
+	echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";
+	echo '<meta property="og:url" content="' . esc_url( $canonical ) . '">' . "\n";
+	echo '<meta name="twitter:card" content="' . ( $image ? 'summary_large_image' : 'summary' ) . '">' . "\n";
+	if ( $image ) {
+		echo '<meta property="og:image" content="' . esc_url( $image ) . '">' . "\n";
+		echo '<meta name="twitter:image" content="' . esc_url( $image ) . '">' . "\n";
+	}
+}
+add_action( 'wp_head', 'stc_output_cms_social_meta', 19 );
+
+/**
+ * Apply the stored robots policy through WordPress core's single robots tag.
+ *
+ * @param array<string, bool|string> $robots Existing directives.
+ * @return array<string, bool|string>
+ */
+function stc_filter_cms_robots( $robots ) {
+	if ( ! is_singular( 'post' ) || stc_cms_seo_plugin_active() ) {
+		return $robots;
+	}
+	$value = strtolower( (string) get_post_meta( get_the_ID(), '_stc_robots', true ) );
+	if ( false !== strpos( $value, 'noindex' ) ) {
+		$robots['noindex'] = true;
+	} elseif ( false !== strpos( $value, 'index' ) ) {
+		$robots['index'] = true;
+	}
+	if ( false !== strpos( $value, 'nofollow' ) ) {
+		$robots['nofollow'] = true;
+	}
+	return $robots;
+}
+add_filter( 'wp_robots', 'stc_filter_cms_robots' );
 
 /**
  * Apply the canonical STC SEO title to WordPress document title output.

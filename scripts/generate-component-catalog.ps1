@@ -25,6 +25,14 @@ function ConvertTo-CanonicalJson($Value, [int]$Level = 0) {
     if ($Value -is [string] -or $Value -is [char]) {
         return ($Value.ToString() | ConvertTo-Json -Compress)
     }
+    # PowerShell decorates primitive values with PSObject properties. Test numeric
+    # primitives and arrays before PSCustomObject or numbers can serialize as `{}`
+    # and arrays can expose Count/SyncRoot implementation details.
+    if ($Value -is [byte] -or $Value -is [sbyte] -or $Value -is [int16] -or $Value -is [uint16] -or
+        $Value -is [int32] -or $Value -is [uint32] -or $Value -is [int64] -or $Value -is [uint64] -or
+        $Value -is [single] -or $Value -is [double] -or $Value -is [decimal]) {
+        return $Value.ToString($null, [System.Globalization.CultureInfo]::InvariantCulture)
+    }
     if ($Value -is [System.Collections.IDictionary]) {
         $Keys = @($Value.Keys | ForEach-Object { $_.ToString() } | Sort-Object)
         if ($Keys.Count -eq 0) {
@@ -40,6 +48,16 @@ function ConvertTo-CanonicalJson($Value, [int]$Level = 0) {
         )
         return "{`n$($Entries -join ",`n")`n$Indent}"
     }
+    if ($Value -is [System.Collections.IEnumerable]) {
+        $Items = @($Value)
+        if ($Items.Count -eq 0) {
+            return "[]"
+        }
+        $Indent = "  " * $Level
+        $ChildIndent = "  " * ($Level + 1)
+        $Entries = @($Items | ForEach-Object { "$ChildIndent$(ConvertTo-CanonicalJson $_ ($Level + 1))" })
+        return "[`n$($Entries -join ",`n")`n$Indent]"
+    }
     if ($Value -is [pscustomobject]) {
         $Properties = @($Value.PSObject.Properties | Sort-Object Name)
         if ($Properties.Count -eq 0) {
@@ -54,19 +72,6 @@ function ConvertTo-CanonicalJson($Value, [int]$Level = 0) {
             }
         )
         return "{`n$($Entries -join ",`n")`n$Indent}"
-    }
-    if ($Value -is [System.Collections.IEnumerable]) {
-        $Items = @($Value)
-        if ($Items.Count -eq 0) {
-            return "[]"
-        }
-        $Indent = "  " * $Level
-        $ChildIndent = "  " * ($Level + 1)
-        $Entries = @($Items | ForEach-Object { "$ChildIndent$(ConvertTo-CanonicalJson $_ ($Level + 1))" })
-        return "[`n$($Entries -join ",`n")`n$Indent]"
-    }
-    if ($Value -is [System.IFormattable]) {
-        return $Value.ToString($null, [System.Globalization.CultureInfo]::InvariantCulture)
     }
     return ($Value.ToString() | ConvertTo-Json -Compress)
 }

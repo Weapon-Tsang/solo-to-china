@@ -59,8 +59,8 @@
                   },
                   "level": {
                     "enum": [
-                      {},
-                      {}
+                      2,
+                      3
                     ],
                     "type": "integer"
                   },

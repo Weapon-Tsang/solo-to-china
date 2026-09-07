@@ -19,6 +19,31 @@ function Read-ProjectFile([string]$Path) {
     return Get-Content -LiteralPath $FullPath -Raw
 }
 
+function Test-JsonEquivalent($Expected, $Actual) {
+    if ($null -eq $Expected -or $null -eq $Actual) { return $null -eq $Expected -and $null -eq $Actual }
+    if ($Expected -is [string] -or $Expected -is [char] -or $Expected -is [bool] -or
+        $Expected -is [byte] -or $Expected -is [sbyte] -or $Expected -is [int16] -or $Expected -is [uint16] -or
+        $Expected -is [int32] -or $Expected -is [uint32] -or $Expected -is [int64] -or $Expected -is [uint64] -or
+        $Expected -is [single] -or $Expected -is [double] -or $Expected -is [decimal]) {
+        return (($Expected | ConvertTo-Json -Compress) -ceq ($Actual | ConvertTo-Json -Compress))
+    }
+    if ($Expected -is [System.Collections.IEnumerable] -and $Expected -isnot [string]) {
+        $ExpectedItems = @($Expected); $ActualItems = @($Actual)
+        if ($ExpectedItems.Count -ne $ActualItems.Count) { return $false }
+        for ($Index = 0; $Index -lt $ExpectedItems.Count; $Index++) {
+            if (-not (Test-JsonEquivalent $ExpectedItems[$Index] $ActualItems[$Index])) { return $false }
+        }
+        return $true
+    }
+    $ExpectedNames = @($Expected.PSObject.Properties.Name | Sort-Object)
+    $ActualNames = @($Actual.PSObject.Properties.Name | Sort-Object)
+    if (($ExpectedNames -join "`n") -cne ($ActualNames -join "`n")) { return $false }
+    foreach ($Name in $ExpectedNames) {
+        if (-not (Test-JsonEquivalent $Expected.$Name $Actual.$Name)) { return $false }
+    }
+    return $true
+}
+
 $RegistryRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json"
 $ContractRaw = Read-ProjectFile "wp-content/themes/solo-to-china/content-contract/content-contract.v2.json"
 $Runtime = Read-ProjectFile "wp-content/themes/solo-to-china/inc/component-registry.php"
@@ -113,6 +138,9 @@ if ($Registry) {
             Assert-Registry ((@($PublishedComponent.requiredFields) -join ",") -eq ($ExpectedRequired -join ",")) "Published required fields drifted for $($PublishedComponent.id)."
             Assert-Registry ((@($PublishedComponent.optionalFields) -join ",") -eq ($ExpectedOptional -join ",")) "Published optional fields drifted for $($PublishedComponent.id)."
             Assert-Registry ($PublishedComponent.example.PSObject.Properties.Name -contains "data") "Published example must use type/variant/data for $($PublishedComponent.id)."
+            Assert-Registry (Test-JsonEquivalent $SourceComponent.schema $PublishedComponent.inputSchema) "Published input schema changed value or type for $($PublishedComponent.id)."
+            Assert-Registry ($PublishedComponent.interface -ceq $SourceComponent.cms_interface) "Published interface drifted for $($PublishedComponent.id)."
+            Assert-Registry ($PublishedComponent.renderMode -ceq $SourceComponent.render_mode) "Published render mode drifted for $($PublishedComponent.id)."
         }
     }
 

@@ -28,7 +28,7 @@ Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/
 
 ## Current Versions
 
-- Parent Theme: 0.27.0
+- Parent Theme: 0.28.0
 - Child Theme: 0.8.0
 - SoloToChina Tools Plugin: 0.22.0
 - Content Contract: 2.1.0

@@ -162,7 +162,7 @@ if (is_file($packageScriptPath)) {
             $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
         }
     }
-    if (strpos($packageScript, 'Theme version: 0.27.0') === false || strpos($packageScript, 'Child Theme version: 0.8.0') === false || strpos($packageScript, 'Plugin version: 0.22.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.28.0') === false || strpos($packageScript, 'Child Theme version: 0.8.0') === false || strpos($packageScript, 'Plugin version: 0.22.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -215,8 +215,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.27.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.27.0.';
+    if (strpos($themeStyle, 'Version: 0.28.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.28.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -229,7 +229,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.27.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.28.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -287,8 +287,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.27.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.27.0.';
+    if (strpos($functions, "'0.28.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.28.0.';
     }
     foreach (['stc_render_share_this_page', 'data-stc-share', 'data-stc-share-trigger', 'data-stc-share-panel'] as $shareRendererToken) {
         if (strpos($functions, $shareRendererToken) === false) {
