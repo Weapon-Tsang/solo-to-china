@@ -2,7 +2,7 @@
 
 Current Content Contract version: 2.1.0
 Current Component Registry version: 1.2.0
-Compatible Parent Theme version: 0.31.0
+Compatible Parent Theme version: 0.31.1
 
 ## Governing Boundary
 

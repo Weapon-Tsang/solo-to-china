@@ -8,9 +8,8 @@
 <footer class="stc-footer">
 	<div class="stc-footer__inner">
 		<div class="stc-footer__brand">
-			<a class="stc-brand stc-brand--footer" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<span class="stc-brand__mark">STC</span>
-				<span class="stc-brand__name">SoloToChina</span>
+			<a class="stc-brand stc-brand--footer" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'SoloToChina Home', 'solo-to-china' ); ?>">
+				<img class="stc-brand__logo stc-brand__logo--footer" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/solotochina-logo-white.png' ); ?>" width="533" height="515" alt="" loading="lazy" decoding="async">
 			</a>
 			<p>Practical China travel for independent travelers, especially solo explorers.</p>
 			<div class="stc-footer__contact">
@@ -51,7 +50,6 @@
 			<a href="<?php echo esc_url( home_url( '/affiliate-disclosure/' ) ); ?>">Affiliate Disclosure</a>
 		</nav>
 		<p class="stc-footer__principles">Guest-first. Practical. Independent.</p>
-		<span class="stc-footer__seal" aria-hidden="true">STC</span>
 	</div>
 </footer>
 <?php wp_footer(); ?>

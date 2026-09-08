@@ -56,6 +56,16 @@ body {
 	letter-spacing: -0.025em;
 }
 
+.home .stc-brand--image {
+	border-radius: 0;
+	box-shadow: none;
+	left: max(var(--stc-container-gutter), calc((100vw - var(--stc-container-max)) / 2 + var(--stc-container-gutter)));
+}
+
+.stc-brand--footer {
+	min-block-size: 0;
+}
+
 .stc-nav {
 	gap: clamp(1rem, 1.8vw, 1.5rem);
 }
@@ -304,11 +314,6 @@ body {
 .stc-footer__legal a {
 	color: #91a39a;
 	font-size: 0.75rem;
-}
-
-.stc-footer__seal {
-	background: var(--stc-color-brand);
-	border-radius: var(--stc-radius-xs);
 }
 
 @media (hover: hover) and (pointer: fine) {

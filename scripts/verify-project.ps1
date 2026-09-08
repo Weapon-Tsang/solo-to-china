@@ -61,6 +61,8 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/assets/js/main.js",
     "wp-content/themes/solo-to-china/assets/js/commercial-events.js",
     "wp-content/themes/solo-to-china/assets/images/hero-home.png",
+    "wp-content/themes/solo-to-china/assets/images/solotochina-logo-white.png",
+    "scripts/prepare-logo.py",
     "wp-content/themes/solo-to-china/assets/images/guide-card-bg.png",
     "wp-content/themes/solo-to-china/assets/images/card-beijing.png",
     "wp-content/themes/solo-to-china/assets/images/card-shanghai.png",
@@ -168,7 +170,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.31.0") -or (-not $PackageScript.Contains("Child Theme version: 0.10.0")) -or (-not $PackageScript.Contains("Plugin version: 0.25.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.31.1") -or (-not $PackageScript.Contains("Child Theme version: 0.10.1")) -or (-not $PackageScript.Contains("Plugin version: 0.25.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -266,8 +268,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.31.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.31.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.31.1")) {
+		$Failures.Add("Theme stylesheet header version is not 0.31.1.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -280,7 +282,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.31.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.31.1"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -316,6 +318,11 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Header.Contains("Skip to content")) {
         $Failures.Add("Header is missing a skip-to-content link.")
     }
+    foreach ($LogoToken in @("is_front_page()", "stc-brand__logo", "solotochina-logo-white.png")) {
+        if (-not $Header.Contains($LogoToken)) {
+            $Failures.Add("Header is missing homepage brand image behavior: $LogoToken")
+        }
+    }
     if (-not $Functions.Contains("stc_ensure_core_pages")) {
         $Failures.Add("Theme setup does not create missing core IA pages on activation.")
     }
@@ -340,8 +347,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.31.0'")) {
-		$Failures.Add("Theme asset version is not 0.31.0.")
+    if (-not $Functions.Contains("'0.31.1'")) {
+		$Failures.Add("Theme asset version is not 0.31.1.")
     }
     foreach ($SitePageToken in @("STC_SITE_PAGE_MIGRATION_VERSION", "stc_static_page_content", "stc_static_page_metadata", "stc_static_page_fallback", "admin_init", "wp_page_for_privacy_policy", "stc_get_trip_planner_url", "https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage")) {
         if (-not $Functions.Contains($SitePageToken)) {
@@ -389,7 +396,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.10.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.10.1", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -430,7 +437,7 @@ if (Test-Path -LiteralPath $ChildThemeDesignSystemPath -PathType Leaf) {
 $ChildThemeHeaderPath = Join-Path $Root "wp-content/themes/solo-to-china-child/header.php"
 if (Test-Path -LiteralPath $ChildThemeHeaderPath -PathType Leaf) {
     $ChildThemeHeader = Get-Content -LiteralPath $ChildThemeHeaderPath -Raw
-    foreach ($ChildHeaderMarkupToken in @('Skip to content', 'stc_child_render_primary_navigation', 'aria-expanded="false"', 'data-open-label', 'data-close-label')) {
+    foreach ($ChildHeaderMarkupToken in @('Skip to content', 'stc_child_render_primary_navigation', 'aria-expanded="false"', 'data-open-label', 'data-close-label', 'is_front_page()', 'stc-brand__logo', 'solotochina-logo-white.png')) {
         if (-not $ChildThemeHeader.Contains($ChildHeaderMarkupToken)) {
             $Failures.Add("Child Theme Header override is missing: $ChildHeaderMarkupToken")
         }
@@ -440,7 +447,7 @@ if (Test-Path -LiteralPath $ChildThemeHeaderPath -PathType Leaf) {
 $ChildThemeSiteCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/site.css"
 if (Test-Path -LiteralPath $ChildThemeSiteCssPath -PathType Leaf) {
     $ChildThemeSiteCss = Get-Content -LiteralPath $ChildThemeSiteCssPath -Raw
-    foreach ($ChildSiteCssToken in @('.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)')) {
+    foreach ($ChildSiteCssToken in @('.stc-header', '.home .stc-brand--image', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)')) {
         if (-not $ChildThemeSiteCss.Contains($ChildSiteCssToken)) {
             $Failures.Add("Child Theme shared site CSS is missing: $ChildSiteCssToken")
         }
@@ -495,7 +502,7 @@ foreach ($ThemePhpFile in $ThemePhpFiles) {
 $FooterPath = Join-Path $Root "wp-content/themes/solo-to-china/footer.php"
 if (Test-Path -LiteralPath $FooterPath -PathType Leaf) {
     $Footer = Get-Content -LiteralPath $FooterPath -Raw
-    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__contact", "stc-footer__bottom", "stc-footer__legal", "Privacy Policy", "Terms of Use", "Affiliate Disclosure", "Disclaimer", "Find This Place", "Taxi Card", "Ticket Booking Window", "alex@solotochina.com", "19098361987", "Guest-first. Practical. Independent.")) {
+    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__contact", "stc-footer__bottom", "stc-footer__legal", "stc-brand__logo--footer", "solotochina-logo-white.png", "Privacy Policy", "Terms of Use", "Affiliate Disclosure", "Disclaimer", "Find This Place", "Taxi Card", "Ticket Booking Window", "alex@solotochina.com", "19098361987", "Guest-first. Practical. Independent.")) {
         if (-not $Footer.Contains($FooterToken)) {
             $Failures.Add("Footer does not preserve the selected homepage-reference footer token: $FooterToken")
         }
@@ -505,6 +512,9 @@ if (Test-Path -LiteralPath $FooterPath -PathType Leaf) {
     }
     if ($Footer.Contains("stc-footer__social")) {
         $Failures.Add("Footer still contains placeholder social controls.")
+    }
+    if ($Footer.Contains("stc-footer__seal")) {
+        $Failures.Add("Footer still contains the superseded STC seal.")
     }
 }
 
@@ -822,12 +832,12 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing refined tool-card styling: $ToolCardStyle")
         }
     }
-    foreach ($StyleToken in @(".home .stc-header", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner__icon", ".stc-ticket-band__icon", "scroll-snap-type")) {
+    foreach ($StyleToken in @(".home .stc-header", ".home .stc-brand--image", ".stc-brand__logo", ".stc-header", "box-shadow", ".stc-page-hero--visual", ".stc-planner__icon", ".stc-ticket-band__icon", "scroll-snap-type")) {
         if (-not $ThemeCss.Contains($StyleToken)) {
             $Failures.Add("Theme CSS is missing selected homepage visual style token: $StyleToken")
         }
     }
-    foreach ($FooterStyleToken in @(".stc-footer__inner", ".stc-footer__contact", ".stc-footer__bottom")) {
+    foreach ($FooterStyleToken in @(".stc-footer__inner", ".stc-footer__contact", ".stc-footer__bottom", ".stc-brand__logo--footer")) {
         if (-not $ThemeCss.Contains($FooterStyleToken)) {
             $Failures.Add("Theme CSS is missing selected homepage-reference footer style token: $FooterStyleToken")
         }
@@ -901,6 +911,9 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
         if (-not $ThemeCss.Contains($MobileGridStyleToken)) {
             $Failures.Add("Theme CSS is missing requested four-card fold or page-utility style: $MobileGridStyleToken")
         }
+    }
+    if ($ThemeCss.Contains(".stc-footer__seal")) {
+        $Failures.Add("Theme CSS still contains the superseded Footer STC seal styling.")
     }
     foreach ($RemovedHeightRevealStyle in @("--stc-guide-collapsed-height", "--stc-guide-expanded-height", "transition: max-height", "max-height: var(--stc-guide")) {
         if ($ThemeCss.Contains($RemovedHeightRevealStyle)) {

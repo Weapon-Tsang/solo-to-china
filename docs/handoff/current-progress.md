@@ -37,7 +37,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.31.0`.
+Current theme version: `0.31.1`.
 
 Content Contract Phase A is complete and has been superseded by the Contract 2.1 responsibility model documented below:
 
@@ -48,12 +48,13 @@ Content Contract Phase A is complete and has been superseded by the Contract 2.1
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks cover Contract `2.1.0`, Registry `1.2.0`, Theme `0.31.0`, four taxonomy-only guide types, 24 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
+- Real Playground REST checks cover Contract `2.1.0`, Registry `1.2.0`, Theme `0.31.1`, four taxonomy-only guide types, 24 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
 
 - Transparent header over the hero image.
+- The homepage Header and Footer use the supplied SoloToChina artwork as a true-alpha white logo with the red seal and orange sun preserved; it blends into dark backgrounds without a card, intrinsic dimensions prevent layout shift, and the mobile menu remains isolated on the right.
 - Non-home header uses the same brand/navigation language with readable dark text on a white surface.
 - Reduced hero copy density.
 - Mobile Hero uses bounded 75vh framing (480-580px), bottom-positioned 32px copy over a smooth dark scrim, a 46px vermilion CTA, and a glass menu button so Survival Kit begins within the first viewport.
@@ -125,7 +126,7 @@ Share This Page is available without login when the CMS explicitly enables `_stc
 
 ## Child Theme Status
 
-Current Child Theme version: `0.10.0`.
+Current Child Theme version: `0.10.1`.
 
 Content Component System Phase B is complete:
 
@@ -193,7 +194,7 @@ Formal Frontend to CMS Capability Contract is complete:
 
 Affiliate Capability Upgrade is complete in the working tree:
 
-- Component Registry `1.2.0`, Content Contract `2.1.0`, Parent Theme `0.31.0`, and Child Theme `0.10.0` publish 24 CMS capabilities, including 21 ordered page blocks.
+- Component Registry `1.2.0`, Content Contract `2.1.0`, Parent Theme `0.31.1`, and Child Theme `0.10.1` publish 24 CMS capabilities, including 21 ordered page blocks.
 - Publish Package `1.0.0` is available at `contracts/cms-publish-package.schema.json` and `GET /wp-json/stc/v1/cms-publish-package-schema`.
 - Authenticated `POST /wp-json/stc/v1/cms-articles` and `PUT /wp-json/stc/v1/cms-articles/{post_id}` now create or update draft-only WordPress articles from CMS Page Payloads.
 - The adapter revalidates the deployed Contract, serializes static/semantic content to editable Gutenberg blocks and dynamic content to renderer-owned shortcode blocks, maps presentation metadata, stores SEO/GEO/provenance, and rejects non-draft overwrites.

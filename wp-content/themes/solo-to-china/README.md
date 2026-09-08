@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.31.0`.
+Current version: `0.31.1`.
 
 ## Responsibility
 
@@ -39,7 +39,7 @@ The CMS delivery adapter accepts `contracts/cms-publish-package.schema.json` at 
 
 The Theme does not own vision providers, place/address data, destination resolution, Ticket data, booking-window calculations, or tool validation. Those responsibilities remain in `wp-content/plugins/solo-to-china-tools/`. The `destination_card` and legacy `ticket_reminder` component IDs are thin Plugin adapters.
 
-Version `0.31.0` adds overflow-safe branded sharing for WhatsApp, Facebook, Reddit, X, Instagram, system apps, and copied links. Version `0.30.0` added the Registry-driven Destination Card adapter and Tools directory integration. Existing pages and administrator-edited content are never overwritten.
+Version `0.31.1` replaces the homepage and Footer text marks with a true-alpha, white-on-dark SoloToChina artwork, using intrinsic dimensions and responsive, non-overlapping placement without a background card. Version `0.31.0` added overflow-safe branded sharing for WhatsApp, Facebook, Reddit, X, Instagram, system apps, and copied links. Existing pages and administrator-edited content are never overwritten.
 
 The theme should not own tool business logic.
 

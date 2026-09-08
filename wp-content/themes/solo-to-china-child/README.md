@@ -1,8 +1,8 @@
 # SoloToChina Child Theme
 
-Current version: `0.10.0`
+Current version: `0.10.1`
 
-This Child Theme is the presentation layer for the SoloToChina `0.31.0` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
+This Child Theme is the presentation layer for the SoloToChina `0.31.1` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
 
 ## Installation
 
@@ -22,7 +22,7 @@ The article stylesheet targets the generic `.stc-article-hero`, `.stc-article-la
 
 Share This Page is styled as a compact utility action rather than a booking CTA. Desktop/fine-pointer devices use the branded popover; mobile/coarse-pointer devices try native Web Share first and use the branded bottom sheet if unavailable or unsuccessful.
 
-Version `0.10.0` adds token-driven, overflow-safe Find This Place and Taxi Card presentation, including high-contrast full-screen Driver Mode. Version `0.9.1` refines the Share popover and mobile bottom sheet with consistent icons, clearer hierarchy, and overflow-safe controls.
+Version `0.10.1` aligns the transparent white homepage logo with the Hero content and removes card-like decoration while keeping the mobile menu and Hero title unobstructed. It also normalizes the matching Footer mark. Version `0.10.0` added token-driven, overflow-safe Find This Place and Taxi Card presentation, including high-contrast full-screen Driver Mode.
 
 ## Asset order
 

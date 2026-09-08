@@ -23,8 +23,8 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.31.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.10.0` in `wp-content/themes/solo-to-china-child/`.
+- Custom SoloToChina theme `0.31.1` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.10.1` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.25.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
@@ -40,7 +40,7 @@ The Theme Registry at `wp-content/themes/solo-to-china/content-contract/componen
 
 Registry `1.2.0` adds the backward-compatible `destination_card` page block. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`.
 
-Parent Theme `0.31.0` preserves the authenticated, draft-only CMS delivery path and adds overflow-safe branded sharing for WhatsApp, Facebook, Reddit, X, Instagram, system apps, and copied links. Tools Plugin `0.25.0` expands privacy-first Find This Place to one-to-four same-location photos while retaining Taxi Card and the stateless Ticket Booking Window. Content Contract `2.1.0` remains compatible through stable component IDs.
+Parent Theme `0.31.1` adds the supplied SoloToChina artwork as a transparent white homepage and Footer logo while preserving the authenticated, draft-only CMS delivery path and overflow-safe branded sharing. Child Theme `0.10.1` integrates the responsive mark into the photographic Hero without a background card. Tools Plugin `0.25.0` retains one-to-four-photo Find This Place, Taxi Card, and the stateless Ticket Booking Window. Content Contract `2.1.0` remains compatible through stable component IDs.
 
 Generate install artifacts with:
 

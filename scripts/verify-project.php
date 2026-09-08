@@ -63,6 +63,8 @@ $requiredFiles = [
     'wp-content/themes/solo-to-china/assets/js/main.js',
     'wp-content/themes/solo-to-china/assets/js/commercial-events.js',
     'wp-content/themes/solo-to-china/assets/images/hero-home.png',
+    'wp-content/themes/solo-to-china/assets/images/solotochina-logo-white.png',
+    'scripts/prepare-logo.py',
     'wp-content/themes/solo-to-china/assets/images/guide-card-bg.png',
     'wp-content/themes/solo-to-china/assets/images/card-beijing.png',
     'wp-content/themes/solo-to-china/assets/images/card-shanghai.png',
@@ -170,7 +172,7 @@ if (is_file($packageScriptPath)) {
             $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
         }
     }
-    if (strpos($packageScript, 'Theme version: 0.31.0') === false || strpos($packageScript, 'Child Theme version: 0.10.0') === false || strpos($packageScript, 'Plugin version: 0.25.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.31.1') === false || strpos($packageScript, 'Child Theme version: 0.10.1') === false || strpos($packageScript, 'Plugin version: 0.25.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -223,8 +225,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.31.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.31.0.';
+    if (strpos($themeStyle, 'Version: 0.31.1') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.31.1.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -237,7 +239,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.31.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.31.1`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -271,6 +273,11 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($header, 'Skip to content') === false) {
         $failures[] = 'Header is missing a skip-to-content link.';
     }
+    foreach (['is_front_page()', 'stc-brand__logo', 'solotochina-logo-white.png'] as $logoToken) {
+        if (strpos($header, $logoToken) === false) {
+            $failures[] = 'Header is missing homepage brand image behavior: ' . $logoToken;
+        }
+    }
     if (strpos($functions, 'stc_ensure_core_pages') === false) {
         $failures[] = 'Theme setup does not create missing core IA pages on activation.';
     }
@@ -295,8 +302,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.31.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.31.0.';
+    if (strpos($functions, "'0.31.1'") === false) {
+        $failures[] = 'Theme asset version is not 0.31.1.';
     }
     foreach (['STC_SITE_PAGE_MIGRATION_VERSION', 'stc_static_page_content', 'stc_static_page_metadata', 'stc_static_page_fallback', 'admin_init', 'wp_page_for_privacy_policy', 'stc_get_trip_planner_url', 'https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage'] as $sitePageToken) {
         if (strpos($functions, $sitePageToken) === false) {
@@ -339,7 +346,7 @@ $childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo
 $childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
 if (is_file($childThemeStylePath)) {
     $childThemeStyle = file_get_contents($childThemeStylePath);
-    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.10.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.10.1', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
         if (strpos($childThemeStyle, $childHeaderToken) === false) {
             $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
         }
@@ -372,7 +379,7 @@ if (is_file($childThemeDesignSystemPath)) {
 $childThemeHeaderPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/header.php';
 if (is_file($childThemeHeaderPath)) {
     $childThemeHeader = file_get_contents($childThemeHeaderPath);
-    foreach (['Skip to content', 'stc_child_render_primary_navigation', 'aria-expanded="false"', 'data-open-label', 'data-close-label'] as $childHeaderMarkupToken) {
+    foreach (['Skip to content', 'stc_child_render_primary_navigation', 'aria-expanded="false"', 'data-open-label', 'data-close-label', 'is_front_page()', 'stc-brand__logo', 'solotochina-logo-white.png'] as $childHeaderMarkupToken) {
         if (strpos($childThemeHeader, $childHeaderMarkupToken) === false) {
             $failures[] = "Child Theme Header override is missing: {$childHeaderMarkupToken}";
         }
@@ -382,7 +389,7 @@ if (is_file($childThemeHeaderPath)) {
 $childThemeSiteCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/site.css';
 if (is_file($childThemeSiteCssPath)) {
     $childThemeSiteCss = file_get_contents($childThemeSiteCssPath);
-    foreach (['.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)'] as $childSiteCssToken) {
+    foreach (['.stc-header', '.home .stc-brand--image', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)'] as $childSiteCssToken) {
         if (strpos($childThemeSiteCss, $childSiteCssToken) === false) {
             $failures[] = "Child Theme shared site CSS is missing: {$childSiteCssToken}";
         }
@@ -420,7 +427,7 @@ foreach ($themePhpFiles as $themePhpFile) {
 $footerPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/footer.php';
 if (is_file($footerPath)) {
     $footer = file_get_contents($footerPath);
-    foreach (['stc-footer__inner', 'stc-footer__contact', 'stc-footer__bottom', 'stc-footer__legal', 'Privacy Policy', 'Terms of Use', 'Affiliate Disclosure', 'Disclaimer', 'Find This Place', 'Taxi Card', 'Ticket Booking Window', 'alex@solotochina.com', '19098361987', 'Guest-first. Practical. Independent.'] as $footerToken) {
+    foreach (['stc-footer__inner', 'stc-footer__contact', 'stc-footer__bottom', 'stc-footer__legal', 'stc-brand__logo--footer', 'solotochina-logo-white.png', 'Privacy Policy', 'Terms of Use', 'Affiliate Disclosure', 'Disclaimer', 'Find This Place', 'Taxi Card', 'Ticket Booking Window', 'alex@solotochina.com', '19098361987', 'Guest-first. Practical. Independent.'] as $footerToken) {
         if (strpos($footer, $footerToken) === false) {
             $failures[] = "Footer does not preserve the selected homepage-reference footer token: {$footerToken}";
         }
@@ -430,6 +437,9 @@ if (is_file($footerPath)) {
     }
     if (strpos($footer, 'stc-footer__social') !== false) {
         $failures[] = 'Footer still contains placeholder social controls.';
+    }
+    if (strpos($footer, 'stc-footer__seal') !== false) {
+        $failures[] = 'Footer still contains the superseded STC seal.';
     }
 }
 
@@ -737,12 +747,12 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing refined tool-card styling: {$toolCardStyle}";
         }
     }
-    foreach (['.home .stc-header', '.stc-header', 'box-shadow', '.stc-page-hero--visual', '.stc-planner__icon', '.stc-ticket-band__icon', 'scroll-snap-type'] as $styleToken) {
+    foreach (['.home .stc-header', '.home .stc-brand--image', '.stc-brand__logo', '.stc-header', 'box-shadow', '.stc-page-hero--visual', '.stc-planner__icon', '.stc-ticket-band__icon', 'scroll-snap-type'] as $styleToken) {
         if (strpos($themeCss, $styleToken) === false) {
             $failures[] = "Theme CSS is missing selected homepage visual style token: {$styleToken}";
         }
     }
-    foreach (['.stc-footer__inner', '.stc-footer__contact', '.stc-footer__bottom'] as $footerStyleToken) {
+    foreach (['.stc-footer__inner', '.stc-footer__contact', '.stc-footer__bottom', '.stc-brand__logo--footer'] as $footerStyleToken) {
         if (strpos($themeCss, $footerStyleToken) === false) {
             $failures[] = "Theme CSS is missing selected homepage-reference footer style token: {$footerStyleToken}";
         }
@@ -816,6 +826,9 @@ if (is_file($themeCssPath)) {
         if (strpos($themeCss, $mobileGridStyleToken) === false) {
             $failures[] = "Theme CSS is missing requested four-card fold or page-utility style: {$mobileGridStyleToken}";
         }
+    }
+    if (strpos($themeCss, '.stc-footer__seal') !== false) {
+        $failures[] = 'Theme CSS still contains the superseded Footer STC seal styling.';
     }
     foreach (['--stc-guide-collapsed-height', '--stc-guide-expanded-height', 'transition: max-height', 'max-height: var(--stc-guide'] as $removedHeightRevealStyle) {
         if (strpos($themeCss, $removedHeightRevealStyle) !== false) {

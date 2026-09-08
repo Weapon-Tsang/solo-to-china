@@ -1,6 +1,6 @@
 {
   "contract_version": "2.1.0",
-  "theme_version": "0.31.0",
+  "theme_version": "0.31.1",
   "principles": {
     "frontend": "Render what CMS requests.",
     "cms": "Decide what the page contains.",
