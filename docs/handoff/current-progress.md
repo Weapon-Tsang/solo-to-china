@@ -37,7 +37,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.29.0`.
+Current theme version: `0.29.1`.
 
 Content Contract Phase A is complete and has been superseded by the Contract 2.1 responsibility model documented below:
 
@@ -48,7 +48,7 @@ Content Contract Phase A is complete and has been superseded by the Contract 2.1
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.29.0`, four taxonomy-only guide types, 23 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
+- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.29.1`, four taxonomy-only guide types, 23 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
@@ -125,7 +125,7 @@ Share This Page is available without login when the CMS explicitly enables `_stc
 
 ## Child Theme Status
 
-Current Child Theme version: `0.9.0`.
+Current Child Theme version: `0.9.1`.
 
 Content Component System Phase B is complete:
 
@@ -149,7 +149,7 @@ Content Component System Phase C is complete:
 
 Content Component System Phase D is complete:
 
-- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.9.0` replaces it with a Design System/Content Component editor canvas.
+- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.9.1` replaces it with a Design System/Content Component editor canvas.
 - Server-side H2 anchor generation preserves explicit public anchors, adds readable IDs when absent, and suffixes duplicates before JavaScript enhancement.
 - Child Theme adds responsive WordPress Media styling for context, evidence, illustration, and decorative roles without forcing image ratios or publishing internal provenance.
 - Playground creates a real ephemeral Media attachment from a project image and stores Gutenberg-valid Core Image markup, rather than hardcoding an external image or Custom HTML block.
@@ -174,7 +174,7 @@ Page Architecture Responsibility Refactor is complete:
 - Topic-wide fixed Gutenberg article patterns were removed; reusable component patterns remain.
 - The complete Save/Saved Guides and Ticket Reminder systems are removed, including localStorage, JSON import/export, ICS/calendar output, and browser reminder management.
 - Share This Page replaces Save Guide as a stateless utility. Desktop uses the branded popover; mobile uses `navigator.share()` first and falls back to the accessible bottom sheet.
-- Child Theme `0.9.0` uses generic Hero/Layout/TOC selectors and a compact Share utility with desktop popover and mobile bottom-sheet presentation.
+- Child Theme `0.9.1` uses generic Hero/Layout/TOC selectors and a compact, overflow-safe Share utility with desktop popover and mobile bottom-sheet presentation.
 
 Frontend Component Registry and Catalog are complete:
 
@@ -193,7 +193,7 @@ Formal Frontend to CMS Capability Contract is complete:
 
 Affiliate Capability Upgrade is complete in the working tree:
 
-- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.29.0`, and Child Theme `0.9.0` publish 23 CMS capabilities, including 20 ordered page blocks.
+- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.29.1`, and Child Theme `0.9.1` publish 23 CMS capabilities, including 20 ordered page blocks.
 - Publish Package `1.0.0` is available at `contracts/cms-publish-package.schema.json` and `GET /wp-json/stc/v1/cms-publish-package-schema`.
 - Authenticated `POST /wp-json/stc/v1/cms-articles` and `PUT /wp-json/stc/v1/cms-articles/{post_id}` now create or update draft-only WordPress articles from CMS Page Payloads.
 - The adapter revalidates the deployed Contract, serializes static/semantic content to editable Gutenberg blocks and dynamic content to renderer-owned shortcode blocks, maps presentation metadata, stores SEO/GEO/provenance, and rejects non-draft overwrites.

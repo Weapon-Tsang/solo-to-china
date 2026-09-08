@@ -1,8 +1,8 @@
 # SoloToChina Child Theme
 
-Current version: `0.9.0`
+Current version: `0.9.1`
 
-This Child Theme is the presentation layer for the SoloToChina `0.29.0` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
+This Child Theme is the presentation layer for the SoloToChina `0.29.1` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
 
 ## Installation
 
@@ -22,7 +22,7 @@ The article stylesheet targets the generic `.stc-article-hero`, `.stc-article-la
 
 Share This Page is styled as a compact utility action rather than a booking CTA. Desktop/fine-pointer devices use the branded popover; mobile/coarse-pointer devices try native Web Share first and use the branded bottom sheet if unavailable or unsuccessful.
 
-Version `0.9.0` adds the restrained 60-75ch support/legal page shell, the responsive Footer information architecture, and the short per-card Guide Grid reveal motion. Container height is never animated and reduced-motion users receive no reveal animation.
+Version `0.9.1` refines the Share popover and mobile bottom sheet with consistent icons, clearer hierarchy, and overflow-safe controls. Version `0.9.0` adds the restrained 60-75ch support/legal page shell, the responsive Footer information architecture, and the short per-card Guide Grid reveal motion. Container height is never animated and reduced-motion users receive no reveal animation.
 
 ## Asset order
 

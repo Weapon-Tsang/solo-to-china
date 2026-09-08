@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.29.0`.
+Current version: `0.29.1`.
 
 ## Responsibility
 
@@ -39,7 +39,7 @@ The CMS delivery adapter accepts `contracts/cms-publish-package.schema.json` at 
 
 The Theme does not own Ticket data, booking-window calculations, or validation. Those responsibilities remain in `wp-content/plugins/solo-to-china-tools/`. The legacy `ticket_reminder` component ID is retained only as a compatibility adapter for the stateless Ticket Booking Window.
 
-Version `0.29.0` also provides a reusable, non-measuring Guide Grid controller; a single Trip.Planner URL helper; the redesigned Footer; and an idempotent, versioned admin migration for About, Contact, Privacy Policy, Terms of Use, Affiliate Disclosure, and Disclaimer pages. Existing pages and administrator-edited content are never overwritten. If an unpublished page already reserves one of those slugs, the public URL uses a read-only Theme fallback until the administrator publishes the page.
+Version `0.29.1` isolates Share panel styles from page Hero rules and uses an overflow-safe action layout. Version `0.29.0` also provides a reusable, non-measuring Guide Grid controller; a single Trip.Planner URL helper; the redesigned Footer; and an idempotent, versioned admin migration for About, Contact, Privacy Policy, Terms of Use, Affiliate Disclosure, and Disclaimer pages. Existing pages and administrator-edited content are never overwritten. If an unpublished page already reserves one of those slugs, the public URL uses a read-only Theme fallback until the administrator publishes the page.
 
 The theme should not own tool business logic.
 

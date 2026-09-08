@@ -23,8 +23,8 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.29.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.9.0` in `wp-content/themes/solo-to-china-child/`.
+- Custom SoloToChina theme `0.29.1` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.9.1` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.23.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
@@ -39,7 +39,7 @@ The Theme Registry at `wp-content/themes/solo-to-china/content-contract/componen
 
 Registry `1.1.0` adds four QA-selected Commercial Blocks: Affiliate Booking Card, Search Card, Banner, and Promotion Card. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`. Privacy-minimal impression/click events post only to the same-origin `POST /wp-json/stc/v1/commercial-events` relay; server forwarding is disabled until its environment variables are configured.
 
-Parent Theme `0.29.0` preserves the authenticated, draft-only CMS delivery path and adds the UX/foundation cleanup: instant mobile Guide Grid toggling without height measurement, branded desktop and native-first mobile sharing, a single Trip.Planner destination helper, versioned static-page bootstrap, and a complete Footer information architecture. Tools Plugin `0.23.0` replaces Ticket Reminder with a stateless Ticket Booking Window and removes all reminder persistence, JSON, and calendar behavior. Content Contract `2.1.0` remains compatible through the historical `ticket_reminder` adapter ID.
+Parent Theme `0.29.1` preserves the authenticated, draft-only CMS delivery path and includes the UX/foundation cleanup plus an overflow-safe Share panel. Tools Plugin `0.23.0` replaces Ticket Reminder with a stateless Ticket Booking Window and removes all reminder persistence, JSON, and calendar behavior. Content Contract `2.1.0` remains compatible through the historical `ticket_reminder` adapter ID.
 
 Generate install artifacts with:
 

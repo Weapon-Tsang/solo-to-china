@@ -109,7 +109,7 @@ Also check:
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.29.0`, verify these public read-only endpoints:
+After installing Parent Theme `0.29.1`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`

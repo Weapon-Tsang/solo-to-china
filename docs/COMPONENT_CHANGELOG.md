@@ -8,6 +8,17 @@ Versioning follows semantic compatibility:
 - Minor: backward-compatible component, optional field, or variant additions.
 - Major: removed/renamed capabilities, newly required fields, incompatible schemas, or changed semantics.
 
+## Parent Theme 0.29.1 / Child Theme 0.9.1 - 2026-09-08
+
+### Changed
+
+- Isolated Share panel typography and controls from page Hero selectors, replaced the cramped three-column action row with an overflow-safe two-column layout, and made Copy Link span the full row.
+- Simplified the Share trigger and panel copy, standardized channel icons, and retained the native-first mobile flow plus keyboard and clipboard behavior.
+
+### Compatibility
+
+- Content Contract remains `2.1.0` and Component Registry remains `1.1.0`; CMS output does not need to change.
+
 ## Parent Theme 0.29.0 / Child Theme 0.9.0 / Tools Plugin 0.23.0 - 2026-09-08
 
 ### Changed
