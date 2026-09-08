@@ -43,7 +43,7 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `comparison_table` | Comparison Table | information | `page_block` | `stable` | default | Compares options with native table semantics and local mobile scrolling. |
 | `faq` | FAQ | information | `page_block` | `stable` | default | Presents explicit questions and complete answers through native disclosures. |
 | `planner_cta` | Planner CTA | travel | `page_block` | `stable` | default | Offers a contextual trip-planning action selected by the CMS. |
-| `ticket_reminder` | Ticket Reminder | travel | `page_block` | `stable` | default | Delegates attraction timing and reminder behavior to SoloToChina Tools. |
+| `ticket_reminder` | Ticket Booking Window | travel | `page_block` | `stable` | default | Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias. |
 | `affiliate_cta` | Affiliate CTA | commercial | `page_block` | `stable` | default | Renders a restrained contextual commercial action with visible disclosure. |
 | `affiliate_booking_card` | Affiliate Booking Card | commercial | `page_block` | `stable` | default | Renders a CMS-selected high-intent Trip.com deep or category link after QA. |
 | `affiliate_search_card` | Affiliate Search Card | commercial | `page_block` | `stable` | link, search_box | Renders a CMS-selected Trip.com search link or allowlisted structured search box. |
@@ -848,17 +848,17 @@ Example:
 }
 ```
 
-### `ticket_reminder` — Ticket Reminder
+### `ticket_reminder` — Ticket Booking Window
 
 - Category: `travel`
 - Status: `stable`
 - CMS usable: `true` via `page_block`
-- Purpose: Delegates attraction timing and reminder behavior to SoloToChina Tools.
+- Purpose: Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias.
 - Variants: `default`
 - Required fields: `attraction_slug`
 - Optional fields: `title`, `description`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/functions.php`, `wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php`
-- Accessibility: The Plugin owns labels, validation, status announcements, and reminder controls.
+- Accessibility: The Plugin owns labels, date validation, status announcements, and booking-timing output.
 - Responsive behavior: Delegated form controls stack and retain touch targets on mobile.
 
 Schema:

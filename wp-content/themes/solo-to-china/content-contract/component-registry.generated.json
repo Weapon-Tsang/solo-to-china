@@ -843,13 +843,13 @@
         "type": "object"
       },
       "interface": "page_block",
-      "name": "Ticket Reminder",
+      "name": "Ticket Booking Window",
       "optionalFields": [
         "title",
         "description",
         "anchor"
       ],
-      "purpose": "Delegates attraction timing and reminder behavior to SoloToChina Tools.",
+      "purpose": "Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias.",
       "renderMode": "shortcode",
       "requiredFields": [
         "attraction_slug"

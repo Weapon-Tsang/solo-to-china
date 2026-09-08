@@ -197,6 +197,84 @@ body {
 	max-width: 19rem;
 }
 
+.stc-footer__contact {
+	display: grid;
+	gap: 0.25rem;
+	margin-top: var(--stc-space-4);
+}
+
+.stc-footer__contact a {
+	min-height: 2.75rem;
+	padding-block: 0.65rem;
+	text-decoration: none;
+}
+
+.stc-static-page__breadcrumb {
+	align-items: center;
+	color: var(--stc-color-muted);
+	display: flex;
+	font-size: 0.75rem;
+	font-weight: 700;
+	gap: 0.5rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.stc-static-page__breadcrumb a {
+	color: var(--stc-color-jade);
+	text-decoration: none;
+}
+
+.stc-page-hero .stc-static-page__breadcrumb span {
+	color: inherit;
+	font-size: inherit;
+}
+
+.stc-static-page {
+	margin: 0 auto;
+	max-width: 75ch;
+	padding: clamp(2.5rem, 7vw, 5rem) var(--stc-container-gutter) clamp(4rem, 8vw, 7rem);
+}
+
+.stc-static-page__content {
+	color: var(--stc-color-ink-soft);
+	font-size: 1.0625rem;
+	line-height: 1.75;
+}
+
+.stc-static-page__content > :first-child {
+	margin-top: 0;
+}
+
+.stc-static-page__content h2 {
+	border-top: 1px solid var(--stc-color-line);
+	color: var(--stc-color-ink);
+	font-family: var(--stc-font-display);
+	font-size: clamp(1.5rem, 3vw, 2rem);
+	letter-spacing: -0.02em;
+	margin: clamp(2.5rem, 6vw, 4rem) 0 1rem;
+	padding-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.stc-static-page__content :where(p, ul, dl) {
+	margin-block: 0 1.25rem;
+}
+
+.stc-static-page__content dt {
+	color: var(--stc-color-ink);
+	font-weight: 750;
+}
+
+.stc-static-page__content dd {
+	margin: 0 0 1rem;
+}
+
+.stc-page-hero .stc-share__trigger {
+	background: var(--stc-color-surface);
+	border-color: var(--stc-color-line);
+	color: var(--stc-color-jade);
+}
+
 .stc-footer h2 {
 	font-family: var(--stc-font-sans);
 	font-size: 0.75rem;
@@ -214,11 +292,6 @@ body {
 	line-height: 1.45;
 	padding-block: 0.4375rem;
 	transition: color var(--stc-motion-duration-fast) var(--stc-motion-ease-standard);
-}
-
-/* Decorative, non-interactive placeholder social glyphs are hidden until real links exist. */
-.stc-footer__socials {
-	display: none;
 }
 
 .stc-footer__bottom {

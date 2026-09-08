@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.8.0' );
+define( 'STC_CHILD_VERSION', '0.9.0' );
 
 /**
  * Replace the Parent fallback editor stylesheet with the Child visual system.
@@ -68,7 +68,7 @@ function stc_child_enqueue_assets() {
 		);
 	}
 
-	if ( is_single() || $is_component_gallery ) {
+	if ( is_singular() || $is_component_gallery ) {
 		wp_enqueue_style(
 			'stc-child-article',
 			get_stylesheet_directory_uri() . '/assets/css/article.css',

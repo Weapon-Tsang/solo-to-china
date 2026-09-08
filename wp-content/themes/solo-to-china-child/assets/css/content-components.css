@@ -448,11 +448,6 @@
 	background: var(--stc-color-jade);
 }
 
-.stc-dynamic-component--ticket .stc-ticket-tool > button[type="button"] {
-	background: var(--stc-color-ink-soft);
-}
-
-.stc-dynamic-component--ticket .stc-reminder-list,
 .stc-dynamic-component--ticket .stc-ticket-result {
 	border-color: var(--stc-color-line);
 }

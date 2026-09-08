@@ -1,6 +1,6 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-09-03
+Date: 2026-09-08
 
 ## Current Working Boundary
 
@@ -37,7 +37,7 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.28.0`.
+Current theme version: `0.29.0`.
 
 Content Contract Phase A is complete and has been superseded by the Contract 2.1 responsibility model documented below:
 
@@ -48,7 +48,7 @@ Content Contract Phase A is complete and has been superseded by the Contract 2.1
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.28.0`, four taxonomy-only guide types, 23 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
+- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.29.0`, four taxonomy-only guide types, 23 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
@@ -59,11 +59,11 @@ The custom theme implements the approved image-led homepage direction:
 - Mobile Hero uses bounded 75vh framing (480-580px), bottom-positioned 32px copy over a smooth dark scrim, a 46px vermilion CTA, and a glass menu button so Survival Kit begins within the first viewport.
 - Survival Kit strip.
 - City Guides and Attraction Guides image cards.
-- Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Date & Availability, FAQ, and Footer.
+- Homepage section order is locked to the approved reference: Hero, Survival Kit, City Guides, Attraction Guides, Planner, Ticket Booking Window, FAQ, and Footer.
 - The homepage no longer inserts Latest Guides between Attraction Guides and Planner; current posts remain available on their matching landing pages and archives.
 - Mobile Survival Kit is a single-row, five-column app shortcut strip with compact labels, full-item links, 40px icon badges, and touch feedback from 360px upward.
 - City Guides and Attraction Guides share a two-column mobile grid that displays four complete cards before a compact frosted capsule button placed below the second row.
-- Each guide-grid button reports the remaining item count, moves focus to the first newly revealed card, and fades away as the remaining cards expand smoothly.
+- Each guide-grid button reports the remaining item count, instantly toggles cards five onward, and changes to Show fewer without measuring or animating container height, moving focus, or scrolling the page.
 - Survival Kit and city subtitles stay on one line, Survival Kit dividers are centered at 60% height, and attraction badges use smaller type.
 - Guide-list cards and articles do not expose guide-saving controls; Share This Page is the stateless article utility.
 - Homepage and landing guide cards now use distinct 960x1200 WebP assets with centered `object-fit: cover`, smooth contrast scrims, and 3:4 mobile framing.
@@ -76,11 +76,11 @@ The custom theme implements the approved image-led homepage direction:
 - Planner reuses the approved homepage calendar icon, Trip.com disclosure block, and watercolor artwork on desktop and mobile.
 - FAQ uses polished two-column desktop and one-column mobile accordions with related internal links.
 - FAQ now uses borderless single-line dividers, 16px medium-weight titles, 18px rotating SVG chevrons, and 1.6-line-height answers.
-- Footer now uses solid deep ink, higher-contrast text, 36px social icon circles, two-column mobile navigation, and a centered legal/copyright area.
+- Footer now uses solid deep ink, real email and WhatsApp destinations, clear Explore/Tools/Help/About groups, two-column mobile navigation, and a complete legal area. Placeholder social icons were removed.
 - Category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
 - Planner band.
-- Homepage Planner CTA opens Trip.com as a sponsored external link.
-- Ticket Date & Availability band.
+- Homepage and Planner-page CTAs use the shared `stc_get_trip_planner_url()` helper and open `https://www.trip.com/tripplanner` as sponsored external links.
+- Ticket Booking Window band.
 - FAQ section.
 - Footer.
 - Keyboard focus styling and skip-to-content link.
@@ -106,6 +106,14 @@ Core IA pages are created on theme activation if missing:
 - Planner
 - Tools
 - FAQ
+- About SoloToChina
+- Contact
+- Privacy Policy
+- Terms of Use
+- Affiliate Disclosure
+- Disclaimer
+
+Theme `0.29.0` also runs this idempotent bootstrap through a versioned one-time admin migration for already-active upgrades. Repeated runs do not duplicate pages, existing page content/status is never overwritten, and an existing WordPress privacy-page setting is preserved. When an unpublished page already reserves a required slug, a read-only Theme fallback keeps the public URL available until the administrator publishes the page.
 
 Core guide categories are created on theme activation if missing:
 
@@ -113,11 +121,11 @@ Core guide categories are created on theme activation if missing:
 - City Guides
 - Attraction Guides
 
-Share This Page is available without login when the CMS explicitly enables `_stc_show_share`. It uses the canonical URL, prioritizes the Web Share API, and provides an accessible copy/channel fallback without account or browser-storage state.
+Share This Page is available without login when the CMS explicitly enables `_stc_show_share`. Desktop/fine-pointer devices always use the branded popover; mobile/coarse-pointer devices try native Web Share first and use the branded bottom sheet on unsupported or failed calls. The canonical WhatsApp, email, copy, clipboard-fallback, Escape, outside-click, focus-return, and focus-loop behaviors remain available without account or browser-storage state.
 
 ## Child Theme Status
 
-Current Child Theme version: `0.8.0`.
+Current Child Theme version: `0.9.0`.
 
 Content Component System Phase B is complete:
 
@@ -131,17 +139,17 @@ Content Component System Phase B is complete:
 
 Content Component System Phase C is complete:
 
-- Parent Theme adds safe renderers for Planner CTA, Ticket Reminder, and Affiliate CTA, registered as the Contract shortcodes.
+- Parent Theme adds safe renderers for Planner CTA, the legacy Ticket Booking Window adapter, and Affiliate CTA, registered as the Contract shortcodes.
 - Planner and Affiliate destinations must be absolute HTTPS URLs; output is escaped, externally opened links use `sponsored nofollow noopener`, and Affiliate CTA always includes visible relationship disclosure.
-- Ticket Reminder accepts only a sanitized attraction slug and delegates the form to the Plugin shortcode. The Theme contains no attraction data, booking lead days, reminder calculation, storage, remote request, or scheduling logic.
-- Plugin `0.22.0` validates optional `attraction_slug` context against Plugin-owned data and preselects the matching option; invalid slugs fall back to the ordinary first option.
-- Plugin asset detection now covers posts containing the Theme-level Ticket Reminder shortcode, so the delegated form loads its existing CSS/JavaScript without Theme coupling.
+- The historical `ticket_reminder` ID accepts only a sanitized attraction slug and delegates the stateless Ticket Booking Window to the Plugin shortcode. The Theme contains no attraction data, booking lead days, or date calculation.
+- Plugin `0.23.0` validates optional `attraction_slug` context against Plugin-owned data and preselects the matching option; invalid slugs fall back to the ordinary first option.
+- Plugin asset detection covers posts containing the Theme-level compatibility shortcode, so the delegated form loads without Theme coupling.
 - Child Theme `0.5.0` provides restrained dynamic-component layouts and contextual Ticket form containment using Design System tokens.
 - Playwright confirmed the Plugin form is delegated exactly once, Forbidden City is preselected, controls retain 46px height, Planner/Affiliate links carry the required safety attributes and disclosures, and checked desktop/mobile pages have no overflow or console errors.
 
 Content Component System Phase D is complete:
 
-- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.8.0` replaces it with a Design System/Content Component editor canvas.
+- Parent Theme now enables editor styles and provides an independent editor fallback; Child Theme `0.9.0` replaces it with a Design System/Content Component editor canvas.
 - Server-side H2 anchor generation preserves explicit public anchors, adds readable IDs when absent, and suffixes duplicates before JavaScript enhancement.
 - Child Theme adds responsive WordPress Media styling for context, evidence, illustration, and decorative roles without forcing image ratios or publishing internal provenance.
 - Playground creates a real ephemeral Media attachment from a project image and stores Gutenberg-valid Core Image markup, rather than hardcoding an external image or Custom HTML block.
@@ -164,9 +172,9 @@ Page Architecture Responsibility Refactor is complete:
 - Parent Theme `single.php` is one generic article shell. It no longer branches by City, Attraction, or Survival type and no longer injects checklists, CTA modules, Share, or TOC based on taxonomy.
 - REST-enabled `_stc_show_share`, `_stc_show_toc`, and `_stc_hero_variant` metadata explicitly control optional presentation. Missing flags render no optional utility.
 - Topic-wide fixed Gutenberg article patterns were removed; reusable component patterns remain.
-- The complete Save/Saved Guides UI, state, import/export, and Parent Theme localStorage behavior were removed. Plugin-owned Ticket Reminder storage is unchanged.
-- Share This Page replaces Save Guide as a stateless utility. It prioritizes `navigator.share()`, uses the canonical URL, and falls back to an accessible lightweight channel/copy panel with status, error, Escape, outside-click, and focus-return behavior.
-- Child Theme `0.8.0` uses generic Hero/Layout/TOC selectors and a refined translucent Share trigger with desktop popover and mobile bottom-panel presentation.
+- The complete Save/Saved Guides and Ticket Reminder systems are removed, including localStorage, JSON import/export, ICS/calendar output, and browser reminder management.
+- Share This Page replaces Save Guide as a stateless utility. Desktop uses the branded popover; mobile uses `navigator.share()` first and falls back to the accessible bottom sheet.
+- Child Theme `0.9.0` uses generic Hero/Layout/TOC selectors and a compact Share utility with desktop popover and mobile bottom-sheet presentation.
 
 Frontend Component Registry and Catalog are complete:
 
@@ -185,7 +193,7 @@ Formal Frontend to CMS Capability Contract is complete:
 
 Affiliate Capability Upgrade is complete in the working tree:
 
-- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.28.0`, and Child Theme `0.8.0` publish 23 CMS capabilities, including 20 ordered page blocks.
+- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.29.0`, and Child Theme `0.9.0` publish 23 CMS capabilities, including 20 ordered page blocks.
 - Publish Package `1.0.0` is available at `contracts/cms-publish-package.schema.json` and `GET /wp-json/stc/v1/cms-publish-package-schema`.
 - Authenticated `POST /wp-json/stc/v1/cms-articles` and `PUT /wp-json/stc/v1/cms-articles/{post_id}` now create or update draft-only WordPress articles from CMS Page Payloads.
 - The adapter revalidates the deployed Contract, serializes static/semantic content to editable Gutenberg blocks and dynamic content to renderer-owned shortcode blocks, maps presentation metadata, stores SEO/GEO/provenance, and rejects non-draft overwrites.
@@ -236,41 +244,30 @@ The original Guide / Article styling stage below is historical and has been supe
 
 ## Plugin Status
 
-Current tools plugin version: `0.22.0`.
+Current tools plugin version: `0.23.0`.
 
 The custom plugin owns the first tool only:
 
-- Attraction Ticket Reservation & Reminder.
+- Ticket Booking Window.
 
 The shortcode is:
 
 - `[solo_to_china_ticket_tool]`
 
-Current Ticket Tool behavior:
+Current Ticket Booking Window behavior:
 
 - Select attraction.
 - Attraction select is grouped by city for easier scanning on mobile.
 - Select visit date.
-- Calculate recommended ticket-check/reminder date from `booking_lead_days`.
+- Calculate the recommended date to start checking tickets from `booking_lead_days`.
 - Static first-phase attraction data currently covers 18 attractions across Beijing, Shanghai, Xi'an, Zhangjiajie, Hangzhou, Chengdu, Guangzhou, Luoyang, Dunhuang, Leshan, Huangshan, Jiuzhaigou, and Guilin.
 - Frontend assets load on the homepage, Tools page, or pages that contain the ticket tool shortcode.
-- Show booking-window status:
-  - `Book now`
-  - `Set reminder`
-  - `Date has passed`
-- Prevent saving reminders for past visit dates.
-- Save reminders locally without login.
-- View saved reminders on the current device.
-- Export saved reminders to `solotochina-ticket-reminders.json`.
-- Import saved reminders from the exported JSON format.
-- Clear saved reminders from the current device.
-- Download an `.ics` calendar file for individual saved reminders.
-- Delete individual reminders.
-- Show local-only saved-data copy near the reminder controls.
-- Clamp imported reminder text before writing to browser storage.
-- Validate imported reminder dates before writing to browser storage.
+- Show `BOOKING NOT OPEN YET`, `BOOKING WINDOW REACHED`, or `VISIT DATE PASSED`.
+- Show the visit date, estimated booking date, and lead-day rule without claiming live availability.
+- Offer the existing safe Trip.com destination with `sponsored noopener` and visible disclosure when the visit date is valid.
+- Keep no state after the page closes. There is no localStorage, JSON, ICS, calendar, reminder, push, email, SMS, or account behavior.
 
-Ticket reminders use browser `localStorage` only. They do not send email or SMS, and do not write to the database.
+Theme `0.29.0` also creates missing About, Contact, Privacy Policy, Terms of Use, Affiliate Disclosure, and Disclaimer pages through an idempotent versioned admin migration. Existing pages and administrator-edited content/status are not overwritten; an existing privacy-page setting is preserved. Reserved draft slugs receive a public, read-only Theme fallback instead of being changed.
 
 ## Install Artifacts
 
@@ -356,8 +353,8 @@ Do not start yet without a new design/spec:
 
 - Accounts.
 - Cross-device sync.
-- Email/SMS reminder delivery.
+- Reminder delivery or browser reminder management.
 - Custom database tables.
 - Real ticket inventory checking.
 - New top-level navigation.
-- New tools beyond Attraction Ticket Reservation & Reminder.
+- New tools beyond Ticket Booking Window.

@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.28.0' );
+define( 'STC_THEME_VERSION', '0.29.0' );
+define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
 require_once get_template_directory() . '/inc/content-contract.php';
@@ -133,6 +134,17 @@ function stc_primary_navigation_items() {
 	];
 }
 
+/**
+ * Return the single configurable Trip.Planner destination.
+ *
+ * Keep this separate from ticket, hotel, train, and other commercial URLs.
+ *
+ * @return string
+ */
+function stc_get_trip_planner_url() {
+	return 'https://www.trip.com/tripplanner';
+}
+
 function stc_render_primary_navigation() {
 	echo '<nav id="stc-primary-nav" class="stc-nav" aria-label="' . esc_attr__( 'Primary navigation', 'solo-to-china' ) . '">';
 	foreach ( stc_primary_navigation_items() as $item ) {
@@ -149,6 +161,47 @@ function stc_core_pages() {
 		'planner'           => 'Planner',
 		'tools'             => 'Tools',
 		'faq'               => 'FAQ',
+		'about'             => 'About SoloToChina',
+		'contact'           => 'Contact',
+		'privacy-policy'    => 'Privacy Policy',
+		'terms-of-use'      => 'Terms of Use',
+		'affiliate-disclosure' => 'Affiliate Disclosure',
+		'disclaimer'        => 'Disclaimer',
+	];
+}
+
+/**
+ * Return display metadata for Theme-owned support and legal pages.
+ *
+ * @return array<string, array<string, string>>
+ */
+function stc_static_page_metadata() {
+	return [
+		'about'                => [ 'title' => 'About SoloToChina', 'copy' => 'Practical China travel guidance for first-time, solo, and independent travelers.' ],
+		'contact'              => [ 'title' => 'Contact', 'copy' => 'Questions, corrections, partnerships, and privacy requests.' ],
+		'privacy-policy'       => [ 'title' => 'Privacy Policy', 'copy' => 'How SoloToChina handles information across this website and its external links.' ],
+		'terms-of-use'         => [ 'title' => 'Terms of Use', 'copy' => 'Important terms for using SoloToChina travel information and third-party links.' ],
+		'affiliate-disclosure' => [ 'title' => 'Affiliate Disclosure', 'copy' => 'How selected commercial links support SoloToChina without increasing the reader\'s price.' ],
+		'disclaimer'           => [ 'title' => 'Disclaimer', 'copy' => 'Travel information changes; verify important decisions with current official sources.' ],
+	];
+}
+
+/**
+ * Return initial content for Theme-owned support and legal pages.
+ *
+ * This content is written only when a page is first created. Administrators
+ * remain free to edit it in WordPress; migrations never overwrite it.
+ *
+ * @return array<string, string>
+ */
+function stc_static_page_content() {
+	return [
+		'about' => '<h2>Who SoloToChina is for</h2><p>SoloToChina helps independent travelers plan a first or solo trip to China with practical, decision-oriented guides.</p><ul><li>First-time China visitors</li><li>Solo travelers</li><li>Independent travelers</li></ul><h2>What we cover</h2><p>We publish practical guidance on payments, essential apps, connectivity, visa and entry preparation, City Guides, Attraction Guides, and realistic travel planning.</p><h2>How the site works</h2><p>SoloToChina combines practical editorial content with lightweight planning tools and selected third-party booking links. Travel articles and their component order are managed as editorial content; the site interface makes those decisions easy to use.</p><h2>How we make money</h2><p>SoloToChina may earn affiliate commissions from partners such as Trip.com. This does not increase the reader\'s price. Commercial relationships should not determine editorial conclusions.</p>',
+		'contact' => '<h2>How to reach us</h2><p>For general questions, content corrections, partnership or affiliate enquiries, and privacy requests, contact SoloToChina using the details below.</p><dl><dt>Email</dt><dd><a href="mailto:alex@solotochina.com">alex@solotochina.com</a></dd><dt>WhatsApp</dt><dd><a href="https://wa.me/19098361987">+1 909-836-1987</a></dd><dt>Postal address</dt><dd>7953 Beckwith Rd<br>Morton Grove, IL 60053<br>US</dd></dl><p>Please include the page URL when reporting a content correction or privacy concern.</p>',
+		'privacy-policy' => '<p><strong>Last updated:</strong> September 8, 2026</p><h2>Information we handle</h2><p>We may receive information you voluntarily provide, such as your name, email address, message, or other details included when you contact us. Our hosting and security systems may also process technical and server-log information such as IP address, browser type, requested pages, timestamps, and error or security events.</p><h2>Cookies and browser technologies</h2><p>SoloToChina may use cookies or similar browser technologies where needed for site operation, security, preferences, and enabled third-party features. Available technology can change as the site evolves; this policy does not claim that a particular analytics or advertising provider is in use unless it is actually configured.</p><h2>Third-party and affiliate links</h2><p>Our pages may link to third-party services, including external booking providers such as Trip.com. Those services operate under their own privacy policies. Some links are affiliate links, which may allow the provider to attribute an eligible purchase to SoloToChina.</p><h2>Retention and security</h2><p>We retain information only as long as reasonably needed for the purpose for which it was collected, legal obligations, dispute resolution, and site security. We use reasonable safeguards, but no online service can guarantee absolute security.</p><h2>International users</h2><p>SoloToChina serves readers in multiple countries. Information you send may be processed in the United States or other locations where our service providers operate, which may have different data-protection rules from your home country.</p><h2>Your privacy requests</h2><p>To ask about, correct, or request deletion of information you have provided directly to us, email <a href="mailto:alex@solotochina.com">alex@solotochina.com</a>. We may need to verify the request and may retain information where legally permitted or required.</p><h2>Policy changes</h2><p>We may revise this policy when the site or applicable requirements change. The fixed date above shows when this page was last substantively updated.</p><h2>Contact</h2><p>SoloToChina, 7953 Beckwith Rd, Morton Grove, IL 60053, US. Email: <a href="mailto:alex@solotochina.com">alex@solotochina.com</a>.</p>',
+		'terms-of-use' => '<p><strong>Last updated:</strong> September 8, 2026</p><h2>Informational travel content</h2><p>SoloToChina provides general travel information. Information about visa and entry rules, attraction ticket rules, transport requirements, opening hours, prices, schedules, and availability can change without notice. Verify important travel decisions with current official sources.</p><h2>Third-party services and booking</h2><p>Links to booking providers and other third parties are provided for convenience. Their products, availability, prices, terms, support, and performance are controlled by those providers. Your transaction is with the provider you choose.</p><h2>Affiliate links</h2><p>Some links are affiliate links. SoloToChina may earn a commission from an eligible purchase at no extra cost to you. Affiliate relationships do not guarantee a product or outcome.</p><h2>Intellectual property</h2><p>Unless otherwise stated, SoloToChina site design, original text, graphics, and branding are protected by applicable intellectual-property laws. You may link to our pages and quote short portions with attribution, but may not republish substantial content without permission.</p><h2>Acceptable use</h2><p>Do not misuse the site, interfere with its operation, attempt unauthorized access, introduce malicious code, or use automated systems in a way that unreasonably burdens the service.</p><h2>Limitations</h2><p>Use of the site is at your own risk. To the extent permitted by law, SoloToChina is not responsible for losses arising from reliance on changing travel information, third-party services, or events outside our control.</p><h2>Changes and contact</h2><p>We may update these terms when the site changes. Questions may be sent to <a href="mailto:alex@solotochina.com">alex@solotochina.com</a>.</p>',
+		'affiliate-disclosure' => '<p><strong>Last updated:</strong> September 8, 2026</p><h2>How affiliate links work</h2><p>SoloToChina may earn commissions from eligible purchases made through affiliate links. This does not increase the reader\'s price.</p><h2>Current commercial destinations</h2><p>Trip.com is currently one commercial or affiliate destination used on SoloToChina. Not every mention of Trip.com means paid placement, and other external links may be included without compensation.</p><h2>Editorial independence</h2><p>Editorial usefulness should remain independent of whether a commercial link exists. We aim to distinguish commercial actions with clear disclosure and to keep practical travel decisions at the center of the page.</p><h2>Questions</h2><p>For questions about a commercial relationship, email <a href="mailto:alex@solotochina.com">alex@solotochina.com</a>.</p>',
+		'disclaimer' => '<p><strong>Last updated:</strong> September 8, 2026</p><h2>Travel information changes</h2><p>Visa and immigration rules, attraction ticket rules, opening hours, prices, transport schedules, internet or app accessibility, and third-party availability can change quickly. Examples and booking-window estimates are planning aids, not live inventory.</p><h2>Verify important decisions</h2><p>Check current official government, attraction, carrier, and provider sources before making important travel, entry, transport, or purchasing decisions.</p><h2>Scope of our information</h2><p>SoloToChina provides general travel information. It does not provide legal or immigration advice, and using the site does not create a professional or advisory relationship.</p><h2>External services</h2><p>Third-party websites and services are responsible for their own information, availability, pricing, security, and terms. SoloToChina cannot guarantee their content or performance.</p><h2>Contact</h2><p>To report outdated or incorrect information, email <a href="mailto:alex@solotochina.com">alex@solotochina.com</a> and include the relevant page URL.</p>',
 	];
 }
 
@@ -174,23 +227,183 @@ function stc_core_guide_categories() {
 }
 
 function stc_ensure_core_pages() {
+	$static_content  = stc_static_page_content();
+	$privacy_page_id = 0;
+	$complete        = true;
+
 	foreach ( stc_core_pages() as $slug => $title ) {
-		if ( get_page_by_path( $slug ) ) {
+		$existing_page = get_page_by_path( $slug );
+		if ( $existing_page ) {
+			if ( 'privacy-policy' === $slug ) {
+				$privacy_page_id = (int) $existing_page->ID;
+			}
 			continue;
 		}
 
-		wp_insert_post(
+		$page_id = wp_insert_post(
 			[
 				'post_title'   => $title,
 				'post_name'    => $slug,
 				'post_type'    => 'page',
 				'post_status'  => 'publish',
-				'post_content' => '<!-- SoloToChina core landing page. The theme renders this page from its slug. -->',
+				'post_content' => isset( $static_content[ $slug ] ) ? $static_content[ $slug ] : '<!-- SoloToChina core landing page. The theme renders this page from its slug. -->',
 			]
 		);
+		if ( ! $page_id || is_wp_error( $page_id ) ) {
+			$complete = false;
+			continue;
+		}
+
+		if ( 'privacy-policy' === $slug ) {
+			$privacy_page_id = (int) $page_id;
+		}
 	}
+
+	if ( ! (int) get_option( 'wp_page_for_privacy_policy' ) && $privacy_page_id ) {
+		update_option( 'wp_page_for_privacy_policy', $privacy_page_id );
+	}
+
+	return $complete;
 }
 add_action( 'after_switch_theme', 'stc_ensure_core_pages' );
+
+/**
+ * Run page creation once after a Theme upgrade, including when already active.
+ *
+ * @return void
+ */
+function stc_maybe_run_site_page_migration() {
+	if ( STC_SITE_PAGE_MIGRATION_VERSION === get_option( 'stc_site_page_migration_version' ) ) {
+		return;
+	}
+
+	if ( stc_ensure_core_pages() ) {
+		update_option( 'stc_site_page_migration_version', STC_SITE_PAGE_MIGRATION_VERSION );
+	}
+}
+add_action( 'admin_init', 'stc_maybe_run_site_page_migration' );
+
+/**
+ * Register the query variable used by the non-destructive static-page fallback.
+ *
+ * A fresh WordPress install may already contain an unpublished Privacy Policy
+ * draft. The migration must not overwrite or publish administrator content, so
+ * the public URL falls back to the Theme copy until that page is published.
+ *
+ * @param array<int, string> $query_vars Public query variables.
+ * @return array<int, string>
+ */
+function stc_register_static_page_fallback_query_var( $query_vars ) {
+	$query_vars[] = 'stc_static_page_fallback';
+	return $query_vars;
+}
+add_filter( 'query_vars', 'stc_register_static_page_fallback_query_var' );
+
+/**
+ * Route an unpublished reserved static-page slug to a read-only Theme fallback.
+ *
+ * @param array<string, mixed> $query_vars Parsed request variables.
+ * @return array<string, mixed>
+ */
+function stc_route_unpublished_static_page( $query_vars ) {
+	$requested_slug = isset( $query_vars['pagename'] ) ? sanitize_title( trim( $query_vars['pagename'], '/' ) ) : '';
+	$static_pages   = stc_static_page_metadata();
+
+	if ( ! $requested_slug || ! isset( $static_pages[ $requested_slug ] ) ) {
+		return $query_vars;
+	}
+
+	$published_pages = get_posts(
+		[
+			'name'           => $requested_slug,
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		]
+	);
+
+	if ( $published_pages ) {
+		return $query_vars;
+	}
+
+	unset( $query_vars['pagename'], $query_vars['page_id'] );
+	$query_vars['stc_static_page_fallback'] = $requested_slug;
+
+	return $query_vars;
+}
+add_filter( 'request', 'stc_route_unpublished_static_page' );
+
+/**
+ * Select the static fallback template when an existing draft owns the slug.
+ *
+ * @param string $template Resolved WordPress template path.
+ * @return string
+ */
+function stc_static_page_fallback_template( $template ) {
+	if ( ! get_query_var( 'stc_static_page_fallback' ) ) {
+		return $template;
+	}
+
+	$fallback = get_template_directory() . '/page-static-fallback.php';
+	if ( is_readable( $fallback ) ) {
+		status_header( 200 );
+		return $fallback;
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'stc_static_page_fallback_template', 99 );
+
+/**
+ * Give virtual static fallbacks the same document title as a published page.
+ *
+ * @param array<string, string> $parts Document title parts.
+ * @return array<string, string>
+ */
+function stc_static_page_fallback_document_title( $parts ) {
+	$slug   = sanitize_title( (string) get_query_var( 'stc_static_page_fallback' ) );
+	$pages  = stc_static_page_metadata();
+
+	if ( $slug && isset( $pages[ $slug ] ) ) {
+		$parts['title'] = $pages[ $slug ]['title'];
+	}
+
+	return $parts;
+}
+add_filter( 'document_title_parts', 'stc_static_page_fallback_document_title' );
+
+/**
+ * Add page-like body classes for virtual static fallbacks.
+ *
+ * @param array<int, string> $classes Body classes.
+ * @return array<int, string>
+ */
+function stc_static_page_fallback_body_class( $classes ) {
+	$slug = sanitize_title( (string) get_query_var( 'stc_static_page_fallback' ) );
+
+	if ( $slug ) {
+		$classes[] = 'page';
+		$classes[] = 'stc-static-page-fallback';
+		$classes[] = 'stc-static-page-fallback--' . sanitize_html_class( $slug );
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'stc_static_page_fallback_body_class' );
+
+/**
+ * Output the public canonical URL for a static fallback route.
+ */
+function stc_static_page_fallback_canonical() {
+	$slug = sanitize_title( (string) get_query_var( 'stc_static_page_fallback' ) );
+
+	if ( $slug ) {
+		echo '<link rel="canonical" href="' . esc_url( home_url( '/' . $slug . '/' ) ) . '">' . "\n";
+	}
+}
+add_action( 'wp_head', 'stc_static_page_fallback_canonical', 1 );
 
 function stc_ensure_core_categories() {
 	foreach ( stc_core_guide_categories() as $slug => $category ) {
@@ -372,17 +585,18 @@ function stc_render_share_this_page( $args = array() ) {
 	echo '<div class="stc-share" data-stc-share data-share-title="' . esc_attr( $title ) . '" data-share-description="' . esc_attr( wp_trim_words( $description, 28 ) ) . '" data-share-canonical="' . esc_url( $canonical ) . '">';
 	echo '<button class="stc-share__trigger" type="button" aria-expanded="false" aria-controls="' . esc_attr( $panel_id ) . '" aria-label="' . esc_attr__( 'Share this page', 'solo-to-china' ) . '" data-stc-share-trigger>';
 	echo '<span class="stc-share__trigger-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></span>';
-	echo '<span class="stc-share__trigger-copy"><strong>' . esc_html__( 'Share this page', 'solo-to-china' ) . '</strong><small>' . esc_html__( 'Send it to a travel companion', 'solo-to-china' ) . '</small></span>';
+	echo '<span class="stc-share__trigger-copy"><strong>' . esc_html__( 'Share this page', 'solo-to-china' ) . '</strong></span>';
 	echo '<span class="stc-share__trigger-arrow" aria-hidden="true">&#8599;</span></button>';
 	echo '<div id="' . esc_attr( $panel_id ) . '" class="stc-share__panel" role="dialog" aria-labelledby="' . esc_attr( $heading_id ) . '" data-stc-share-panel hidden>';
-	echo '<div class="stc-share__panel-heading"><div><span>' . esc_html__( 'Share the useful part', 'solo-to-china' ) . '</span><strong id="' . esc_attr( $heading_id ) . '">' . esc_html__( 'Pass this guide along', 'solo-to-china' ) . '</strong></div>';
+	echo '<div class="stc-share__panel-heading"><div><span>' . esc_html__( 'SoloToChina', 'solo-to-china' ) . '</span><strong id="' . esc_attr( $heading_id ) . '">' . esc_html__( 'Share this page', 'solo-to-china' ) . '</strong></div>';
 	echo '<button class="stc-share__close" type="button" aria-label="' . esc_attr__( 'Close sharing options', 'solo-to-china' ) . '" data-stc-share-close><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>';
-	echo '<p class="stc-share__panel-copy">' . esc_html__( 'Good plans travel further when they are easy to share.', 'solo-to-china' ) . '</p>';
+	echo '<p class="stc-share__panel-copy">' . esc_html__( 'Send this guide to someone planning China with you.', 'solo-to-china' ) . '</p>';
 	echo '<div class="stc-share__channels">';
 	echo '<a class="stc-share__channel" href="#" data-stc-share-whatsapp><span aria-hidden="true">WA</span>' . esc_html__( 'WhatsApp', 'solo-to-china' ) . '</a>';
 	echo '<a class="stc-share__channel" href="#" data-stc-share-email><span aria-hidden="true">@</span>' . esc_html__( 'Email', 'solo-to-china' ) . '</a>';
+	echo '<button class="stc-share__channel stc-share__copy" type="button" data-stc-share-copy><span aria-hidden="true">&#128279;</span><strong data-stc-share-copy-label>' . esc_html__( 'Copy link', 'solo-to-china' ) . '</strong></button>';
 	echo '</div>';
-	echo '<div class="stc-share__copy-row"><input type="text" value="' . esc_attr( $canonical ) . '" readonly aria-label="' . esc_attr__( 'Canonical page link', 'solo-to-china' ) . '" data-stc-share-url><button class="stc-share__copy" type="button" data-stc-share-copy>' . esc_html__( 'Copy link', 'solo-to-china' ) . '</button></div>';
+	echo '<input class="stc-share__url-field" type="text" value="' . esc_attr( $canonical ) . '" readonly aria-label="' . esc_attr__( 'Canonical page link', 'solo-to-china' ) . '" data-stc-share-url>';
 	echo '<p class="stc-share__status" role="status" aria-live="polite" data-stc-share-status></p>';
 	echo '</div></div>';
 }

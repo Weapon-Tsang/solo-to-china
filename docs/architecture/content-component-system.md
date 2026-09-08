@@ -2,7 +2,7 @@
 
 Current Content Contract version: 2.1.0
 Current Component Registry version: 1.1.0
-Compatible Parent Theme version: 0.28.0
+Compatible Parent Theme version: 0.29.0
 
 ## Governing Boundary
 
@@ -102,7 +102,7 @@ Registry 1.1 exposes 23 CMS-selectable capabilities: 20 ordered page blocks plus
 
 - Core: Paragraph, Heading, List, Image
 - Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
-- Contextual: Planner CTA, Ticket Reminder, Affiliate CTA
+- Contextual: Planner CTA, Ticket Booking Window compatibility adapter (`ticket_reminder`), Affiliate CTA
 - Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
 - Presentation: Article Hero, Share This Page, and TOC through explicit page metadata
 
@@ -118,20 +118,21 @@ Images remain native WordPress Media with intrinsic dimensions, srcset, sizes, l
 
 Share This Page replaces the discontinued Save Guide feature. It has no login requirement, account state, local storage, saved state, or cross-device implication.
 
-When the browser supports the Web Share API, the utility first calls navigator.share() with the page title, optional excerpt, and canonical URL. Otherwise it opens a lightweight accessible share panel with:
+On desktop/fine-pointer devices, the utility always opens the SoloToChina branded popover and never invokes `navigator.share()`. On mobile/coarse-pointer devices, it first calls `navigator.share()` with the page title, optional excerpt, and canonical URL; unsupported or unsuccessful native sharing opens the branded bottom sheet with:
 
 - WhatsApp and email links
 - A read-only canonical URL
 - Copy link with clipboard and legacy-copy fallback
 - Visible success/error status through an ARIA live region
 - Escape, outside-click, close-button, and focus-return behavior
-- Busy state while the native share sheet is opening
+- Busy state while the mobile native share sheet is opening
+- Focus-loop keyboard navigation inside the open fallback
 
-Its visual weight stays below booking, availability, and planner CTAs. The Child Theme presents it as a refined translucent Hero utility and a compact desktop popover/mobile bottom panel.
+Its visual weight stays below the H1 and primary planner or booking actions. The Child Theme presents it as a one-line utility trigger and a restrained 340-380px-class desktop popover/mobile bottom sheet.
 
 ## Ticket Boundary
 
-The Parent Theme’s Ticket Reminder adapter delegates to [solo_to_china_ticket_tool]. The SoloToChina Tools Plugin continues to own attraction data, booking lead days, calculations, validation, reminder storage, import/export, and calendar output. The architecture refactor does not move or duplicate any Ticket logic.
+The Parent Theme’s historical `ticket_reminder` adapter delegates to `[solo_to_china_ticket_tool]`. The rendered product is Ticket Booking Window. The SoloToChina Tools Plugin owns attraction data, booking lead days, date calculations, validation, and booking-timing states. The Theme does not move or duplicate Ticket logic.
 
 ## Removed Behavior
 
@@ -145,7 +146,7 @@ The Theme no longer contains:
 - Topic-wide fixed Gutenberg article templates
 - Automatic Share or TOC decisions based on guide type
 
-Ticket reminders still use Plugin-owned local storage; that is a separate explicitly scoped tool behavior.
+Ticket Reminder is fully removed. No layer stores reminders, uses localStorage, imports or exports JSON, creates ICS/calendar files, or offers push, email, SMS, or account reminders. The Plugin is a stateless decision tool and does not claim real-time inventory.
 
 ## Integration Fixtures And Verification
 

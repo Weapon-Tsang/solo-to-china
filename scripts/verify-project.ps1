@@ -49,6 +49,7 @@ $RequiredFiles = @(
     "wp-content/themes/solo-to-china/search.php",
     "wp-content/themes/solo-to-china/searchform.php",
     "wp-content/themes/solo-to-china/page.php",
+    "wp-content/themes/solo-to-china/page-static-fallback.php",
     "wp-content/themes/solo-to-china/page-design-system.php",
     "wp-content/themes/solo-to-china/front-page.php",
     "wp-content/themes/solo-to-china/screenshot.png",
@@ -160,7 +161,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.28.0") -or (-not $PackageScript.Contains("Child Theme version: 0.8.0")) -or (-not $PackageScript.Contains("Plugin version: 0.22.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.29.0") -or (-not $PackageScript.Contains("Child Theme version: 0.9.0")) -or (-not $PackageScript.Contains("Plugin version: 0.23.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -185,7 +186,7 @@ $PreviewScriptPath = Join-Path $Root "scripts/start-preview.ps1"
 $PreviewBlueprintPath = Join-Path $Root "scripts/playground-blueprint.json"
 if (Test-Path -LiteralPath $PreviewScriptPath -PathType Leaf) {
     $PreviewScript = Get-Content -LiteralPath $PreviewScriptPath -Raw
-    foreach ($PreviewToken in @('@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', 'solo-to-china-scripts', '--mount-dir', 'playground-blueprint.json', 'playground-editor-blueprint.json', 'playground-parent-blueprint.json', 'ParentOnly', 'Editor')) {
+    foreach ($PreviewToken in @('@wp-playground/cli@', 'solo-to-china-child', 'solo-to-china-tools', 'solo-to-china-scripts', '--mount-dir', 'playground-blueprint.json', 'playground-editor-blueprint.json', 'playground-parent-blueprint.json', 'ParentOnly', 'Editor')) {
         if (-not $PreviewScript.Contains($PreviewToken)) {
             $Failures.Add("WordPress Playground preview script is missing: $PreviewToken")
         }
@@ -258,8 +259,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.28.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.28.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.29.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.29.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -272,7 +273,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.28.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.29.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -332,8 +333,13 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.28.0'")) {
-		$Failures.Add("Theme asset version is not 0.28.0.")
+    if (-not $Functions.Contains("'0.29.0'")) {
+		$Failures.Add("Theme asset version is not 0.29.0.")
+    }
+    foreach ($SitePageToken in @("STC_SITE_PAGE_MIGRATION_VERSION", "stc_static_page_content", "stc_static_page_metadata", "stc_static_page_fallback", "admin_init", "wp_page_for_privacy_policy", "stc_get_trip_planner_url", "https://www.trip.com/tripplanner")) {
+        if (-not $Functions.Contains($SitePageToken)) {
+            $Failures.Add("Theme is missing static-page migration or Planner configuration: $SitePageToken")
+        }
     }
     foreach ($ContentEditorToken in @("editor-styles", "add_editor_style", "assets/css/editor-style.css", "stc_add_stable_content_heading_ids", "sanitize_title", "preg_replace_callback")) {
         if (-not $Functions.Contains($ContentEditorToken)) {
@@ -376,7 +382,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.8.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.9.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -390,7 +396,7 @@ if (Test-Path -LiteralPath $ChildThemeFunctionsPath -PathType Leaf) {
             $Failures.Add("Child Theme resource loading is missing: $ChildFunctionToken")
         }
     }
-    foreach ($ChildStageToken in @("stc-child-site", "stc-child-home", "is_front_page", "stc-child-article", "stc-child-content-components", "is_single", "stc-child-interactions", "stc_child_render_primary_navigation", "stc_child_prepend_guide_breadcrumbs")) {
+    foreach ($ChildStageToken in @("stc-child-site", "stc-child-home", "is_front_page", "stc-child-article", "stc-child-content-components", "is_singular", "stc-child-interactions", "stc_child_render_primary_navigation", "stc_child_prepend_guide_breadcrumbs")) {
         if (-not $ChildThemeFunctions.Contains($ChildStageToken)) {
             $Failures.Add("Child Theme shared/home asset stage is missing: $ChildStageToken")
         }
@@ -427,7 +433,7 @@ if (Test-Path -LiteralPath $ChildThemeHeaderPath -PathType Leaf) {
 $ChildThemeSiteCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/site.css"
 if (Test-Path -LiteralPath $ChildThemeSiteCssPath -PathType Leaf) {
     $ChildThemeSiteCss = Get-Content -LiteralPath $ChildThemeSiteCssPath -Raw
-    foreach ($ChildSiteCssToken in @('.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__socials', '@media (max-width: 840px)')) {
+    foreach ($ChildSiteCssToken in @('.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)')) {
         if (-not $ChildThemeSiteCss.Contains($ChildSiteCssToken)) {
             $Failures.Add("Child Theme shared site CSS is missing: $ChildSiteCssToken")
         }
@@ -447,7 +453,7 @@ if (Test-Path -LiteralPath $ChildThemeHomeCssPath -PathType Leaf) {
 $ChildThemeArticleCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/article.css"
 if (Test-Path -LiteralPath $ChildThemeArticleCssPath -PathType Leaf) {
     $ChildThemeArticleCss = Get-Content -LiteralPath $ChildThemeArticleCssPath -Raw
-    foreach ($ChildArticleCssToken in @(".single .stc-content", ".stc-article-hero", ".stc-article-layout", ".stc-entry-content--guide", ".stc-guide-breadcrumb", ".stc-guide-toc", ".stc-guide-quick-facts", ".stc-guide-warning", ".stc-guide-route", ".stc-share__trigger", ".stc-share__panel", "card-forbidden-city-hd.webp", "card-beijing-hd.webp", "card-hangzhou-hd.webp", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+    foreach ($ChildArticleCssToken in @(".single .stc-content", ".stc-article-hero", ".stc-article-layout", ".stc-entry-content--guide", ".stc-guide-breadcrumb", ".stc-guide-toc", ".stc-guide-quick-facts", ".stc-guide-warning", ".stc-guide-route", ".stc-share__trigger", ".stc-share__panel", ".stc-share.is-mobile-fallback", "card-forbidden-city-hd.webp", "card-beijing-hd.webp", "card-hangzhou-hd.webp", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
         if (-not $ChildThemeArticleCss.Contains($ChildArticleCssToken)) {
             $Failures.Add("Child Theme article CSS is missing: $ChildArticleCssToken")
         }
@@ -482,19 +488,27 @@ foreach ($ThemePhpFile in $ThemePhpFiles) {
 $FooterPath = Join-Path $Root "wp-content/themes/solo-to-china/footer.php"
 if (Test-Path -LiteralPath $FooterPath -PathType Leaf) {
     $Footer = Get-Content -LiteralPath $FooterPath -Raw
-    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__socials", "stc-footer__bottom", "stc-footer__legal", "Privacy Policy", "Terms of Use", "Guest-first. Practical. Independent.")) {
+    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__contact", "stc-footer__bottom", "stc-footer__legal", "Privacy Policy", "Terms of Use", "Affiliate Disclosure", "Disclaimer", "alex@solotochina.com", "19098361987", "Guest-first. Practical. Independent.")) {
         if (-not $Footer.Contains($FooterToken)) {
             $Failures.Add("Footer does not preserve the selected homepage-reference footer token: $FooterToken")
         }
+    }
+    if ($Footer.Contains("stc-footer__social")) {
+        $Failures.Add("Footer still contains placeholder social controls.")
     }
 }
 
 $PageTemplatePath = Join-Path $Root "wp-content/themes/solo-to-china/page.php"
 if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     $PageTemplate = Get-Content -LiteralPath $PageTemplatePath -Raw
-    foreach ($Slug in @("survival-kit", "city-guides", "attraction-guides", "planner", "tools", "faq")) {
+    foreach ($Slug in @("survival-kit", "city-guides", "attraction-guides", "planner", "tools", "faq", "about", "contact", "privacy-policy", "terms-of-use", "affiliate-disclosure", "disclaimer")) {
         if (-not $PageTemplate.Contains($Slug)) {
             $Failures.Add("Page template does not handle core IA slug: $Slug")
+        }
+    }
+    foreach ($StaticPageToken in @("stc-static-page", "stc-static-page__content", "stc-static-page__breadcrumb", "the_content()", "stc_get_trip_planner_url")) {
+        if (-not $PageTemplate.Contains($StaticPageToken)) {
+            $Failures.Add("Page template is missing static-page or Planner reuse token: $StaticPageToken")
         }
     }
     if (-not $PageTemplate.Contains("solo_to_china_ticket_tool")) {
@@ -580,19 +594,19 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.22.0"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.23.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
-        if (-not $PluginReadme.Contains("limited to Attraction Ticket Reservation & Reminder")) {
+        if (-not $PluginReadme.Contains("Ticket Booking Window")) {
             $Failures.Add("Tools plugin README does not preserve the first-tool boundary.")
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.22.0")) {
-		$Failures.Add("Tools plugin header version is not 0.22.0.")
+    if (-not $Plugin.Contains("Version: 0.23.0")) {
+		$Failures.Add("Tools plugin header version is not 0.23.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.22.0'")) {
-		$Failures.Add("Tools plugin version constant is not 0.22.0.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.23.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.23.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -611,7 +625,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     }
     foreach ($TicketContextToken in @("stc_ticket_reminder", "attraction_slug", "shortcode_atts", "selected(")) {
         if (-not $PluginSource.Contains($TicketContextToken)) {
-            $Failures.Add("Tools plugin is missing contextual Ticket Reminder support: $TicketContextToken")
+            $Failures.Add("Tools plugin is missing historical ticket_reminder adapter support: $TicketContextToken")
         }
     }
     if (-not $PluginSource.Contains("data-stc-ticket-tool")) {
@@ -638,23 +652,15 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
             $Failures.Add("Attraction ticket data is missing planned coverage for: $AttractionName")
         }
     }
-    if (-not $PluginSource.Contains("data-stc-save-reminder")) {
-        $Failures.Add("Ticket tool markup is missing the guest reminder save action.")
+    foreach ($BookingWindowToken in @("Ticket Booking Window", "Check booking date", "data-stc-ticket-link", "sponsored noopener", "Ticket rules and booking windows can change")) {
+        if (-not $PluginSource.Contains($BookingWindowToken)) {
+            $Failures.Add("Ticket Booking Window markup is missing: $BookingWindowToken")
+        }
     }
-    if (-not $PluginSource.Contains("data-stc-reminder-list")) {
-        $Failures.Add("Ticket tool markup is missing the local saved reminders list.")
-    }
-    if (-not $PluginSource.Contains("data-stc-export-reminders")) {
-        $Failures.Add("Ticket tool markup is missing the saved reminders export action.")
-    }
-    if (-not $PluginSource.Contains("data-stc-clear-reminders")) {
-        $Failures.Add("Ticket tool markup is missing the saved reminders clear action.")
-    }
-    if (-not $PluginSource.Contains("data-stc-import-reminders")) {
-        $Failures.Add("Ticket tool markup is missing the saved reminders import action.")
-    }
-    if (-not $PluginSource.Contains("Saved reminders stay in this browser")) {
-        $Failures.Add("Ticket tool markup is missing local-only reminder privacy copy.")
+    foreach ($RemovedReminderToken in @("data-stc-save-reminder", "data-stc-reminder-list", "data-stc-export-reminders", "data-stc-clear-reminders", "data-stc-import-reminders", "Saved reminders", "Add to calendar")) {
+        if ($PluginSource.Contains($RemovedReminderToken)) {
+            $Failures.Add("Ticket tool markup still contains removed reminder behavior: $RemovedReminderToken")
+        }
     }
     if (-not $Shortcodes.Contains("name=""stc_visit_date"" required")) {
         $Failures.Add("Ticket tool visit date input is not required.")
@@ -670,78 +676,41 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
 $PluginJsPath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/assets/js/tools.js"
 if (Test-Path -LiteralPath $PluginJsPath -PathType Leaf) {
     $PluginJs = Get-Content -LiteralPath $PluginJsPath -Raw
-    if (-not $PluginJs.Contains("stcTicketTool")) {
+    if (-not $PluginJs.Contains("ticketBookingWindow")) {
         $Failures.Add("Ticket tool JavaScript is missing the submit handler boundary.")
     }
-    if (-not $PluginJs.Contains("localStorage")) {
-        $Failures.Add("Ticket reminder JavaScript does not persist reminders locally.")
-    }
-    if (-not $PluginJs.Contains("stcRenderReminders")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the saved reminders renderer.")
-    }
-    if (-not $PluginJs.Contains("data-stc-delete-reminder")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the delete reminder action.")
-    }
-    if (-not $PluginJs.Contains("data-stc-export-reminders")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the reminders export binding.")
-    }
-    if (-not $PluginJs.Contains("data-stc-clear-reminders")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the reminders clear binding.")
-    }
-    if (-not $PluginJs.Contains("stcExportReminders")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the reminders JSON exporter.")
-    }
-    if (-not $PluginJs.Contains("data-stc-import-reminders")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the reminders import binding.")
-    }
-    if (-not $PluginJs.Contains("stcImportReminders")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the reminders JSON importer.")
-    }
-    if (-not $PluginJs.Contains("stcClampText")) {
-        $Failures.Add("Ticket reminder JavaScript does not clamp imported reminder text.")
-    }
-    if (-not $PluginJs.Contains("stcDateValue")) {
-        $Failures.Add("Ticket reminder JavaScript does not validate imported reminder dates.")
-    }
-    if (-not $PluginJs.Contains("data-stc-download-calendar")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the calendar download action.")
-    }
-    if (-not $PluginJs.Contains("stcDownloadCalendar")) {
-        $Failures.Add("Ticket reminder JavaScript is missing the ICS calendar exporter.")
-    }
-    if (-not $PluginJs.Contains("text/calendar")) {
-        $Failures.Add("Ticket reminder JavaScript does not create a calendar file download.")
-    }
-    if (-not $PluginJs.Contains("stcBookingWindowStatus")) {
+    if (-not $PluginJs.Contains("bookingWindowStatus")) {
         $Failures.Add("Ticket tool JavaScript is missing booking window status logic.")
     }
-    foreach ($StatusLabel in @("Book now", "Set reminder", "Date has passed")) {
+    foreach ($StatusLabel in @("BOOKING NOT OPEN YET", "BOOKING WINDOW REACHED", "VISIT DATE PASSED")) {
         if (-not $PluginJs.Contains($StatusLabel)) {
             $Failures.Add("Ticket tool JavaScript is missing booking window label: $StatusLabel")
         }
     }
-    if (-not $PluginJs.Contains("plan.bookingStatus === 'passed'")) {
-        $Failures.Add("Ticket reminder JavaScript allows saving reminders for past visit dates.")
+    foreach ($CalculationToken in @("getBookingPlan", "setDate", "plan.leadDays", "Choose a valid visit date", "plan.status.key === 'passed'")) {
+        if (-not $PluginJs.Contains($CalculationToken)) {
+            $Failures.Add("Ticket Booking Window JavaScript is missing: $CalculationToken")
+        }
+    }
+    foreach ($RemovedReminderScript in @("localStorage", "JSON.parse", "JSON.stringify", "FileReader", "Blob", "text/calendar", "stcExportReminders", "stcImportReminders", "data-stc-download-calendar", "data-stc-save-reminder")) {
+        if ($PluginJs.Contains($RemovedReminderScript)) {
+            $Failures.Add("Ticket Booking Window JavaScript still contains removed reminder behavior: $RemovedReminderScript")
+        }
     }
 }
 
 $PluginCssPath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/assets/css/tools.css"
 if (Test-Path -LiteralPath $PluginCssPath -PathType Leaf) {
     $PluginCss = Get-Content -LiteralPath $PluginCssPath -Raw
-    if (-not $PluginCss.Contains(".stc-reminder-list")) {
-        $Failures.Add("Ticket tool CSS is missing saved reminder list styling.")
+    foreach ($BookingWindowStyle in @(".stc-ticket-tool__heading", ".stc-ticket-result", ".stc-ticket-status", ".stc-ticket-tool__booking-link", "min-height: 46px")) {
+        if (-not $PluginCss.Contains($BookingWindowStyle)) {
+            $Failures.Add("Ticket Booking Window CSS is missing: $BookingWindowStyle")
+        }
     }
-    if (-not $PluginCss.Contains(".stc-reminder-actions")) {
-        $Failures.Add("Ticket tool CSS is missing reminder action button styling.")
-    }
-    if (-not $PluginCss.Contains(".stc-reminder-list__actions")) {
-        $Failures.Add("Ticket tool CSS is missing saved reminder list action styling.")
-    }
-    if (-not $PluginCss.Contains(".stc-tool-local-note")) {
-        $Failures.Add("Ticket tool CSS is missing local-only reminder note styling.")
-    }
-    if (-not $PluginCss.Contains(".stc-ticket-status")) {
-        $Failures.Add("Ticket tool CSS is missing booking window status styling.")
+    foreach ($RemovedReminderStyle in @(".stc-reminder-list", ".stc-reminder-actions", ".stc-tool-local-note")) {
+        if ($PluginCss.Contains($RemovedReminderStyle)) {
+            $Failures.Add("Ticket Booking Window CSS still contains removed reminder styling: $RemovedReminderStyle")
+        }
     }
     if (-not $PluginCss.Contains(":focus-visible")) {
         $Failures.Add("Ticket tool CSS is missing keyboard focus styling.")
@@ -804,15 +773,15 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if ($FrontPage.Contains("data-stc-collapsible-grid") -or $FrontPage.Contains("data-stc-grid-toggle")) {
         $Failures.Add("Homepage still includes the removed vertical city-card expansion control.")
     }
-    if (-not $FrontPage.Contains("https://www.trip.com/") -or (-not $FrontPage.Contains("rel=""sponsored noopener"""))) {
-        $Failures.Add("Homepage Planner CTA is not a sponsored Trip.com external link.")
+    if (-not $FrontPage.Contains("stc_get_trip_planner_url()") -or (-not $FrontPage.Contains("rel=""sponsored noopener"""))) {
+        $Failures.Add("Homepage Planner CTA does not use the shared sponsored Trip.Planner destination.")
     }
-    foreach ($ToolCopy in @("Plan Your Trip", "Book hotels, trains &amp; flights with confidence.", "Explore on Trip.com", "Ticket Date &amp; Availability", "Check booking windows &amp; set free alerts before your visit.", "Real-time Dates", "Free Alerts", "Check Dates &amp; Set Alerts", "Free to use", "No login required")) {
+    foreach ($ToolCopy in @("Plan Your Trip", "Book hotels, trains &amp; flights with confidence.", "Open Trip.Planner", "Ticket Booking Window", "See when you should start checking tickets for your visit.", "Choose a visit date", "Get booking timing", "Check booking date", "Rule-based estimate", "No login required")) {
         if (-not $FrontPage.Contains($ToolCopy)) {
             $Failures.Add("Homepage tool cards are missing refined copy: $ToolCopy")
         }
     }
-    foreach ($RemovedToolCopy in @("Start planning on", "Build your itinerary and book with confidence.", "Ticket Tool / Reminder", "See availability and important notes.", "Get notified before your visit.", "Check ticket date / Set reminder")) {
+    foreach ($RemovedToolCopy in @("Start planning on", "Build your itinerary and book with confidence.", "Ticket Tool / Reminder", "Ticket Date &amp; Availability", "Real-time Dates", "Free Alerts", "Set Alerts", "Get notified before your visit.")) {
         if ($FrontPage.Contains($RemovedToolCopy)) {
             $Failures.Add("Homepage tool cards still include superseded copy: $RemovedToolCopy")
         }
@@ -848,7 +817,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing selected homepage visual style token: $StyleToken")
         }
     }
-    foreach ($FooterStyleToken in @(".stc-footer__inner", ".stc-footer__socials", ".stc-footer__bottom")) {
+    foreach ($FooterStyleToken in @(".stc-footer__inner", ".stc-footer__contact", ".stc-footer__bottom")) {
         if (-not $ThemeCss.Contains($FooterStyleToken)) {
             $Failures.Add("Theme CSS is missing selected homepage-reference footer style token: $FooterStyleToken")
         }
@@ -861,7 +830,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if ($ThemeCss.Contains(".stc-faq summary::after")) {
         $Failures.Add("FAQ still uses the old text pseudo-element icon instead of the SVG chevron.")
     }
-    foreach ($ModernFooterToken in @("background: #0d1714", "color: #9eb0a7", "color: #8a9c94", "background: rgba(255, 255, 255, .08)", "height: 36px", ".stc-footer__legal")) {
+    foreach ($ModernFooterToken in @("background: #0d1714", "color: #9eb0a7", "color: #8a9c94", ".stc-footer__contact", "min-height: 44px", ".stc-footer__legal")) {
         if (-not $ThemeCss.Contains($ModernFooterToken)) {
             $Failures.Add("Theme CSS is missing modern footer styling: $ModernFooterToken")
         }
@@ -918,9 +887,14 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing secondary-page responsive style: $SecondaryPageStyleToken")
         }
     }
-    foreach ($MobileGridStyleToken in @(".stc-survival-card::after", ".stc-share__trigger", ".stc-guide-grid-shell", ".stc-guide-grid-reveal", "grid-template-columns: repeat(2", "max-height: var(--stc-guide-collapsed-height)", "max-height: var(--stc-guide-expanded-height)", "backdrop-filter: blur")) {
+    foreach ($MobileGridStyleToken in @(".stc-survival-card::after", ".stc-share__trigger", ".stc-guide-grid-shell", ".stc-guide-grid-reveal", ".stc-image-card[hidden]", ".stc-image-card.is-revealing", "grid-template-columns: repeat(2", "animation: stc-guide-card-reveal .16s", "min-height: 44px")) {
         if (-not $ThemeCss.Contains($MobileGridStyleToken)) {
             $Failures.Add("Theme CSS is missing requested four-card fold or page-utility style: $MobileGridStyleToken")
+        }
+    }
+    foreach ($RemovedHeightRevealStyle in @("--stc-guide-collapsed-height", "--stc-guide-expanded-height", "transition: max-height", "max-height: var(--stc-guide")) {
+        if ($ThemeCss.Contains($RemovedHeightRevealStyle)) {
+            $Failures.Add("Theme CSS still contains removed dynamic Guide Grid height behavior: $RemovedHeightRevealStyle")
         }
     }
     foreach ($RefinedGuideCardToken in @(".stc-section__view-all", "linear-gradient(to top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .35) 40%, transparent 100%)", "background: rgba(0, 0, 0, .45)", "-webkit-backdrop-filter: blur(8px)", "border: 1px solid rgba(255, 255, 255, .18)", "aspect-ratio: 3 / 4", "border-radius: 14px", "gap: 12px", "color: rgba(255, 255, 255, .85)", "font-size: 12px", "text-shadow: 0 2px 8px rgba(0, 0, 0, .65)", "box-shadow: 0 2px 8px rgba(0, 0, 0, .06)", "transform: scale(.96)")) {
@@ -968,7 +942,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing structured Attraction Guide content styling: $GuideClass")
         }
     }
-    foreach ($GenericArticleStyle in @(".stc-article-hero", ".stc-article-layout--with-toc", ".stc-article-sidebar", ".stc-share__panel")) {
+    foreach ($GenericArticleStyle in @(".stc-article-hero", ".stc-article-layout--with-toc", ".stc-article-sidebar", ".stc-share__panel", ".stc-share.is-mobile-fallback")) {
         if (-not $ThemeCss.Contains($GenericArticleStyle)) {
             $Failures.Add("Theme CSS is missing generic article or ShareThisPage styling: $GenericArticleStyle")
         }
@@ -995,9 +969,19 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     if (-not $ThemeJs.Contains("querySelectorAll('[data-stc-guide-toc]')")) {
         $Failures.Add("Theme JavaScript does not populate both desktop and mobile Guide tables of contents.")
     }
-    foreach ($ShareScriptToken in @("navigator.share", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-copy", "data-stc-share-close", "AbortError", "Link copied", "Escape")) {
+    foreach ($ShareScriptToken in @("navigator.share", "finePointer.matches", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-copy", "data-stc-share-close", "Copied ✓", "Escape", "event.key === 'Tab'")) {
         if (-not $ThemeJs.Contains($ShareScriptToken)) {
             $Failures.Add("Theme JavaScript is missing accessible ShareThisPage behavior: $ShareScriptToken")
+        }
+    }
+    foreach ($GuideGridScriptToken in @("stcGuideGridReveal", "cards.forEach", "card.hidden", "Show fewer", "aria-expanded", "matchMedia('(max-width: 840px)'")) {
+        if (-not $ThemeJs.Contains($GuideGridScriptToken)) {
+            $Failures.Add("Theme JavaScript is missing reusable Guide Grid behavior: $GuideGridScriptToken")
+        }
+    }
+    foreach ($RemovedHeightRevealScript in @("getBoundingClientRect", "collapsedHeight", "expandedHeight", "--stc-guide-collapsed-height", "--stc-guide-expanded-height", "preventScroll")) {
+        if ($ThemeJs.Contains($RemovedHeightRevealScript)) {
+            $Failures.Add("Theme JavaScript still contains removed measured Guide Grid behavior: $RemovedHeightRevealScript")
         }
     }
 }

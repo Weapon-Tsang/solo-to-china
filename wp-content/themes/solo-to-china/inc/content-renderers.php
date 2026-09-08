@@ -335,7 +335,9 @@ function stc_render_planner_cta_component( $attributes ) {
 }
 
 /**
- * Render a contextual Ticket Reminder wrapper and delegate its form to the Plugin.
+ * Render a contextual Ticket Booking Window and delegate its form to the Plugin.
+ *
+ * The historical shortcode name remains as a compatibility adapter.
  *
  * @param array<string, mixed> $attributes Shortcode attributes.
  * @return string
@@ -345,7 +347,7 @@ function stc_render_ticket_reminder_component( $attributes ) {
 		array(
 			'attraction_slug' => '',
 			'title'           => __( 'Plan your ticket timing', 'solo-to-china' ),
-			'description'     => __( 'Choose a visit date to see when to check availability and save a local reminder.', 'solo-to-china' ),
+			'description'     => __( 'Choose a visit date to see when you should start checking tickets.', 'solo-to-china' ),
 			'anchor'          => '',
 		),
 		(array) $attributes,
@@ -367,7 +369,7 @@ function stc_render_ticket_reminder_component( $attributes ) {
 	?>
 	<section id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--ticket" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 		<div class="stc-dynamic-component__body">
-			<p class="stc-dynamic-component__eyebrow"><?php esc_html_e( 'Ticket reminder', 'solo-to-china' ); ?></p>
+			<p class="stc-dynamic-component__eyebrow"><?php esc_html_e( 'Ticket Booking Window', 'solo-to-china' ); ?></p>
 			<h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $title ); ?></h2>
 			<?php if ( $description ) : ?>
 				<p><?php echo esc_html( $description ); ?></p>
@@ -375,7 +377,7 @@ function stc_render_ticket_reminder_component( $attributes ) {
 		</div>
 		<div class="stc-dynamic-component__tool">
 			<?php if ( shortcode_exists( 'solo_to_china_ticket_tool' ) ) : ?>
-				<?php echo do_shortcode( '[solo_to_china_ticket_tool attraction_slug="' . esc_attr( $attraction_slug ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Trusted Plugin renderer escapes its own output. ?>
+				<?php echo do_shortcode( '[solo_to_china_ticket_tool attraction_slug="' . esc_attr( $attraction_slug ) . '" heading_level="3"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Trusted Plugin renderer escapes its own output. ?>
 			<?php else : ?>
 				<p class="stc-dynamic-component__fallback"><?php esc_html_e( 'Ticket timing is temporarily unavailable.', 'solo-to-china' ); ?> <a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>"><?php esc_html_e( 'Open Tools', 'solo-to-china' ); ?></a>.</p>
 			<?php endif; ?>

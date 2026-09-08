@@ -39,6 +39,12 @@ $PlaygroundArguments = @(
     "@wp-playground/cli@$PlaygroundCliVersion"
     "server"
     "--port=$Port"
+    "--define-bool"
+    "AUTOMATIC_UPDATER_DISABLED"
+    "true"
+    "--define-bool"
+    "WP_AUTO_UPDATE_CORE"
+    "false"
     "--blueprint=$Blueprint"
     "--mount-dir"
     $ParentTheme

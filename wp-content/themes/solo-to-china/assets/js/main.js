@@ -34,46 +34,59 @@
 				return;
 			}
 
-			function syncCollapsedHeight() {
+			function setCardVisibility(expanded, animate) {
+				cards.forEach(function (card, index) {
+					var shouldHide = media.matches && !expanded && index >= 4;
+
+					card.hidden = shouldHide;
+					card.classList.remove('is-revealing');
+
+					if (animate && !shouldHide && index >= 4) {
+						window.requestAnimationFrame(function () {
+							card.classList.add('is-revealing');
+						});
+					}
+				});
+			}
+
+			function syncResponsiveState() {
 				if (!media.matches) {
-					shell.classList.remove('is-ready');
-					grid.style.removeProperty('--stc-guide-collapsed-height');
-					grid.style.removeProperty('--stc-guide-expanded-height');
+					setCardVisibility(true, false);
+					shell.classList.remove('is-ready', 'is-expanded');
+					button.setAttribute('aria-expanded', 'false');
 					button.hidden = true;
 					return;
 				}
 
-				var firstCard = cards[0].getBoundingClientRect();
-				var fourthCard = cards[3].getBoundingClientRect();
-				var lastCard = cards[cards.length - 1].getBoundingClientRect();
-				var collapsedHeight = Math.ceil(fourthCard.bottom - firstCard.top);
-				var expandedHeight = Math.ceil(lastCard.bottom - firstCard.top);
-
-				grid.style.setProperty('--stc-guide-collapsed-height', collapsedHeight + 'px');
-				grid.style.setProperty('--stc-guide-expanded-height', expandedHeight + 'px');
+				setCardVisibility(false, false);
 				label.textContent = '+' + (cards.length - 4) + ' More ' + guideLabel;
 				button.hidden = false;
+				button.setAttribute('aria-expanded', 'false');
+				shell.classList.remove('is-expanded');
 				shell.classList.add('is-ready');
 			}
 
 			button.addEventListener('click', function () {
-				var firstRevealedLink = cards[4].querySelector('a');
+				var expanded = button.getAttribute('aria-expanded') === 'true';
 
-				shell.classList.add('is-expanded');
-				button.setAttribute('aria-expanded', 'true');
-
-				if (firstRevealedLink) {
-					firstRevealedLink.focus({ preventScroll: true });
-				}
+				button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+				shell.classList.toggle('is-expanded', !expanded);
+				label.textContent = expanded ? '+' + (cards.length - 4) + ' More ' + guideLabel : 'Show fewer';
+				setCardVisibility(!expanded, !expanded);
 			});
 
-			syncCollapsedHeight();
-			window.addEventListener('resize', syncCollapsedHeight);
+			syncResponsiveState();
+			if (media.addEventListener) {
+				media.addEventListener('change', syncResponsiveState);
+			} else {
+				media.addListener(syncResponsiveState);
+			}
 		});
 	}
 
 	function stcPageShare() {
 		var shareUtilities = document.querySelectorAll('[data-stc-share]');
+		var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
 		function copyToClipboard(text) {
 			if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -107,6 +120,7 @@
 			var panel = utility.querySelector('[data-stc-share-panel]');
 			var closeButton = utility.querySelector('[data-stc-share-close]');
 			var copyButton = utility.querySelector('[data-stc-share-copy]');
+			var copyLabelNode = utility.querySelector('[data-stc-share-copy-label]');
 			var urlInput = utility.querySelector('[data-stc-share-url]');
 			var status = utility.querySelector('[data-stc-share-status]');
 			var whatsapp = utility.querySelector('[data-stc-share-whatsapp]');
@@ -114,7 +128,7 @@
 			var title = utility.getAttribute('data-share-title') || document.title;
 			var description = utility.getAttribute('data-share-description') || '';
 			var canonicalUrl = utility.getAttribute('data-share-canonical') || window.location.href;
-			var copyLabel = copyButton ? copyButton.textContent : 'Copy link';
+			var copyLabel = copyLabelNode ? copyLabelNode.textContent : 'Copy link';
 
 			if (!trigger || !panel) {
 				return;
@@ -148,16 +162,17 @@
 				panel.hidden = false;
 				trigger.setAttribute('aria-expanded', 'true');
 				utility.classList.add('is-open');
+				utility.classList.toggle('is-mobile-fallback', !finePointer.matches);
 				announce(message || '');
 				window.requestAnimationFrame(function () {
-					(closeButton || copyButton || urlInput).focus();
+					(closeButton || whatsapp || email || copyButton).focus();
 				});
 			}
 
 			function closePanel(restoreFocus) {
 				panel.hidden = true;
 				trigger.setAttribute('aria-expanded', 'false');
-				utility.classList.remove('is-open');
+				utility.classList.remove('is-open', 'is-mobile-fallback');
 				announce('');
 				if (restoreFocus) {
 					trigger.focus();
@@ -171,15 +186,13 @@
 					url: canonicalUrl
 				};
 
-				if (navigator.share) {
+				if (!finePointer.matches && navigator.share) {
 					setBusy(true);
 					announce('Opening sharing options');
 					navigator.share(shareData).then(function () {
 						announce('Page shared');
-					}).catch(function (error) {
-						if (!error || error.name !== 'AbortError') {
-							openPanel('Choose another way to share');
-						}
+					}).catch(function () {
+						openPanel('Choose another way to share');
 					}).finally(function () {
 						setBusy(false);
 					});
@@ -197,10 +210,14 @@
 				copyButton.addEventListener('click', function () {
 					copyButton.disabled = true;
 					copyToClipboard(canonicalUrl).then(function () {
-						copyButton.textContent = 'Link copied';
-						announce('Link copied');
+						if (copyLabelNode) {
+							copyLabelNode.textContent = 'Copied ✓';
+						}
+						announce('Copied');
 						window.setTimeout(function () {
-							copyButton.textContent = copyLabel;
+							if (copyLabelNode) {
+								copyLabelNode.textContent = copyLabel;
+							}
 							copyButton.disabled = false;
 						}, 1800);
 					}).catch(function () {
@@ -224,6 +241,21 @@
 				if (event.key === 'Escape' && !panel.hidden) {
 					event.preventDefault();
 					closePanel(true);
+					return;
+				}
+
+				if (event.key === 'Tab' && !panel.hidden) {
+					var focusable = Array.from(panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])'));
+					var first = focusable[0];
+					var last = focusable[focusable.length - 1];
+
+					if (event.shiftKey && document.activeElement === first) {
+						event.preventDefault();
+						last.focus();
+					} else if (!event.shiftKey && document.activeElement === last) {
+						event.preventDefault();
+						first.focus();
+					}
 				}
 			});
 

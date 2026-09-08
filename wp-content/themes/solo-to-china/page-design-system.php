@@ -96,7 +96,7 @@ foreach ( $components as $component ) {
 		<div class="stc-component-gallery__utility-grid">
 			<article data-stc-gallery-component="share_this_page">
 				<h3><?php esc_html_e( 'Share This Page', 'solo-to-china' ); ?></h3>
-				<p><?php esc_html_e( 'Native share first; canonical channel and copy fallback second.', 'solo-to-china' ); ?></p>
+				<p><?php esc_html_e( 'Desktop branded popover; mobile native share with a canonical-link fallback sheet.', 'solo-to-china' ); ?></p>
 				<?php stc_render_share_this_page(); ?>
 			</article>
 			<article data-stc-gallery-component="table_of_contents">

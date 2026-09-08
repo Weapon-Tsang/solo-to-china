@@ -127,7 +127,7 @@ $attractions = [
 		</div>
 		<div class="stc-planner__partner">
 			<strong>Trip.com</strong>
-			<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener">Explore on Trip.com <span aria-hidden="true">&#8599;</span></a>
+			<a class="stc-button stc-button--secondary" href="<?php echo esc_url( stc_get_trip_planner_url() ); ?>" target="_blank" rel="sponsored noopener">Open Trip.Planner <span aria-hidden="true">&#8599;</span></a>
 			<p class="stc-affiliate-disclosure">Opens in a new tab. We may earn a commission at no extra cost to you.</p>
 		</div>
 		<span class="stc-planner__art" aria-hidden="true"></span>
@@ -137,17 +137,17 @@ $attractions = [
 		<div class="stc-ticket-band__intro">
 			<span class="stc-ticket-band__icon" aria-hidden="true"></span>
 			<div>
-				<h2 id="ticket-title">Ticket Date &amp; Availability</h2>
-				<p>Check booking windows &amp; set free alerts before your visit.</p>
+				<h2 id="ticket-title">Ticket Booking Window</h2>
+				<p>See when you should start checking tickets for your visit.</p>
 			</div>
 		</div>
 		<div class="stc-ticket-band__steps">
-			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><strong>Real-time Dates</strong></p>
-			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><strong>Free Alerts</strong></p>
+			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><strong>Choose a visit date</strong></p>
+			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m5 12 4 4L19 6"/></svg></span><strong>Get booking timing</strong></p>
 		</div>
 		<div class="stc-ticket-band__action">
-			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check Dates &amp; Set Alerts</a>
-			<p class="stc-ticket-band__trust"><span aria-hidden="true">&#10003;</span> Free to use <span aria-hidden="true">&bull;</span> No login required</p>
+			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check booking date</a>
+			<p class="stc-ticket-band__trust"><span aria-hidden="true">&#10003;</span> Rule-based estimate <span aria-hidden="true">&bull;</span> No login required</p>
 		</div>
 	</section>
 

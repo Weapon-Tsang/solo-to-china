@@ -8,6 +8,26 @@ Versioning follows semantic compatibility:
 - Minor: backward-compatible component, optional field, or variant additions.
 - Major: removed/renamed capabilities, newly required fields, incompatible schemas, or changed semantics.
 
+## Parent Theme 0.29.0 / Child Theme 0.9.0 / Tools Plugin 0.23.0 - 2026-09-08
+
+### Changed
+
+- Replaced measured mobile Guide Grid max-height transitions with a reusable first-four card toggle. No-JS and desktop continue to show every card; newly revealed cards use only a short opacity/translate animation.
+- Reworked Share This Page into a branded desktop popover and native-first mobile flow with a branded fallback bottom sheet, while preserving canonical channels, clipboard fallback, Escape, outside-click, focus return, and keyboard containment.
+- Repositioned the Plugin tool as stateless Ticket Booking Window. The historical `ticket_reminder` Registry ID remains stable as a compatibility adapter.
+- Centralized Homepage and Planner-page Trip.Planner links in `stc_get_trip_planner_url()`.
+- Added versioned, idempotent bootstrap content and a shared reading shell for About, Contact, Privacy Policy, Terms of Use, Affiliate Disclosure, and Disclaimer. A read-only public fallback handles slugs already reserved by unpublished pages without overwriting or publishing them.
+- Reorganized the Footer around Brand, Explore, Tools, Help, About, and Legal; removed placeholder social icons and added real contact destinations.
+
+### Removed
+
+- Removed the full Ticket Reminder product surface: Save/Saved reminders, localStorage, JSON import/export, delete/clear, ICS/calendar output, and all related UI and tests.
+- Removed dynamic Guide Grid height measurement, height custom properties, max-height reveal transitions, forced focus, and automatic scroll risk.
+
+### Compatibility
+
+- Content Contract remains `2.1.0` and Component Registry remains `1.1.0`; there is no schema-breaking ID change.
+
 ## Parent Theme 0.28.0 - 2026-09-08
 
 ### Changed

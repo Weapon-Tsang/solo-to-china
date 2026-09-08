@@ -1,6 +1,6 @@
 {
   "registry_version": "1.1.0",
-  "theme_version": "0.28.0",
+  "theme_version": "0.29.0",
   "principles": {
     "frontend": "Frontend defines what can be rendered.",
     "cms": "CMS decides what should be rendered.",
@@ -238,9 +238,9 @@
     },
     {
       "id": "ticket_reminder",
-      "name": "Ticket Reminder",
+      "name": "Ticket Booking Window",
       "category": "travel",
-      "purpose": "Delegates attraction timing and reminder behavior to SoloToChina Tools.",
+      "purpose": "Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias.",
       "status": "stable",
       "variants": ["default"],
       "cms_usable": true,
@@ -249,7 +249,7 @@
       "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php"],
       "schema": {"type": "object", "additionalProperties": false, "required": ["attraction_slug"], "properties": {"attraction_slug": {"type": "string", "minLength": 1}, "title": {"type": "string"}, "description": {"type": "string"}, "anchor": {"type": "string"}}},
       "example": {"type": "ticket_reminder", "variant": "default", "attraction_slug": "forbidden-city", "title": "Check ticket timing"},
-      "accessibility": "The Plugin owns labels, validation, status announcements, and reminder controls.",
+      "accessibility": "The Plugin owns labels, date validation, status announcements, and booking-timing output.",
       "responsive": "Delegated form controls stack and retain touch targets on mobile."
     },
     {

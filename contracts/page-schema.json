@@ -682,7 +682,7 @@
           },
           {
             "additionalProperties": false,
-            "description": "Delegates attraction timing and reminder behavior to SoloToChina Tools.",
+            "description": "Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias.",
             "properties": {
               "data": {
                 "additionalProperties": false,
@@ -721,7 +721,7 @@
               "variant",
               "data"
             ],
-            "title": "Ticket Reminder",
+            "title": "Ticket Booking Window",
             "type": "object"
           },
           {

@@ -51,6 +51,7 @@ $requiredFiles = [
     'wp-content/themes/solo-to-china/search.php',
     'wp-content/themes/solo-to-china/searchform.php',
     'wp-content/themes/solo-to-china/page.php',
+    'wp-content/themes/solo-to-china/page-static-fallback.php',
     'wp-content/themes/solo-to-china/page-design-system.php',
     'wp-content/themes/solo-to-china/front-page.php',
     'wp-content/themes/solo-to-china/screenshot.png',
@@ -162,7 +163,7 @@ if (is_file($packageScriptPath)) {
             $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
         }
     }
-    if (strpos($packageScript, 'Theme version: 0.28.0') === false || strpos($packageScript, 'Child Theme version: 0.8.0') === false || strpos($packageScript, 'Plugin version: 0.22.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.29.0') === false || strpos($packageScript, 'Child Theme version: 0.9.0') === false || strpos($packageScript, 'Plugin version: 0.23.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -187,7 +188,7 @@ $previewScriptPath = $root . DIRECTORY_SEPARATOR . 'scripts/start-preview.ps1';
 $previewBlueprintPath = $root . DIRECTORY_SEPARATOR . 'scripts/playground-blueprint.json';
 if (is_file($previewScriptPath)) {
     $previewScript = file_get_contents($previewScriptPath);
-    foreach (['@wp-playground/cli@latest', 'solo-to-china-child', 'solo-to-china-tools', '--mount-dir', 'playground-blueprint.json'] as $previewToken) {
+    foreach (['@wp-playground/cli@', 'solo-to-china-child', 'solo-to-china-tools', '--mount-dir', 'playground-blueprint.json'] as $previewToken) {
         if (strpos($previewScript, $previewToken) === false) {
             $failures[] = "WordPress Playground preview script is missing: {$previewToken}";
         }
@@ -215,8 +216,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.28.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.28.0.';
+    if (strpos($themeStyle, 'Version: 0.29.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.29.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -229,7 +230,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.28.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.29.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -287,8 +288,13 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.28.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.28.0.';
+    if (strpos($functions, "'0.29.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.29.0.';
+    }
+    foreach (['STC_SITE_PAGE_MIGRATION_VERSION', 'stc_static_page_content', 'stc_static_page_metadata', 'stc_static_page_fallback', 'admin_init', 'wp_page_for_privacy_policy', 'stc_get_trip_planner_url', 'https://www.trip.com/tripplanner'] as $sitePageToken) {
+        if (strpos($functions, $sitePageToken) === false) {
+            $failures[] = 'Theme is missing static-page migration or Planner configuration: ' . $sitePageToken;
+        }
     }
     foreach (['stc_render_share_this_page', 'data-stc-share', 'data-stc-share-trigger', 'data-stc-share-panel'] as $shareRendererToken) {
         if (strpos($functions, $shareRendererToken) === false) {
@@ -326,7 +332,7 @@ $childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo
 $childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
 if (is_file($childThemeStylePath)) {
     $childThemeStyle = file_get_contents($childThemeStylePath);
-    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.8.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.9.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
         if (strpos($childThemeStyle, $childHeaderToken) === false) {
             $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
         }
@@ -369,7 +375,7 @@ if (is_file($childThemeHeaderPath)) {
 $childThemeSiteCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/site.css';
 if (is_file($childThemeSiteCssPath)) {
     $childThemeSiteCss = file_get_contents($childThemeSiteCssPath);
-    foreach (['.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__socials', '@media (max-width: 840px)'] as $childSiteCssToken) {
+    foreach (['.stc-header', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)'] as $childSiteCssToken) {
         if (strpos($childThemeSiteCss, $childSiteCssToken) === false) {
             $failures[] = "Child Theme shared site CSS is missing: {$childSiteCssToken}";
         }
@@ -407,17 +413,20 @@ foreach ($themePhpFiles as $themePhpFile) {
 $footerPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/footer.php';
 if (is_file($footerPath)) {
     $footer = file_get_contents($footerPath);
-    foreach (['stc-footer__inner', 'stc-footer__socials', 'stc-footer__bottom', 'stc-footer__legal', 'Privacy Policy', 'Terms of Use', 'Guest-first. Practical. Independent.'] as $footerToken) {
+    foreach (['stc-footer__inner', 'stc-footer__contact', 'stc-footer__bottom', 'stc-footer__legal', 'Privacy Policy', 'Terms of Use', 'Affiliate Disclosure', 'Disclaimer', 'alex@solotochina.com', '19098361987', 'Guest-first. Practical. Independent.'] as $footerToken) {
         if (strpos($footer, $footerToken) === false) {
             $failures[] = "Footer does not preserve the selected homepage-reference footer token: {$footerToken}";
         }
+    }
+    if (strpos($footer, 'stc-footer__social') !== false) {
+        $failures[] = 'Footer still contains placeholder social controls.';
     }
 }
 
 $pageTemplatePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/page.php';
 if (is_file($pageTemplatePath)) {
     $pageTemplate = file_get_contents($pageTemplatePath);
-    foreach (['survival-kit', 'city-guides', 'attraction-guides', 'planner', 'tools', 'faq'] as $slug) {
+    foreach (['survival-kit', 'city-guides', 'attraction-guides', 'planner', 'tools', 'faq', 'about', 'contact', 'privacy-policy', 'terms-of-use', 'affiliate-disclosure', 'disclaimer'] as $slug) {
         if (strpos($pageTemplate, $slug) === false) {
             $failures[] = "Page template does not handle core IA slug: {$slug}";
         }
@@ -505,19 +514,19 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.22.0`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.23.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
-        if (strpos($pluginReadme, 'limited to Attraction Ticket Reservation & Reminder') === false) {
+        if (strpos($pluginReadme, 'Ticket Booking Window') === false) {
             $failures[] = 'Tools plugin README does not preserve the first-tool boundary.';
         }
     }
 
-    if (strpos($plugin, 'Version: 0.22.0') === false) {
-        $failures[] = 'Tools plugin header version is not 0.22.0.';
+    if (strpos($plugin, 'Version: 0.23.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.23.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.22.0'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.22.0.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.23.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.23.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -558,23 +567,15 @@ if (is_file($pluginPath)) {
             $failures[] = "Attraction ticket data is missing planned coverage for: {$attractionName}";
         }
     }
-    if (strpos($pluginSource, 'data-stc-save-reminder') === false) {
-        $failures[] = 'Ticket tool markup is missing the guest reminder save action.';
+    foreach (['Ticket Booking Window', 'Check booking date', 'data-stc-ticket-link', 'sponsored noopener', 'Ticket rules and booking windows can change'] as $bookingWindowToken) {
+        if (strpos($pluginSource, $bookingWindowToken) === false) {
+            $failures[] = 'Ticket Booking Window markup is missing: ' . $bookingWindowToken;
+        }
     }
-    if (strpos($pluginSource, 'data-stc-reminder-list') === false) {
-        $failures[] = 'Ticket tool markup is missing the local saved reminders list.';
-    }
-    if (strpos($pluginSource, 'data-stc-export-reminders') === false) {
-        $failures[] = 'Ticket tool markup is missing the saved reminders export action.';
-    }
-    if (strpos($pluginSource, 'data-stc-clear-reminders') === false) {
-        $failures[] = 'Ticket tool markup is missing the saved reminders clear action.';
-    }
-    if (strpos($pluginSource, 'data-stc-import-reminders') === false) {
-        $failures[] = 'Ticket tool markup is missing the saved reminders import action.';
-    }
-    if (strpos($pluginSource, 'Saved reminders stay in this browser') === false) {
-        $failures[] = 'Ticket tool markup is missing local-only reminder privacy copy.';
+    foreach (['data-stc-save-reminder', 'data-stc-reminder-list', 'data-stc-export-reminders', 'data-stc-clear-reminders', 'data-stc-import-reminders', 'Saved reminders', 'Add to calendar'] as $removedReminderToken) {
+        if (strpos($pluginSource, $removedReminderToken) !== false) {
+            $failures[] = 'Ticket tool markup still contains removed reminder behavior: ' . $removedReminderToken;
+        }
     }
     if (strpos($shortcodes, 'name="stc_visit_date" required') === false) {
         $failures[] = 'Ticket tool visit date input is not required.';
@@ -590,78 +591,41 @@ if (is_file($pluginPath)) {
 $pluginJsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/assets/js/tools.js';
 if (is_file($pluginJsPath)) {
     $pluginJs = file_get_contents($pluginJsPath);
-    if (strpos($pluginJs, 'stcTicketTool') === false) {
+    if (strpos($pluginJs, 'ticketBookingWindow') === false) {
         $failures[] = 'Ticket tool JavaScript is missing the submit handler boundary.';
     }
-    if (strpos($pluginJs, 'localStorage') === false) {
-        $failures[] = 'Ticket reminder JavaScript does not persist reminders locally.';
-    }
-    if (strpos($pluginJs, 'stcRenderReminders') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the saved reminders renderer.';
-    }
-    if (strpos($pluginJs, 'data-stc-delete-reminder') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the delete reminder action.';
-    }
-    if (strpos($pluginJs, 'data-stc-export-reminders') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the reminders export binding.';
-    }
-    if (strpos($pluginJs, 'data-stc-clear-reminders') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the reminders clear binding.';
-    }
-    if (strpos($pluginJs, 'stcExportReminders') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the reminders JSON exporter.';
-    }
-    if (strpos($pluginJs, 'data-stc-import-reminders') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the reminders import binding.';
-    }
-    if (strpos($pluginJs, 'stcImportReminders') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the reminders JSON importer.';
-    }
-    if (strpos($pluginJs, 'stcClampText') === false) {
-        $failures[] = 'Ticket reminder JavaScript does not clamp imported reminder text.';
-    }
-    if (strpos($pluginJs, 'stcDateValue') === false) {
-        $failures[] = 'Ticket reminder JavaScript does not validate imported reminder dates.';
-    }
-    if (strpos($pluginJs, 'data-stc-download-calendar') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the calendar download action.';
-    }
-    if (strpos($pluginJs, 'stcDownloadCalendar') === false) {
-        $failures[] = 'Ticket reminder JavaScript is missing the ICS calendar exporter.';
-    }
-    if (strpos($pluginJs, 'text/calendar') === false) {
-        $failures[] = 'Ticket reminder JavaScript does not create a calendar file download.';
-    }
-    if (strpos($pluginJs, 'stcBookingWindowStatus') === false) {
+    if (strpos($pluginJs, 'bookingWindowStatus') === false) {
         $failures[] = 'Ticket tool JavaScript is missing booking window status logic.';
     }
-    foreach (['Book now', 'Set reminder', 'Date has passed'] as $statusLabel) {
+    foreach (['BOOKING NOT OPEN YET', 'BOOKING WINDOW REACHED', 'VISIT DATE PASSED'] as $statusLabel) {
         if (strpos($pluginJs, $statusLabel) === false) {
             $failures[] = "Ticket tool JavaScript is missing booking window label: {$statusLabel}";
         }
     }
-    if (strpos($pluginJs, "plan.bookingStatus === 'passed'") === false) {
-        $failures[] = 'Ticket reminder JavaScript allows saving reminders for past visit dates.';
+    foreach (['getBookingPlan', 'setDate', 'plan.leadDays', 'Choose a valid visit date', "plan.status.key === 'passed'"] as $calculationToken) {
+        if (strpos($pluginJs, $calculationToken) === false) {
+            $failures[] = 'Ticket Booking Window JavaScript is missing: ' . $calculationToken;
+        }
+    }
+    foreach (['localStorage', 'JSON.parse', 'JSON.stringify', 'FileReader', 'Blob', 'text/calendar', 'stcExportReminders', 'stcImportReminders', 'data-stc-download-calendar', 'data-stc-save-reminder'] as $removedReminderScript) {
+        if (strpos($pluginJs, $removedReminderScript) !== false) {
+            $failures[] = 'Ticket Booking Window JavaScript still contains removed reminder behavior: ' . $removedReminderScript;
+        }
     }
 }
 
 $pluginCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/assets/css/tools.css';
 if (is_file($pluginCssPath)) {
     $pluginCss = file_get_contents($pluginCssPath);
-    if (strpos($pluginCss, '.stc-reminder-list') === false) {
-        $failures[] = 'Ticket tool CSS is missing saved reminder list styling.';
+    foreach (['.stc-ticket-tool__heading', '.stc-ticket-result', '.stc-ticket-status', '.stc-ticket-tool__booking-link', 'min-height: 46px'] as $bookingWindowStyle) {
+        if (strpos($pluginCss, $bookingWindowStyle) === false) {
+            $failures[] = 'Ticket Booking Window CSS is missing: ' . $bookingWindowStyle;
+        }
     }
-    if (strpos($pluginCss, '.stc-reminder-actions') === false) {
-        $failures[] = 'Ticket tool CSS is missing reminder action button styling.';
-    }
-    if (strpos($pluginCss, '.stc-reminder-list__actions') === false) {
-        $failures[] = 'Ticket tool CSS is missing saved reminder list action styling.';
-    }
-    if (strpos($pluginCss, '.stc-tool-local-note') === false) {
-        $failures[] = 'Ticket tool CSS is missing local-only reminder note styling.';
-    }
-    if (strpos($pluginCss, '.stc-ticket-status') === false) {
-        $failures[] = 'Ticket tool CSS is missing booking window status styling.';
+    foreach (['.stc-reminder-list', '.stc-reminder-actions', '.stc-tool-local-note'] as $removedReminderStyle) {
+        if (strpos($pluginCss, $removedReminderStyle) !== false) {
+            $failures[] = 'Ticket Booking Window CSS still contains removed reminder styling: ' . $removedReminderStyle;
+        }
     }
     if (strpos($pluginCss, ':focus-visible') === false) {
         $failures[] = 'Ticket tool CSS is missing keyboard focus styling.';
@@ -724,15 +688,15 @@ if (is_file($frontPagePath)) {
     if (strpos($frontPage, 'data-stc-collapsible-grid') !== false || strpos($frontPage, 'data-stc-grid-toggle') !== false) {
         $failures[] = 'Homepage still includes the removed vertical city-card expansion control.';
     }
-    if (strpos($frontPage, 'https://www.trip.com/') === false || strpos($frontPage, 'rel="sponsored noopener"') === false) {
-        $failures[] = 'Homepage Planner CTA is not a sponsored Trip.com external link.';
+    if (strpos($frontPage, 'stc_get_trip_planner_url()') === false || strpos($frontPage, 'rel="sponsored noopener"') === false) {
+        $failures[] = 'Homepage Planner CTA does not use the shared sponsored Trip.Planner destination.';
     }
-    foreach (['Plan Your Trip', 'Book hotels, trains &amp; flights with confidence.', 'Explore on Trip.com', 'Ticket Date &amp; Availability', 'Check booking windows &amp; set free alerts before your visit.', 'Real-time Dates', 'Free Alerts', 'Check Dates &amp; Set Alerts', 'Free to use', 'No login required'] as $toolCopy) {
+    foreach (['Plan Your Trip', 'Book hotels, trains &amp; flights with confidence.', 'Open Trip.Planner', 'Ticket Booking Window', 'See when you should start checking tickets for your visit.', 'Choose a visit date', 'Get booking timing', 'Check booking date', 'Rule-based estimate', 'No login required'] as $toolCopy) {
         if (strpos($frontPage, $toolCopy) === false) {
             $failures[] = "Homepage tool cards are missing refined copy: {$toolCopy}";
         }
     }
-    foreach (['Start planning on', 'Build your itinerary and book with confidence.', 'Ticket Tool / Reminder', 'See availability and important notes.', 'Get notified before your visit.', 'Check ticket date / Set reminder'] as $removedToolCopy) {
+    foreach (['Start planning on', 'Build your itinerary and book with confidence.', 'Ticket Tool / Reminder', 'Ticket Date &amp; Availability', 'Real-time Dates', 'Free Alerts', 'Set Alerts', 'Get notified before your visit.'] as $removedToolCopy) {
         if (strpos($frontPage, $removedToolCopy) !== false) {
             $failures[] = "Homepage tool cards still include superseded copy: {$removedToolCopy}";
         }
@@ -768,7 +732,7 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing selected homepage visual style token: {$styleToken}";
         }
     }
-    foreach (['.stc-footer__inner', '.stc-footer__socials', '.stc-footer__bottom'] as $footerStyleToken) {
+    foreach (['.stc-footer__inner', '.stc-footer__contact', '.stc-footer__bottom'] as $footerStyleToken) {
         if (strpos($themeCss, $footerStyleToken) === false) {
             $failures[] = "Theme CSS is missing selected homepage-reference footer style token: {$footerStyleToken}";
         }
@@ -781,7 +745,7 @@ if (is_file($themeCssPath)) {
     if (strpos($themeCss, '.stc-faq summary::after') !== false) {
         $failures[] = 'FAQ still uses the old text pseudo-element icon instead of the SVG chevron.';
     }
-    foreach (['background: #0d1714', 'color: #9eb0a7', 'color: #8a9c94', 'background: rgba(255, 255, 255, .08)', 'height: 36px', '.stc-footer__legal'] as $modernFooterToken) {
+    foreach (['background: #0d1714', 'color: #9eb0a7', 'color: #8a9c94', '.stc-footer__contact', 'min-height: 44px', '.stc-footer__legal'] as $modernFooterToken) {
         if (strpos($themeCss, $modernFooterToken) === false) {
             $failures[] = "Theme CSS is missing modern footer styling: {$modernFooterToken}";
         }
@@ -838,9 +802,14 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing secondary-page responsive style: {$secondaryPageStyleToken}";
         }
     }
-    foreach (['.stc-survival-card::after', '.stc-share__trigger', '.stc-guide-grid-shell', '.stc-guide-grid-reveal', 'grid-template-columns: repeat(2', 'max-height: var(--stc-guide-collapsed-height)', 'max-height: var(--stc-guide-expanded-height)', 'backdrop-filter: blur'] as $mobileGridStyleToken) {
+    foreach (['.stc-survival-card::after', '.stc-share__trigger', '.stc-guide-grid-shell', '.stc-guide-grid-reveal', '.stc-image-card[hidden]', '.stc-image-card.is-revealing', 'grid-template-columns: repeat(2', 'animation: stc-guide-card-reveal .16s', 'min-height: 44px'] as $mobileGridStyleToken) {
         if (strpos($themeCss, $mobileGridStyleToken) === false) {
             $failures[] = "Theme CSS is missing requested four-card fold or page-utility style: {$mobileGridStyleToken}";
+        }
+    }
+    foreach (['--stc-guide-collapsed-height', '--stc-guide-expanded-height', 'transition: max-height', 'max-height: var(--stc-guide'] as $removedHeightRevealStyle) {
+        if (strpos($themeCss, $removedHeightRevealStyle) !== false) {
+            $failures[] = 'Theme CSS still contains removed dynamic Guide Grid height behavior: ' . $removedHeightRevealStyle;
         }
     }
     foreach (['.stc-section__view-all', 'linear-gradient(to top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .35) 40%, transparent 100%)', 'background: rgba(0, 0, 0, .45)', '-webkit-backdrop-filter: blur(8px)', 'border: 1px solid rgba(255, 255, 255, .18)', 'aspect-ratio: 3 / 4', 'border-radius: 14px', 'gap: 12px', 'color: rgba(255, 255, 255, .85)', 'font-size: 12px', 'text-shadow: 0 2px 8px rgba(0, 0, 0, .65)', 'box-shadow: 0 2px 8px rgba(0, 0, 0, .06)', 'transform: scale(.96)'] as $refinedGuideCardToken) {
@@ -888,7 +857,7 @@ if (is_file($themeCssPath)) {
             $failures[] = "Theme CSS is missing structured Attraction Guide content styling: {$guideClass}";
         }
     }
-    foreach (['.stc-article-hero', '.stc-article-layout--with-toc', '.stc-article-sidebar', '.stc-share__panel'] as $genericArticleStyle) {
+    foreach (['.stc-article-hero', '.stc-article-layout--with-toc', '.stc-article-sidebar', '.stc-share__panel', '.stc-share.is-mobile-fallback'] as $genericArticleStyle) {
         if (strpos($themeCss, $genericArticleStyle) === false) {
             $failures[] = 'Theme CSS is missing generic article or ShareThisPage styling: ' . $genericArticleStyle;
         }
@@ -915,9 +884,19 @@ if (is_file($themeJsPath)) {
     if (strpos($themeJs, "querySelectorAll('[data-stc-guide-toc]')") === false) {
         $failures[] = 'Theme JavaScript does not populate both desktop and mobile Guide tables of contents.';
     }
-    foreach (['navigator.share', 'navigator.clipboard', 'data-stc-share-trigger', 'data-stc-share-panel', 'data-stc-share-copy', 'data-stc-share-close', 'AbortError', 'Link copied', 'Escape'] as $shareScriptToken) {
+    foreach (['navigator.share', 'finePointer.matches', 'navigator.clipboard', 'data-stc-share-trigger', 'data-stc-share-panel', 'data-stc-share-copy', 'data-stc-share-close', 'Copied ✓', 'Escape', "event.key === 'Tab'"] as $shareScriptToken) {
         if (strpos($themeJs, $shareScriptToken) === false) {
             $failures[] = 'Theme JavaScript is missing accessible ShareThisPage behavior: ' . $shareScriptToken;
+        }
+    }
+    foreach (['stcGuideGridReveal', 'cards.forEach', 'card.hidden', 'Show fewer', 'aria-expanded', "matchMedia('(max-width: 840px)'"] as $guideGridScriptToken) {
+        if (strpos($themeJs, $guideGridScriptToken) === false) {
+            $failures[] = 'Theme JavaScript is missing reusable Guide Grid behavior: ' . $guideGridScriptToken;
+        }
+    }
+    foreach (['getBoundingClientRect', 'collapsedHeight', 'expandedHeight', '--stc-guide-collapsed-height', '--stc-guide-expanded-height', 'preventScroll'] as $removedHeightRevealScript) {
+        if (strpos($themeJs, $removedHeightRevealScript) !== false) {
+            $failures[] = 'Theme JavaScript still contains removed measured Guide Grid behavior: ' . $removedHeightRevealScript;
         }
     }
 }

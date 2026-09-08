@@ -248,6 +248,87 @@ function stc_playground_install_component_gallery( $media_block ) {
 }
 
 /**
+ * Verify the Theme-owned site-page migration against a real WordPress database.
+ *
+ * The fixture deliberately removes one generated page, confirms it is restored,
+ * then edits another page and confirms repeated migrations preserve its ID,
+ * content, status, page count, and the existing WordPress privacy setting.
+ *
+ * @return void
+ * @throws RuntimeException When the migration is not idempotent or overwrites content.
+ */
+function stc_playground_verify_site_page_migration() {
+	$disclaimer = get_page_by_path( 'disclaimer', OBJECT, 'page' );
+	if ( ! $disclaimer ) {
+		throw new RuntimeException( 'Static-page bootstrap did not create Disclaimer.' );
+	}
+
+	wp_delete_post( $disclaimer->ID, true );
+	if ( ! stc_ensure_core_pages() ) {
+		throw new RuntimeException( 'Static-page bootstrap did not report successful recreation.' );
+	}
+
+	$recreated_disclaimer = get_page_by_path( 'disclaimer', OBJECT, 'page' );
+	if ( ! $recreated_disclaimer || 'publish' !== $recreated_disclaimer->post_status ) {
+		throw new RuntimeException( 'Static-page bootstrap did not recreate the missing Disclaimer page.' );
+	}
+
+	$terms = get_page_by_path( 'terms-of-use', OBJECT, 'page' );
+	if ( ! $terms ) {
+		throw new RuntimeException( 'Static-page bootstrap did not create Terms of Use.' );
+	}
+
+	$original_terms_content = $terms->post_content;
+	$edited_terms_content   = $original_terms_content . "\n<!-- playground administrator edit -->";
+	$privacy_setting       = get_option( 'wp_page_for_privacy_policy' );
+	wp_update_post(
+		array(
+			'ID'           => $terms->ID,
+			'post_content' => $edited_terms_content,
+		)
+	);
+
+	$before_ids = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		)
+	);
+
+	stc_ensure_core_pages();
+	stc_ensure_core_pages();
+
+	$after_ids   = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		)
+	);
+	$terms_after = get_post( $terms->ID );
+
+	if ( count( $before_ids ) !== count( $after_ids ) ) {
+		throw new RuntimeException( 'Repeated static-page bootstrap changed the page count.' );
+	}
+	if ( ! $terms_after || $edited_terms_content !== $terms_after->post_content || $terms->post_status !== $terms_after->post_status ) {
+		throw new RuntimeException( 'Repeated static-page bootstrap overwrote administrator page content or status.' );
+	}
+	if ( $privacy_setting !== get_option( 'wp_page_for_privacy_policy' ) ) {
+		throw new RuntimeException( 'Repeated static-page bootstrap overwrote the WordPress privacy-page setting.' );
+	}
+
+	wp_update_post(
+		array(
+			'ID'           => $terms->ID,
+			'post_content' => $original_terms_content,
+		)
+	);
+}
+
+/**
  * Install or refresh the disposable fixtures.
  *
  * @return void
@@ -255,6 +336,7 @@ function stc_playground_install_component_gallery( $media_block ) {
 function stc_playground_install_fixtures() {
 	$media_block = stc_playground_render_media_block( stc_playground_install_media_fixture() );
 	stc_playground_install_component_gallery( $media_block );
+	stc_playground_verify_site_page_migration();
 
 	foreach ( stc_playground_fixture_definitions() as $fixture ) {
 		$term = get_term_by( 'slug', $fixture['category'], 'category' );

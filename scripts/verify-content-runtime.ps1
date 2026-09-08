@@ -51,7 +51,7 @@ Assert-Runtime ($ContractResponse.StatusCode -eq 200) "Content Contract endpoint
 Assert-Runtime ($ContractResponse.Content -eq $ContractAgain.Content) "Content Contract JSON changed between consecutive reads."
 Assert-Runtime ([string]$ContractResponse.Headers.ETag -eq [string]$ContractAgain.Headers.ETag) "Content Contract ETag is not stable."
 Assert-Runtime ($Contract.contract_version -eq "2.1.0") "Content Contract version is not 2.1.0."
-Assert-Runtime ($Contract.theme_version -eq "0.28.0") "Content Contract Theme version is not 0.28.0."
+Assert-Runtime ($Contract.theme_version -eq "0.29.0") "Content Contract Theme version is not 0.29.0."
 Assert-Runtime ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."
 Assert-Runtime ($Contract.principles.cms -eq "Decide what the page contains.") "CMS responsibility principle is missing."
 Assert-Runtime ($Contract.principles.content_type -eq "Content type is taxonomy, not layout.") "Content type boundary principle is missing."
@@ -137,6 +137,23 @@ $SurvivalPost = Get-FixturePost $SurvivalSlug
 $CityPost = Get-FixturePost $CitySlug
 $AttractionPost = Get-FixturePost $AttractionSlug
 
+$StaticPageSlugs = @("about", "contact", "privacy-policy", "terms-of-use", "affiliate-disclosure", "disclaimer")
+$StaticPageHtml = @{}
+foreach ($StaticPageSlug in $StaticPageSlugs) {
+    $StaticPageHtml[$StaticPageSlug] = Get-FixtureHtml $StaticPageSlug
+    Assert-Runtime (([regex]::Matches($StaticPageHtml[$StaticPageSlug], "<h1\b")).Count -eq 1) "Static page must render exactly one H1: $StaticPageSlug"
+    Assert-Runtime ($StaticPageHtml[$StaticPageSlug].Contains("stc-static-page")) "Static page shell is missing: $StaticPageSlug"
+    Assert-Runtime (-not [regex]::IsMatch($StaticPageHtml[$StaticPageSlug], "Coming soon", "IgnoreCase")) "Static page still contains placeholder copy: $StaticPageSlug"
+}
+foreach ($LegalPageSlug in @("privacy-policy", "terms-of-use", "affiliate-disclosure", "disclaimer")) {
+    Assert-Runtime ($StaticPageHtml[$LegalPageSlug].Contains("Last updated:</strong> September 8, 2026")) "Legal page fixed update date is missing: $LegalPageSlug"
+}
+Assert-Runtime ($StaticPageHtml["contact"].Contains("mailto:alex@solotochina.com")) "Contact page email is missing."
+Assert-Runtime ($StaticPageHtml["contact"].Contains("https://wa.me/19098361987")) "Contact page WhatsApp link is missing."
+foreach ($FooterSlug in $StaticPageSlugs) {
+    Assert-Runtime ($SurvivalHtml.Contains("/$FooterSlug/")) "Footer is missing static-page link: $FooterSlug"
+}
+
 foreach ($Fixture in @(
     @{ Slug = $SurvivalSlug; Html = $SurvivalHtml },
     @{ Slug = $CitySlug; Html = $CityHtml },
@@ -162,8 +179,14 @@ foreach ($AttractionToken in @("stc-content-block--quick-facts", "stc-content-bl
 
 Assert-Runtime ([regex]::IsMatch($SurvivalHtml, 'rel="sponsored nofollow noopener"')) "Affiliate CTA is missing sponsored nofollow noopener."
 Assert-Runtime ([regex]::IsMatch($CityHtml, 'rel="sponsored nofollow noopener"')) "Planner CTA is missing sponsored nofollow noopener."
-Assert-Runtime (([regex]::Matches($AttractionHtml, "data-stc-ticket-tool")).Count -eq 1) "Ticket Reminder did not delegate exactly one Plugin form."
-Assert-Runtime ([regex]::IsMatch($AttractionHtml, '<option(?=[^>]*value="forbidden-city")(?=[^>]*selected)[^>]*>', "IgnoreCase")) "Ticket Reminder did not preselect the Plugin-owned Forbidden City option."
+Assert-Runtime (([regex]::Matches($AttractionHtml, "data-stc-ticket-tool")).Count -eq 1) "Ticket Booking Window did not delegate exactly one Plugin form."
+Assert-Runtime ([regex]::IsMatch($AttractionHtml, '<option(?=[^>]*value="forbidden-city")(?=[^>]*selected)[^>]*>', "IgnoreCase")) "Ticket Booking Window did not preselect the Plugin-owned Forbidden City option."
+Assert-Runtime ($AttractionHtml.Contains("Ticket Booking Window")) "Ticket Booking Window heading is missing."
+Assert-Runtime ($AttractionHtml.Contains("Check booking date")) "Ticket Booking Window submit action is missing."
+Assert-Runtime ($AttractionHtml.Contains('rel="sponsored noopener"')) "Ticket Booking Window affiliate link is missing sponsored noopener."
+foreach ($RemovedReminderToken in @("data-stc-save-reminder", "data-stc-reminder-list", "Saved reminders", "Add to calendar")) {
+    Assert-Runtime (-not $AttractionHtml.Contains($RemovedReminderToken)) "Rendered Ticket Booking Window still contains reminder behavior: $RemovedReminderToken"
+}
 
 foreach ($MediaToken in @("stc-content-image--context", "srcset=", "sizes=", 'loading="lazy"', 'decoding="async"', "width=", "height=", "wp-element-caption", 'alt="Visitors approaching the Forbidden City in Beijing"')) {
     Assert-Runtime ($AttractionHtml.Contains($MediaToken)) "Responsive Media output is missing: $MediaToken"
@@ -201,7 +224,7 @@ foreach ($CommercialClass in @("affiliate_booking_card", "affiliate_search_card"
 Assert-Runtime ($GalleryHtml.Contains('data-stc-commercial="true"')) "Component Gallery commercial events are not instrumented."
 
 $RendererRuntime = Get-Content -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/inc/content-renderers.php") -Raw
-Assert-Runtime ($RendererRuntime.Contains("do_shortcode")) "Ticket Reminder is not delegated through the Plugin shortcode."
+Assert-Runtime ($RendererRuntime.Contains("do_shortcode")) "Ticket Booking Window compatibility adapter is not delegated through the Plugin shortcode."
 Assert-Runtime (-not $RendererRuntime.Contains("stc_tools_get_attractions")) "Theme renderer copied Plugin attraction data access."
 Assert-Runtime (-not $RendererRuntime.Contains("booking_lead_days")) "Theme renderer copied Plugin booking calculations."
 

@@ -19,13 +19,13 @@ Current repository status:
 Recommended future code ownership:
 
 - `wp-content/themes/solo-to-china/` for the custom site theme.
-- `wp-content/plugins/solo-to-china-tools/` for project-owned tools such as the Attraction Ticket Reservation & Reminder.
+- `wp-content/plugins/solo-to-china-tools/` for project-owned tools such as Ticket Booking Window.
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.28.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.8.0` in `wp-content/themes/solo-to-china-child/`.
-- SoloToChina Tools plugin `0.22.0` in `wp-content/plugins/solo-to-china-tools/`.
+- Custom SoloToChina theme `0.29.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.9.0` in `wp-content/themes/solo-to-china-child/`.
+- SoloToChina Tools plugin `0.23.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.
@@ -39,7 +39,7 @@ The Theme Registry at `wp-content/themes/solo-to-china/content-contract/componen
 
 Registry `1.1.0` adds four QA-selected Commercial Blocks: Affiliate Booking Card, Search Card, Banner, and Promotion Card. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`. Privacy-minimal impression/click events post only to the same-origin `POST /wp-json/stc/v1/commercial-events` relay; server forwarding is disabled until its environment variables are configured.
 
-Parent Theme `0.28.0` adds the authenticated, draft-only CMS delivery path. The CMS submits a validated Publish Package to `POST /wp-json/stc/v1/cms-articles` or explicitly updates a draft with `PUT /wp-json/stc/v1/cms-articles/{post_id}`. WordPress revalidates the deployed Contract, serializes `page.blocks[]` to editable Gutenberg/shortcode content in exact order, stores provenance plus SEO/GEO metadata, and refuses implicit publication or updates to non-draft posts. The formal package schema is available at `GET /wp-json/stc/v1/cms-publish-package-schema`.
+Parent Theme `0.29.0` preserves the authenticated, draft-only CMS delivery path and adds the UX/foundation cleanup: instant mobile Guide Grid toggling without height measurement, branded desktop and native-first mobile sharing, a single Trip.Planner destination helper, versioned static-page bootstrap, and a complete Footer information architecture. Tools Plugin `0.23.0` replaces Ticket Reminder with a stateless Ticket Booking Window and removes all reminder persistence, JSON, and calendar behavior. Content Contract `2.1.0` remains compatible through the historical `ticket_reminder` adapter ID.
 
 Generate install artifacts with:
 

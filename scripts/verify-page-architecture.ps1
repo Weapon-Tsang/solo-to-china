@@ -47,7 +47,7 @@ foreach ($MetaToken in @("_stc_show_share", "_stc_show_toc", "_stc_hero_variant"
 foreach ($ShareToken in @("stc_render_share_this_page", "data-stc-share", "data-stc-share-trigger", "data-stc-share-panel", 'role="dialog"', "aria-labelledby", "canonical", "aria-live")) {
     Assert-Architecture ($Functions.Contains($ShareToken)) "ShareThisPage renderer is missing: $ShareToken"
 }
-foreach ($ShareJsToken in @("navigator.share", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-copy", "data-stc-share-close", "AbortError", "aria-expanded", "Escape", "Link copied")) {
+foreach ($ShareJsToken in @("navigator.share", "finePointer.matches", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-copy", "data-stc-share-close", "aria-expanded", "Escape", "Copied ✓", "event.key === 'Tab'")) {
     Assert-Architecture ($ThemeJs.Contains($ShareJsToken)) "ShareThisPage interaction is missing: $ShareJsToken"
 }
 Assert-Architecture ($ThemeJs.Contains("document.addEventListener('keydown'")) "ShareThisPage Escape handling must work after a control becomes disabled and loses focus."

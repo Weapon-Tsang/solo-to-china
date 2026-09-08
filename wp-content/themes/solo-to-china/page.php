@@ -75,15 +75,21 @@ $core_pages = [
 		],
 	],
 ];
+$core_pages = array_merge( $core_pages, stc_static_page_metadata() );
 
 $page                = $core_pages[ $slug ] ?? null;
 $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
+$static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', 'affiliate-disclosure', 'disclaimer' ];
 ?>
 
 <main id="main" class="stc-main">
 	<?php if ( $page ) : ?>
 		<section class="stc-page-hero stc-page-hero--visual stc-page-hero--<?php echo esc_attr( $slug ); ?>">
-			<p><?php esc_html_e( 'SoloToChina', 'solo-to-china' ); ?></p>
+			<?php if ( in_array( $slug, $static_page_slugs, true ) ) : ?>
+				<nav class="stc-static-page__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'solo-to-china' ); ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'solo-to-china' ); ?></a><span aria-hidden="true">/</span><span aria-current="page"><?php echo esc_html( $page['title'] ); ?></span></nav>
+			<?php else : ?>
+				<p><?php esc_html_e( 'SoloToChina', 'solo-to-china' ); ?></p>
+			<?php endif; ?>
 			<h1><?php echo esc_html( $page['title'] ); ?></h1>
 			<span><?php echo esc_html( $page['copy'] ); ?></span>
 			<?php if ( ! empty( $page['share'] ) ) : ?>
@@ -138,6 +144,17 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 					</div>
 				</div>
 			</section>
+		<?php elseif ( in_array( $slug, $static_page_slugs, true ) ) : ?>
+			<article class="stc-static-page stc-static-page--<?php echo esc_attr( $slug ); ?>">
+				<div class="stc-static-page__content">
+					<?php
+					while ( have_posts() ) :
+						the_post();
+						the_content();
+					endwhile;
+					?>
+				</div>
+			</article>
 		<?php elseif ( 'planner' === $slug ) : ?>
 			<section class="stc-planner stc-planner--page" aria-labelledby="stc-planner-page-title">
 				<div class="stc-planner__intro">
@@ -151,26 +168,20 @@ $guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
 				</div>
 				<div class="stc-planner__partner">
 					<strong>Trip.com</strong>
-					<a class="stc-button stc-button--secondary" href="https://www.trip.com/" target="_blank" rel="sponsored noopener"><?php esc_html_e( 'Explore on Trip.com', 'solo-to-china' ); ?> <span aria-hidden="true">&#8599;</span></a>
+					<a class="stc-button stc-button--secondary" href="<?php echo esc_url( stc_get_trip_planner_url() ); ?>" target="_blank" rel="sponsored noopener"><?php esc_html_e( 'Open Trip.Planner', 'solo-to-china' ); ?> <span aria-hidden="true">&#8599;</span></a>
 					<p class="stc-affiliate-disclosure"><?php esc_html_e( 'Opens in a new tab. We may earn a commission at no extra cost to you.', 'solo-to-china' ); ?></p>
 				</div>
 				<span class="stc-planner__art" aria-hidden="true"></span>
 			</section>
 		<?php elseif ( 'tools' === $slug ) : ?>
-			<section class="stc-page-section">
-				<div class="stc-feature-panel stc-feature-panel--gold">
-					<div>
-						<h2><?php esc_html_e( 'Ticket Date & Availability', 'solo-to-china' ); ?></h2>
-						<p><?php esc_html_e( 'Check booking windows & set free alerts before your visit.', 'solo-to-china' ); ?></p>
-					</div>
-					<?php
-					if ( shortcode_exists( 'solo_to_china_ticket_tool' ) ) {
-						echo do_shortcode( '[solo_to_china_ticket_tool]' );
-					} else {
-						echo '<p>' . esc_html__( 'Activate the SoloToChina Tools plugin to use this tool.', 'solo-to-china' ) . '</p>';
-					}
-					?>
-				</div>
+			<section class="stc-page-section stc-page-section--ticket-tool">
+				<?php
+				if ( shortcode_exists( 'solo_to_china_ticket_tool' ) ) {
+					echo do_shortcode( '[solo_to_china_ticket_tool]' );
+				} else {
+					echo '<p>' . esc_html__( 'Activate the SoloToChina Tools plugin to use this tool.', 'solo-to-china' ) . '</p>';
+				}
+				?>
 			</section>
 		<?php elseif ( 'faq' === $slug ) : ?>
 			<section class="stc-faq stc-faq--page" aria-label="Frequently asked questions">

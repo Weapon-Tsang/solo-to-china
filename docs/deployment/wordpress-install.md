@@ -40,8 +40,14 @@ When the theme is activated, it creates any missing core IA pages:
 - Planner
 - Tools
 - FAQ
+- About SoloToChina
+- Contact
+- Privacy Policy
+- Terms of Use
+- Affiliate Disclosure
+- Disclaimer
 
-It only creates missing pages. It does not overwrite existing WordPress page content.
+It only creates missing pages. It does not overwrite existing WordPress page content or publish drafts. Theme `0.29.0` also runs this idempotent bootstrap once from the WordPress admin after an upgrade, so the six support/legal pages are created even when the Theme was already active. If an unpublished page already reserves one of the required slugs—as a fresh WordPress install commonly does for Privacy Policy—the public URL uses a read-only Theme fallback until an administrator publishes that page. If WordPress has no configured privacy page, the new or existing `/privacy-policy/` page is assigned; an existing privacy-page setting is preserved.
 
 ## Install Through aaPanel Files
 
@@ -80,9 +86,10 @@ After activation, check these pages in WordPress:
 - City Guides: guide articles use the same shared shell; guide type affects taxonomy and breadcrumb context, not layout.
 - Attraction Guides: guide articles use the same shared shell and retain responsive featured-image output.
 - Guide articles: verify one H1, Home / Hub / Article Breadcrumb, CMS-authored component order, and no automatically injected checklist, FAQ, CTA, Share, or TOC.
-- Planner: Trip.com CTA opens in a new tab.
-- Tools: Ticket Date & Availability renders, requires a visit date, and can save a local reminder.
+- Planner: the shared CTA opens `https://www.trip.com/tripplanner` in a new tab with sponsored/noopener semantics.
+- Tools: Ticket Booking Window renders, requires a visit date, calculates the estimated date from Plugin-owned lead days, and shows all three timing states without saving browser data or claiming live availability.
 - FAQ: FAQ items open and close normally.
+- About, Contact, Privacy Policy, Terms of Use, Affiliate Disclosure, and Disclaimer: each URL resolves with one H1 and the shared reading-width static-page shell.
 
 For featured images uploaded before version `0.17.0`, regenerate WordPress thumbnails once so the `stc-guide-card-2x` 960px size is available. New uploads receive the size automatically. Source featured images should be at least 960px wide; 1200px or wider is preferred for high-DPI screens.
 
@@ -93,15 +100,16 @@ Also check:
 - Mobile Hero stays within 480-580px at 75vh, keeps its title to two readable lines, and reveals the top of the Survival Kit shortcuts in the first viewport.
 - Mobile Hero uses the vermilion Start Exploring CTA and the translucent glass menu button.
 - Keyboard Tab shows visible focus states.
-- Share This Page uses the canonical URL, prefers the device share sheet, and exposes the channel/copy fallback when native sharing is unavailable or fails.
+- Share This Page uses the canonical URL. Desktop/fine-pointer devices always open the branded popover; mobile/coarse-pointer devices prefer the native share sheet and use the branded bottom sheet when native sharing is unavailable or fails.
 - Share fallback supports keyboard focus, Escape close, visible status, and manual URL selection if clipboard access fails.
-- Saved Reminders show local-only copy; their export/import/clear actions work only on the current browser.
+- Ticket Booking Window retains no reminder state and exposes no Save, JSON, ICS, or calendar controls.
+- Mobile Guide Grids at 375, 390, 430, 768, and 840 show four cards initially, reveal immediately, toggle back with Show fewer, and have no clipping or overlap. Desktop shows all cards and no More button.
 - City and Attraction cards are sharp on a high-DPI phone, use centered 3:4 framing, and retain a readable smooth bottom scrim without image blur.
 - Article reading width stays controlled on desktop; the mobile article has no horizontal overflow at 375-390px, and TOC links stop below the Header.
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.28.0`, verify these public read-only endpoints:
+After installing Parent Theme `0.29.0`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`
@@ -164,10 +172,10 @@ The project-owned code boundaries are only:
 
 ## Current Scope
 
-This release includes the approved homepage direction, the renovated Child Theme Guide / Article presentation, and a guest-first Ticket Reservation & Reminder shortcode.
+This release includes the approved homepage direction, the renovated Child Theme Guide / Article presentation, the stateless Ticket Booking Window, the support/legal page migration, and the redesigned Footer.
 
-The reminder feature is currently local-device only. It shows a simple booking-window status, stores saved reminders in the visitor's browser, can export/import a `.json` backup, can clear saved reminders from the current device, and can download an `.ics` calendar file for each reminder date. It does not require login, email, SMS, or database storage.
+Ticket Booking Window uses Plugin-owned attraction data and lead-day rules. It stores no reminder or visit state, does not create calendar files, and does not claim live inventory.
 
-Share This Page is stateless. It does not save a guide, create an account, imply cross-device persistence, or write page state to browser storage or WordPress. It shares the canonical URL through `navigator.share()` when available and otherwise offers WhatsApp, email, and Copy link actions.
+Share This Page is stateless. It does not save a guide, create an account, imply cross-device persistence, or write page state to browser storage or WordPress. Desktop uses the branded popover; mobile attempts `navigator.share()` first and otherwise offers the branded WhatsApp, email, and Copy link sheet.
 
-Email/SMS reminder delivery and cross-device sync should be added later as plugin features, after deciding storage, notification provider, consent copy, and anti-spam rules.
+Reminder delivery and browser reminder management are not part of the SoloToChina product direction.

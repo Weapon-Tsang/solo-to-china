@@ -1,16 +1,42 @@
 .stc-ticket-tool {
 	display: grid;
-	gap: 12px;
-	grid-template-columns: 1fr 1fr auto auto;
+	gap: 16px;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
 	width: 100%;
 }
 
-.stc-ticket-tool button:focus-visible,
-.stc-ticket-tool input:focus-visible,
-.stc-ticket-tool select:focus-visible,
-.stc-ticket-tool label:focus-visible {
-	outline: 3px solid rgba(169, 120, 36, .7);
-	outline-offset: 3px;
+.stc-ticket-tool__heading,
+.stc-ticket-result,
+.stc-ticket-tool__booking-link,
+.stc-ticket-tool__disclosure,
+.stc-ticket-tool__note {
+	grid-column: 1 / -1;
+}
+
+.stc-ticket-tool__heading {
+	display: grid;
+	gap: 6px;
+}
+
+.stc-ticket-tool__heading :is(h2, h3),
+.stc-ticket-tool__heading p,
+.stc-ticket-tool__note,
+.stc-ticket-tool__disclosure,
+.stc-ticket-result p {
+	margin: 0;
+}
+
+.stc-ticket-tool__heading :is(h2, h3) {
+	color: #24362f;
+	font-size: clamp(1.25rem, 2vw, 1.5rem);
+}
+
+.stc-ticket-tool__heading p,
+.stc-ticket-tool__note,
+.stc-ticket-tool__disclosure {
+	color: #6d5d42;
+	font-size: 13px;
+	line-height: 1.55;
 }
 
 .stc-ticket-tool label {
@@ -18,7 +44,7 @@
 	gap: 6px;
 }
 
-.stc-ticket-tool span {
+.stc-ticket-tool label > span {
 	color: #6d5d42;
 	font-size: 12px;
 	font-weight: 800;
@@ -26,79 +52,89 @@
 
 .stc-ticket-tool select,
 .stc-ticket-tool input {
+	background: #fff;
 	border: 1px solid #e3d2b3;
-	border-radius: 8px;
+	border-radius: 9px;
 	font: inherit;
 	min-height: 46px;
 	padding: 0 12px;
+	width: 100%;
 }
 
-.stc-ticket-tool button {
-	background: #a97824;
+.stc-ticket-tool button,
+.stc-ticket-tool__booking-link {
+	align-items: center;
+	background: #146b54;
 	border: 0;
-	border-radius: 8px;
+	border-radius: 9px;
 	color: #fff;
 	cursor: pointer;
+	display: inline-flex;
 	font: inherit;
 	font-weight: 800;
+	justify-content: center;
 	min-height: 46px;
 	padding: 0 18px;
+	text-decoration: none;
 }
 
-.stc-ticket-tool button[type="button"] {
-	background: #7c5b20;
+.stc-ticket-tool__booking-link {
+	justify-self: start;
 }
 
-.stc-ticket-tool p {
-	color: #6d5d42;
-	font-size: 13px;
-	grid-column: 1 / -1;
-	margin: 0;
+.stc-ticket-tool :where(button, input, select, a):focus-visible {
+	outline: 3px solid rgba(20, 107, 84, .45);
+	outline-offset: 3px;
 }
 
 .stc-ticket-result {
-	background: #fff7ea;
+	background: #fffaf1;
 	border: 1px solid #ead7b8;
-	border-radius: 8px;
+	border-radius: 12px;
 	color: #3a3125;
 	display: none;
-	gap: 4px;
-	grid-column: 1 / -1;
-	padding: 14px 16px;
+	gap: 7px;
+	padding: 18px;
 }
 
 .stc-ticket-result.is-visible {
 	display: grid;
 }
 
-.stc-ticket-result strong,
-.stc-ticket-result span {
-	color: inherit;
-	font-size: 14px;
-	font-weight: 700;
+.stc-ticket-result__attraction,
+.stc-ticket-result__date {
+	color: #24362f;
+	font-size: 1.125rem;
 }
 
-.stc-ticket-result span {
-	font-weight: 500;
+.stc-ticket-result__label,
+.stc-ticket-result__rule,
+.stc-ticket-result__visit,
+.stc-ticket-result__guidance,
+.stc-ticket-result__error {
+	color: #5f584b;
+	font-size: 14px;
+	line-height: 1.5;
 }
 
 .stc-ticket-status {
 	border-radius: 999px;
 	color: #fff;
 	display: inline-flex;
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: 800;
 	justify-content: center;
+	letter-spacing: .05em;
 	min-height: 28px;
 	padding: 6px 10px;
 	width: fit-content;
 }
 
-.stc-ticket-status--book-now {
+.stc-ticket-status--reached {
 	background: #146b54;
 }
 
-.stc-ticket-status--set-reminder {
+.stc-ticket-status--not-open {
 	background: #a97824;
 }
 
@@ -106,126 +142,18 @@
 	background: #8b3a2e;
 }
 
-.stc-reminder-list {
-	background: #fff;
-	border: 1px solid #ead7b8;
-	border-radius: 8px;
-	display: grid;
-	gap: 10px;
-	grid-column: 1 / -1;
-	padding: 14px;
-}
-
-.stc-reminder-list h3 {
-	font-size: 15px;
-	margin: 0;
-}
-
-.stc-reminder-list__header {
-	align-items: center;
-	display: flex;
-	gap: 12px;
-	justify-content: space-between;
-}
-
-.stc-reminder-list__actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	justify-content: end;
-}
-
-.stc-reminder-list__actions button,
-.stc-reminder-list__actions label {
-	align-items: center;
-	background: #a97824;
-	border: 0;
-	border-radius: 8px;
-	color: #fff;
-	cursor: pointer;
-	display: inline-flex;
-	font: inherit;
-	font-weight: 800;
-	min-height: 36px;
-	padding: 0 12px;
-}
-
-.stc-reminder-list__actions label span {
-	color: inherit;
-	font-size: inherit;
-}
-
-.stc-reminder-list__actions input {
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
-	overflow: hidden;
-	position: absolute;
-	white-space: nowrap;
-	width: 1px;
-}
-
-.stc-tool-local-note {
-	color: #766853;
-	font-size: 13px;
-	margin: -2px 0 0;
-}
-
-.stc-reminder-list [data-stc-reminder-list] {
-	display: grid;
-	gap: 10px;
-}
-
-.stc-reminder-item {
-	align-items: center;
-	border-top: 1px solid #f0dfc5;
-	display: grid;
-	gap: 12px;
-	grid-template-columns: 1fr auto;
-	padding-top: 10px;
-}
-
-.stc-reminder-item div {
-	display: grid;
-	gap: 4px;
-}
-
-.stc-reminder-actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	justify-content: end;
-}
-
-.stc-reminder-item button {
-	background: #3a3125;
-	min-height: 38px;
-}
-
-.stc-reminder-item button[data-stc-download-calendar] {
-	background: #a97824;
+[data-stc-ticket-link][hidden],
+[data-stc-ticket-disclosure][hidden] {
+	display: none;
 }
 
 @media (max-width: 900px) {
 	.stc-ticket-tool {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
 
-	.stc-reminder-actions {
-		justify-content: start;
-	}
-
-	.stc-reminder-list__header {
-		align-items: start;
-		flex-direction: column;
-	}
-
-	.stc-reminder-list__actions {
-		justify-content: start;
-	}
-
-	.stc-reminder-item {
-		align-items: start;
-		grid-template-columns: 1fr;
+	.stc-ticket-tool button,
+	.stc-ticket-tool__booking-link {
+		width: 100%;
 	}
 }

@@ -1,6 +1,6 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-09-06
+Date: 2026-09-08
 
 ## Product Boundary
 
@@ -28,9 +28,9 @@ Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/
 
 ## Current Versions
 
-- Parent Theme: 0.28.0
-- Child Theme: 0.8.0
-- SoloToChina Tools Plugin: 0.22.0
+- Parent Theme: 0.29.0
+- Child Theme: 0.9.0
+- SoloToChina Tools Plugin: 0.23.0
 - Content Contract: 2.1.0
 - Component Registry: 1.1.0
 
@@ -95,13 +95,14 @@ Current behavior:
 
 - No account, localStorage, saved state, or cross-device implication
 - Uses page title, excerpt, and canonical URL
-- Prioritizes navigator.share()
-- Falls back to WhatsApp, email, and Copy link
+- Uses a branded SoloToChina popover on desktop/fine-pointer devices and never invokes the desktop system share UI
+- Prioritizes `navigator.share()` on mobile/coarse-pointer devices
+- Falls back to a branded bottom sheet with WhatsApp, email, and Copy link
 - Includes clipboard fallback and manual-selection error path
 - Uses ARIA live status, busy state, Escape, outside click, close button, and focus return
 - Appears as a refined translucent Hero utility
-- Uses a lightweight desktop popover and mobile bottom panel
-- Remains visually quieter than booking, availability, and planner CTAs
+- Uses a 340-380px-class desktop popover and compact mobile bottom sheet
+- Remains visually quieter than the H1 and primary planner/booking CTAs
 
 The Theme no longer contains Save guide, Saved, Unsave, Saved Guides, guide export/import/clear/delete, or guide localStorage behavior.
 
@@ -111,7 +112,7 @@ Registry 1.1 publishes 23 stable CMS capabilities: 20 ordered page blocks and th
 
 - Core: Paragraph, Heading, List, Image
 - Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
-- Contextual: Planner CTA, Ticket Reminder, Affiliate CTA
+- Contextual: Planner CTA, Ticket Booking Window compatibility adapter, Affiliate CTA
 - Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
 - Presentation: Article Hero, Share This Page, Table of Contents
 
@@ -125,16 +126,15 @@ Responsive Media, server-rendered stable H2 IDs, editor parity, semantic HTML, l
 
 ## Plugin Boundary
 
-SoloToChina Tools continues to own Attraction Ticket Reservation & Reminder:
+SoloToChina Tools owns the stateless Ticket Booking Window:
 
 - Attraction data
 - Booking lead days and date calculations
 - Form validation
-- Reminder localStorage
-- Reminder import/export/delete/clear
-- Calendar file output
+- Booking-not-open, booking-window-reached, and visit-date-passed states
+- Rule-based timing language with no live-inventory claim
 
-The Theme only renders contextual presentation and delegates the form shortcode. Do not move Plugin data or reminder logic into either Theme.
+The Theme only renders contextual presentation and delegates the form shortcode. The historical `ticket_reminder` Contract ID remains as a compatibility adapter. Do not move Plugin data or date logic into either Theme. Reminder state, localStorage, JSON, ICS, calendar, push, email, and SMS behavior are intentionally absent.
 
 ## Local Fixtures And QA
 
@@ -144,7 +144,7 @@ scripts/playground-fixtures.php creates disposable Survival, City, and Attractio
 - Survival and Attraction explicitly enable TOC.
 - City explicitly disables TOC, proving taxonomy does not dictate layout.
 - City retains category-only historical classification coverage.
-- Attraction contains the Plugin-delegated Ticket Reminder and responsive Media fixture.
+- Attraction contains the Plugin-delegated Ticket Booking Window compatibility adapter and responsive Media fixture.
 
 Static verification:
 
@@ -194,7 +194,7 @@ No production deployment is authorized by this handoff.
 - Import three deliberately different block combinations and confirm exact order.
 - Run staging screenshots and accessibility checks with representative real content.
 
-Do not start accounts, cross-device sync, email/SMS reminders, custom tables, real inventory checks, payments, new tools, or new top-level navigation without a separate approved design.
+Do not start accounts, cross-device sync, reminder delivery or management, custom tables, real inventory checks, payments, new tools, or new top-level navigation without a separate approved design.
 
 ## Fixed Information Architecture
 
@@ -206,8 +206,8 @@ Work in small, independently verifiable commits. Update verification first, impl
 
 ## Do Not Start Without Explicit Approval
 
-Do not deploy to production, change WordPress Core or third-party packages, introduce accounts or cross-device sync, add email/SMS delivery, create database tables, add live inventory checks, add tools, or expand the top-level navigation without a separate approved scope.
+Do not deploy to production, change WordPress Core or third-party packages, introduce accounts or cross-device sync, add reminder delivery or management, create database tables, add live inventory checks, add tools, or expand the top-level navigation without a separate approved scope.
 
 ## Suggested New Chat Opening Message
 
-Continue the existing SoloToChina WordPress repository from Contract 2.0. Read the current handoff and architecture document first, preserve the generic CMS-driven article shell and explicit Share/TOC metadata, keep Ticket Reminder logic in the Plugin, verify changes in real WordPress Playground at all required widths, and do not create a static replacement project.
+Continue the existing SoloToChina WordPress repository from Contract 2.1. Read the current handoff and architecture document first, preserve the generic CMS-driven article shell and explicit Share/TOC metadata, keep Ticket Booking Window data and date logic in the Plugin, verify changes in real WordPress Playground at all required widths, and do not create a static replacement project.

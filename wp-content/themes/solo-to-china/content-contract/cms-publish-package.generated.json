@@ -12,7 +12,7 @@
           "const": "1.1.0"
         },
         "contractChecksum": {
-          "const": "2e8da42b4fa86f8e717b992d648cae222bbbbe59a2b9d78848f0181bb9415fd3",
+          "const": "d9e855d448ac73a0f2ccc402d18e2d9a73be0412094678760b0bb94a7c51c2d5",
           "pattern": "^[a-f0-9]{64}$",
           "type": "string"
         },
@@ -757,7 +757,7 @@
               },
               {
                 "additionalProperties": false,
-                "description": "Delegates attraction timing and reminder behavior to SoloToChina Tools.",
+                "description": "Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias.",
                 "properties": {
                   "data": {
                     "additionalProperties": false,
@@ -796,7 +796,7 @@
                   "variant",
                   "data"
                 ],
-                "title": "Ticket Reminder",
+                "title": "Ticket Booking Window",
                 "type": "object"
               },
               {
