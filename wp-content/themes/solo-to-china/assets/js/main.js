@@ -124,7 +124,11 @@
 			var urlInput = utility.querySelector('[data-stc-share-url]');
 			var status = utility.querySelector('[data-stc-share-status]');
 			var whatsapp = utility.querySelector('[data-stc-share-whatsapp]');
-			var email = utility.querySelector('[data-stc-share-email]');
+			var facebook = utility.querySelector('[data-stc-share-facebook]');
+			var reddit = utility.querySelector('[data-stc-share-reddit]');
+			var x = utility.querySelector('[data-stc-share-x]');
+			var instagram = utility.querySelector('[data-stc-share-instagram]');
+			var moreApps = utility.querySelector('[data-stc-share-more]');
 			var title = utility.getAttribute('data-share-title') || document.title;
 			var description = utility.getAttribute('data-share-description') || '';
 			var canonicalUrl = utility.getAttribute('data-share-canonical') || window.location.href;
@@ -139,12 +143,11 @@
 			}
 			if (whatsapp) {
 				whatsapp.href = 'https://wa.me/?text=' + encodeURIComponent(title + ' — ' + canonicalUrl);
-				whatsapp.target = '_blank';
-				whatsapp.rel = 'noopener';
 			}
-			if (email) {
-				email.href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent((description ? description + '\n\n' : '') + canonicalUrl);
-			}
+			if (facebook) { facebook.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(canonicalUrl); }
+			if (reddit) { reddit.href = 'https://www.reddit.com/submit?url=' + encodeURIComponent(canonicalUrl) + '&title=' + encodeURIComponent(title); }
+			if (x) { x.href = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(canonicalUrl) + '&text=' + encodeURIComponent(title); }
+			if (moreApps && navigator.share) { moreApps.hidden = false; }
 
 			function announce(message) {
 				if (status) {
@@ -158,6 +161,22 @@
 				utility.classList.toggle('is-sharing', isBusy);
 			}
 
+			function shareData() {
+				return { title: title, text: description, url: canonicalUrl };
+			}
+
+			function shareNatively(fallback) {
+				setBusy(true);
+				announce('Opening sharing options');
+				return navigator.share(shareData()).then(function () {
+					announce('Page shared');
+				}).catch(function (error) {
+					if (!error || error.name !== 'AbortError') {
+						if (fallback) { fallback(); } else { announce('Could not open sharing options.'); }
+					}
+				}).finally(function () { setBusy(false); });
+			}
+
 			function openPanel(message) {
 				panel.hidden = false;
 				trigger.setAttribute('aria-expanded', 'true');
@@ -165,7 +184,7 @@
 				utility.classList.toggle('is-mobile-fallback', !finePointer.matches);
 				announce(message || '');
 				window.requestAnimationFrame(function () {
-					(closeButton || whatsapp || email || copyButton).focus();
+					(closeButton || whatsapp || facebook || reddit || x || instagram || copyButton).focus();
 				});
 			}
 
@@ -180,22 +199,8 @@
 			}
 
 			trigger.addEventListener('click', function () {
-				var shareData = {
-					title: title,
-					text: description,
-					url: canonicalUrl
-				};
-
 				if (!finePointer.matches && navigator.share) {
-					setBusy(true);
-					announce('Opening sharing options');
-					navigator.share(shareData).then(function () {
-						announce('Page shared');
-					}).catch(function () {
-						openPanel('Choose another way to share');
-					}).finally(function () {
-						setBusy(false);
-					});
+					shareNatively(function () { openPanel('Choose another way to share'); });
 					return;
 				}
 
@@ -205,6 +210,21 @@
 					closePanel(false);
 				}
 			});
+
+			if (moreApps) {
+				moreApps.addEventListener('click', function () { if (navigator.share) { shareNatively(); } });
+			}
+
+			if (instagram) {
+				instagram.addEventListener('click', function (event) {
+					event.preventDefault();
+					if (!finePointer.matches && navigator.share) { shareNatively(); return; }
+					window.open(instagram.href, '_blank', 'noopener');
+					copyToClipboard(canonicalUrl).then(function () {
+						announce('Link copied. Paste it into Instagram.');
+					}).catch(function () { announce('Open Instagram, then copy and paste the page link manually.'); });
+				});
+			}
 
 			if (copyButton) {
 				copyButton.addEventListener('click', function () {

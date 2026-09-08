@@ -8,9 +8,26 @@ Versioning follows semantic compatibility:
 - Minor: backward-compatible component, optional field, or variant additions.
 - Major: removed/renamed capabilities, newly required fields, incompatible schemas, or changed semantics.
 
+## 1.2.0 / Parent Theme 0.31.0 / Child Theme 0.10.0 / Tools Plugin 0.25.0 - 2026-09-09
+
+### Added
+
+- Added `destination_card` as a backward-compatible CMS-selectable page block requiring a canonical `entity_key`.
+- Added the Plugin-delegated Taxi Card renderer with verified Chinese destination output, ambiguity handling, copy action, and full-screen Driver Mode.
+- Added privacy-first Find This Place and Taxi Card public tools without expanding the CMS into provider or place-data ownership.
+- Added one-to-four same-location photo identification with 20 MB per-photo and 60 MB per-request limits, multi-preview guidance, and a combined provider payload.
+- Added branded Facebook, Reddit, X, and Instagram share choices alongside WhatsApp, native system sharing, and Copy link; removed Email from the share panel.
+
+### Compatibility
+
+- Content Contract remains `2.1.0`; Component Registry advances to `1.2.0` because the new capability is additive.
+- Existing component IDs, fields, variants, and stored content remain valid.
+
 ## Parent Theme 0.29.1 / Child Theme 0.9.1 - 2026-09-08
 
 ### Changed
+
+- Updated the shared Trip.Planner destination so Homepage and Planner-page CTAs open the planner workspace directly instead of requiring a second click on the Trip.com introduction page.
 
 - Isolated Share panel typography and controls from page Hero selectors, replaced the cramped three-column action row with an overflow-safe two-column layout, and made Copy Link span the full row.
 - Simplified the Share trigger and panel copy, standardized channel icons, and retained the native-first mobile flow plus keyboard and clipboard behavior.

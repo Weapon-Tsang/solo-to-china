@@ -1,0 +1,64 @@
+/* Child Theme visual layer for the Plugin-owned web tools. */
+.stc-tools-directory,
+.stc-tools-ticket,
+.stc-place-finder,
+.stc-taxi-card {
+	--stc-tool-jade: var(--stc-color-jade);
+	--stc-tool-ink: var(--stc-color-ink);
+	--stc-tool-muted: var(--stc-color-muted);
+	font-family: var(--stc-font-sans);
+}
+
+.stc-tool-card,
+.stc-place-finder__form,
+.stc-taxi-card__form {
+	background: color-mix(in srgb, var(--stc-color-surface) 96%, var(--stc-color-canvas));
+	border-color: var(--stc-color-line);
+	border-radius: var(--stc-radius-lg);
+	box-shadow: var(--stc-shadow-card);
+}
+
+.stc-tool-card h3,
+.stc-tools-directory__heading h2,
+.stc-tool-intro :is(h2, h3),
+.stc-place-result-card h3,
+.stc-taxi-card__chinese,
+.stc-driver-mode__inner > strong {
+	font-family: var(--stc-font-display);
+}
+
+.stc-tool-card__icon,
+.stc-place-upload__icon {
+	background: color-mix(in srgb, var(--stc-color-jade) 10%, var(--stc-color-surface));
+	color: var(--stc-color-jade);
+}
+
+.stc-tool-primary,
+.stc-taxi-card__actions button:first-child {
+	background: var(--stc-color-jade);
+}
+
+.stc-tool-primary:hover,
+.stc-taxi-card__actions button:first-child:hover {
+	background: var(--stc-color-jade-hover);
+}
+
+.stc-place-upload,
+.stc-place-result-card,
+.stc-place-choices,
+.stc-place-low,
+.stc-taxi-card__card {
+	border-color: var(--stc-color-line);
+}
+
+.stc-driver-mode {
+	background: var(--stc-color-ink);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.stc-tool-card:hover {
+		border-color: color-mix(in srgb, var(--stc-color-jade) 28%, var(--stc-color-line));
+		box-shadow: var(--stc-shadow-raised);
+		transform: translateY(-0.125rem);
+	}
+}

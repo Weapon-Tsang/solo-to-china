@@ -19,17 +19,18 @@ Current repository status:
 Recommended future code ownership:
 
 - `wp-content/themes/solo-to-china/` for the custom site theme.
-- `wp-content/plugins/solo-to-china-tools/` for project-owned tools such as Ticket Booking Window.
+- `wp-content/plugins/solo-to-china-tools/` for project-owned Find This Place, Taxi Card, and Ticket Booking Window logic.
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.29.1` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.9.1` in `wp-content/themes/solo-to-china-child/`.
-- SoloToChina Tools plugin `0.23.0` in `wp-content/plugins/solo-to-china-tools/`.
+- Custom SoloToChina theme `0.31.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.10.0` in `wp-content/themes/solo-to-china-child/`.
+- SoloToChina Tools plugin `0.25.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.
 - Content Component System architecture in `docs/architecture/content-component-system.md`.
+- Web Tools provider, privacy, verification, and handoff architecture in `docs/architecture/web-tools.md`.
 - CMS-facing generated Component Contract in `contracts/component-registry.json`.
 - CMS page payload schema in `contracts/page-schema.json`.
 - CMS WordPress Publish Package schema in `contracts/cms-publish-package.schema.json`.
@@ -37,9 +38,9 @@ Current development branch deliverables:
 
 The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
 
-Registry `1.1.0` adds four QA-selected Commercial Blocks: Affiliate Booking Card, Search Card, Banner, and Promotion Card. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`. Privacy-minimal impression/click events post only to the same-origin `POST /wp-json/stc/v1/commercial-events` relay; server forwarding is disabled until its environment variables are configured.
+Registry `1.2.0` adds the backward-compatible `destination_card` page block. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`.
 
-Parent Theme `0.29.1` preserves the authenticated, draft-only CMS delivery path and includes the UX/foundation cleanup plus an overflow-safe Share panel. Tools Plugin `0.23.0` replaces Ticket Reminder with a stateless Ticket Booking Window and removes all reminder persistence, JSON, and calendar behavior. Content Contract `2.1.0` remains compatible through the historical `ticket_reminder` adapter ID.
+Parent Theme `0.31.0` preserves the authenticated, draft-only CMS delivery path and adds overflow-safe branded sharing for WhatsApp, Facebook, Reddit, X, Instagram, system apps, and copied links. Tools Plugin `0.25.0` expands privacy-first Find This Place to one-to-four same-location photos while retaining Taxi Card and the stateless Ticket Booking Window. Content Contract `2.1.0` remains compatible through stable component IDs.
 
 Generate install artifacts with:
 
@@ -61,6 +62,8 @@ Content Component System verification:
 .\scripts\verify-page-architecture.ps1
 .\scripts\verify-component-registry.ps1
 .\scripts\verify-content-contract.ps1
+.\scripts\verify-web-tools.ps1
+.\scripts\verify-web-tools-runtime.ps1 -BaseUrl http://127.0.0.1:9400
 .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
 .\scripts\start-preview.ps1 -Port 9402 -ParentOnly
 .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly

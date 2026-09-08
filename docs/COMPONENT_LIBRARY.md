@@ -2,9 +2,9 @@
 
 Generated from `component-registry.v1.json`. Do not edit component capability details here by hand; update the Registry, implementations, Gallery, and tests, then run `.\scripts\generate-component-catalog.ps1`.
 
-Registry version: `1.1.0`
+Registry version: `1.2.0`
 
-CMS-usable capabilities: `23`
+CMS-usable capabilities: `24`
 
 Internal rendering components recorded: `4`
 
@@ -44,6 +44,7 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `faq` | FAQ | information | `page_block` | `stable` | default | Presents explicit questions and complete answers through native disclosures. |
 | `planner_cta` | Planner CTA | travel | `page_block` | `stable` | default | Offers a contextual trip-planning action selected by the CMS. |
 | `ticket_reminder` | Ticket Booking Window | travel | `page_block` | `stable` | default | Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias. |
+| `destination_card` | Destination / Taxi Card | travel | `page_block` | `stable` | default | Renders a verified Chinese destination card that travelers can show or copy for a driver. |
 | `affiliate_cta` | Affiliate CTA | commercial | `page_block` | `stable` | default | Renders a restrained contextual commercial action with visible disclosure. |
 | `affiliate_booking_card` | Affiliate Booking Card | commercial | `page_block` | `stable` | default | Renders a CMS-selected high-intent Trip.com deep or category link after QA. |
 | `affiliate_search_card` | Affiliate Search Card | commercial | `page_block` | `stable` | link, search_box | Renders a CMS-selected Trip.com search link or allowlisted structured search box. |
@@ -896,6 +897,61 @@ Example:
   "variant": "default",
   "attraction_slug": "forbidden-city",
   "title": "Check ticket timing"
+}
+```
+
+### `destination_card` — Destination / Taxi Card
+
+- Category: `travel`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Renders a verified Chinese destination card that travelers can show or copy for a driver.
+- Variants: `default`
+- Required fields: `entity_key`
+- Optional fields: `title`, `description`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/plugins/solo-to-china-tools/includes/shortcodes.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`
+- Accessibility: Uses semantic headings, a live copy status, keyboard-operable actions, and a focus-contained full-screen dialog.
+- Responsive behavior: The destination card scales Chinese text for mobile portrait and provides a distraction-free full-screen Driver Mode.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entity_key"
+  ],
+  "properties": {
+    "entity_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "destination_card",
+  "variant": "default",
+  "entity_key": "forbidden-city",
+  "title": "Show the Forbidden City to a driver"
 }
 ```
 

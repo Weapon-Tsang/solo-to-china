@@ -388,6 +388,23 @@ function stc_render_ticket_reminder_component( $attributes ) {
 	return ob_get_clean();
 }
 
+/** Render the reusable Destination / Taxi Card capability through the Tools Plugin. */
+function stc_render_destination_card_component( $attributes ) {
+	$attributes = shortcode_atts( array( 'entity_key' => '', 'title' => 'Show this to a driver', 'description' => 'A clear Chinese destination card for taxis and ride-hailing apps.', 'anchor' => '' ), (array) $attributes, 'stc_destination_card' );
+	$entity_key = sanitize_title( $attributes['entity_key'] );
+	$title = sanitize_text_field( $attributes['title'] );
+	$description = sanitize_text_field( $attributes['description'] );
+	if ( '' === $entity_key ) { return ''; }
+	$component_id = stc_get_component_id( $attributes['anchor'], 'stc-destination-' );
+	$title_id = $component_id . '-title';
+	ob_start(); ?>
+	<section id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--destination" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
+		<div class="stc-dynamic-component__body"><p class="stc-dynamic-component__eyebrow"><?php esc_html_e( 'Taxi Card', 'solo-to-china' ); ?></p><h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $title ); ?></h2><?php if ( $description ) : ?><p><?php echo esc_html( $description ); ?></p><?php endif; ?></div>
+		<div class="stc-dynamic-component__tool"><?php if ( shortcode_exists( 'solo_to_china_taxi_card' ) ) { echo do_shortcode( '[solo_to_china_taxi_card entity_key="' . esc_attr( $entity_key ) . '" heading_level="3"]' ); } else { echo '<p class="stc-dynamic-component__fallback">' . esc_html__( 'Taxi Card is temporarily unavailable.', 'solo-to-china' ) . '</p>'; } ?></div>
+	</section>
+	<?php return ob_get_clean();
+}
+
 /**
  * Render a restrained contextual affiliate CTA.
  *
@@ -628,6 +645,7 @@ function stc_render_affiliate_promotion_card_component( $attributes ) {
 function stc_register_content_component_shortcodes() {
 	add_shortcode( 'stc_planner_cta', 'stc_render_planner_cta_component' );
 	add_shortcode( 'stc_ticket_reminder', 'stc_render_ticket_reminder_component' );
+	add_shortcode( 'stc_destination_card', 'stc_render_destination_card_component' );
 	add_shortcode( 'stc_affiliate_cta', 'stc_render_affiliate_cta_component' );
 	add_shortcode( 'stc_affiliate_booking_card', 'stc_render_affiliate_booking_card_component' );
 	add_shortcode( 'stc_affiliate_search_card', 'stc_render_affiliate_search_card_component' );

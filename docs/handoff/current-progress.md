@@ -1,6 +1,6 @@
 # SoloToChina Current Progress Handoff
 
-Date: 2026-09-08
+Date: 2026-09-09
 
 ## Current Working Boundary
 
@@ -37,18 +37,18 @@ Affiliate links remain a restrained transaction layer behind content and tools. 
 
 ## Theme Status
 
-Current theme version: `0.29.1`.
+Current theme version: `0.31.0`.
 
 Content Contract Phase A is complete and has been superseded by the Contract 2.1 responsibility model documented below:
 
 - The canonical contract is now `content-contract/content-contract.v2.json` at Contract version `2.1.0`, independent from the Theme version.
 - Defined four stable guide types, category mappings, shell behaviors, component allowlists, and optional dynamic capabilities.
-- Defined 20 ordered core, editorial, image, contextual, and commercial page-block capabilities without exposing CSS values or internal research provenance.
+- Defined 21 ordered core, editorial, image, contextual, travel-tool, and commercial page-block capabilities without exposing CSS values or internal research provenance.
 - Added the public read-only `GET /wp-json/stc/v1/content-contract` endpoint with ETag, Last-Modified, and Cache-Control headers.
 - Registered `_stc_guide_type` and `_stc_content_contract_version` with REST schemas, allowlist sanitization, and authenticated edit checks.
 - Explicit guide metadata now takes precedence over existing category/tag fallback; historical posts remain compatible.
 - Added `scripts/verify-content-contract.ps1` and integrated Contract validation into the primary project verifier.
-- Real Playground REST checks cover Contract `2.1.0`, Registry `1.1.0`, Theme `0.29.1`, four taxonomy-only guide types, 23 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
+- Real Playground REST checks cover Contract `2.1.0`, Registry `1.2.0`, Theme `0.31.0`, four taxonomy-only guide types, 24 CMS capabilities, the generated Publish Package Schema, authenticated draft ingestion, exact-order serialization, idempotency, rejection cases, and cache headers.
 - Existing article shell regression checks passed at 1440, 768, 390, and 375 with one H1, no horizontal overflow, and no console errors/warnings.
 
 The custom theme implements the approved image-led homepage direction:
@@ -79,7 +79,7 @@ The custom theme implements the approved image-led homepage direction:
 - Footer now uses solid deep ink, real email and WhatsApp destinations, clear Explore/Tools/Help/About groups, two-column mobile navigation, and a complete legal area. Placeholder social icons were removed.
 - Category-matched latest posts are limited to Survival Kit, City Guides, and Attraction Guides; Planner, Tools, and FAQ stay focused on their primary tasks.
 - Planner band.
-- Homepage and Planner-page CTAs use the shared `stc_get_trip_planner_url()` helper and open `https://www.trip.com/tripplanner` as sponsored external links.
+- Homepage and Planner-page CTAs use the shared `stc_get_trip_planner_url()` helper and open the Trip.Planner workspace directly at `https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage` as sponsored external links, avoiding the intermediate marketing page.
 - Ticket Booking Window band.
 - FAQ section.
 - Footer.
@@ -121,11 +121,11 @@ Core guide categories are created on theme activation if missing:
 - City Guides
 - Attraction Guides
 
-Share This Page is available without login when the CMS explicitly enables `_stc_show_share`. Desktop/fine-pointer devices always use the branded popover; mobile/coarse-pointer devices try native Web Share first and use the branded bottom sheet on unsupported or failed calls. The canonical WhatsApp, email, copy, clipboard-fallback, Escape, outside-click, focus-return, and focus-loop behaviors remain available without account or browser-storage state.
+Share This Page is available without login when the CMS explicitly enables `_stc_show_share`. Desktop/fine-pointer devices always use the branded popover; mobile/coarse-pointer devices try native Web Share first and use the branded bottom sheet on unsupported or failed calls. The overflow-safe sheet uses recognizable branded icons for WhatsApp, Facebook, Reddit, X, and Instagram, plus system sharing and Copy link. Instagram invokes native sharing where available; otherwise it copies the canonical link before opening Instagram. Clipboard fallback, Escape, outside-click, focus-return, and focus-loop behavior remain available without account or browser-storage state.
 
 ## Child Theme Status
 
-Current Child Theme version: `0.9.1`.
+Current Child Theme version: `0.10.0`.
 
 Content Component System Phase B is complete:
 
@@ -142,7 +142,7 @@ Content Component System Phase C is complete:
 - Parent Theme adds safe renderers for Planner CTA, the legacy Ticket Booking Window adapter, and Affiliate CTA, registered as the Contract shortcodes.
 - Planner and Affiliate destinations must be absolute HTTPS URLs; output is escaped, externally opened links use `sponsored nofollow noopener`, and Affiliate CTA always includes visible relationship disclosure.
 - The historical `ticket_reminder` ID accepts only a sanitized attraction slug and delegates the stateless Ticket Booking Window to the Plugin shortcode. The Theme contains no attraction data, booking lead days, or date calculation.
-- Plugin `0.23.0` validates optional `attraction_slug` context against Plugin-owned data and preselects the matching option; invalid slugs fall back to the ordinary first option.
+- Plugin `0.25.0` validates optional `attraction_slug` context against Plugin-owned data and preselects the matching option; invalid slugs fall back to the ordinary first option.
 - Plugin asset detection covers posts containing the Theme-level compatibility shortcode, so the delegated form loads without Theme coupling.
 - Child Theme `0.5.0` provides restrained dynamic-component layouts and contextual Ticket form containment using Design System tokens.
 - Playwright confirmed the Plugin form is delegated exactly once, Forbidden City is preselected, controls retain 46px height, Planner/Affiliate links carry the required safety attributes and disclosures, and checked desktop/mobile pages have no overflow or console errors.
@@ -178,7 +178,7 @@ Page Architecture Responsibility Refactor is complete:
 
 Frontend Component Registry and Catalog are complete:
 
-- Added `component-registry.v1.json` as the single capability source for 23 stable CMS-callable IDs: 20 ordered `page_block` components plus Article Hero, Share This Page, and Table of Contents as explicit `presentation_meta` capabilities.
+- Added `component-registry.v1.json` as the single capability source for 24 stable CMS-callable IDs: 21 ordered `page_block` components plus Article Hero, Share This Page, and Table of Contents as explicit `presentation_meta` capabilities.
 - Each capability declares purpose, category, status, supported semantic variants, JSON Schema, example, implementation paths, accessibility, responsive behavior, and CMS availability.
 - The Contract REST response derives its component definitions and guide allowlists from the Registry; `content-contract.v2.json` does not maintain a duplicate list.
 - Added the cached public read-only `GET /wp-json/stc/v1/component-registry` endpoint.
@@ -188,12 +188,12 @@ Frontend Component Registry and Catalog are complete:
 
 Formal Frontend to CMS Capability Contract is complete:
 
-- Published `contracts/component-registry.json` for the independent CMS repository. It contains only the 23 implemented `cms_usable` capabilities and exposes Contract/schema versions, status, deprecation state, semantic variants, input schemas, derived required/optional fields, and `{ type, variant, data }` examples.
-- Published `contracts/page-schema.json`, whose 20 allowed ordered block shapes and variants are generated from the same Registry. Its `blocks[]` sequence is explicitly the final render order; `contentType` is taxonomy, not layout.
+- Published `contracts/component-registry.json` for the independent CMS repository. It contains only the 24 implemented `cms_usable` capabilities and exposes Contract/schema versions, status, deprecation state, semantic variants, input schemas, derived required/optional fields, and `{ type, variant, data }` examples.
+- Published `contracts/page-schema.json`, whose 21 allowed ordered block shapes and variants are generated from the same Registry. Its `blocks[]` sequence is explicitly the final render order; `contentType` is taxonomy, not layout.
 
 Affiliate Capability Upgrade is complete in the working tree:
 
-- Component Registry `1.1.0`, Content Contract `2.1.0`, Parent Theme `0.29.1`, and Child Theme `0.9.1` publish 23 CMS capabilities, including 20 ordered page blocks.
+- Component Registry `1.2.0`, Content Contract `2.1.0`, Parent Theme `0.31.0`, and Child Theme `0.10.0` publish 24 CMS capabilities, including 21 ordered page blocks.
 - Publish Package `1.0.0` is available at `contracts/cms-publish-package.schema.json` and `GET /wp-json/stc/v1/cms-publish-package-schema`.
 - Authenticated `POST /wp-json/stc/v1/cms-articles` and `PUT /wp-json/stc/v1/cms-articles/{post_id}` now create or update draft-only WordPress articles from CMS Page Payloads.
 - The adapter revalidates the deployed Contract, serializes static/semantic content to editable Gutenberg blocks and dynamic content to renderer-owned shortcode blocks, maps presentation metadata, stores SEO/GEO/provenance, and rejects non-draft overwrites.
@@ -244,15 +244,24 @@ The original Guide / Article styling stage below is historical and has been supe
 
 ## Plugin Status
 
-Current tools plugin version: `0.23.0`.
+Current tools plugin version: `0.25.0`.
 
-The custom plugin owns the first tool only:
+The custom plugin owns three tools:
 
+- Find This Place.
+- Show This to a Driver / Taxi Card.
 - Ticket Booking Window.
 
-The shortcode is:
+The shortcodes are:
 
+- `[solo_to_china_tools_directory]`
+- `[solo_to_china_place_finder]`
+- `[solo_to_china_taxi_card entity_key="forbidden-city"]`
 - `[solo_to_china_ticket_tool]`
+
+Find This Place accepts one to four photos of the same location through click, drag/drop, or paste; validates JPEG/PNG/WebP, count, per-file and total bytes, MIME, and dimensions on both client and server; immediately removes every PHP temporary file; and never creates a Media Library attachment. The UI recommends complementary angles, signs, entrances, streets, and a wide view. Its external vision adapter processes the set as one request using only server environment credentials, semantic confidence levels, and safe unavailable/error states. Provider addresses and coordinates are discarded.
+
+Taxi Card resolves canonical Chinese names/cities, includes a street address only when locally verified, asks the traveler to choose among ambiguous places such as West Lake, copies a driver-ready destination, and provides keyboard-contained full-screen Driver Mode. Canonical finder results hand off by `entity_key`; provider-only text is never promoted into driver instructions, and no handoff state is persisted.
 
 Current Ticket Booking Window behavior:
 

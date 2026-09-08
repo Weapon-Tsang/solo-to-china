@@ -35,8 +35,8 @@ foreach ($TopLevelKey in @("contract_version", "theme_version", "principles", "p
         Add-ContractFailure "Content Contract is missing top-level key: $TopLevelKey"
     }
 }
-if ($Contract.component_registry.version -ne "1.1.0" -or $Registry.registry_version -ne "1.1.0") {
-    Add-ContractFailure "Content Contract must reference Component Registry 1.1.0."
+if ($Contract.component_registry.version -ne "1.2.0" -or $Registry.registry_version -ne "1.2.0") {
+    Add-ContractFailure "Content Contract must reference Component Registry 1.2.0."
 }
 if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.Contains('"allowed_components"')) {
     Add-ContractFailure "Content Contract duplicates the canonical Component Registry list."
@@ -45,8 +45,8 @@ if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.C
 if ($Contract.contract_version -ne "2.1.0") {
     Add-ContractFailure "Content Contract version must be 2.1.0."
 }
-if ($Contract.theme_version -ne "0.29.1") {
-    Add-ContractFailure "Content Contract theme_version must be 0.29.1."
+if ($Contract.theme_version -ne "0.31.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.31.0."
 }
 
 $CmsAdapterPath = Join-Path $Root "wp-content/themes/solo-to-china/inc/cms-articles.php"
@@ -105,7 +105,7 @@ $ExpectedComponents = @(
     "quick_answer", "key_takeaways", "quick_facts", "tip", "warning",
     "steps", "checklist", "comparison_table", "faq",
     "planner_cta", "ticket_reminder", "affiliate_cta",
-    "affiliate_booking_card", "affiliate_search_card", "affiliate_banner", "affiliate_promotion_card"
+    "affiliate_booking_card", "affiliate_search_card", "affiliate_banner", "affiliate_promotion_card", "destination_card"
 )
 $RequiredComponentKeys = @("id", "name", "category", "purpose", "status", "variants", "schema", "implementation_paths", "cms_usable", "cms_interface", "render_mode", "accessibility", "responsive", "example")
 $Components = @($Registry.components | Where-Object { $_.cms_usable -eq $true -and $_.cms_interface -eq "page_block" })
@@ -132,7 +132,7 @@ foreach ($Component in $Components) {
     }
 }
 
-foreach ($DynamicType in @("planner_cta", "ticket_reminder", "affiliate_cta", "affiliate_booking_card", "affiliate_search_card", "affiliate_banner", "affiliate_promotion_card")) {
+foreach ($DynamicType in @("planner_cta", "ticket_reminder", "affiliate_cta", "affiliate_booking_card", "affiliate_search_card", "affiliate_banner", "affiliate_promotion_card", "destination_card")) {
     $DynamicComponent = $Components | Where-Object { $_.id -eq $DynamicType } | Select-Object -First 1
     if ($DynamicComponent.render_mode -ne "shortcode") {
         Add-ContractFailure "Dynamic component $DynamicType must declare its shortcode render mode."
@@ -179,7 +179,7 @@ if (-not (Test-Path -LiteralPath $RenderersRuntimePath -PathType Leaf)) {
     Add-ContractFailure "Dynamic Content Component renderers are missing."
 } else {
     $RenderersRuntime = Get-Content -LiteralPath $RenderersRuntimePath -Raw
-    foreach ($RendererToken in @("stc_render_planner_cta_component", "stc_render_ticket_reminder_component", "stc_render_affiliate_cta_component", "stc_render_affiliate_booking_card_component", "stc_render_affiliate_search_card_component", "stc_render_affiliate_banner_component", "stc_render_affiliate_promotion_card_component", "stc_planner_cta", "stc_ticket_reminder", "stc_affiliate_cta", "stc_affiliate_booking_card", "stc_affiliate_search_card", "stc_affiliate_banner", "stc_affiliate_promotion_card", "wp_parse_url", "https", "sponsored nofollow noopener", "shortcode_exists", "solo_to_china_ticket_tool", "do_shortcode", "esc_html", "esc_attr", "esc_url")) {
+    foreach ($RendererToken in @("stc_render_planner_cta_component", "stc_render_ticket_reminder_component", "stc_render_affiliate_cta_component", "stc_render_affiliate_booking_card_component", "stc_render_affiliate_search_card_component", "stc_render_affiliate_banner_component", "stc_render_affiliate_promotion_card_component", "stc_render_destination_card_component", "stc_planner_cta", "stc_ticket_reminder", "stc_affiliate_cta", "stc_affiliate_booking_card", "stc_affiliate_search_card", "stc_affiliate_banner", "stc_affiliate_promotion_card", "stc_destination_card", "wp_parse_url", "https", "sponsored nofollow noopener", "shortcode_exists", "solo_to_china_ticket_tool", "solo_to_china_taxi_card", "do_shortcode", "esc_html", "esc_attr", "esc_url")) {
         if (-not $RenderersRuntime.Contains($RendererToken)) {
             Add-ContractFailure "Dynamic Content Component runtime is missing: $RendererToken"
         }

@@ -55,7 +55,7 @@ function stc_playground_verify_cms_publish_path() {
 		}
 		$blocks[] = array( 'type' => $definition['id'], 'variant' => $variant, 'data' => $example );
 	}
-	stc_playground_cms_assert( 20 === count( $blocks ), 'CMS adapter did not resolve all 20 page-block capabilities.' );
+	stc_playground_cms_assert( 21 === count( $blocks ), 'CMS adapter did not resolve all 21 page-block capabilities.' );
 
 	$package = array(
 		'contract'      => array(

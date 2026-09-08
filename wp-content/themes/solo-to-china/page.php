@@ -174,10 +174,10 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 				<span class="stc-planner__art" aria-hidden="true"></span>
 			</section>
 		<?php elseif ( 'tools' === $slug ) : ?>
-			<section class="stc-page-section stc-page-section--ticket-tool">
+			<section class="stc-page-section stc-page-section--tools">
 				<?php
-				if ( shortcode_exists( 'solo_to_china_ticket_tool' ) ) {
-					echo do_shortcode( '[solo_to_china_ticket_tool]' );
+				if ( shortcode_exists( 'solo_to_china_tools_directory' ) ) {
+					echo do_shortcode( '[solo_to_china_tools_directory]' );
 				} else {
 					echo '<p>' . esc_html__( 'Activate the SoloToChina Tools plugin to use this tool.', 'solo-to-china' ) . '</p>';
 				}

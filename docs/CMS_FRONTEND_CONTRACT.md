@@ -1,6 +1,6 @@
 # SoloToChina CMS / Frontend Capability Contract
 
-Current Component Contract version: `1.1.0`
+Current Component Contract version: `1.2.0`
 
 This document defines the integration boundary between the independent `solo-to-china` frontend repository and `solo-to-china-CMS` repository.
 
@@ -131,8 +131,8 @@ The formal package shape is generated at `contracts/cms-publish-package.schema.j
 ```json
 {
   "contract": {
-    "componentContractVersion": "1.1.0",
-    "pageSchemaVersion": "1.1.0",
+    "componentContractVersion": "1.2.0",
+    "pageSchemaVersion": "1.2.0",
     "contractChecksum": "<sha256 of deployed generated Component Contract>"
   },
   "page": {

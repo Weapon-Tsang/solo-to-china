@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.29.1' );
+define( 'STC_THEME_VERSION', '0.31.0' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -142,7 +142,7 @@ function stc_primary_navigation_items() {
  * @return string
  */
 function stc_get_trip_planner_url() {
-	return 'https://www.trip.com/tripplanner';
+	return 'https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage';
 }
 
 function stc_render_primary_navigation() {
@@ -582,6 +582,11 @@ function stc_render_share_this_page( $args = array() ) {
 		return;
 	}
 
+	$whatsapp_url = 'https://wa.me/?text=' . rawurlencode( $title . ' — ' . $canonical );
+	$facebook_url = 'https://www.facebook.com/sharer/sharer.php?u=' . rawurlencode( $canonical );
+	$reddit_url   = 'https://www.reddit.com/submit?url=' . rawurlencode( $canonical ) . '&title=' . rawurlencode( $title );
+	$x_url        = 'https://twitter.com/intent/tweet?url=' . rawurlencode( $canonical ) . '&text=' . rawurlencode( $title );
+
 	echo '<div class="stc-share" data-stc-share data-share-title="' . esc_attr( $title ) . '" data-share-description="' . esc_attr( wp_trim_words( $description, 28 ) ) . '" data-share-canonical="' . esc_url( $canonical ) . '">';
 	echo '<button class="stc-share__trigger" type="button" aria-expanded="false" aria-controls="' . esc_attr( $panel_id ) . '" aria-label="' . esc_attr__( 'Share this page', 'solo-to-china' ) . '" data-stc-share-trigger>';
 	echo '<span class="stc-share__trigger-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></span>';
@@ -590,10 +595,14 @@ function stc_render_share_this_page( $args = array() ) {
 	echo '<div id="' . esc_attr( $panel_id ) . '" class="stc-share__panel" role="dialog" aria-labelledby="' . esc_attr( $heading_id ) . '" data-stc-share-panel hidden>';
 	echo '<div class="stc-share__panel-heading"><strong id="' . esc_attr( $heading_id ) . '">' . esc_html__( 'Share this guide', 'solo-to-china' ) . '</strong>';
 	echo '<button class="stc-share__close" type="button" aria-label="' . esc_attr__( 'Close sharing options', 'solo-to-china' ) . '" data-stc-share-close><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>';
-	echo '<p class="stc-share__panel-copy">' . esc_html__( 'Send it by message or email, or copy the link.', 'solo-to-china' ) . '</p>';
+	echo '<p class="stc-share__panel-copy">' . esc_html__( 'Choose a social platform or copy the link.', 'solo-to-china' ) . '</p>';
 	echo '<div class="stc-share__channels">';
-	echo '<a class="stc-share__channel" href="#" data-stc-share-whatsapp><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M7 18.5 4 20l1-3.5A8 8 0 1 1 7 18.5Z"/><path d="M9 8.5c.5 2.5 2 4 4.5 4.5"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'WhatsApp', 'solo-to-china' ) . '</span></a>';
-	echo '<a class="stc-share__channel" href="#" data-stc-share-email><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Email', 'solo-to-china' ) . '</span></a>';
+	echo '<a class="stc-share__channel stc-share__channel--whatsapp" href="' . esc_url( $whatsapp_url ) . '" target="_blank" rel="noopener" data-stc-share-whatsapp><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 2a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l5.3-1.3A9.5 9.5 0 1 0 12 2Zm5.4 13.4c-.2.7-1.2 1.3-2 1.5-.5.1-1.2.2-3.7-.8-3.1-1.3-5.1-4.5-5.3-4.7-.1-.2-1.2-1.6-1.2-3.1 0-1.5.8-2.2 1.1-2.5.3-.3.7-.4 1-.4h.7c.2 0 .5-.1.8.6l1 2.4c.1.2.1.5 0 .7l-.4.7-.6.6c-.2.2-.4.4-.2.8.2.4.8 1.3 1.8 2.1 1.2 1.1 2.2 1.4 2.6 1.6.3.2.6.1.8-.1l1.1-1.3c.2-.3.5-.3.8-.2l2.2 1c.4.2.6.3.7.5.1.2.1.8-.2 1.5Z"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'WhatsApp', 'solo-to-china' ) . '</span></a>';
+	echo '<a class="stc-share__channel stc-share__channel--facebook" href="' . esc_url( $facebook_url ) . '" target="_blank" rel="noopener" data-stc-share-facebook><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M13.7 22v-8h2.8l.4-3h-3.2V9.1c0-.9.3-1.6 1.7-1.6H17V4.8c-.8-.1-1.7-.2-2.8-.2-2.9 0-4.9 1.8-4.9 5.1V11H6v3h3.3v8h4.4Z"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Facebook', 'solo-to-china' ) . '</span></a>';
+	echo '<a class="stc-share__channel stc-share__channel--reddit" href="' . esc_url( $reddit_url ) . '" target="_blank" rel="noopener" data-stc-share-reddit><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="13" r="7"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M8.5 15c1.8 1.3 5.2 1.3 7 0M16.8 7.7l1-3.7 3 1M5.7 10a2 2 0 1 0-2.4 3.1M18.3 10a2 2 0 1 1 2.4 3.1"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Reddit', 'solo-to-china' ) . '</span></a>';
+	echo '<a class="stc-share__channel stc-share__channel--x" href="' . esc_url( $x_url ) . '" target="_blank" rel="noopener" data-stc-share-x><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 3h5.2l3.9 5.3L17.7 3H20l-5.8 6.8L20.8 21h-5.2l-4.4-6-5.1 6H3.8l6.3-7.5L4 3Zm3.9 2 8.7 14h1.5L9.4 5H7.9Z"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'X', 'solo-to-china' ) . '</span></a>';
+	echo '<a class="stc-share__channel stc-share__channel--instagram" href="https://www.instagram.com/" target="_blank" rel="noopener" data-stc-share-instagram><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.7" r="1"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Instagram', 'solo-to-china' ) . '</span></a>';
+	echo '<button class="stc-share__channel stc-share__channel--more" type="button" data-stc-share-more hidden><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'More apps', 'solo-to-china' ) . '</span></button>';
 	echo '<button class="stc-share__channel stc-share__copy" type="button" data-stc-share-copy><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9.5 14.5 14.5 9"/><path d="M7.5 16.5 5 19a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0" transform="translate(3)"/><path d="m13.5 7.5 2.5-2.5a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0" transform="translate(-3)"/></svg></span><span class="stc-share__channel-label" data-stc-share-copy-label>' . esc_html__( 'Copy link', 'solo-to-china' ) . '</span></button>';
 	echo '</div>';
 	echo '<input class="stc-share__url-field" type="text" value="' . esc_attr( $canonical ) . '" readonly aria-label="' . esc_attr__( 'Canonical page link', 'solo-to-china' ) . '" data-stc-share-url>';

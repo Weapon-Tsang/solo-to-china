@@ -1,6 +1,6 @@
 # SoloToChina New Chat Handoff
 
-Date: 2026-09-08
+Date: 2026-09-09
 
 ## Product Boundary
 
@@ -28,11 +28,11 @@ Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/
 
 ## Current Versions
 
-- Parent Theme: 0.29.1
-- Child Theme: 0.9.1
-- SoloToChina Tools Plugin: 0.23.0
+- Parent Theme: 0.31.0
+- Child Theme: 0.10.0
+- SoloToChina Tools Plugin: 0.25.0
 - Content Contract: 2.1.0
-- Component Registry: 1.1.0
+- Component Registry: 1.2.0
 
 ## Architecture Rule
 
@@ -97,7 +97,7 @@ Current behavior:
 - Uses page title, excerpt, and canonical URL
 - Uses a branded SoloToChina popover on desktop/fine-pointer devices and never invokes the desktop system share UI
 - Prioritizes `navigator.share()` on mobile/coarse-pointer devices
-- Falls back to a branded bottom sheet with WhatsApp, email, and Copy link
+- Falls back to a branded bottom sheet with WhatsApp, Facebook, Reddit, X, Instagram, system apps, and Copy link
 - Includes clipboard fallback and manual-selection error path
 - Uses ARIA live status, busy state, Escape, outside click, close button, and focus return
 - Appears as a refined translucent Hero utility
@@ -108,25 +108,27 @@ The Theme no longer contains Save guide, Saved, Unsave, Saved Guides, guide expo
 
 ## Component System
 
-Registry 1.1 publishes 23 stable CMS capabilities: 20 ordered page blocks and three explicit presentation controls.
+Registry 1.2 publishes 24 stable CMS capabilities: 21 ordered page blocks and three explicit presentation controls.
 
 - Core: Paragraph, Heading, List, Image
 - Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
-- Contextual: Planner CTA, Ticket Booking Window compatibility adapter, Affiliate CTA
+- Contextual/travel: Planner CTA, Ticket Booking Window compatibility adapter, Destination / Taxi Card, Affiliate CTA
 - Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
 - Presentation: Article Hero, Share This Page, Table of Contents
 
 All components are available independently of content type. The CMS decides their presence, order, data, and variants. Four additional renderer components are documented as internal and are not valid CMS types: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. The Parent Theme keeps small reusable component patterns; topic-wide Attraction, City, and Survival article patterns were removed.
 
-`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. The CMS should read the root contracts or deployed generated endpoints and must not scan frontend implementation code to discover capabilities. Playground exposes an ephemeral `/design-system/` Gallery with all 23 capability records, the major Hero variants, and real examples for all 20 page-block components. The Theme does not auto-create this page in production.
+`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. The CMS should read the root contracts or deployed generated endpoints and must not scan frontend implementation code to discover capabilities. Playground exposes an ephemeral `/design-system/` Gallery with all 24 capability records, the major Hero variants, and real examples for all 21 page-block components. The Theme does not auto-create this page in production.
 
 Commercial blocks are rendered only when the CMS explicitly supplies them after QA. Official HTTPS hostname validation, structured embeds, visible disclosure, promotion date windows, privacy-minimal event attributes, and a same-origin WordPress relay are implemented. Server forwarding requires `STC_COMMERCIAL_EVENTS_ENDPOINT` and `STC_COMMERCIAL_EVENTS_TOKEN` in the PHP process environment; neither value belongs in Git, Theme files, WordPress options, browser output, or logs.
 
 Responsive Media, server-rendered stable H2 IDs, editor parity, semantic HTML, long-text containment, keyboard focus, reduced motion, and safe affiliate rel/disclosure behavior remain in place.
 
-## Plugin Boundary
+## Web Tools and Plugin Boundary
 
-SoloToChina Tools owns the stateless Ticket Booking Window:
+SoloToChina Tools owns `/tools/find-this-place/`, `/tools/taxi-card/`, and the stateless Ticket Booking Window. Find This Place accepts one to four same-location photos (20 MB each, 60 MB total), performs private temporary upload validation, and calls only a server-configured provider; without one it fails safely. Taxi Card resolves Plugin-owned canonical place data, marks field provenance, omits unverified addresses/drop-off points, handles ambiguity, copies Chinese output, and provides full-screen Driver Mode. Provider details and deployment variables are documented in `docs/architecture/web-tools.md`.
+
+The Plugin also owns Ticket Booking Window:
 
 - Attraction data
 - Booking lead days and date calculations

@@ -274,7 +274,7 @@
 	padding: 1.25rem;
 	position: absolute;
 	top: 100%;
-	width: min(21.5rem, calc(100vw - 3rem));
+	width: min(23.75rem, calc(100vw - 3rem));
 }
 
 .stc-share__panel[hidden] {
@@ -382,6 +382,19 @@
 	stroke-width: 1.7;
 	width: 1.05rem;
 }
+
+.stc-share__channel--whatsapp .stc-share__channel-icon { background: #25d366; color: #fff; }
+.stc-share__channel--facebook .stc-share__channel-icon { background: #1877f2; color: #fff; }
+.stc-share__channel--reddit .stc-share__channel-icon { background: #ff4500; color: #fff; }
+.stc-share__channel--x .stc-share__channel-icon { background: #000; color: #fff; }
+.stc-share__channel--instagram .stc-share__channel-icon { background: radial-gradient(circle at 30% 105%, #fdf497 0 8%, #fd5949 42%, #d6249f 66%, #285aeb 100%); color: #fff; }
+.stc-share__channel--more .stc-share__channel-icon { background: var(--stc-color-surface-muted); color: var(--stc-color-jade); }
+.stc-share__channel--whatsapp .stc-share__channel-icon svg,
+.stc-share__channel--facebook .stc-share__channel-icon svg,
+.stc-share__channel--x .stc-share__channel-icon svg { fill: currentColor; stroke: none; }
+.stc-share__channel--reddit .stc-share__channel-icon svg,
+.stc-share__channel--instagram .stc-share__channel-icon svg { fill: none; stroke: currentColor; }
+.stc-share__channel--reddit .stc-share__channel-icon svg circle { fill: none; }
 
 .stc-share__channel-label {
 	color: inherit;

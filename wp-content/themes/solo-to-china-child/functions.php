@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.9.1' );
+define( 'STC_CHILD_VERSION', '0.10.0' );
 
 /**
  * Replace the Parent fallback editor stylesheet with the Child visual system.
@@ -80,6 +80,15 @@ function stc_child_enqueue_assets() {
 			'stc-child-content-components',
 			get_stylesheet_directory_uri() . '/assets/css/content-components.css',
 			[ 'stc-child-article' ],
+			STC_CHILD_VERSION
+		);
+	}
+
+	if ( is_page( array( 'tools', 'find-this-place', 'taxi-card' ) ) || ( is_singular() && has_shortcode( (string) get_post_field( 'post_content', get_queried_object_id() ), 'stc_destination_card' ) ) ) {
+		wp_enqueue_style(
+			'stc-child-tools',
+			get_stylesheet_directory_uri() . '/assets/css/tools.css',
+			array( 'stc-tools', 'stc-child-content-components' ),
 			STC_CHILD_VERSION
 		);
 	}

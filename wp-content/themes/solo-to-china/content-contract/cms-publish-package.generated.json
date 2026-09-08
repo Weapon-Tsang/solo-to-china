@@ -2,22 +2,22 @@
   "$id": "https://solotochina.com/contracts/cms-publish-package.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "contractVersion": "1.1.0",
+  "contractVersion": "1.2.0",
   "description": "Authenticated CMS-to-WordPress draft delivery package. WordPress validates and serializes page.blocks[] in the supplied order.",
   "properties": {
     "contract": {
       "additionalProperties": false,
       "properties": {
         "componentContractVersion": {
-          "const": "1.1.0"
+          "const": "1.2.0"
         },
         "contractChecksum": {
-          "const": "d9e855d448ac73a0f2ccc402d18e2d9a73be0412094678760b0bb94a7c51c2d5",
+          "const": "70af404049c44083b7041b5f5fd147c5f6b561f296ef670d780b8f221ffa06e3",
           "pattern": "^[a-f0-9]{64}$",
           "type": "string"
         },
         "pageSchemaVersion": {
-          "const": "1.1.0"
+          "const": "1.2.0"
         }
       },
       "required": [
@@ -77,7 +77,7 @@
       "$id": "https://solotochina.com/contracts/page-schema.json",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "additionalProperties": false,
-      "contractVersion": "1.1.0",
+      "contractVersion": "1.2.0",
       "description": "CMS-authored page metadata and ordered content blocks for the SoloToChina frontend.",
       "properties": {
         "blocks": {
@@ -797,6 +797,54 @@
                   "data"
                 ],
                 "title": "Ticket Booking Window",
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "description": "Renders a verified Chinese destination card that travelers can show or copy for a driver.",
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "anchor": {
+                        "maxLength": 120,
+                        "type": "string"
+                      },
+                      "description": {
+                        "maxLength": 300,
+                        "type": "string"
+                      },
+                      "entity_key": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "title": {
+                        "maxLength": 160,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "entity_key"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "const": "destination_card"
+                  },
+                  "variant": {
+                    "enum": [
+                      "default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "variant",
+                  "data"
+                ],
+                "title": "Destination / Taxi Card",
                 "type": "object"
               },
               {

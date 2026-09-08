@@ -2,7 +2,7 @@
   "$id": "https://solotochina.com/contracts/page-schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "contractVersion": "1.1.0",
+  "contractVersion": "1.2.0",
   "description": "CMS-authored page metadata and ordered content blocks for the SoloToChina frontend.",
   "properties": {
     "blocks": {
@@ -722,6 +722,54 @@
               "data"
             ],
             "title": "Ticket Booking Window",
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "description": "Renders a verified Chinese destination card that travelers can show or copy for a driver.",
+            "properties": {
+              "data": {
+                "additionalProperties": false,
+                "properties": {
+                  "anchor": {
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "description": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "entity_key": {
+                    "maxLength": 120,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "title": {
+                    "maxLength": 160,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "entity_key"
+                ],
+                "type": "object"
+              },
+              "type": {
+                "const": "destination_card"
+              },
+              "variant": {
+                "enum": [
+                  "default"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "variant",
+              "data"
+            ],
+            "title": "Destination / Taxi Card",
             "type": "object"
           },
           {

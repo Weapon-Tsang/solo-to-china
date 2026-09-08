@@ -1,6 +1,6 @@
 {
-  "registry_version": "1.1.0",
-  "theme_version": "0.29.1",
+  "registry_version": "1.2.0",
+  "theme_version": "0.31.0",
   "principles": {
     "frontend": "Frontend defines what can be rendered.",
     "cms": "CMS decides what should be rendered.",
@@ -251,6 +251,22 @@
       "example": {"type": "ticket_reminder", "variant": "default", "attraction_slug": "forbidden-city", "title": "Check ticket timing"},
       "accessibility": "The Plugin owns labels, date validation, status announcements, and booking-timing output.",
       "responsive": "Delegated form controls stack and retain touch targets on mobile."
+    },
+    {
+      "id": "destination_card",
+      "name": "Destination / Taxi Card",
+      "category": "travel",
+      "purpose": "Renders a verified Chinese destination card that travelers can show or copy for a driver.",
+      "status": "stable",
+      "variants": ["default"],
+      "cms_usable": true,
+      "cms_interface": "page_block",
+      "render_mode": "shortcode",
+      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-renderers.php", "wp-content/plugins/solo-to-china-tools/includes/shortcodes.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
+      "schema": {"type": "object", "additionalProperties": false, "required": ["entity_key"], "properties": {"entity_key": {"type": "string", "minLength": 1, "maxLength": 120}, "title": {"type": "string", "maxLength": 160}, "description": {"type": "string", "maxLength": 300}, "anchor": {"type": "string", "maxLength": 120}}},
+      "example": {"type": "destination_card", "variant": "default", "entity_key": "forbidden-city", "title": "Show the Forbidden City to a driver"},
+      "accessibility": "Uses semantic headings, a live copy status, keyboard-operable actions, and a focus-contained full-screen dialog.",
+      "responsive": "The destination card scales Chinese text for mobile portrait and provides a distraction-free full-screen Driver Mode."
     },
     {
       "id": "affiliate_cta",

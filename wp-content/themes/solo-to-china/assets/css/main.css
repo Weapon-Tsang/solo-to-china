@@ -2297,7 +2297,7 @@ label:focus-visible {
 	padding: 18px;
 	position: absolute;
 	top: 100%;
-	width: min(344px, calc(100vw - 48px));
+	width: min(380px, calc(100vw - 48px));
 	z-index: 20;
 }
 
@@ -2310,6 +2310,19 @@ label:focus-visible {
 .stc-share__channel { align-items: center; background: #fff; border: 1px solid var(--stc-line); border-radius: 11px; color: var(--stc-ink); display: flex; font: inherit; font-size: 13px; font-weight: 750; gap: 9px; justify-content: flex-start; min-height: 48px; min-width: 0; overflow: hidden; padding: 8px 10px; text-decoration: none; }
 .stc-share__channel-icon { align-items: center; background: #eef5f1; border-radius: 8px; color: var(--stc-green); display: inline-flex; flex: 0 0 30px; height: 30px; justify-content: center; max-width: none; }
 .stc-share__channel-icon svg { height: 17px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 17px; }
+.stc-share__channel--whatsapp .stc-share__channel-icon { background: #25d366; color: #fff; }
+.stc-share__channel--facebook .stc-share__channel-icon { background: #1877f2; color: #fff; }
+.stc-share__channel--reddit .stc-share__channel-icon { background: #ff4500; color: #fff; }
+.stc-share__channel--x .stc-share__channel-icon { background: #000; color: #fff; }
+.stc-share__channel--instagram .stc-share__channel-icon { background: radial-gradient(circle at 30% 105%, #fdf497 0 8%, #fd5949 42%, #d6249f 66%, #285aeb 100%); color: #fff; }
+.stc-share__channel--more .stc-share__channel-icon { background: #e8efeb; color: var(--stc-green); }
+.stc-share__channel--whatsapp .stc-share__channel-icon svg,
+.stc-share__channel--facebook .stc-share__channel-icon svg,
+.stc-share__channel--x .stc-share__channel-icon svg { fill: currentColor; stroke: none; }
+.stc-share__channel--reddit .stc-share__channel-icon svg,
+.stc-share__channel--instagram .stc-share__channel-icon svg { fill: none; stroke: currentColor; }
+.stc-share__channel--reddit .stc-share__channel-icon svg circle { fill: none; }
+.stc-share__channel:hover { border-color: #aebdb5; transform: translateY(-1px); }
 .stc-share__channel-label { color: inherit; display: block; font-size: inherit; line-height: 1.2; max-width: none; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .stc-share__copy { cursor: pointer; grid-column: 1 / -1; }
 .stc-share__copy .stc-share__channel-icon { background: var(--stc-green); color: #fff; }

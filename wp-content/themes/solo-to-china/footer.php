@@ -27,6 +27,8 @@
 		</nav>
 		<nav class="stc-footer__column" aria-label="<?php esc_attr_e( 'Tools', 'solo-to-china' ); ?>">
 			<h2>Tools</h2>
+			<a href="<?php echo esc_url( home_url( '/tools/find-this-place/' ) ); ?>">Find This Place</a>
+			<a href="<?php echo esc_url( home_url( '/tools/taxi-card/' ) ); ?>">Taxi Card</a>
 			<a href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Ticket Booking Window</a>
 		</nav>
 		<nav class="stc-footer__column" aria-label="<?php esc_attr_e( 'Help', 'solo-to-china' ); ?>">

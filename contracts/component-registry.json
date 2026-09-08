@@ -860,6 +860,62 @@
       ]
     },
     {
+      "category": "travel",
+      "cmsUsable": true,
+      "deprecated": false,
+      "example": {
+        "data": {
+          "entity_key": "forbidden-city",
+          "title": "Show the Forbidden City to a driver"
+        },
+        "type": "destination_card",
+        "variant": "default"
+      },
+      "id": "destination_card",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor": {
+            "maxLength": 120,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 300,
+            "type": "string"
+          },
+          "entity_key": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 160,
+            "type": "string"
+          }
+        },
+        "required": [
+          "entity_key"
+        ],
+        "type": "object"
+      },
+      "interface": "page_block",
+      "name": "Destination / Taxi Card",
+      "optionalFields": [
+        "title",
+        "description",
+        "anchor"
+      ],
+      "purpose": "Renders a verified Chinese destination card that travelers can show or copy for a driver.",
+      "renderMode": "shortcode",
+      "requiredFields": [
+        "entity_key"
+      ],
+      "status": "stable",
+      "variants": [
+        "default"
+      ]
+    },
+    {
       "category": "commercial",
       "cmsUsable": true,
       "deprecated": false,
@@ -1982,7 +2038,7 @@
       ]
     }
   ],
-  "contractVersion": "1.1.0",
+  "contractVersion": "1.2.0",
   "generatedBy": "scripts/generate-component-catalog.ps1",
   "generatedFrom": "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json",
   "principles": {

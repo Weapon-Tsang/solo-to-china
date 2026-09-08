@@ -1,8 +1,8 @@
 # SoloToChina Content Component System
 
 Current Content Contract version: 2.1.0
-Current Component Registry version: 1.1.0
-Compatible Parent Theme version: 0.29.1
+Current Component Registry version: 1.2.0
+Compatible Parent Theme version: 0.31.0
 
 ## Governing Boundary
 
@@ -98,7 +98,7 @@ The Hero consumes title, excerpt, date, featured image, taxonomy label, and expl
 
 ## Component Library
 
-Registry 1.1 exposes 23 CMS-selectable capabilities: 20 ordered page blocks plus three explicit presentation capabilities.
+Registry 1.2 exposes 24 CMS-selectable capabilities: 21 ordered page blocks plus three explicit presentation capabilities. The additive `destination_card` block accepts a canonical Plugin-owned `entity_key` and delegates rendering to the Tools Plugin.
 
 - Core: Paragraph, Heading, List, Image
 - Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
@@ -120,7 +120,8 @@ Share This Page replaces the discontinued Save Guide feature. It has no login re
 
 On desktop/fine-pointer devices, the utility always opens the SoloToChina branded popover and never invokes `navigator.share()`. On mobile/coarse-pointer devices, it first calls `navigator.share()` with the page title, optional excerpt, and canonical URL; unsupported or unsuccessful native sharing opens the branded bottom sheet with:
 
-- WhatsApp and email links
+- Branded WhatsApp, Facebook, Reddit, X, and Instagram choices
+- Native system sharing when supported; Instagram otherwise copies the canonical link before opening Instagram
 - A read-only canonical URL
 - Copy link with clipboard and legacy-copy fallback
 - Visible success/error status through an ARIA live region
@@ -152,7 +153,7 @@ Ticket Reminder is fully removed. No layer stores reminders, uses localStorage, 
 
 scripts/playground-fixtures.php creates disposable Survival, City, and Attraction articles. Each explicitly enables Share and selects a Hero variant. Survival and Attraction enable TOC; City disables it to prove that taxonomy does not control layout. City also retains historical category-only guide classification coverage.
 
-The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 23 capability cards and renders real Gutenberg/shortcode examples for the 20 page-block components, plus the three presentation capabilities and every published Hero variant. The Theme does not create this page in production.
+The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 24 capability cards and renders real Gutenberg/shortcode examples for the 21 page-block components, plus the three presentation capabilities and every published Hero variant. The Theme does not create this page in production.
 
 Verification commands:
 

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_COMPONENT_REGISTRY_VERSION', '1.1.0' );
+define( 'STC_COMPONENT_REGISTRY_VERSION', '1.2.0' );
 
 /**
  * Return the canonical Component Registry path.
