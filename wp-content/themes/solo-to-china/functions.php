@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.31.1' );
+define( 'STC_THEME_VERSION', '0.32.0' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';

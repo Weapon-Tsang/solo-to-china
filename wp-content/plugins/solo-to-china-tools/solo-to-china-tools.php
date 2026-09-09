@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SoloToChina Tools
  * Description: Privacy-first place finding, taxi cards, and ticket planning for SoloToChina.
- * Version: 0.25.0
+ * Version: 0.25.1
  * Author: SoloToChina
  * Text Domain: solo-to-china-tools
  * Requires at least: 6.5
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_TOOLS_VERSION', '0.25.0' );
+define( 'STC_TOOLS_VERSION', '0.25.1' );
 define( 'STC_TOOLS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'STC_TOOLS_URL', plugin_dir_url( __FILE__ ) );
 define( 'STC_TOOLS_MAX_IMAGE_BYTES', 20 * 1024 * 1024 );

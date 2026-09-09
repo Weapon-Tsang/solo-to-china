@@ -58,7 +58,7 @@ $core_pages = [
 	],
 	'tools'             => [
 		'title' => 'Tools',
-		'copy'  => 'Free tools for practical China travel decisions. No login required.',
+		'copy'  => 'Choose a tool and get the next step.',
 		'share' => true,
 	],
 	'faq'               => [

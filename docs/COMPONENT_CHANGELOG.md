@@ -8,6 +8,24 @@ Versioning follows semantic compatibility:
 - Minor: backward-compatible component, optional field, or variant additions.
 - Major: removed/renamed capabilities, newly required fields, incompatible schemas, or changed semantics.
 
+## 1.3.0 / Parent Theme 0.32.0 / Child Theme 0.11.0 / Tools Plugin 0.25.1 - 2026-09-09
+
+### Added
+
+- Added `route_timeline` for ordered, mobile-friendly travel sequences with optional stop details.
+- Added `pros_cons` for balanced two-sided guidance with configurable headings and concise item lists.
+- Added reusable Stack, Cluster, Outline/Quiet Button, Badge, Field, and Panel visual primitives, documented through a new Foundations section in the internal Component Gallery.
+
+### Changed
+
+- Reworked the Component Gallery with sticky navigation, category counts and accents, stronger card hierarchy, clearer live-example surfaces, and responsive foundation samples.
+
+### Compatibility
+
+- Content Contract remains `2.1.0`; Component Registry advances to `1.3.0` because both CMS capabilities are additive.
+- The new visual primitives are implementation-level library additions and do not expand the CMS page-block API.
+- Existing component IDs, fields, variants, and stored content remain valid.
+
 ## 1.2.0 / Parent Theme 0.31.0 / Child Theme 0.10.0 / Tools Plugin 0.25.0 - 2026-09-09
 
 ### Added

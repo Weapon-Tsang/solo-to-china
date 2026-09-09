@@ -41,7 +41,7 @@ foreach ($Token in @("confidence", "match_level", "exact_viewpoint", "AI_INFERRE
 foreach ($Token in @("forbidden-city", "west-lake-hangzhou", "west-lake-huizhou", "上海虹桥站", "外滩", "_stc_entity_key", "related_city_guide", "related_attraction_guide")) {
     Require-Token $Places $Token "Canonical place/guide resolver is missing: $Token"
 }
-foreach ($Token in @("data-stc-place-finder", "data-stc-place-dropzone", "data-stc-place-preview", 'name="images[]"', "multiple", "Upload 1–4 photos", "20 MB each", "60 MB total", "processed together", "data-stc-taxi-tool", "data-stc-driver-mode", "Copy destination", "Show full-screen card")) {
+foreach ($Token in @("data-stc-place-finder", "data-stc-place-dropzone", "data-stc-place-preview", 'name="images[]"', "multiple", "Choose 1–4 photos", "20 MB each", "Photos are discarded after identification.", "data-stc-taxi-tool", "data-stc-driver-mode", "Copy destination", "Show full-screen card", '<a class="stc-tool-card"', "stc-tool-card__action")) {
     Require-Token $Shortcodes $Token "Tool interface is missing: $Token"
 }
 foreach ($Token in @("entity_key", "FormData", "images[]", "currentFiles", "maxImageCount", "maxUploadBytes", "clipboard", "dragover", "paste", "HIGH CONFIDENCE", "LIKELY MATCH", "Address not verified", "AI inferred", "Escape")) {
@@ -52,6 +52,7 @@ Require-Token $Registry '"id": "destination_card"' "Registry does not publish de
 foreach ($Forbidden in @("wp_insert_attachment", "media_handle_sideload", "wp_handle_upload", "localStorage", "sessionStorage", "text/calendar", "data:image")) {
     if ($AllToolSource.Contains($Forbidden)) { $Failures.Add("Forbidden persistence/upload behavior found: $Forbidden") }
 }
+if ($Shortcodes.Contains('<article class="stc-tool-card"')) { $Failures.Add("Tool cards are not full-card links.") }
 if ($AllToolSource -match '(?i)(sk-[a-z0-9]{20,}|api[_-]?key\s*[=:]\s*["''][^"'']+)') { $Failures.Add("Possible API credential found in tool source.") }
 if ($Javascript -match '(?i)\b\d{1,3}%\s*(match|confidence)') { $Failures.Add("UI contains pseudo-precise confidence percentages.") }
 

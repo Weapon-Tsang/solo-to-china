@@ -19,7 +19,6 @@
 		<?php if ( is_front_page() ) : ?>
 			<img class="stc-brand__logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/solotochina-logo-white.png' ); ?>" width="533" height="515" alt="" decoding="async" fetchpriority="high">
 		<?php else : ?>
-			<span class="stc-brand__mark">STC</span>
 			<span class="stc-brand__name">SoloToChina</span>
 		<?php endif; ?>
 	</a>

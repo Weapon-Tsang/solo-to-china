@@ -2,7 +2,7 @@
 
 Project-owned planning functionality for SoloToChina.
 
-Current version: `0.25.0`.
+Current version: `0.25.1`.
 
 This plugin owns:
 
@@ -17,7 +17,7 @@ This plugin owns:
 - Visit-date validation and the booking-not-open, booking-window-reached, and visit-date-passed states.
 - Optional `attraction_slug` shortcode context, validated against Plugin-owned attraction data.
 
-The primary shortcodes are `[solo_to_china_tools_directory]`, `[solo_to_china_place_finder]`, `[solo_to_china_taxi_card entity_key="forbidden-city"]`, and `[solo_to_china_ticket_tool]`. Theme renderers may delegate a canonical entity or attraction slug; the Plugin still owns validation, data, calculations, and frontend behavior.
+The primary shortcodes are `[solo_to_china_tools_directory]`, `[solo_to_china_place_finder]`, `[solo_to_china_taxi_card entity_key="forbidden-city"]`, and `[solo_to_china_ticket_tool]`. The Tools directory uses full-card links, and the tool interfaces keep one concise instruction per step. Theme renderers may delegate a canonical entity or attraction slug; the Plugin still owns validation, data, calculations, and frontend behavior.
 
 Provider configuration and the exact request/privacy contract are documented in `docs/architecture/web-tools.md`. Find This Place accepts one to four photos of the same location (20 MB each, 60 MB total), processes them as one identification request, and returns a safe temporary-unavailable result when no vision provider is configured; it never invents a match. Taxi Card continues to resolve its locally verified canonical catalog.
 

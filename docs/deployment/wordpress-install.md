@@ -47,7 +47,7 @@ When the theme is activated, it creates any missing core IA pages:
 - Affiliate Disclosure
 - Disclaimer
 
-When Tools Plugin `0.25.0` is activated, it creates missing child pages at `/tools/find-this-place/` and `/tools/taxi-card/`. It never overwrites existing page content.
+When Tools Plugin `0.25.1` is activated, it creates missing child pages at `/tools/find-this-place/` and `/tools/taxi-card/`. It never overwrites existing page content.
 
 It only creates missing pages. It does not overwrite existing WordPress page content or publish drafts. Theme `0.29.0` also runs this idempotent bootstrap once from the WordPress admin after an upgrade, so the six support/legal pages are created even when the Theme was already active. If an unpublished page already reserves one of the required slugs—as a fresh WordPress install commonly does for Privacy Policy—the public URL uses a read-only Theme fallback until an administrator publishes that page. If WordPress has no configured privacy page, the new or existing `/privacy-policy/` page is assigned; an existing privacy-page setting is preserved.
 
@@ -115,7 +115,7 @@ Also check:
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.31.1`, verify these public read-only endpoints:
+After installing Parent Theme `0.32.0`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`

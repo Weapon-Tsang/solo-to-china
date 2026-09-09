@@ -202,8 +202,10 @@ function stc_playground_component_gallery_content( $media_block ) {
 		'tip'           => 'tip',
 		'warning'       => 'warning',
 		'steps'         => 'steps',
+		'route-timeline' => 'route_timeline',
 		'checklist'     => 'checklist',
 		'comparison'    => 'comparison_table',
+		'pros-cons'     => 'pros_cons',
 		'faq'           => 'faq',
 	);
 

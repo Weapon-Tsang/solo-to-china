@@ -35,8 +35,8 @@ foreach ($TopLevelKey in @("contract_version", "theme_version", "principles", "p
         Add-ContractFailure "Content Contract is missing top-level key: $TopLevelKey"
     }
 }
-if ($Contract.component_registry.version -ne "1.2.0" -or $Registry.registry_version -ne "1.2.0") {
-    Add-ContractFailure "Content Contract must reference Component Registry 1.2.0."
+if ($Contract.component_registry.version -ne "1.3.0" -or $Registry.registry_version -ne "1.3.0") {
+    Add-ContractFailure "Content Contract must reference Component Registry 1.3.0."
 }
 if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.Contains('"allowed_components"')) {
     Add-ContractFailure "Content Contract duplicates the canonical Component Registry list."
@@ -45,8 +45,8 @@ if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.C
 if ($Contract.contract_version -ne "2.1.0") {
     Add-ContractFailure "Content Contract version must be 2.1.0."
 }
-if ($Contract.theme_version -ne "0.31.1") {
-    Add-ContractFailure "Content Contract theme_version must be 0.31.1."
+if ($Contract.theme_version -ne "0.32.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.32.0."
 }
 
 $CmsAdapterPath = Join-Path $Root "wp-content/themes/solo-to-china/inc/cms-articles.php"
@@ -195,7 +195,7 @@ if (-not (Test-Path -LiteralPath $ComponentsRuntimePath -PathType Leaf)) {
     Add-ContractFailure "Content Component Gutenberg runtime is missing."
 } else {
     $ComponentsRuntime = Get-Content -LiteralPath $ComponentsRuntimePath -Raw
-    foreach ($PatternToken in @("register_block_pattern", "solo-to-china/content-components", "stc-content-block--quick-answer", "stc-content-block--key-takeaways", "stc-content-block--quick-facts", "stc-content-block--tip", "stc-content-block--warning", "stc-content-block--steps", "stc-content-block--checklist", "stc-content-block--comparison", "stc-content-block--faq", "<!-- wp:group", "<!-- wp:details", "<!-- wp:table")) {
+    foreach ($PatternToken in @("register_block_pattern", "solo-to-china/content-components", "stc-content-block--quick-answer", "stc-content-block--key-takeaways", "stc-content-block--quick-facts", "stc-content-block--tip", "stc-content-block--warning", "stc-content-block--steps", "stc-content-block--route-timeline", "stc-content-block--checklist", "stc-content-block--comparison", "stc-content-block--pros-cons", "stc-content-block--faq", "<!-- wp:group", "<!-- wp:details", "<!-- wp:table")) {
         if (-not $ComponentsRuntime.Contains($PatternToken)) {
             Add-ContractFailure "Content Component Gutenberg runtime is missing: $PatternToken"
         }
@@ -216,7 +216,7 @@ if (-not (Test-Path -LiteralPath $ComponentsCssPath -PathType Leaf)) {
     Add-ContractFailure "Child Theme Content Component CSS is missing."
 } else {
     $ComponentsCss = Get-Content -LiteralPath $ComponentsCssPath -Raw
-    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--faq", ".stc-content-image", ".stc-content-image--evidence", ".stc-content-image--context", "figcaption", "height: auto", "max-width: 100%", ".stc-dynamic-component", ".stc-dynamic-component--planner", ".stc-dynamic-component--ticket", ".stc-dynamic-component--affiliate", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+    foreach ($CssToken in @(".stc-content-block", ".stc-content-block--quick-answer", ".stc-content-block--key-takeaways", ".stc-content-block--quick-facts", ".stc-content-block--tip", ".stc-content-block--warning", ".stc-content-block--steps", ".stc-content-block--route-timeline", ".stc-content-block--checklist", ".stc-content-block--comparison", ".stc-content-block--pros-cons", ".stc-content-block--faq", ".stc-content-image", ".stc-content-image--evidence", ".stc-content-image--context", "figcaption", "height: auto", "max-width: 100%", ".stc-dynamic-component", ".stc-dynamic-component--planner", ".stc-dynamic-component--ticket", ".stc-dynamic-component--affiliate", "overflow-x: auto", "details", "summary", "--stc-color-", "--stc-space-", "--stc-radius-", "--stc-motion-", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
         if (-not $ComponentsCss.Contains($CssToken)) {
             Add-ContractFailure "Content Component CSS is missing: $CssToken"
         }

@@ -156,6 +156,23 @@ body {
 	gap: var(--stc-grid-gap);
 }
 
+.stc-stack {
+	display: flex;
+	flex-direction: column;
+	gap: var(--stc-space-6);
+}
+
+.stc-stack--tight {
+	gap: var(--stc-space-3);
+}
+
+.stc-cluster {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--stc-space-3);
+}
+
 :where(.stc-button, .stc-page-actions button) {
 	align-items: center;
 	border: 1px solid transparent;
@@ -197,6 +214,60 @@ body {
 	background: var(--stc-color-jade-hover);
 }
 
+.stc-button--outline {
+	background: transparent;
+	border-color: color-mix(in srgb, var(--stc-color-jade) 45%, var(--stc-color-line));
+	color: var(--stc-color-jade);
+}
+
+.stc-button--outline:hover {
+	background: color-mix(in srgb, var(--stc-color-jade) 7%, var(--stc-color-surface));
+	border-color: var(--stc-color-jade);
+}
+
+.stc-button--quiet {
+	background: transparent;
+	color: var(--stc-color-ink-soft);
+	padding-inline: var(--stc-space-2);
+}
+
+.stc-button--quiet:hover {
+	background: var(--stc-color-surface-muted);
+	color: var(--stc-color-ink);
+}
+
+.stc-badge {
+	align-items: center;
+	background: var(--stc-color-surface-muted);
+	border: 1px solid var(--stc-color-line);
+	border-radius: var(--stc-radius-pill);
+	color: var(--stc-color-ink-soft);
+	display: inline-flex;
+	font-size: var(--stc-font-size-xs);
+	font-weight: 750;
+	line-height: 1;
+	min-height: 1.75rem;
+	padding: var(--stc-space-1) var(--stc-space-3);
+}
+
+.stc-badge--success {
+	background: color-mix(in srgb, var(--stc-color-jade) 10%, var(--stc-color-surface));
+	border-color: color-mix(in srgb, var(--stc-color-jade) 30%, var(--stc-color-line));
+	color: var(--stc-color-jade-hover);
+}
+
+.stc-badge--attention {
+	background: color-mix(in srgb, var(--stc-color-gold-muted) 12%, var(--stc-color-surface));
+	border-color: color-mix(in srgb, var(--stc-color-gold-muted) 35%, var(--stc-color-line));
+	color: #6f521f;
+}
+
+.stc-badge--critical {
+	background: color-mix(in srgb, var(--stc-color-brand) 9%, var(--stc-color-surface));
+	border-color: color-mix(in srgb, var(--stc-color-brand) 30%, var(--stc-color-line));
+	color: var(--stc-color-brand-hover);
+}
+
 :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
 	background: var(--stc-color-surface);
 	border: 1px solid var(--stc-color-line);
@@ -212,6 +283,40 @@ body {
 
 :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea):hover {
 	border-color: color-mix(in srgb, var(--stc-color-ink) 28%, var(--stc-color-line));
+}
+
+.stc-field {
+	color: var(--stc-color-ink);
+	display: grid;
+	font-size: var(--stc-font-size-sm);
+	font-weight: 700;
+	gap: var(--stc-space-2);
+}
+
+.stc-field small {
+	color: var(--stc-color-muted);
+	font-size: var(--stc-font-size-xs);
+	font-weight: 500;
+}
+
+.stc-panel {
+	background: var(--stc-color-surface);
+	border: 1px solid var(--stc-color-line);
+	border-radius: var(--stc-radius-md);
+	padding: var(--stc-space-5);
+}
+
+.stc-panel > :first-child {
+	margin-top: 0;
+}
+
+.stc-panel > :last-child {
+	margin-bottom: 0;
+}
+
+.stc-panel--accent {
+	background: color-mix(in srgb, var(--stc-color-jade) 7%, var(--stc-color-surface));
+	border-inline-start: var(--stc-space-1) solid var(--stc-color-jade);
 }
 
 .stc-ui-card {

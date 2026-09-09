@@ -2,9 +2,9 @@
 
 Generated from `component-registry.v1.json`. Do not edit component capability details here by hand; update the Registry, implementations, Gallery, and tests, then run `.\scripts\generate-component-catalog.ps1`.
 
-Registry version: `1.2.0`
+Registry version: `1.3.0`
 
-CMS-usable capabilities: `24`
+CMS-usable capabilities: `26`
 
 Internal rendering components recorded: `4`
 
@@ -39,8 +39,10 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `tip` | Tip | information | `page_block` | `stable` | default | Highlights friendly supporting advice with low urgency. |
 | `warning` | Warning | information | `page_block` | `stable` | default | Highlights a travel risk, prerequisite, or failure condition. |
 | `steps` | Steps | travel | `page_block` | `stable` | default | Explains an ordered setup, booking, or route process. |
+| `route_timeline` | Route Timeline | travel | `page_block` | `stable` | default | Shows a sequence of travel stops with concise supporting details. |
 | `checklist` | Checklist | travel | `page_block` | `stable` | default | Provides a scannable preparation list without saved completion state. |
 | `comparison_table` | Comparison Table | information | `page_block` | `stable` | default | Compares options with native table semantics and local mobile scrolling. |
+| `pros_cons` | Pros and Cons | information | `page_block` | `stable` | default | Balances the advantages and tradeoffs of one travel choice. |
 | `faq` | FAQ | information | `page_block` | `stable` | default | Presents explicit questions and complete answers through native disclosures. |
 | `planner_cta` | Planner CTA | travel | `page_block` | `stable` | default | Offers a contextual trip-planning action selected by the CMS. |
 | `ticket_reminder` | Ticket Booking Window | travel | `page_block` | `stable` | default | Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias. |
@@ -590,6 +592,80 @@ Example:
 }
 ```
 
+### `route_timeline` — Route Timeline
+
+- Category: `travel`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Shows a sequence of travel stops with concise supporting details.
+- Variants: `default`
+- Required fields: `items`
+- Optional fields: `title`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-components.php`, `wp-content/themes/solo-to-china/inc/cms-articles.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`
+- Accessibility: Renders an ordered list so the sequence remains meaningful without visual styling.
+- Responsive behavior: Timeline markers and copy stay aligned in one readable column.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "title": {
+      "type": "string"
+    },
+    "anchor": {
+      "type": "string"
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "route_timeline",
+  "variant": "default",
+  "title": "A simple first day",
+  "items": [
+    {
+      "title": "Arrive at Beijing South",
+      "detail": "Follow Metro signs after the ticket gates."
+    },
+    {
+      "title": "Check in near Qianmen",
+      "detail": "Keep the Chinese hotel address ready."
+    }
+  ]
+}
+```
+
 ### `checklist` — Checklist
 
 - Category: `travel`
@@ -712,6 +788,84 @@ Example:
     ]
   ],
   "caption": "Transport comparison"
+}
+```
+
+### `pros_cons` — Pros and Cons
+
+- Category: `information`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Balances the advantages and tradeoffs of one travel choice.
+- Variants: `default`
+- Required fields: `pros`, `cons`
+- Optional fields: `title`, `pros_title`, `cons_title`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/content-components.php`, `wp-content/themes/solo-to-china/inc/cms-articles.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`
+- Accessibility: Uses explicit headings and semantic lists; meaning never depends on color or icons alone.
+- Responsive behavior: The two columns stack in logical reading order on narrow screens.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pros",
+    "cons"
+  ],
+  "properties": {
+    "pros": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "cons": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "title": {
+      "type": "string"
+    },
+    "pros_title": {
+      "type": "string"
+    },
+    "cons_title": {
+      "type": "string"
+    },
+    "anchor": {
+      "type": "string"
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "pros_cons",
+  "variant": "default",
+  "title": "Staying near the old city",
+  "pros_title": "Works well when",
+  "cons_title": "Plan around",
+  "pros": [
+    "You want to walk to major sights",
+    "You prefer an atmospheric base"
+  ],
+  "cons": [
+    "Metro transfers may take longer",
+    "Rooms can be smaller"
+  ]
 }
 ```
 

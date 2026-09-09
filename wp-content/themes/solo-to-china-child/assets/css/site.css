@@ -40,16 +40,6 @@ body {
 	min-block-size: 2.75rem;
 }
 
-.stc-brand__mark {
-	background: var(--stc-color-brand);
-	border-radius: var(--stc-radius-xs);
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-	font-size: 0.625rem;
-	height: 1.625rem;
-	letter-spacing: 0.07em;
-	width: 1.625rem;
-}
-
 .stc-brand__name {
 	font-size: 1.25rem;
 	font-weight: 750;

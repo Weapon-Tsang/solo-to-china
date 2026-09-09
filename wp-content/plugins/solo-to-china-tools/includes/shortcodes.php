@@ -49,11 +49,11 @@ function stc_tools_render_ticket_tool( $attributes = array() ) {
 	?>
 	<form class="stc-ticket-tool" action="#" method="get" data-stc-ticket-tool>
 		<div class="stc-ticket-tool__heading">
-			<<?php echo esc_html( $heading_tag ); ?>><?php esc_html_e( 'Ticket Booking Window', 'solo-to-china-tools' ); ?></<?php echo esc_html( $heading_tag ); ?>>
-			<p><?php esc_html_e( 'Choose your attraction and visit date to see when you should start checking tickets.', 'solo-to-china-tools' ); ?></p>
+			<<?php echo esc_html( $heading_tag ); ?>><?php esc_html_e( 'Check when tickets open', 'solo-to-china-tools' ); ?></<?php echo esc_html( $heading_tag ); ?>>
+			<p><?php esc_html_e( 'Pick an attraction and visit date.', 'solo-to-china-tools' ); ?></p>
 		</div>
 		<label>
-			<span>Select attraction</span>
+			<span>Attraction</span>
 			<select name="stc_attraction" required>
 				<?php foreach ( $attractions_by_city as $city => $city_attractions ) : ?>
 					<optgroup label="<?php echo esc_attr( $city ); ?>">
@@ -75,14 +75,14 @@ function stc_tools_render_ticket_tool( $attributes = array() ) {
 			</select>
 		</label>
 		<label>
-			<span>Select visit date</span>
+			<span>Visit date</span>
 			<input type="date" name="stc_visit_date" required>
 		</label>
-		<button type="submit">Check booking date</button>
+		<button type="submit">Check date</button>
 		<div class="stc-ticket-result" data-stc-ticket-result role="status" aria-live="polite" aria-atomic="true"></div>
 		<a class="stc-ticket-tool__booking-link" href="https://www.trip.com/" target="_blank" rel="sponsored noopener" data-stc-ticket-link hidden><?php esc_html_e( 'Check tickets on Trip.com', 'solo-to-china-tools' ); ?> <span aria-hidden="true">&#8599;</span></a>
 		<p class="stc-ticket-tool__disclosure" data-stc-ticket-disclosure hidden><?php esc_html_e( 'Affiliate link. SoloToChina may earn a commission at no extra cost to you.', 'solo-to-china-tools' ); ?></p>
-		<p class="stc-ticket-tool__note"><?php esc_html_e( 'Ticket rules and booking windows can change. Verify current information before purchasing.', 'solo-to-china-tools' ); ?></p>
+		<p class="stc-ticket-tool__note"><?php esc_html_e( 'Booking rules can change. Check again before paying.', 'solo-to-china-tools' ); ?></p>
 	</form>
 	<?php
 	return ob_get_clean();
@@ -99,31 +99,38 @@ function stc_tools_tool_icon( $name ) {
 
 function stc_tools_render_directory() {
 	$cards = array(
-		array( 'icon' => 'photo', 'title' => 'Find This Place', 'copy' => 'Upload up to four photos of the same location to identify a China travel spot.', 'label' => 'Find a place', 'url' => home_url( '/tools/find-this-place/' ) ),
-		array( 'icon' => 'taxi', 'title' => 'Taxi Card', 'copy' => 'Turn a destination into a Chinese card you can show to a driver.', 'label' => 'Create taxi card', 'url' => home_url( '/tools/taxi-card/' ) ),
+		array( 'icon' => 'photo', 'title' => 'Find This Place', 'copy' => 'Identify a place from 1–4 photos.', 'url' => home_url( '/tools/find-this-place/' ) ),
+		array( 'icon' => 'taxi', 'title' => 'Taxi Card', 'copy' => 'Create a Chinese destination card for your driver.', 'url' => home_url( '/tools/taxi-card/' ) ),
 	);
 	ob_start(); ?>
 	<section class="stc-tools-directory" aria-labelledby="stc-tools-directory-title">
-		<div class="stc-tools-directory__heading"><p><?php esc_html_e( 'Travel utilities', 'solo-to-china-tools' ); ?></p><h2 id="stc-tools-directory-title"><?php esc_html_e( 'Solve the next practical step', 'solo-to-china-tools' ); ?></h2></div>
+		<div class="stc-tools-directory__heading"><h2 id="stc-tools-directory-title"><?php esc_html_e( 'Choose a tool', 'solo-to-china-tools' ); ?></h2></div>
 		<div class="stc-tools-directory__grid">
-			<?php foreach ( $cards as $card ) : ?><article class="stc-tool-card"><span class="stc-tool-card__icon"><?php echo stc_tools_tool_icon( $card['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><h3><?php echo esc_html( $card['title'] ); ?></h3><p><?php echo esc_html( $card['copy'] ); ?></p><a href="<?php echo esc_url( $card['url'] ); ?>"><?php echo esc_html( $card['label'] ); ?><span aria-hidden="true">→</span></a></article><?php endforeach; ?>
+			<?php foreach ( $cards as $card ) : ?>
+				<a class="stc-tool-card" href="<?php echo esc_url( $card['url'] ); ?>">
+					<span class="stc-tool-card__icon"><?php echo stc_tools_tool_icon( $card['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+					<h3><?php echo esc_html( $card['title'] ); ?></h3>
+					<p><?php echo esc_html( $card['copy'] ); ?></p>
+					<span class="stc-tool-card__action"><?php esc_html_e( 'Open tool', 'solo-to-china-tools' ); ?><span aria-hidden="true">→</span></span>
+				</a>
+			<?php endforeach; ?>
 		</div>
 	</section>
-	<section class="stc-tools-ticket" aria-labelledby="stc-tools-ticket-title"><div class="stc-tools-directory__heading"><p><?php esc_html_e( 'Plan ahead', 'solo-to-china-tools' ); ?></p><h2 id="stc-tools-ticket-title"><?php esc_html_e( 'Ticket Booking Window', 'solo-to-china-tools' ); ?></h2></div><?php echo stc_tools_render_ticket_tool( array( 'heading_level' => '3' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></section>
+	<section class="stc-tools-ticket" aria-label="<?php esc_attr_e( 'Ticket booking tool', 'solo-to-china-tools' ); ?>"><?php echo stc_tools_render_ticket_tool(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></section>
 	<?php return ob_get_clean();
 }
 
 function stc_tools_render_place_finder() {
 	ob_start(); ?>
 	<section class="stc-place-finder" data-stc-place-finder>
-		<header class="stc-tool-intro"><p class="stc-tool-intro__eyebrow"><?php esc_html_e( 'Photos to practical plan', 'solo-to-china-tools' ); ?></p><h2><?php esc_html_e( 'Upload photos of the same place.', 'solo-to-china-tools' ); ?></h2><p><?php esc_html_e( 'Different angles and visible signs give the AI more evidence and can reduce wrong matches.', 'solo-to-china-tools' ); ?></p></header>
+		<header class="stc-tool-intro"><h2><?php esc_html_e( 'Add photos', 'solo-to-china-tools' ); ?></h2></header>
 		<form class="stc-place-finder__form" data-stc-place-form enctype="multipart/form-data" novalidate>
 			<div class="stc-place-upload" data-stc-place-dropzone>
 				<input class="stc-place-upload__input" type="file" name="images[]" id="stc-place-image" accept="image/jpeg,image/png,image/webp" multiple data-stc-place-input>
-				<label class="stc-place-upload__label" for="stc-place-image"><span class="stc-place-upload__icon"><?php echo stc_tools_tool_icon( 'photo' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><strong><?php esc_html_e( 'Upload 1–4 photos of the same place', 'solo-to-china-tools' ); ?></strong><span><?php esc_html_e( 'JPG, PNG or WebP · up to 20 MB each · 60 MB total', 'solo-to-china-tools' ); ?></span><small><?php esc_html_e( 'Best results: include a wide view, entrance or sign, and nearby streets from different angles.', 'solo-to-china-tools' ); ?></small></label>
+				<label class="stc-place-upload__label" for="stc-place-image"><span class="stc-place-upload__icon"><?php echo stc_tools_tool_icon( 'photo' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><strong><?php esc_html_e( 'Choose 1–4 photos of one place', 'solo-to-china-tools' ); ?></strong><span><?php esc_html_e( 'JPG, PNG or WebP · 20 MB each', 'solo-to-china-tools' ); ?></span><small><?php esc_html_e( 'Include a wide view or visible sign.', 'solo-to-china-tools' ); ?></small></label>
 				<div class="stc-place-upload__preview" data-stc-place-preview hidden><div class="stc-place-upload__previews" data-stc-place-previews></div><div class="stc-place-upload__actions"><button type="button" data-stc-place-change><?php esc_html_e( 'Choose different photos', 'solo-to-china-tools' ); ?></button><button type="button" data-stc-place-remove><?php esc_html_e( 'Remove all', 'solo-to-china-tools' ); ?></button></div></div>
 			</div>
-			<p class="stc-place-finder__privacy"><?php esc_html_e( 'Upload only photos from one location. They are processed together for identification, then discarded; they are not added to the Media Library.', 'solo-to-china-tools' ); ?></p>
+			<p class="stc-place-finder__privacy"><?php esc_html_e( 'Photos are discarded after identification.', 'solo-to-china-tools' ); ?></p>
 			<div class="stc-place-finder__hint" data-stc-city-hint hidden><label for="stc-place-city-hint"><?php esc_html_e( 'Optional city hint', 'solo-to-china-tools' ); ?></label><input id="stc-place-city-hint" name="city_hint" type="text" maxlength="80" autocomplete="off" placeholder="e.g. Chongqing"></div>
 			<button class="stc-tool-primary" type="submit" data-stc-place-submit disabled><?php esc_html_e( 'Find this place', 'solo-to-china-tools' ); ?></button>
 			<p class="stc-tool-message" role="status" aria-live="polite" aria-atomic="true" data-stc-place-status></p>
@@ -156,8 +163,8 @@ function stc_tools_render_taxi_card( $attributes = array() ) {
 	$heading = '3' === (string) $attributes['heading_level'] ? 'h3' : 'h2';
 	ob_start(); ?>
 	<section class="stc-taxi-card" data-stc-taxi-tool data-initial-entity="<?php echo esc_attr( $requested ); ?>">
-		<header class="stc-tool-intro"><p class="stc-tool-intro__eyebrow"><?php esc_html_e( 'Taxi Card', 'solo-to-china-tools' ); ?></p><<?php echo esc_html( $heading ); ?>><?php esc_html_e( 'Turn a destination into a clear Chinese place card.', 'solo-to-china-tools' ); ?></<?php echo esc_html( $heading ); ?>><p><?php esc_html_e( 'Use it with taxi drivers, hotel staff, or Chinese ride-hailing apps.', 'solo-to-china-tools' ); ?></p></header>
-		<form class="stc-taxi-card__form" data-stc-taxi-form><label for="stc-taxi-query"><?php esc_html_e( 'Search destination', 'solo-to-china-tools' ); ?></label><div><input id="stc-taxi-query" name="query" type="search" maxlength="160" autocomplete="off" placeholder="Forbidden City, The Bund…"><button class="stc-tool-primary" type="submit"><?php esc_html_e( 'Create taxi card', 'solo-to-china-tools' ); ?></button></div><p class="stc-tool-message" role="status" aria-live="polite" data-stc-taxi-status></p></form>
+		<header class="stc-tool-intro"><<?php echo esc_html( $heading ); ?>><?php esc_html_e( 'Enter a destination', 'solo-to-china-tools' ); ?></<?php echo esc_html( $heading ); ?>></header>
+		<form class="stc-taxi-card__form" data-stc-taxi-form><label for="stc-taxi-query"><?php esc_html_e( 'Destination', 'solo-to-china-tools' ); ?></label><div><input id="stc-taxi-query" name="query" type="search" maxlength="160" autocomplete="off" placeholder="Forbidden City, The Bund…"><button class="stc-tool-primary" type="submit"><?php esc_html_e( 'Create card', 'solo-to-china-tools' ); ?></button></div><p class="stc-tool-message" role="status" aria-live="polite" data-stc-taxi-status></p></form>
 		<div class="stc-taxi-card__choices" data-stc-taxi-choices hidden></div>
 		<div class="stc-taxi-card__result" data-stc-taxi-result<?php echo $place ? '' : ' hidden'; ?>>
 			<p class="stc-taxi-card__result-label"><?php esc_html_e( 'Show this to your driver', 'solo-to-china-tools' ); ?></p>

@@ -23,9 +23,9 @@ Recommended future code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.31.1` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.10.1` in `wp-content/themes/solo-to-china-child/`.
-- SoloToChina Tools plugin `0.25.0` in `wp-content/plugins/solo-to-china-tools/`.
+- Custom SoloToChina theme `0.32.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.11.0` in `wp-content/themes/solo-to-china-child/`.
+- SoloToChina Tools plugin `0.25.1` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.
@@ -38,9 +38,9 @@ Current development branch deliverables:
 
 The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
 
-Registry `1.2.0` adds the backward-compatible `destination_card` page block. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`.
+Registry `1.3.0` adds the backward-compatible `route_timeline` and `pros_cons` page blocks. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`.
 
-Parent Theme `0.31.1` adds the supplied SoloToChina artwork as a transparent white homepage and Footer logo while preserving the authenticated, draft-only CMS delivery path and overflow-safe branded sharing. Child Theme `0.10.1` integrates the responsive mark into the photographic Hero without a background card. Tools Plugin `0.25.0` retains one-to-four-photo Find This Place, Taxi Card, and the stateless Ticket Booking Window. Content Contract `2.1.0` remains compatible through stable component IDs.
+Parent Theme `0.32.0` expands the reusable content library with route timelines and pros/cons blocks while retaining the transparent white homepage/Footer artwork and compact inner-page wordmark. Child Theme `0.11.0` adds layout, action, badge, field, and panel primitives plus a more legible Component Gallery. Tools Plugin remains `0.25.1`. Content Contract `2.1.0` remains compatible through stable component IDs.
 
 Generate install artifacts with:
 

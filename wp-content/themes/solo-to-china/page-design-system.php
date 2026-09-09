@@ -34,15 +34,56 @@ foreach ( $components as $component ) {
 			<div><dt><?php esc_html_e( 'Registry', 'solo-to-china' ); ?></dt><dd><?php echo esc_html( STC_COMPONENT_REGISTRY_VERSION ); ?></dd></div>
 			<div><dt><?php esc_html_e( 'CMS capabilities', 'solo-to-china' ); ?></dt><dd><?php echo esc_html( count( $components ) ); ?></dd></div>
 			<div><dt><?php esc_html_e( 'Contract', 'solo-to-china' ); ?></dt><dd><?php echo esc_html( STC_CONTENT_CONTRACT_VERSION ); ?></dd></div>
+			<div><dt><?php esc_html_e( 'Foundation sets', 'solo-to-china' ); ?></dt><dd>5</dd></div>
 		</dl>
 	</section>
 
 	<nav class="stc-component-gallery__jump" aria-label="<?php esc_attr_e( 'Component categories', 'solo-to-china' ); ?>">
+		<a href="#gallery-foundations"><?php esc_html_e( 'Foundations', 'solo-to-china' ); ?></a>
 		<?php foreach ( array_keys( $categories ) as $category ) : ?>
-			<a href="#gallery-<?php echo esc_attr( sanitize_title( $category ) ); ?>"><?php echo esc_html( ucwords( $category ) ); ?></a>
+			<a href="#gallery-<?php echo esc_attr( sanitize_title( $category ) ); ?>"><span><?php echo esc_html( ucwords( $category ) ); ?></span><small><?php echo esc_html( count( $categories[ $category ] ) ); ?></small></a>
 		<?php endforeach; ?>
 		<a href="#gallery-live-examples"><?php esc_html_e( 'Live examples', 'solo-to-china' ); ?></a>
 	</nav>
+
+	<section id="gallery-foundations" class="stc-component-gallery__foundations" aria-labelledby="stc-gallery-foundations-title">
+		<div class="stc-component-gallery__section-heading">
+			<p><?php esc_html_e( 'Reusable UI foundation', 'solo-to-china' ); ?></p>
+			<h2 id="stc-gallery-foundations-title"><?php esc_html_e( 'Tokens and primitives', 'solo-to-china' ); ?></h2>
+			<p><?php esc_html_e( 'Shared building blocks for consistent interfaces across the public site, tools, and editorial content.', 'solo-to-china' ); ?></p>
+		</div>
+
+		<div class="stc-component-gallery__foundation-grid">
+			<article class="stc-component-gallery__foundation-card stc-component-gallery__foundation-card--wide">
+				<div class="stc-component-gallery__sample-heading"><span>01</span><div><h3><?php esc_html_e( 'Color roles', 'solo-to-china' ); ?></h3><p><?php esc_html_e( 'Semantic tokens stay stable while exact values remain frontend-owned.', 'solo-to-china' ); ?></p></div></div>
+				<div class="stc-component-gallery__swatches">
+					<?php foreach ( array( 'ink' => 'Ink', 'jade' => 'Jade', 'brand' => 'Brand', 'gold' => 'Gold', 'canvas' => 'Canvas', 'surface' => 'Surface' ) as $token => $label ) : ?>
+						<div><span class="stc-component-gallery__swatch stc-component-gallery__swatch--<?php echo esc_attr( $token ); ?>" aria-hidden="true"></span><strong><?php echo esc_html( $label ); ?></strong><code>--stc-color-<?php echo esc_html( $token ); ?></code></div>
+					<?php endforeach; ?>
+				</div>
+			</article>
+
+			<article class="stc-component-gallery__foundation-card">
+				<div class="stc-component-gallery__sample-heading"><span>02</span><div><h3><?php esc_html_e( 'Type scale', 'solo-to-china' ); ?></h3><p><?php esc_html_e( 'Editorial character with a practical interface voice.', 'solo-to-china' ); ?></p></div></div>
+				<div class="stc-component-gallery__type-samples"><strong><?php esc_html_e( 'Travel deeper', 'solo-to-china' ); ?></strong><h4><?php esc_html_e( 'Plan with confidence', 'solo-to-china' ); ?></h4><p><?php esc_html_e( 'Clear guidance stays readable at every screen size.', 'solo-to-china' ); ?></p><small><?php esc_html_e( 'LABEL / SUPPORTING META', 'solo-to-china' ); ?></small></div>
+			</article>
+
+			<article class="stc-component-gallery__foundation-card">
+				<div class="stc-component-gallery__sample-heading"><span>03</span><div><h3><?php esc_html_e( 'Actions', 'solo-to-china' ); ?></h3><p><?php esc_html_e( 'Primary, secondary, outline, and quiet hierarchy.', 'solo-to-china' ); ?></p></div></div>
+				<div class="stc-cluster"><a class="stc-button stc-button--primary" href="#gallery-foundations"><?php esc_html_e( 'Primary', 'solo-to-china' ); ?></a><a class="stc-button stc-button--secondary" href="#gallery-foundations"><?php esc_html_e( 'Secondary', 'solo-to-china' ); ?></a><a class="stc-button stc-button--outline" href="#gallery-foundations"><?php esc_html_e( 'Outline', 'solo-to-china' ); ?></a><a class="stc-button stc-button--quiet" href="#gallery-foundations"><?php esc_html_e( 'Quiet action', 'solo-to-china' ); ?></a></div>
+			</article>
+
+			<article class="stc-component-gallery__foundation-card">
+				<div class="stc-component-gallery__sample-heading"><span>04</span><div><h3><?php esc_html_e( 'Status badges', 'solo-to-china' ); ?></h3><p><?php esc_html_e( 'Meaning is carried by both text and color.', 'solo-to-china' ); ?></p></div></div>
+				<div class="stc-cluster"><span class="stc-badge">Default</span><span class="stc-badge stc-badge--success">Verified</span><span class="stc-badge stc-badge--attention">Check first</span><span class="stc-badge stc-badge--critical">Important</span></div>
+			</article>
+
+			<article class="stc-component-gallery__foundation-card">
+				<div class="stc-component-gallery__sample-heading"><span>05</span><div><h3><?php esc_html_e( 'Fields and panels', 'solo-to-china' ); ?></h3><p><?php esc_html_e( 'Consistent labels, help text, focus, shape, and elevation.', 'solo-to-china' ); ?></p></div></div>
+				<div class="stc-stack stc-stack--tight"><label class="stc-field"><span><?php esc_html_e( 'Destination', 'solo-to-china' ); ?></span><input type="text" value="Beijing" readonly><small><?php esc_html_e( 'City or landmark', 'solo-to-china' ); ?></small></label><div class="stc-panel stc-panel--accent"><strong><?php esc_html_e( 'Ready to use', 'solo-to-china' ); ?></strong><p><?php esc_html_e( 'The same primitives work in themes, tools, and editor previews.', 'solo-to-china' ); ?></p></div></div>
+			</article>
+		</div>
+	</section>
 
 	<section class="stc-component-gallery__registry" aria-labelledby="stc-component-registry-title">
 		<div class="stc-component-gallery__section-heading">
@@ -51,8 +92,8 @@ foreach ( $components as $component ) {
 		</div>
 
 		<?php foreach ( $categories as $category => $category_components ) : ?>
-			<section id="gallery-<?php echo esc_attr( sanitize_title( $category ) ); ?>" class="stc-component-gallery__category">
-				<h3><?php echo esc_html( ucwords( $category ) ); ?></h3>
+			<section id="gallery-<?php echo esc_attr( sanitize_title( $category ) ); ?>" class="stc-component-gallery__category stc-component-gallery__category--<?php echo esc_attr( sanitize_title( $category ) ); ?>">
+				<h3><span><?php echo esc_html( ucwords( $category ) ); ?></span><small><?php echo esc_html( sprintf( _n( '%d component', '%d components', count( $category_components ), 'solo-to-china' ), count( $category_components ) ) ); ?></small></h3>
 				<div class="stc-component-gallery__registry-grid">
 					<?php foreach ( $category_components as $component ) : ?>
 						<?php

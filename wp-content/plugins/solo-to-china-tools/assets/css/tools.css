@@ -159,6 +159,7 @@
 }
 
 .stc-tools-directory *,
+.stc-tools-ticket *,
 .stc-place-finder *,
 .stc-taxi-card * { box-sizing: border-box; }
 
@@ -167,33 +168,38 @@
 .stc-place-finder,
 .stc-taxi-card { color: #17251f; display: grid; gap: 24px; min-width: 0; }
 
-.stc-tools-ticket { border-top: 1px solid #dfded5; margin-top: 48px; padding-top: 48px; }
+.stc-tools-ticket { margin-top: 34px; }
+.stc-tools-ticket .stc-ticket-tool { background: #fff; border: 1px solid #cfdad4; border-radius: 20px; box-shadow: 0 18px 46px rgba(24, 38, 31, .12); padding: clamp(22px, 4vw, 30px); }
 .stc-tools-directory__heading { display: grid; gap: 6px; }
 .stc-tools-directory__heading > * { margin: 0; }
 .stc-tools-directory__heading > p,
 .stc-tool-intro__eyebrow,
 .stc-taxi-card__result-label { color: #146b54; font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
-.stc-tools-directory__heading h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.stc-tools-directory__heading h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.7rem, 3vw, 2.15rem); }
 .stc-tools-directory__grid { display: grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.stc-tool-card { background: #fffef9; border: 1px solid #dfded5; border-radius: 18px; box-shadow: 0 16px 40px rgba(24, 38, 31, .08); display: grid; gap: 12px; min-width: 0; padding: 24px; }
-.stc-tool-card__icon { align-items: center; background: #e9f2ed; border-radius: 14px; color: #146b54; display: inline-flex; height: 48px; justify-content: center; width: 48px; }
+.stc-tool-card { background: #fff; border: 1px solid #c7d5ce; border-radius: 20px; box-shadow: 0 16px 42px rgba(24, 38, 31, .12); color: #17251f; display: grid; gap: 13px; min-height: 240px; min-width: 0; padding: 26px; position: relative; text-decoration: none; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.stc-tool-card::before { background: #146b54; border-radius: 20px 20px 0 0; content: ""; height: 5px; inset: -1px -1px auto; position: absolute; }
+.stc-tool-card__icon { align-items: center; background: #e3f0e9; border-radius: 14px; color: #146b54; display: inline-flex; height: 52px; justify-content: center; width: 52px; }
 .stc-tool-card__icon svg,
 .stc-place-upload__icon svg { fill: none; height: 25px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 25px; }
 .stc-tool-card h3,
 .stc-tool-card p { margin: 0; }
-.stc-tool-card h3 { font-family: Georgia, "Times New Roman", serif; font-size: 1.45rem; }
-.stc-tool-card p { color: #637068; line-height: 1.6; }
-.stc-tool-card a { align-items: center; color: #146b54; display: inline-flex; font-weight: 800; gap: 8px; margin-top: auto; min-height: 44px; text-decoration: none; }
+.stc-tool-card h3 { font-family: Georgia, "Times New Roman", serif; font-size: 1.6rem; }
+.stc-tool-card p { color: #52615a; font-size: .95rem; line-height: 1.5; }
+.stc-tool-card__action { align-items: center; color: #146b54; display: inline-flex; font-weight: 800; gap: 8px; margin-top: auto; min-height: 32px; }
+.stc-tool-card__action > span { transition: transform .18s ease; }
+.stc-tool-card:hover { border-color: #86aa99; box-shadow: 0 22px 54px rgba(24, 38, 31, .17); transform: translateY(-4px); }
+.stc-tool-card:hover .stc-tool-card__action > span { transform: translateX(4px); }
 
-.stc-tool-intro { display: grid; gap: 9px; max-width: 720px; }
+.stc-tool-intro { display: grid; gap: 0; max-width: 720px; }
 .stc-tool-intro > * { margin: 0; }
 .stc-tool-intro h2,
 .stc-tool-intro h3 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.65rem, 4vw, 2.5rem); line-height: 1.12; }
 .stc-tool-intro > p:last-child { color: #637068; font-size: 1rem; line-height: 1.65; }
 
 .stc-place-finder__form,
-.stc-taxi-card__form { background: #fffef9; border: 1px solid #dfded5; border-radius: 20px; box-shadow: 0 18px 44px rgba(24, 38, 31, .08); display: grid; gap: 14px; min-width: 0; padding: clamp(18px, 4vw, 30px); }
-.stc-place-upload { border: 2px dashed #b8c7bf; border-radius: 16px; min-height: 260px; overflow: hidden; position: relative; transition: border-color .18s ease, background .18s ease; }
+.stc-taxi-card__form { background: #fff; border: 1px solid #cfdad4; border-radius: 20px; box-shadow: 0 18px 46px rgba(24, 38, 31, .11); display: grid; gap: 14px; min-width: 0; padding: clamp(18px, 4vw, 30px); }
+.stc-place-upload { border: 2px dashed #aebfb6; border-radius: 16px; min-height: 230px; overflow: hidden; position: relative; transition: border-color .18s ease, background .18s ease; }
 .stc-place-upload.is-dragging { background: #eef6f2; border-color: #146b54; }
 .stc-place-upload__input { height: 1px; left: 1rem; opacity: 0; position: absolute; top: 1rem; width: 1px; }
 .stc-place-upload__input:focus-visible + .stc-place-upload__label { outline: 3px solid rgba(20, 107, 84, .42); outline-offset: -5px; }
@@ -203,7 +209,7 @@
 .stc-place-upload__label > strong + span { color: #6a746f; font-size: 13px; margin-top: 6px; }
 .stc-place-upload__label small { color: #52615a; font-size: 12px; line-height: 1.5; margin-top: 12px; max-width: 520px; }
 .stc-place-upload.has-preview .stc-place-upload__label { display: none; }
-.stc-place-upload__preview { display: grid; gap: 14px; min-height: 260px; padding: 16px; }
+.stc-place-upload__preview { display: grid; gap: 14px; min-height: 230px; padding: 16px; }
 .stc-place-upload__preview[hidden] { display: none; }
 .stc-place-upload__previews { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; }
 .stc-place-upload__preview-card { background: #f1f4f2; border-radius: 12px; margin: 0; min-width: 0; overflow: hidden; }
@@ -309,5 +315,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.stc-tool-card,
+	.stc-tool-card__action > span { transition: none; }
+	.stc-tool-card:hover { transform: none; }
 	.stc-place-finder.is-loading .stc-place-finder__result { animation: none; }
 }

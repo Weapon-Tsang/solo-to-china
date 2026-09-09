@@ -1,7 +1,9 @@
 /* Internal Component Gallery; loaded only for the explicitly created Gallery page. */
 
 .stc-component-gallery {
-	background: var(--stc-color-canvas);
+	background:
+		radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--stc-color-jade) 9%, transparent), transparent 24rem),
+		var(--stc-color-canvas);
 	color: var(--stc-color-ink);
 	padding: clamp(2rem, 5vw, 5rem) var(--stc-container-gutter) clamp(5rem, 9vw, 8rem);
 }
@@ -13,7 +15,7 @@
 
 .stc-component-gallery__intro {
 	align-items: end;
-	background: #13231c;
+	background: linear-gradient(135deg, #102119 0%, #173126 58%, #2f3422 100%);
 	border-radius: var(--stc-radius-lg);
 	color: rgba(249, 251, 248, 0.82);
 	display: grid;
@@ -22,6 +24,18 @@
 	overflow: hidden;
 	padding: clamp(2rem, 6vw, 5rem);
 	position: relative;
+}
+
+.stc-component-gallery__intro::before {
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+	background-size: 2rem 2rem;
+	content: "";
+	inset: 0;
+	mask-image: linear-gradient(90deg, transparent 25%, #000);
+	pointer-events: none;
+	position: absolute;
 }
 
 .stc-component-gallery__intro::after {
@@ -68,17 +82,19 @@
 
 .stc-component-gallery__stats {
 	display: grid;
-	gap: 0.65rem;
+	gap: 0.5rem;
 	margin: 0;
 	min-width: 12rem;
 }
 
 .stc-component-gallery__stats div {
-	border-top: 1px solid rgba(255, 255, 255, 0.16);
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: var(--stc-radius-sm);
 	display: flex;
 	gap: 1rem;
 	justify-content: space-between;
-	padding-top: 0.65rem;
+	padding: 0.65rem 0.75rem;
 }
 
 .stc-component-gallery__stats dt {
@@ -94,11 +110,20 @@
 }
 
 .stc-component-gallery__jump {
+	backdrop-filter: blur(0.75rem);
+	background: color-mix(in srgb, var(--stc-color-canvas) 88%, transparent);
 	display: flex;
 	gap: 0.55rem;
 	overflow-x: auto;
 	padding-block: 1.5rem;
-	scrollbar-width: thin;
+	position: sticky;
+	top: 4.25rem;
+	scrollbar-width: none;
+	z-index: 20;
+}
+
+.stc-component-gallery__jump::-webkit-scrollbar {
+	display: none;
 }
 
 .stc-component-gallery__jump a {
@@ -116,10 +141,158 @@
 	text-decoration: none;
 }
 
+.stc-component-gallery__jump a:hover {
+	background: color-mix(in srgb, var(--stc-color-jade) 8%, var(--stc-color-surface));
+	border-color: color-mix(in srgb, var(--stc-color-jade) 32%, var(--stc-color-line));
+	color: var(--stc-color-jade);
+}
+
+.stc-component-gallery__jump a small {
+	align-items: center;
+	background: var(--stc-color-surface-muted);
+	border-radius: var(--stc-radius-pill);
+	display: inline-flex;
+	font-size: 0.65rem;
+	height: 1.35rem;
+	justify-content: center;
+	min-width: 1.35rem;
+	padding-inline: 0.3rem;
+}
+
+.stc-component-gallery__foundations,
 .stc-component-gallery__registry,
 .stc-component-gallery__presentation,
 .stc-component-gallery__examples {
 	margin-top: clamp(3.5rem, 7vw, 6rem);
+}
+
+.stc-component-gallery__foundations {
+	scroll-margin-top: 9rem;
+}
+
+.stc-component-gallery__foundation-grid {
+	display: grid;
+	gap: var(--stc-grid-gap);
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-top: var(--stc-space-8);
+}
+
+.stc-component-gallery__foundation-card {
+	background: var(--stc-color-surface);
+	border: 1px solid var(--stc-color-line);
+	border-radius: var(--stc-radius-md);
+	box-shadow: 0 0.5rem 1.5rem rgba(19, 33, 27, 0.05);
+	display: grid;
+	gap: var(--stc-space-6);
+	min-width: 0;
+	padding: clamp(var(--stc-space-5), 3vw, var(--stc-space-8));
+}
+
+.stc-component-gallery__foundation-card--wide {
+	grid-column: 1 / -1;
+}
+
+.stc-component-gallery__sample-heading {
+	align-items: start;
+	display: grid;
+	gap: var(--stc-space-3);
+	grid-template-columns: var(--stc-space-8) minmax(0, 1fr);
+}
+
+.stc-component-gallery__sample-heading > span {
+	align-items: center;
+	background: var(--stc-color-ink);
+	border-radius: var(--stc-radius-pill);
+	color: var(--stc-color-on-dark);
+	display: flex;
+	font-size: 0.65rem;
+	font-weight: 800;
+	height: var(--stc-space-8);
+	justify-content: center;
+}
+
+.stc-component-gallery__sample-heading h3,
+.stc-component-gallery__sample-heading p {
+	margin: 0;
+}
+
+.stc-component-gallery__sample-heading h3 {
+	font-size: 1.25rem;
+}
+
+.stc-component-gallery__sample-heading p {
+	color: var(--stc-color-muted);
+	font-size: var(--stc-font-size-sm);
+	line-height: 1.55;
+	margin-top: var(--stc-space-1);
+}
+
+.stc-component-gallery__swatches {
+	display: grid;
+	gap: var(--stc-space-3);
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.stc-component-gallery__swatches > div {
+	display: grid;
+	gap: var(--stc-space-1);
+	min-width: 0;
+}
+
+.stc-component-gallery__swatch {
+	border: 1px solid rgba(19, 33, 27, 0.12);
+	border-radius: var(--stc-radius-sm);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+	display: block;
+	height: 4.5rem;
+}
+
+.stc-component-gallery__swatch--ink { background: var(--stc-color-ink); }
+.stc-component-gallery__swatch--jade { background: var(--stc-color-jade); }
+.stc-component-gallery__swatch--brand { background: var(--stc-color-brand); }
+.stc-component-gallery__swatch--gold { background: var(--stc-color-gold-muted); }
+.stc-component-gallery__swatch--canvas { background: var(--stc-color-canvas); }
+.stc-component-gallery__swatch--surface { background: var(--stc-color-surface); }
+
+.stc-component-gallery__swatches strong {
+	font-size: var(--stc-font-size-sm);
+}
+
+.stc-component-gallery__swatches code {
+	color: var(--stc-color-muted);
+	font-size: 0.65rem;
+	overflow-wrap: anywhere;
+}
+
+.stc-component-gallery__type-samples {
+	display: grid;
+	gap: var(--stc-space-3);
+}
+
+.stc-component-gallery__type-samples > * {
+	margin: 0;
+}
+
+.stc-component-gallery__type-samples > strong {
+	font-family: var(--stc-font-display);
+	font-size: clamp(2rem, 5vw, 3.5rem);
+	letter-spacing: -0.04em;
+	line-height: 1;
+}
+
+.stc-component-gallery__type-samples h4 {
+	font-size: var(--stc-font-size-lg);
+}
+
+.stc-component-gallery__type-samples p {
+	color: var(--stc-color-ink-soft);
+}
+
+.stc-component-gallery__type-samples small {
+	color: var(--stc-color-jade);
+	font-size: 0.7rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
 }
 
 .stc-component-gallery__section-heading {
@@ -138,17 +311,36 @@
 }
 
 .stc-component-gallery__category {
+	--stc-gallery-accent: var(--stc-color-jade);
 	scroll-margin-top: 6rem;
 }
 
 .stc-component-gallery__category > h3 {
+	align-items: center;
 	border-bottom: 1px solid var(--stc-color-line);
+	display: flex;
 	font-size: 0.78rem;
+	justify-content: space-between;
 	letter-spacing: 0.08em;
 	margin: 2.5rem 0 1rem;
 	padding-bottom: 0.7rem;
 	text-transform: uppercase;
 }
+
+.stc-component-gallery__category > h3 small {
+	color: var(--stc-color-muted);
+	font-size: 0.68rem;
+	font-weight: 650;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.stc-component-gallery__category--media { --stc-gallery-accent: #397c83; }
+.stc-component-gallery__category--information { --stc-gallery-accent: var(--stc-color-gold-muted); }
+.stc-component-gallery__category--travel { --stc-gallery-accent: var(--stc-color-brand); }
+.stc-component-gallery__category--commercial { --stc-gallery-accent: #76588f; }
+.stc-component-gallery__category--layout { --stc-gallery-accent: #4c6f96; }
+.stc-component-gallery__category--utility { --stc-gallery-accent: #59655f; }
 
 .stc-component-gallery__registry-grid {
 	display: grid;
@@ -159,11 +351,22 @@
 .stc-component-gallery__registry-card {
 	background: var(--stc-color-surface);
 	border: 1px solid var(--stc-color-line);
-	border-radius: var(--stc-radius-sm);
+	border-radius: var(--stc-radius-md);
+	box-shadow: 0 0.45rem 1.4rem rgba(19, 33, 27, 0.045);
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
+	overflow: hidden;
 	padding: 1.25rem;
+	position: relative;
+}
+
+.stc-component-gallery__registry-card::before {
+	background: var(--stc-gallery-accent);
+	content: "";
+	height: 0.25rem;
+	inset: 0 0 auto;
+	position: absolute;
 }
 
 .stc-component-gallery__registry-meta {
@@ -174,9 +377,12 @@
 }
 
 .stc-component-gallery__registry-meta code {
+	background: color-mix(in srgb, var(--stc-gallery-accent) 8%, var(--stc-color-surface));
+	border-radius: var(--stc-radius-xs);
 	color: var(--stc-color-jade);
 	font-size: 0.72rem;
 	font-weight: 780;
+	padding: 0.2rem 0.35rem;
 }
 
 .stc-component-gallery__registry-meta span {
@@ -304,6 +510,41 @@
 
 .stc-component-gallery__examples .stc-entry-content--guide {
 	margin-top: 1.5rem;
+	max-width: none;
+}
+
+.stc-component-gallery__examples .stc-gallery-example {
+	background: var(--stc-color-surface);
+	border: 1px solid var(--stc-color-line);
+	border-radius: var(--stc-radius-md);
+	box-shadow: 0 0.65rem 2rem rgba(19, 33, 27, 0.055);
+	margin-block: var(--stc-space-5);
+	max-width: none;
+	padding: clamp(var(--stc-space-5), 4vw, var(--stc-space-8));
+}
+
+.stc-component-gallery__examples .stc-gallery-example > :first-child {
+	margin-top: 0;
+}
+
+.stc-component-gallery__examples .stc-gallery-example > :last-child {
+	margin-bottom: 0;
+}
+
+.stc-component-gallery__examples .stc-gallery-example > :is(.stc-content-block, .stc-dynamic-component) {
+	margin-block: var(--stc-space-4) 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.stc-component-gallery__registry-card {
+		transition: border-color var(--stc-motion-duration-base) var(--stc-motion-ease-standard), box-shadow var(--stc-motion-duration-base) var(--stc-motion-ease-standard), transform var(--stc-motion-duration-base) var(--stc-motion-ease-standard);
+	}
+
+	.stc-component-gallery__registry-card:hover {
+		border-color: color-mix(in srgb, var(--stc-gallery-accent) 34%, var(--stc-color-line));
+		box-shadow: var(--stc-shadow-card);
+		transform: translateY(-0.2rem);
+	}
 }
 
 .stc-component-gallery a:focus-visible,
@@ -319,6 +560,10 @@
 
 	.stc-component-gallery__hero-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.stc-component-gallery__swatches {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 }
 
@@ -341,8 +586,17 @@
 	}
 
 	.stc-component-gallery__registry-grid,
-	.stc-component-gallery__utility-grid {
+	.stc-component-gallery__utility-grid,
+	.stc-component-gallery__foundation-grid {
 		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.stc-component-gallery__foundation-card--wide {
+		grid-column: auto;
+	}
+
+	.stc-component-gallery__swatches {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	.stc-component-gallery__hero-grid {

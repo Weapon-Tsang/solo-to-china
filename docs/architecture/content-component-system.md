@@ -1,8 +1,8 @@
 # SoloToChina Content Component System
 
 Current Content Contract version: 2.1.0
-Current Component Registry version: 1.2.0
-Compatible Parent Theme version: 0.31.1
+Current Component Registry version: 1.3.0
+Compatible Parent Theme version: 0.32.0
 
 ## Governing Boundary
 
@@ -98,10 +98,10 @@ The Hero consumes title, excerpt, date, featured image, taxonomy label, and expl
 
 ## Component Library
 
-Registry 1.2 exposes 24 CMS-selectable capabilities: 21 ordered page blocks plus three explicit presentation capabilities. The additive `destination_card` block accepts a canonical Plugin-owned `entity_key` and delegates rendering to the Tools Plugin.
+Registry 1.3 exposes 26 CMS-selectable capabilities: 23 ordered page blocks plus three explicit presentation capabilities. The additive `route_timeline` and `pros_cons` blocks cover travel sequencing and balanced decision support. The `destination_card` block accepts a canonical Plugin-owned `entity_key` and delegates rendering to the Tools Plugin.
 
 - Core: Paragraph, Heading, List, Image
-- Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
+- Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Route Timeline, Checklist, Comparison Table, Pros and Cons, FAQ
 - Contextual: Planner CTA, Ticket Booking Window compatibility adapter (`ticket_reminder`), Affiliate CTA
 - Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
 - Presentation: Article Hero, Share This Page, and TOC through explicit page metadata
@@ -153,7 +153,7 @@ Ticket Reminder is fully removed. No layer stores reminders, uses localStorage, 
 
 scripts/playground-fixtures.php creates disposable Survival, City, and Attraction articles. Each explicitly enables Share and selects a Hero variant. Survival and Attraction enable TOC; City disables it to prove that taxonomy does not control layout. City also retains historical category-only guide classification coverage.
 
-The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 24 capability cards and renders real Gutenberg/shortcode examples for the 21 page-block components, plus the three presentation capabilities and every published Hero variant. The Theme does not create this page in production.
+The same fixture creates `/design-system/` only inside Playground. Its Component Gallery reads the Registry for all 26 capability cards and renders real Gutenberg/shortcode examples for the 23 page-block components, plus the three presentation capabilities, every published Hero variant, and reusable visual foundations. The Theme does not create this page in production.
 
 Verification commands:
 

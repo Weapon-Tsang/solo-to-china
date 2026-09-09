@@ -55,7 +55,7 @@ function stc_playground_verify_cms_publish_path() {
 		}
 		$blocks[] = array( 'type' => $definition['id'], 'variant' => $variant, 'data' => $example );
 	}
-	stc_playground_cms_assert( 21 === count( $blocks ), 'CMS adapter did not resolve all 21 page-block capabilities.' );
+	stc_playground_cms_assert( 23 === count( $blocks ), 'CMS adapter did not resolve all 23 page-block capabilities.' );
 
 	$package = array(
 		'contract'      => array(
@@ -146,9 +146,11 @@ function stc_playground_verify_cms_publish_path() {
 		'stc-content-block--tip',
 		'stc-content-block--warning',
 		'stc-content-block--steps',
+		'stc-content-block--route-timeline',
 		'stc-content-block--checklist',
 		'stc-content-block--faq',
 		'stc-content-block--comparison',
+		'stc-content-block--pros-cons',
 		'stc-dynamic-component--planner',
 		'stc-dynamic-component--ticket',
 		'stc-dynamic-component--affiliate',

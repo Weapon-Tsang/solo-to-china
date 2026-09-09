@@ -1,12 +1,12 @@
 # SoloToChina Web Tools Architecture
 
-Current Tools Plugin version: `0.25.0`
+Current Tools Plugin version: `0.25.1`
 
 This release adds two guest-first utilities while preserving Ticket Booking Window:
 
 - `/tools/find-this-place/` accepts one to four photos or screenshots of the same location and asks a configured server-side vision provider for one structured, uncertainty-aware place result.
 - `/tools/taxi-card/` resolves a destination to a canonical Chinese place name and renders a copyable, full-screen Driver Mode card.
-- `/tools/` lists both utilities and Ticket Booking Window.
+- `/tools/` presents both utilities as full-card links and includes the ticket-window calculator.
 
 ## Ownership
 

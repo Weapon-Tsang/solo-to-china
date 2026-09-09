@@ -706,6 +706,55 @@ function stc_cms_serialize_quick_facts( $data ) {
 }
 
 /**
+ * Serialize an ordered travel route with optional supporting details.
+ *
+ * @param array<string, mixed> $data Component data.
+ * @return string
+ */
+function stc_cms_serialize_route_timeline( $data ) {
+	$title = empty( $data['title'] ) ? 'Route timeline' : $data['title'];
+	$items = '';
+	foreach ( $data['items'] as $item ) {
+		$content = '<strong>' . esc_html( $item['title'] ) . '</strong>';
+		if ( ! empty( $item['detail'] ) ) {
+			$content .= '<span>' . esc_html( $item['detail'] ) . '</span>';
+		}
+		$items .= stc_cms_open_block( 'list-item' ) . '<li>' . $content . '</li>' . stc_cms_close_block( 'list-item' );
+	}
+	$list  = stc_cms_open_block( 'list', array( 'ordered' => true, 'className' => 'stc-content-block__timeline' ) ) . '<ol class="wp-block-list stc-content-block__timeline">' . $items . '</ol>' . stc_cms_close_block( 'list' );
+	$inner = stc_cms_serialize_child_heading( $title, 2 ) . $list;
+	return stc_cms_serialize_semantic_group( 'route-timeline', $inner, $data );
+}
+
+/**
+ * Serialize balanced pros and cons lists.
+ *
+ * @param array<string, mixed> $data Component data.
+ * @return string
+ */
+function stc_cms_serialize_pros_cons( $data ) {
+	$title      = empty( $data['title'] ) ? 'Pros and cons' : $data['title'];
+	$pros_title = empty( $data['pros_title'] ) ? 'Works well when' : $data['pros_title'];
+	$cons_title = empty( $data['cons_title'] ) ? 'Plan around' : $data['cons_title'];
+	$columns    = '';
+
+	foreach ( array( 'pros' => $pros_title, 'cons' => $cons_title ) as $type => $column_title ) {
+		$items = '';
+		foreach ( $data[ $type ] as $item ) {
+			$items .= stc_cms_open_block( 'list-item' ) . '<li>' . esc_html( $item ) . '</li>' . stc_cms_close_block( 'list-item' );
+		}
+		$list    = stc_cms_open_block( 'list' ) . '<ul class="wp-block-list">' . $items . '</ul>' . stc_cms_close_block( 'list' );
+		$content = stc_cms_serialize_child_heading( $column_title, 3 ) . $list;
+		$class   = 'stc-content-block__' . $type;
+		$columns .= stc_cms_open_block( 'group', array( 'className' => $class, 'layout' => array( 'type' => 'constrained' ) ) ) . '<div class="wp-block-group ' . esc_attr( $class ) . '">' . $content . '</div>' . stc_cms_close_block( 'group' );
+	}
+
+	$grid  = stc_cms_open_block( 'group', array( 'className' => 'stc-content-block__pros-cons', 'layout' => array( 'type' => 'grid', 'minimumColumnWidth' => '16rem' ) ) ) . '<div class="wp-block-group stc-content-block__pros-cons">' . $columns . '</div>' . stc_cms_close_block( 'group' );
+	$inner = stc_cms_serialize_child_heading( $title, 2 ) . $grid;
+	return stc_cms_serialize_semantic_group( 'pros-cons', $inner, $data );
+}
+
+/**
  * Serialize the Comparison Table semantic component.
  *
  * @param array<string, mixed> $data Component data.
@@ -836,8 +885,14 @@ function stc_serialize_cms_component_to_post_content( $block ) {
 		if ( 'quick_facts' === $block['type'] ) {
 			return stc_cms_serialize_quick_facts( $data );
 		}
+		if ( 'route_timeline' === $block['type'] ) {
+			return stc_cms_serialize_route_timeline( $data );
+		}
 		if ( 'comparison_table' === $block['type'] ) {
 			return stc_cms_serialize_comparison_table( $data );
+		}
+		if ( 'pros_cons' === $block['type'] ) {
+			return stc_cms_serialize_pros_cons( $data );
 		}
 		if ( 'faq' === $block['type'] ) {
 			return stc_cms_serialize_faq( $data );

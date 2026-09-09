@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.31.1`.
+Current version: `0.32.0`.
 
 ## Responsibility
 
@@ -29,7 +29,7 @@ City, Attraction, Survival, and Travel guide types may inform labels, URLs, brea
 
 The old topic-wide article patterns and guide-saving system have been removed. Share This Page replaces Save Guide without accounts, browser storage, or saved state. Desktop/fine-pointer devices never invoke the system share sheet.
 
-Registry `1.2` exposes 24 stable CMS capabilities: 21 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). The `destination_card` block delegates a canonical `entity_key` to the Tools Plugin; the Theme never owns place data or resolution. `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
+Registry `1.3` exposes 26 stable CMS capabilities: 23 ordered content blocks and three explicit presentation capabilities (`article_hero`, `share_this_page`, and `table_of_contents`). The new `route_timeline` and `pros_cons` blocks provide reusable travel sequencing and balanced decision support. The `destination_card` block delegates a canonical `entity_key` to the Tools Plugin; the Theme never owns place data or resolution. `page-design-system.php` provides an internal Gallery when a page deliberately selects that template; the Theme never creates that page in production.
 
 `contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. Change the Registry and implementation together, update the Gallery/tests and Component Changelog, then run `scripts/generate-component-catalog.ps1`. The independent CMS repository should read the root `contracts/` files instead of reverse-engineering Theme source.
 
@@ -39,7 +39,7 @@ The CMS delivery adapter accepts `contracts/cms-publish-package.schema.json` at 
 
 The Theme does not own vision providers, place/address data, destination resolution, Ticket data, booking-window calculations, or tool validation. Those responsibilities remain in `wp-content/plugins/solo-to-china-tools/`. The `destination_card` and legacy `ticket_reminder` component IDs are thin Plugin adapters.
 
-Version `0.31.1` replaces the homepage and Footer text marks with a true-alpha, white-on-dark SoloToChina artwork, using intrinsic dimensions and responsive, non-overlapping placement without a background card. Version `0.31.0` added overflow-safe branded sharing for WhatsApp, Facebook, Reddit, X, Instagram, system apps, and copied links. Existing pages and administrator-edited content are never overwritten.
+Version `0.32.0` adds Route Timeline and Pros and Cons as registered, CMS-serializable Gutenberg components and expands the internal Gallery with reusable foundations. Version `0.31.3` shortened the Tools landing-page introduction. Version `0.31.2` removed the legacy red STC square from inner-page Headers and retained `SoloToChina` as a compact text wordmark. The homepage and Footer continue to use the true-alpha white artwork introduced in `0.31.1`. Existing pages and administrator-edited content are never overwritten.
 
 The theme should not own tool business logic.
 

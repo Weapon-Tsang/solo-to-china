@@ -12,10 +12,24 @@
 .stc-tool-card,
 .stc-place-finder__form,
 .stc-taxi-card__form {
-	background: color-mix(in srgb, var(--stc-color-surface) 96%, var(--stc-color-canvas));
+	background: var(--stc-color-surface);
 	border-color: var(--stc-color-line);
 	border-radius: var(--stc-radius-lg);
 	box-shadow: var(--stc-shadow-card);
+}
+
+.stc-page-section--tools {
+	background: color-mix(in srgb, var(--stc-color-jade) 6%, var(--stc-color-canvas));
+	border: 1px solid color-mix(in srgb, var(--stc-color-jade) 18%, var(--stc-color-line));
+	border-radius: calc(var(--stc-radius-lg) + .5rem);
+	margin-top: 2rem;
+	padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.stc-tools-ticket .stc-ticket-tool {
+	background: var(--stc-color-surface);
+	border-color: color-mix(in srgb, var(--stc-color-jade) 20%, var(--stc-color-line));
+	box-shadow: var(--stc-shadow-raised);
 }
 
 .stc-tool-card h3,
@@ -57,8 +71,18 @@
 
 @media (hover: hover) and (pointer: fine) {
 	.stc-tool-card:hover {
-		border-color: color-mix(in srgb, var(--stc-color-jade) 28%, var(--stc-color-line));
+		border-color: color-mix(in srgb, var(--stc-color-jade) 48%, var(--stc-color-line));
 		box-shadow: var(--stc-shadow-raised);
-		transform: translateY(-0.125rem);
+		transform: translateY(-0.25rem);
+	}
+}
+
+@media (max-width: 47.99rem) {
+	.stc-page-section--tools {
+		border-left: 0;
+		border-radius: 0;
+		border-right: 0;
+		margin-top: 1rem;
+		padding: 1.5rem 1rem;
 	}
 }
