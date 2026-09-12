@@ -35,8 +35,8 @@ foreach ($TopLevelKey in @("contract_version", "theme_version", "principles", "p
         Add-ContractFailure "Content Contract is missing top-level key: $TopLevelKey"
     }
 }
-if ($Contract.component_registry.version -ne "1.3.0" -or $Registry.registry_version -ne "1.3.0") {
-    Add-ContractFailure "Content Contract must reference Component Registry 1.3.0."
+if ($Contract.component_registry.version -ne "1.4.0" -or $Registry.registry_version -ne "1.4.0") {
+    Add-ContractFailure "Content Contract must reference Component Registry 1.4.0."
 }
 if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.Contains('"allowed_components"')) {
     Add-ContractFailure "Content Contract duplicates the canonical Component Registry list."
@@ -45,8 +45,8 @@ if ($Contract.PSObject.Properties.Name.Contains("components") -or $ContractRaw.C
 if ($Contract.contract_version -ne "2.1.0") {
     Add-ContractFailure "Content Contract version must be 2.1.0."
 }
-if ($Contract.theme_version -ne "0.32.0") {
-    Add-ContractFailure "Content Contract theme_version must be 0.32.0."
+if ($Contract.theme_version -ne "0.33.0") {
+    Add-ContractFailure "Content Contract theme_version must be 0.33.0."
 }
 
 $CmsAdapterPath = Join-Path $Root "wp-content/themes/solo-to-china/inc/cms-articles.php"

@@ -320,3 +320,22 @@
 	.stc-tool-card:hover { transform: none; }
 	.stc-place-finder.is-loading .stc-place-finder__result { animation: none; }
 }
+
+/* Dialog uses native modality, focus containment and Escape support. */
+.stc-driver-mode { width:100%; max-width:none; max-height:none; height:100dvh; margin:0; border:0; overflow:auto; padding: max(24px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left)); }
+.stc-driver-mode::backdrop { background:rgba(0,0,0,.55); }
+.stc-driver-mode__inner { margin:auto; width:min(100%,900px); overflow-wrap:anywhere; }
+[data-stc-taxi-address],[data-stc-driver-address] { white-space:pre-line; }
+[data-stc-driver-arrival] { font-size:16px; line-height:1.5; }
+.stc-manual-copy { display:block; width:100%; min-height:120px; margin-top:16px; font-size:18px; }
+.stc-driver-mode__inner > .stc-driver-mode__actions { position:sticky; top:0; z-index:2; width:100%; padding:8px; background:#202832; border-radius:8px; }
+.stc-driver-mode__actions button:first-child { background:#2f66e8; border-color:#2f66e8; color:white; }
+.stc-driver-mode.has-long-name .stc-driver-mode__inner { align-content:start; }
+.stc-driver-mode.has-long-name [data-stc-driver-name-zh] { font-size:clamp(28px,6vw,48px); line-height:1.3; }
+.stc-place-upload__preview-card button { min-height:44px; margin:4px; }
+.stc-place-finder__hint input { width:100%; min-height:46px; }
+html:not(.stc-tools-js) :is([data-stc-taxi-copy],[data-stc-taxi-fullscreen],[data-stc-place-submit]) { display:none; }
+.stc-tools-ticket { margin-top:48px; }
+.stc-tool-primary { background:var(--stc-color-brand,#2f66e8); }
+
+html:not(.stc-tools-js) :is([data-stc-place-form],[data-stc-taxi-form],.stc-taxi-card__actions,.stc-ticket-tool button) { display:none; }

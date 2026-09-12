@@ -53,9 +53,10 @@ function stc_playground_verify_cms_publish_path() {
 			$example['media_id'] = $media_id;
 			$example['role']     = $variant;
 		}
+		if ( isset( $example['media_id'] ) ) { $example['media_id'] = $media_id; }
 		$blocks[] = array( 'type' => $definition['id'], 'variant' => $variant, 'data' => $example );
 	}
-	stc_playground_cms_assert( 23 === count( $blocks ), 'CMS adapter did not resolve all 23 page-block capabilities.' );
+	stc_playground_cms_assert( 26 === count( $blocks ), 'CMS adapter did not resolve all 26 page-block capabilities.' );
 
 	$package = array(
 		'contract'      => array(

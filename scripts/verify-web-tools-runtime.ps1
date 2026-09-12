@@ -27,7 +27,7 @@ $TaxiHtml = Get-ToolPage "/tools/taxi-card/" "data-stc-taxi-tool"
 foreach ($DirectoryToken in @("Choose a tool", "Find This Place", "Taxi Card", "Check when tickets open", 'class="stc-tool-card"', "/tools/find-this-place/", "/tools/taxi-card/")) {
     Assert-ToolRuntime ($DirectoryHtml.Contains($DirectoryToken)) "Tools directory is missing: $DirectoryToken"
 }
-foreach ($FinderToken in @("data-stc-place-dropzone", "data-stc-place-preview", 'name="images[]"', "multiple", "Choose 1–4 photos", "20 MB each", "Include a wide view or visible sign.", "Photos are discarded after identification.", "data-stc-city-hint")) {
+foreach ($FinderToken in @("data-stc-place-dropzone", "data-stc-place-preview", 'name="images[]"', "multiple", "Choose 1–4 photos", "20 MB each", "Include a wide view or visible sign.", "Provider retention is separate.", "data-stc-city-hint")) {
     Assert-ToolRuntime ($FinderHtml.Contains($FinderToken)) "Find This Place page is missing: $FinderToken"
 }
 foreach ($SecretToken in @("STC_PLACE_VISION_TOKEN", "STC_PLACE_RESOLVER_TOKEN", "Authorization: Bearer")) {

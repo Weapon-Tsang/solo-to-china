@@ -8,41 +8,26 @@
 get_header();
 
 $survival_items = [
-	[ 'title' => 'Payment', 'icon' => 'payment' ],
-	[ 'title' => 'Apps', 'icon' => 'apps' ],
-	[ 'title' => 'eSIM', 'icon' => 'esim' ],
-	[ 'title' => 'Visa', 'icon' => 'visa' ],
-	[ 'title' => 'VPN', 'icon' => 'vpn' ],
+	[ 'title' => 'Payment', 'icon' => 'payment', 'anchor' => 'payment' ],
+	[ 'title' => 'Apps', 'icon' => 'apps', 'anchor' => 'essential-apps' ],
+	[ 'title' => 'eSIM', 'icon' => 'esim', 'anchor' => 'esim' ],
+	[ 'title' => 'Visa', 'icon' => 'visa', 'anchor' => 'visa' ],
+	[ 'title' => 'VPN', 'icon' => 'vpn', 'anchor' => 'internet-access' ],
 ];
 
-$cities = [
-	[ 'name' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing', 'image' => 'card-beijing-hd.webp' ],
-	[ 'name' => 'Shanghai', 'copy' => 'Modern & vibrant', 'class' => 'shanghai', 'image' => 'card-shanghai-hd.webp' ],
-	[ 'name' => 'Guangzhou', 'copy' => 'Business & shopping', 'class' => 'guangzhou', 'image' => 'card-guangzhou-hd.webp' ],
-	[ 'name' => 'Chengdu', 'copy' => 'Pandas & laid-back', 'class' => 'chengdu', 'image' => 'card-chengdu-hd.webp' ],
-	[ 'name' => 'Chongqing', 'copy' => 'Mountains & rivers', 'class' => 'chongqing', 'image' => 'card-chongqing-hd.webp' ],
-	[ 'name' => "Xi'an", 'copy' => 'Ancient capital', 'class' => 'xian', 'image' => 'card-xian-hd.webp' ],
-	[ 'name' => 'Hangzhou', 'copy' => 'Natural beauty', 'class' => 'hangzhou', 'image' => 'card-hangzhou-hd.webp' ],
-	[ 'name' => 'Zhangjiajie', 'copy' => 'Otherworldly peaks', 'class' => 'zhangjiajie', 'image' => 'card-zhangjiajie-city-hd.webp' ],
-];
-
-$attractions = [
-	[ 'name' => 'Forbidden City', 'city' => 'Beijing', 'tag' => 'Booking required', 'class' => 'forbidden-city', 'image' => 'card-forbidden-city-hd.webp' ],
-	[ 'name' => 'Great Wall', 'city' => 'Beijing', 'tag' => 'Best time: Apr-Oct', 'class' => 'great-wall', 'image' => 'card-great-wall-hd.webp' ],
-	[ 'name' => 'Terracotta Warriors', 'city' => "Xi'an", 'tag' => 'Passport', 'class' => 'terracotta', 'image' => 'card-terracotta-hd.webp' ],
-	[ 'name' => 'Zhangjiajie', 'city' => 'Hunan', 'tag' => 'Best time: Apr-Nov', 'class' => 'zhangjiajie', 'image' => 'card-zhangjiajie-attraction-hd.webp' ],
-	[ 'name' => 'West Lake', 'city' => 'Hangzhou', 'tag' => 'Best time: Mar-May', 'class' => 'west-lake', 'image' => 'card-west-lake-hd.webp' ],
-	[ 'name' => 'Shanghai Disney Resort', 'city' => 'Shanghai', 'tag' => 'Booking required', 'class' => 'disney', 'image' => 'card-disney-hd.webp' ],
-];
+$cities = stc_get_site_collection( 'city-guides' );
+$attractions = stc_get_site_collection( 'attraction-guides' );
 
 ?>
 
 <main id="main">
 	<section class="stc-hero">
+		<?php stc_render_theme_image( 'hero-home', '', true ); ?>
 		<div class="stc-hero__content">
 			<h1>China,<br>clearly planned</h1>
-			<p>Practical tips for independent travel.</p>
-			<a class="stc-button stc-button--primary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Start Exploring <span aria-hidden="true">&rarr;</span></a>
+			<p>Practical guides and useful tools for your first solo trip to China.</p>
+			<a class="stc-button stc-button--primary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Start with the essentials <span aria-hidden="true">&rarr;</span></a>
+			<a class="stc-hero__secondary" href="<?php echo esc_url( home_url( '/tools/find-this-place/' ) ); ?>">Find a place from a photo &rarr;</a>
 		</div>
 	</section>
 
@@ -50,7 +35,7 @@ $attractions = [
 		<h2 id="survival-title">Survival Kit</h2>
 		<div class="stc-survival__grid">
 			<?php foreach ( $survival_items as $item ) : ?>
-				<a class="stc-survival-card" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">
+				<a class="stc-survival-card" href="<?php echo esc_url( home_url( '/survival-kit/#' . $item['anchor'] ) ); ?>">
 					<?php stc_render_survival_icon( $item['icon'] ); ?>
 					<strong><?php echo esc_html( $item['title'] ); ?></strong>
 				</a>
@@ -58,6 +43,7 @@ $attractions = [
 		</div>
 	</section>
 
+	<?php if ($cities) : ?>
 	<section class="stc-section" aria-labelledby="cities-title">
 		<div class="stc-section__header">
 			<h2 id="cities-title">City Guides</h2>
@@ -68,7 +54,7 @@ $attractions = [
 				<?php foreach ( $cities as $city ) : ?>
 					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $city['class'] ); ?>">
 						<?php stc_render_guide_card_media( $city['image'], $city['name'] ); ?>
-						<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/city-guides/' ) ); ?>">
+						<a class="stc-image-card__link" href="<?php echo esc_url( $city['url'] ); ?>">
 							<span class="stc-image-card__content">
 								<strong><?php echo esc_html( $city['name'] ); ?></strong>
 								<span><?php echo esc_html( $city['copy'] ); ?></span>
@@ -78,14 +64,16 @@ $attractions = [
 				<?php endforeach; ?>
 			</div>
 			<div class="stc-guide-grid-reveal">
-				<button type="button" data-stc-guide-reveal aria-controls="home-city-grid" aria-expanded="false">
+				<button type="button" hidden data-stc-guide-reveal aria-controls="home-city-grid" aria-expanded="false">
 					<span data-stc-guide-reveal-label>+4 More Cities</span>
 					<svg class="stc-guide-grid-reveal__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
 				</button>
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
+	<?php if ($attractions) : ?>
 	<section class="stc-section" aria-labelledby="attractions-title">
 		<div class="stc-section__header">
 			<h2 id="attractions-title">Attraction Guides</h2>
@@ -96,8 +84,7 @@ $attractions = [
 				<?php foreach ( $attractions as $attraction ) : ?>
 					<article class="stc-image-card stc-image-card--<?php echo esc_attr( $attraction['class'] ); ?>">
 						<?php stc_render_guide_card_media( $attraction['image'], $attraction['name'] ); ?>
-						<span class="stc-image-card__tag"><?php echo esc_html( $attraction['tag'] ); ?></span>
-						<a class="stc-image-card__link" href="<?php echo esc_url( home_url( '/attraction-guides/' ) ); ?>">
+						<a class="stc-image-card__link" href="<?php echo esc_url( $attraction['url'] ); ?>">
 							<span class="stc-image-card__content">
 								<strong><?php echo esc_html( $attraction['name'] ); ?></strong>
 								<span><?php echo esc_html( $attraction['city'] ); ?></span>
@@ -107,13 +94,24 @@ $attractions = [
 				<?php endforeach; ?>
 			</div>
 			<div class="stc-guide-grid-reveal">
-				<button type="button" data-stc-guide-reveal aria-controls="home-attraction-grid" aria-expanded="false">
+				<button type="button" hidden data-stc-guide-reveal aria-controls="home-attraction-grid" aria-expanded="false">
 					<span data-stc-guide-reveal-label>+2 More Attractions</span>
 					<svg class="stc-guide-grid-reveal__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
 				</button>
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
+
+	<section class="stc-section stc-home-tools" aria-labelledby="home-tools-title">
+        <div class="stc-section__header"><h2 id="home-tools-title">A little help, right when you need it</h2></div>
+        <div class="stc-tool-entry-grid">
+            <a class="stc-tool-entry" href="<?php echo esc_url( home_url( '/tools/find-this-place/' ) ); ?>"><span aria-hidden="true">&#8982;</span><h3>Find This Place</h3><p>Bring a photo. Find likely places, useful guides, and a Chinese destination card.</p><strong>Choose your photos &rarr;</strong></a>
+            <a class="stc-tool-entry" href="<?php echo esc_url( home_url( '/tools/taxi-card/' ) ); ?>"><span aria-hidden="true">&#8599;</span><h3>Show this to a driver</h3><p>Look up a destination and show its confirmed Chinese name. Arrival details are labelled separately.</p><strong>Make a Taxi Card &rarr;</strong></a>
+        </div>
+    </section>
+
+	<?php stc_render_home_latest_guides(); ?>
 
 	<section class="stc-planner" aria-labelledby="planner-title">
 		<div class="stc-planner__intro">
@@ -127,28 +125,10 @@ $attractions = [
 		</div>
 		<div class="stc-planner__partner">
 			<strong>Trip.com</strong>
-			<a class="stc-button stc-button--secondary" href="<?php echo esc_url( stc_get_trip_planner_url() ); ?>" target="_blank" rel="sponsored noopener">Open Trip.Planner <span aria-hidden="true">&#8599;</span></a>
+			<a class="stc-button stc-button--secondary" href="<?php echo esc_url( stc_get_trip_planner_url() ); ?>" target="_blank" rel="sponsored nofollow noopener noreferrer">Open Trip.Planner <span aria-hidden="true">&#8599;</span></a>
 			<p class="stc-affiliate-disclosure">Opens in a new tab. We may earn a commission at no extra cost to you.</p>
 		</div>
 		<span class="stc-planner__art" aria-hidden="true"></span>
-	</section>
-
-	<section class="stc-ticket-band" aria-labelledby="ticket-title">
-		<div class="stc-ticket-band__intro">
-			<span class="stc-ticket-band__icon" aria-hidden="true"></span>
-			<div>
-				<h2 id="ticket-title">Ticket Booking Window</h2>
-				<p>See when you should start checking tickets for your visit.</p>
-			</div>
-		</div>
-		<div class="stc-ticket-band__steps">
-			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><strong>Choose a visit date</strong></p>
-			<p><span class="stc-ticket-band__step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m5 12 4 4L19 6"/></svg></span><strong>Get booking timing</strong></p>
-		</div>
-		<div class="stc-ticket-band__action">
-			<a class="stc-button stc-button--gold" href="<?php echo esc_url( home_url( '/tools/' ) ); ?>">Check booking date</a>
-			<p class="stc-ticket-band__trust"><span aria-hidden="true">&#10003;</span> Rule-based estimate <span aria-hidden="true">&bull;</span> No login required</p>
-		</div>
 	</section>
 
 	<section class="stc-faq" aria-labelledby="faq-title">
@@ -157,10 +137,10 @@ $attractions = [
 			<a href="<?php echo esc_url( home_url( '/faq/' ) ); ?>">View all FAQs</a>
 		</div>
 		<div class="stc-faq__grid">
-			<details><summary><span>Do I need a visa to visit China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Check entry rules before you travel.</p></div></details>
-			<details><summary><span>How can I pay in China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Payment setup is a key first step.</p></div></details>
-			<details><summary><span>Is China safe for solo travelers?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Plan with practical local context.</p></div></details>
-			<details><summary><span>Which apps are essential in China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Maps, translation, payments, and transport matter most.</p></div></details>
+			<details><summary><span>Do I need a visa to visit China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>It depends on your passport, purpose, arrival date, and length of stay. Confirm the exact policy with the National Immigration Administration and the Chinese embassy or consulate responsible for your residence before buying non-refundable travel.</p><a class="stc-faq__answer-link" href="<?php echo esc_url( home_url( '/faq/#faq-entry-documents' ) ); ?>">Read the entry exceptions <span aria-hidden="true">&#8594;</span></a></div></details>
+			<details><summary><span>How can I pay in China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Set up Alipay or WeChat with a supported international card before departure, but keep a second card and some RMB. A linked card can still be declined by its issuer or require identity verification.</p><a class="stc-faq__answer-link" href="<?php echo esc_url( home_url( '/survival-kit/#payment' ) ); ?>">Use the payment checklist <span aria-hidden="true">&#8594;</span></a></div></details>
+			<details><summary><span>Is China safe for solo travelers?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Many visitors travel independently without difficulty. Share your route, use licensed transport, keep your hotel address in Chinese, and carry separate payment and connection backups so a lost phone or failed app does not leave you stranded.</p><a class="stc-faq__answer-link" href="<?php echo esc_url( home_url( '/faq/#faq-getting-around-staying-safe' ) ); ?>">See the solo-travel safety plan <span aria-hidden="true">&#8594;</span></a></div></details>
+			<details><summary><span>Which apps are essential in China?</span><?php stc_render_faq_chevron(); ?></summary><div class="stc-faq__answer"><p>Cover five jobs: payment, a China-compatible map, offline translation, ride hailing, and intercity transport. Create accounts before flying and keep offline copies of addresses and bookings.</p><a class="stc-faq__answer-link" href="<?php echo esc_url( home_url( '/survival-kit/#essential-apps' ) ); ?>">Build your app setup <span aria-hidden="true">&#8594;</span></a></div></details>
 		</div>
 	</section>
 </main>

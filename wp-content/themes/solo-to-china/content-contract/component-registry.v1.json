@@ -1,6 +1,6 @@
 {
-  "registry_version": "1.3.0",
-  "theme_version": "0.32.0",
+  "registry_version": "1.4.0",
+  "theme_version": "0.33.0",
   "principles": {
     "frontend": "Frontend defines what can be rendered.",
     "cms": "CMS decides what should be rendered.",
@@ -18,13 +18,37 @@
       "category": "content",
       "purpose": "Standard editable body copy with meaningful inline links.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "gutenberg_core",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "core/paragraph"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["content"], "properties": {"content": {"type": "string", "contentMediaType": "text/html"}, "anchor": {"type": "string"}}},
-      "example": {"type": "paragraph", "variant": "default", "content": "Carry the passport used for the reservation."},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "core/paragraph"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "paragraph",
+        "variant": "default",
+        "content": "Carry the passport used for the reservation."
+      },
       "accessibility": "Use visible text and meaningful link labels.",
       "responsive": "Text follows the article reading measure and wraps without horizontal overflow."
     },
@@ -34,13 +58,48 @@
       "category": "content",
       "purpose": "Creates an article section in the semantic document outline.",
       "status": "stable",
-      "variants": ["section", "subsection"],
+      "variants": [
+        "section",
+        "subsection"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "gutenberg_core",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "core/heading"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["text", "level"], "properties": {"text": {"type": "string", "minLength": 1}, "level": {"type": "integer", "enum": [2, 3]}, "anchor": {"type": "string"}}},
-      "example": {"type": "heading", "variant": "section", "text": "How to visit", "level": 2, "anchor": "how-to-visit"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "core/heading"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "level"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "level": {
+            "type": "integer",
+            "enum": [
+              2,
+              3
+            ]
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "heading",
+        "variant": "section",
+        "text": "How to visit",
+        "level": 2,
+        "anchor": "how-to-visit"
+      },
       "accessibility": "Keep heading levels sequential and never create a second H1.",
       "responsive": "Heading scale and anchor offset adapt below tablet width."
     },
@@ -50,13 +109,48 @@
       "category": "content",
       "purpose": "Presents related items or a meaningful sequence.",
       "status": "stable",
-      "variants": ["unordered", "ordered"],
+      "variants": [
+        "unordered",
+        "ordered"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "gutenberg_core",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "core/list"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "ordered": {"type": "boolean"}, "anchor": {"type": "string"}}},
-      "example": {"type": "list", "variant": "ordered", "items": ["Confirm the date", "Bring the original passport"], "ordered": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "core/list"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "ordered": {
+            "type": "boolean"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "list",
+        "variant": "ordered",
+        "items": [
+          "Confirm the date",
+          "Bring the original passport"
+        ],
+        "ordered": true
+      },
       "accessibility": "Use ordered semantics only when sequence carries meaning.",
       "responsive": "Items wrap within the reading column."
     },
@@ -66,13 +160,87 @@
       "category": "media",
       "purpose": "Renders WordPress Media with intrinsic dimensions and responsive candidates.",
       "status": "stable",
-      "variants": ["evidence", "context", "illustration", "decorative"],
+      "variants": [
+        "evidence",
+        "context",
+        "illustration",
+        "decorative"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "gutenberg_core",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css", "core/image"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["media_id", "alt"], "properties": {"media_id": {"type": "integer", "minimum": 1}, "alt": {"type": "string"}, "caption": {"type": "string"}, "role": {"type": "string", "enum": ["evidence", "context", "illustration", "decorative"], "default": "context"}, "anchor": {"type": "string"}, "after_block_id": {"type": "string"}}},
-      "example": {"type": "image", "variant": "context", "media_id": 123, "alt": "Visitors approaching the Forbidden City", "role": "context"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+        "core/image"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "media_id",
+          "alt"
+        ],
+        "properties": {
+          "media_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "alt": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "evidence",
+              "context",
+              "illustration",
+              "decorative"
+            ],
+            "default": "context"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "after_block_id": {
+            "type": "string"
+          },
+          "focal_point": {
+            "type": "string",
+            "enum": [
+              "center",
+              "top",
+              "bottom",
+              "left",
+              "right"
+            ],
+            "default": "center"
+          },
+          "frame": {
+            "type": "string",
+            "enum": [
+              "natural",
+              "landscape",
+              "portrait"
+            ],
+            "default": "natural"
+          },
+          "enlarge": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "example": {
+        "type": "image",
+        "variant": "context",
+        "media_id": 123,
+        "alt": "Visitors approaching the Forbidden City",
+        "role": "context"
+      },
       "accessibility": "Alt may be empty only when role is decorative; captions stay visible and semantic.",
       "responsive": "Uses srcset, sizes, lazy loading, async decoding, and stable intrinsic dimensions."
     },
@@ -82,13 +250,41 @@
       "category": "information",
       "purpose": "Places a direct answer before supporting detail for fast human and search scanning.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["answer"], "properties": {"answer": {"type": "string", "contentMediaType": "text/html"}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "quick_answer", "variant": "default", "title": "Quick answer", "answer": "Reserve before arrival and carry the booking passport."},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "answer"
+        ],
+        "properties": {
+          "answer": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "quick_answer",
+        "variant": "default",
+        "title": "Quick answer",
+        "answer": "Reserve before arrival and carry the booking passport."
+      },
       "accessibility": "Keep the answer indexable and use a heading only when it fits the outline.",
       "responsive": "Uses a single readable column at all widths."
     },
@@ -98,13 +294,46 @@
       "category": "information",
       "purpose": "Summarizes the decisions that matter most.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "key_takeaways", "variant": "default", "items": ["Book early", "Use the correct passport"]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "key_takeaways",
+        "variant": "default",
+        "items": [
+          "Book early",
+          "Use the correct passport"
+        ]
+      },
       "accessibility": "Render takeaways as a semantic list.",
       "responsive": "Stacks as a compact single-column list."
     },
@@ -114,13 +343,62 @@
       "category": "information",
       "purpose": "Shows practical label and value pairs without dashboard styling.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default",
+        "compact",
+        "detailed"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["label", "value"], "properties": {"label": {"type": "string"}, "value": {"type": "string"}}}}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "quick_facts", "variant": "default", "items": [{"label": "Time needed", "value": "3–4 hours"}]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "value"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "quick_facts",
+        "variant": "default",
+        "items": [
+          {
+            "label": "Time needed",
+            "value": "3–4 hours"
+          }
+        ]
+      },
       "accessibility": "Keep every label adjacent to its value in logical reading order.",
       "responsive": "Grid collapses to one column on narrow screens."
     },
@@ -130,13 +408,41 @@
       "category": "information",
       "purpose": "Highlights friendly supporting advice with low urgency.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["content"], "properties": {"content": {"type": "string", "contentMediaType": "text/html"}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "tip", "variant": "default", "title": "Solo traveler tip", "content": "Save an offline screenshot of the reservation."},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "tip",
+        "variant": "default",
+        "title": "Solo traveler tip",
+        "content": "Save an offline screenshot of the reservation."
+      },
       "accessibility": "Meaning must remain explicit without color or iconography.",
       "responsive": "Maintains readable padding and wraps long text."
     },
@@ -146,13 +452,41 @@
       "category": "information",
       "purpose": "Highlights a travel risk, prerequisite, or failure condition.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["content"], "properties": {"content": {"type": "string", "contentMediaType": "text/html"}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "warning", "variant": "default", "title": "Passport check", "content": "The reservation passport must match the visitor."},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "contentMediaType": "text/html"
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "warning",
+        "variant": "default",
+        "title": "Passport check",
+        "content": "The reservation passport must match the visitor."
+      },
       "accessibility": "State severity in text and never rely on color alone.",
       "responsive": "Keeps the accent and copy visible without overflow."
     },
@@ -162,13 +496,79 @@
       "category": "travel",
       "purpose": "Explains an ordered setup, booking, or route process.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default",
+        "screenshots"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "steps", "variant": "default", "items": ["Choose the visit date", "Confirm traveler details", "Save the confirmation"]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "screenshots": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "step",
+                "media_id",
+                "alt"
+              ],
+              "properties": {
+                "step": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "media_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "alt": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "caption": {
+                  "type": "string",
+                  "maxLength": 300
+                }
+              }
+            }
+          }
+        }
+      },
+      "example": {
+        "type": "steps",
+        "variant": "default",
+        "items": [
+          "Choose the visit date",
+          "Confirm traveler details",
+          "Save the confirmation"
+        ]
+      },
       "accessibility": "Render as an ordered list with visible numbering.",
       "responsive": "Number and copy remain aligned on narrow screens."
     },
@@ -178,13 +578,84 @@
       "category": "travel",
       "purpose": "Shows a sequence of travel stops with concise supporting details.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china/inc/cms-articles.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 2, "maxItems": 12, "items": {"type": "object", "additionalProperties": false, "required": ["title"], "properties": {"title": {"type": "string", "minLength": 1}, "detail": {"type": "string"}}}}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "route_timeline", "variant": "default", "title": "A simple first day", "items": [{"title": "Arrive at Beijing South", "detail": "Follow Metro signs after the ticket gates."}, {"title": "Check in near Qianmen", "detail": "Keep the Chinese hotel address ready."}]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china/inc/cms-articles.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 12,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "detail": {
+                  "type": "string"
+                },
+                "transport_mode": {
+                  "type": "string",
+                  "maxLength": 300
+                },
+                "travel_time": {
+                  "type": "string",
+                  "maxLength": 300
+                },
+                "note": {
+                  "type": "string",
+                  "maxLength": 300
+                },
+                "entity_key": {
+                  "type": "string",
+                  "maxLength": 300
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "route_timeline",
+        "variant": "default",
+        "title": "A simple first day",
+        "items": [
+          {
+            "title": "Arrive at Beijing South",
+            "detail": "Follow Metro signs after the ticket gates."
+          },
+          {
+            "title": "Check in near Qianmen",
+            "detail": "Keep the Chinese hotel address ready."
+          }
+        ]
+      },
       "accessibility": "Renders an ordered list so the sequence remains meaningful without visual styling.",
       "responsive": "Timeline markers and copy stay aligned in one readable column."
     },
@@ -194,13 +665,47 @@
       "category": "travel",
       "purpose": "Provides a scannable preparation list without saved completion state.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "checklist", "variant": "default", "items": ["Passport", "Reservation screenshot", "Offline map"]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "checklist",
+        "variant": "default",
+        "items": [
+          "Passport",
+          "Reservation screenshot",
+          "Offline map"
+        ]
+      },
       "accessibility": "Use list semantics and do not imply persisted completion.",
       "responsive": "Uses compact touch-safe spacing without controls."
     },
@@ -210,13 +715,64 @@
       "category": "information",
       "purpose": "Compares options with native table semantics and local mobile scrolling.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["columns", "rows"], "properties": {"columns": {"type": "array", "minItems": 2, "items": {"type": "string"}}, "rows": {"type": "array", "minItems": 1, "items": {"type": "array", "items": {"type": "string"}}}, "caption": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "comparison_table", "variant": "default", "columns": ["Option", "Best for"], "rows": [["Metro", "Predictable city trips"]], "caption": "Transport comparison"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "columns",
+          "rows"
+        ],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "caption": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "comparison_table",
+        "variant": "default",
+        "columns": [
+          "Option",
+          "Best for"
+        ],
+        "rows": [
+          [
+            "Metro",
+            "Predictable city trips"
+          ]
+        ],
+        "caption": "Transport comparison"
+      },
       "accessibility": "Preserve caption and header cells; scrolling remains keyboard reachable.",
       "responsive": "Overflow is contained within the table component, not the page."
     },
@@ -226,13 +782,72 @@
       "category": "information",
       "purpose": "Balances the advantages and tradeoffs of one travel choice.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china/inc/cms-articles.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["pros", "cons"], "properties": {"pros": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "string", "minLength": 1}}, "cons": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "string", "minLength": 1}}, "title": {"type": "string"}, "pros_title": {"type": "string"}, "cons_title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "pros_cons", "variant": "default", "title": "Staying near the old city", "pros_title": "Works well when", "cons_title": "Plan around", "pros": ["You want to walk to major sights", "You prefer an atmospheric base"], "cons": ["Metro transfers may take longer", "Rooms can be smaller"]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china/inc/cms-articles.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pros",
+          "cons"
+        ],
+        "properties": {
+          "pros": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "cons": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "pros_title": {
+            "type": "string"
+          },
+          "cons_title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "pros_cons",
+        "variant": "default",
+        "title": "Staying near the old city",
+        "pros_title": "Works well when",
+        "cons_title": "Plan around",
+        "pros": [
+          "You want to walk to major sights",
+          "You prefer an atmospheric base"
+        ],
+        "cons": [
+          "Metro transfers may take longer",
+          "Rooms can be smaller"
+        ]
+      },
       "accessibility": "Uses explicit headings and semantic lists; meaning never depends on color or icons alone.",
       "responsive": "The two columns stack in logical reading order on narrow screens."
     },
@@ -242,13 +857,62 @@
       "category": "information",
       "purpose": "Presents explicit questions and complete answers through native disclosures.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "semantic_group",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-components.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css", "core/details"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["items"], "properties": {"items": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["question", "answer"], "properties": {"question": {"type": "string"}, "answer": {"type": "string", "contentMediaType": "text/html"}}}}, "title": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "faq", "variant": "default", "items": [{"question": "Can I buy at the entrance?", "answer": "Advance reservation is the safer default."}]},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-components.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+        "core/details"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "question",
+                "answer"
+              ],
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string",
+                  "contentMediaType": "text/html"
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "faq",
+        "variant": "default",
+        "items": [
+          {
+            "question": "Can I buy at the entrance?",
+            "answer": "Advance reservation is the safer default."
+          }
+        ]
+      },
       "accessibility": "Uses native details and summary with complete visible answer text.",
       "responsive": "Summary targets retain at least touch-class height."
     },
@@ -258,13 +922,59 @@
       "category": "travel",
       "purpose": "Offers a contextual trip-planning action selected by the CMS.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["title", "description", "cta_label", "target_url"], "properties": {"title": {"type": "string"}, "description": {"type": "string"}, "cta_label": {"type": "string"}, "target_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "provider": {"type": "string"}, "disclosure": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "planner_cta", "variant": "default", "title": "Build a realistic route", "description": "Keep travel time visible.", "cta_label": "Open planner", "target_url": "https://example.com/planner"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description",
+          "cta_label",
+          "target_url"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "cta_label": {
+            "type": "string"
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "disclosure": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "planner_cta",
+        "variant": "default",
+        "title": "Build a realistic route",
+        "description": "Keep travel time visible.",
+        "cta_label": "Open planner",
+        "target_url": "https://example.com/planner"
+      },
       "accessibility": "Use a descriptive label and disclose external commercial relationships.",
       "responsive": "CTA content and action stack at phone widths."
     },
@@ -274,13 +984,44 @@
       "category": "travel",
       "purpose": "Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["attraction_slug"], "properties": {"attraction_slug": {"type": "string", "minLength": 1}, "title": {"type": "string"}, "description": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "ticket_reminder", "variant": "default", "attraction_slug": "forbidden-city", "title": "Check ticket timing"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php",
+        "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attraction_slug"
+        ],
+        "properties": {
+          "attraction_slug": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "ticket_reminder",
+        "variant": "default",
+        "attraction_slug": "forbidden-city",
+        "title": "Check ticket timing"
+      },
       "accessibility": "The Plugin owns labels, date validation, status announcements, and booking-timing output.",
       "responsive": "Delegated form controls stack and retain touch targets on mobile."
     },
@@ -290,13 +1031,49 @@
       "category": "travel",
       "purpose": "Renders a verified Chinese destination card that travelers can show or copy for a driver.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-renderers.php", "wp-content/plugins/solo-to-china-tools/includes/shortcodes.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["entity_key"], "properties": {"entity_key": {"type": "string", "minLength": 1, "maxLength": 120}, "title": {"type": "string", "maxLength": 160}, "description": {"type": "string", "maxLength": 300}, "anchor": {"type": "string", "maxLength": 120}}},
-      "example": {"type": "destination_card", "variant": "default", "entity_key": "forbidden-city", "title": "Show the Forbidden City to a driver"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-renderers.php",
+        "wp-content/plugins/solo-to-china-tools/includes/shortcodes.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entity_key"
+        ],
+        "properties": {
+          "entity_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "destination_card",
+        "variant": "default",
+        "entity_key": "forbidden-city",
+        "title": "Show the Forbidden City to a driver"
+      },
       "accessibility": "Uses semantic headings, a live copy status, keyboard-operable actions, and a focus-contained full-screen dialog.",
       "responsive": "The destination card scales Chinese text for mobile portrait and provides a distraction-free full-screen Driver Mode."
     },
@@ -306,13 +1083,70 @@
       "category": "commercial",
       "purpose": "Renders a restrained contextual commercial action with visible disclosure.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["category", "provider", "title", "description", "cta_label", "target_url"], "properties": {"category": {"type": "string"}, "provider": {"type": "string"}, "title": {"type": "string"}, "description": {"type": "string"}, "price_text": {"type": "string"}, "cta_label": {"type": "string"}, "target_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "disclosure": {"type": "string"}, "anchor": {"type": "string"}}},
-      "example": {"type": "affiliate_cta", "variant": "default", "category": "hotel", "provider": "Example", "title": "Compare practical bases", "description": "Check location before price.", "cta_label": "View options", "target_url": "https://example.com", "disclosure": "Sponsored link."},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "category",
+          "provider",
+          "title",
+          "description",
+          "cta_label",
+          "target_url"
+        ],
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price_text": {
+            "type": "string"
+          },
+          "cta_label": {
+            "type": "string"
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "disclosure": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "type": "affiliate_cta",
+        "variant": "default",
+        "category": "hotel",
+        "provider": "Example",
+        "title": "Compare practical bases",
+        "description": "Check location before price.",
+        "cta_label": "View options",
+        "target_url": "https://example.com",
+        "disclosure": "Sponsored link."
+      },
       "accessibility": "External links open safely and relationship disclosure remains visible.",
       "responsive": "Copy and action stack without becoming a deal wall."
     },
@@ -322,13 +1156,167 @@
       "category": "commercial",
       "purpose": "Renders a CMS-selected high-intent Trip.com deep or category link after QA.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-renderers.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css", "wp-content/themes/solo-to-china/assets/js/commercial-events.js"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["affiliate_asset_id", "provider", "asset_type", "product_category", "title", "description", "cta_label", "target_url", "disclosure", "scope_type", "scope_key", "slot_key", "placement", "strategy_version"], "properties": {"affiliate_asset_id": {"type": "string", "minLength": 1, "maxLength": 120}, "provider": {"type": "string", "minLength": 1, "maxLength": 80}, "asset_type": {"type": "string", "enum": ["DEEP_LINK", "CATEGORY_LINK"]}, "product_category": {"type": "string", "enum": ["HOTEL", "FLIGHT", "TRAIN", "ATTRACTION", "TOUR_ACTIVITY", "FLIGHT_HOTEL", "CAR_RENTAL", "AIRPORT_TRANSFER", "PLANNER"]}, "title": {"type": "string", "minLength": 1, "maxLength": 160}, "description": {"type": "string", "minLength": 1, "maxLength": 500}, "price_text": {"type": "string", "maxLength": 120}, "cta_label": {"type": "string", "minLength": 1, "maxLength": 80}, "target_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "disclosure": {"type": "string", "minLength": 1, "maxLength": 300}, "scope_type": {"type": "string", "enum": ["ENTITY", "ROUTE", "AREA", "DESTINATION", "COUNTRY", "CATEGORY", "GLOBAL"]}, "scope_key": {"type": "string", "minLength": 1, "maxLength": 160}, "slot_key": {"type": "string", "minLength": 1, "maxLength": 120}, "placement": {"type": "string", "enum": ["contextual", "end_resource"]}, "strategy_version": {"type": "string", "minLength": 1, "maxLength": 40}, "entity": {"type": "string", "maxLength": 160}, "route": {"type": "string", "maxLength": 160}, "destination": {"type": "string", "maxLength": 160}, "anchor": {"type": "string", "maxLength": 120}}},
-      "example": {"type": "affiliate_booking_card", "variant": "default", "affiliate_asset_id": "trip-forbidden-city", "provider": "Trip.com", "asset_type": "DEEP_LINK", "product_category": "ATTRACTION", "title": "Check Forbidden City ticket options", "description": "Review the official listing details before booking.", "cta_label": "View ticket options", "target_url": "https://www.trip.com/", "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.", "scope_type": "ENTITY", "scope_key": "forbidden-city", "slot_key": "tickets-contextual-1", "placement": "contextual", "strategy_version": "commercial-v1"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-renderers.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+        "wp-content/themes/solo-to-china/assets/js/commercial-events.js"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "affiliate_asset_id",
+          "provider",
+          "asset_type",
+          "product_category",
+          "title",
+          "description",
+          "cta_label",
+          "target_url",
+          "disclosure",
+          "scope_type",
+          "scope_key",
+          "slot_key",
+          "placement",
+          "strategy_version"
+        ],
+        "properties": {
+          "affiliate_asset_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "asset_type": {
+            "type": "string",
+            "enum": [
+              "DEEP_LINK",
+              "CATEGORY_LINK"
+            ]
+          },
+          "product_category": {
+            "type": "string",
+            "enum": [
+              "HOTEL",
+              "FLIGHT",
+              "TRAIN",
+              "ATTRACTION",
+              "TOUR_ACTIVITY",
+              "FLIGHT_HOTEL",
+              "CAR_RENTAL",
+              "AIRPORT_TRANSFER",
+              "PLANNER"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "price_text": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "cta_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "disclosure": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "scope_type": {
+            "type": "string",
+            "enum": [
+              "ENTITY",
+              "ROUTE",
+              "AREA",
+              "DESTINATION",
+              "COUNTRY",
+              "CATEGORY",
+              "GLOBAL"
+            ]
+          },
+          "scope_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "slot_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "placement": {
+            "type": "string",
+            "enum": [
+              "contextual",
+              "end_resource"
+            ]
+          },
+          "strategy_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "entity": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "route": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "affiliate_booking_card",
+        "variant": "default",
+        "affiliate_asset_id": "trip-forbidden-city",
+        "provider": "Trip.com",
+        "asset_type": "DEEP_LINK",
+        "product_category": "ATTRACTION",
+        "title": "Check Forbidden City ticket options",
+        "description": "Review the official listing details before booking.",
+        "cta_label": "View ticket options",
+        "target_url": "https://www.trip.com/",
+        "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+        "scope_type": "ENTITY",
+        "scope_key": "forbidden-city",
+        "slot_key": "tickets-contextual-1",
+        "placement": "contextual",
+        "strategy_version": "commercial-v1"
+      },
       "accessibility": "Uses a labeled aside, visible disclosure, and a descriptive sponsored link.",
       "responsive": "Stacks copy and action without horizontal overflow or urgency treatment."
     },
@@ -338,13 +1326,226 @@
       "category": "commercial",
       "purpose": "Renders a CMS-selected Trip.com search link or allowlisted structured search box.",
       "status": "stable",
-      "variants": ["link", "search_box"],
+      "variants": [
+        "link",
+        "search_box"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-renderers.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css", "wp-content/themes/solo-to-china/assets/js/commercial-events.js"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["affiliate_asset_id", "provider", "asset_type", "product_category", "title", "description", "cta_label", "disclosure", "scope_type", "scope_key", "slot_key", "placement", "strategy_version"], "oneOf": [{"required": ["target_url"]}, {"required": ["embed_config"]}], "properties": {"affiliate_asset_id": {"type": "string", "minLength": 1, "maxLength": 120}, "provider": {"type": "string", "minLength": 1, "maxLength": 80}, "asset_type": {"const": "SEARCH_BOX"}, "product_category": {"type": "string", "enum": ["HOTEL", "FLIGHT", "TRAIN", "ATTRACTION", "TOUR_ACTIVITY", "FLIGHT_HOTEL", "CAR_RENTAL", "AIRPORT_TRANSFER", "PLANNER"]}, "title": {"type": "string", "minLength": 1, "maxLength": 160}, "description": {"type": "string", "minLength": 1, "maxLength": 500}, "cta_label": {"type": "string", "minLength": 1, "maxLength": 80}, "target_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "embed_config": {"type": "object", "additionalProperties": false, "required": ["embed_type", "src", "width", "height", "language", "theme", "variant"], "properties": {"embed_type": {"const": "search_box"}, "src": {"type": "string", "format": "uri", "pattern": "^https://"}, "width": {"type": "integer", "minimum": 240, "maximum": 1600}, "height": {"type": "integer", "minimum": 80, "maximum": 800}, "language": {"type": "string", "enum": ["en", "zh-CN", "zh-TW"]}, "theme": {"type": "string", "enum": ["light", "dark"]}, "variant": {"type": "string", "enum": ["compact", "standard"]}}}, "disclosure": {"type": "string", "minLength": 1, "maxLength": 300}, "scope_type": {"type": "string", "enum": ["ENTITY", "ROUTE", "AREA", "DESTINATION", "COUNTRY", "CATEGORY", "GLOBAL"]}, "scope_key": {"type": "string", "minLength": 1, "maxLength": 160}, "slot_key": {"type": "string", "minLength": 1, "maxLength": 120}, "placement": {"type": "string", "enum": ["contextual", "end_resource"]}, "strategy_version": {"type": "string", "minLength": 1, "maxLength": 40}, "entity": {"type": "string", "maxLength": 160}, "route": {"type": "string", "maxLength": 160}, "destination": {"type": "string", "maxLength": 160}, "anchor": {"type": "string", "maxLength": 120}}},
-      "example": {"type": "affiliate_search_card", "variant": "link", "affiliate_asset_id": "trip-hotel-search", "provider": "Trip.com", "asset_type": "SEARCH_BOX", "product_category": "HOTEL", "title": "Search hotel options", "description": "Compare location and arrival access for your dates.", "cta_label": "Search hotels", "target_url": "https://www.trip.com/hotels/", "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.", "scope_type": "DESTINATION", "scope_key": "beijing", "slot_key": "hotel-search-1", "placement": "contextual", "strategy_version": "commercial-v1"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-renderers.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+        "wp-content/themes/solo-to-china/assets/js/commercial-events.js"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "affiliate_asset_id",
+          "provider",
+          "asset_type",
+          "product_category",
+          "title",
+          "description",
+          "cta_label",
+          "disclosure",
+          "scope_type",
+          "scope_key",
+          "slot_key",
+          "placement",
+          "strategy_version"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "target_url"
+            ]
+          },
+          {
+            "required": [
+              "embed_config"
+            ]
+          }
+        ],
+        "properties": {
+          "affiliate_asset_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "asset_type": {
+            "const": "SEARCH_BOX"
+          },
+          "product_category": {
+            "type": "string",
+            "enum": [
+              "HOTEL",
+              "FLIGHT",
+              "TRAIN",
+              "ATTRACTION",
+              "TOUR_ACTIVITY",
+              "FLIGHT_HOTEL",
+              "CAR_RENTAL",
+              "AIRPORT_TRANSFER",
+              "PLANNER"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "cta_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "embed_config": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "embed_type",
+              "src",
+              "width",
+              "height",
+              "language",
+              "theme",
+              "variant"
+            ],
+            "properties": {
+              "embed_type": {
+                "const": "search_box"
+              },
+              "src": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 240,
+                "maximum": 1600
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 80,
+                "maximum": 800
+              },
+              "language": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "zh-CN",
+                  "zh-TW"
+                ]
+              },
+              "theme": {
+                "type": "string",
+                "enum": [
+                  "light",
+                  "dark"
+                ]
+              },
+              "variant": {
+                "type": "string",
+                "enum": [
+                  "compact",
+                  "standard"
+                ]
+              }
+            }
+          },
+          "disclosure": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "scope_type": {
+            "type": "string",
+            "enum": [
+              "ENTITY",
+              "ROUTE",
+              "AREA",
+              "DESTINATION",
+              "COUNTRY",
+              "CATEGORY",
+              "GLOBAL"
+            ]
+          },
+          "scope_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "slot_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "placement": {
+            "type": "string",
+            "enum": [
+              "contextual",
+              "end_resource"
+            ]
+          },
+          "strategy_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "entity": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "route": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "affiliate_search_card",
+        "variant": "link",
+        "affiliate_asset_id": "trip-hotel-search",
+        "provider": "Trip.com",
+        "asset_type": "SEARCH_BOX",
+        "product_category": "HOTEL",
+        "title": "Search hotel options",
+        "description": "Compare location and arrival access for your dates.",
+        "cta_label": "Search hotels",
+        "target_url": "https://www.trip.com/hotels/",
+        "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+        "scope_type": "DESTINATION",
+        "scope_key": "beijing",
+        "slot_key": "hotel-search-1",
+        "placement": "contextual",
+        "strategy_version": "commercial-v1"
+      },
       "accessibility": "Keeps instructions and disclosure visible; structured embeds include a descriptive title.",
       "responsive": "Uses a bounded responsive iframe or a full-width link action on phones."
     },
@@ -354,13 +1555,249 @@
       "category": "commercial",
       "purpose": "Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback.",
       "status": "stable",
-      "variants": ["static", "dynamic"],
+      "variants": [
+        "static",
+        "dynamic"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-renderers.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css", "wp-content/themes/solo-to-china/assets/js/commercial-events.js"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["affiliate_asset_id", "provider", "asset_type", "product_category", "title", "description", "cta_label", "target_url", "disclosure", "scope_type", "scope_key", "slot_key", "placement", "strategy_version"], "oneOf": [{"properties": {"asset_type": {"const": "STATIC_BANNER"}}, "required": ["image_url", "alt_text"]}, {"properties": {"asset_type": {"const": "DYNAMIC_BANNER"}}, "required": ["embed_config"]}], "properties": {"affiliate_asset_id": {"type": "string", "minLength": 1, "maxLength": 120}, "provider": {"type": "string", "minLength": 1, "maxLength": 80}, "asset_type": {"type": "string", "enum": ["STATIC_BANNER", "DYNAMIC_BANNER"]}, "product_category": {"type": "string", "enum": ["HOTEL", "FLIGHT", "TRAIN", "ATTRACTION", "TOUR_ACTIVITY", "FLIGHT_HOTEL", "CAR_RENTAL", "AIRPORT_TRANSFER", "PLANNER"]}, "title": {"type": "string", "minLength": 1, "maxLength": 160}, "description": {"type": "string", "minLength": 1, "maxLength": 500}, "cta_label": {"type": "string", "minLength": 1, "maxLength": 80}, "target_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "image_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "alt_text": {"type": "string", "maxLength": 200}, "embed_config": {"type": "object", "additionalProperties": false, "required": ["embed_type", "src", "width", "height", "language", "theme", "variant"], "properties": {"embed_type": {"const": "dynamic_banner"}, "src": {"type": "string", "format": "uri", "pattern": "^https://"}, "width": {"type": "integer", "minimum": 240, "maximum": 1600}, "height": {"type": "integer", "minimum": 80, "maximum": 800}, "language": {"type": "string", "enum": ["en", "zh-CN", "zh-TW"]}, "theme": {"type": "string", "enum": ["light", "dark"]}, "variant": {"type": "string", "enum": ["compact", "standard"]}}}, "disclosure": {"type": "string", "minLength": 1, "maxLength": 300}, "scope_type": {"type": "string", "enum": ["ENTITY", "ROUTE", "AREA", "DESTINATION", "COUNTRY", "CATEGORY", "GLOBAL"]}, "scope_key": {"type": "string", "minLength": 1, "maxLength": 160}, "slot_key": {"type": "string", "minLength": 1, "maxLength": 120}, "placement": {"const": "end_resource"}, "strategy_version": {"type": "string", "minLength": 1, "maxLength": 40}, "entity": {"type": "string", "maxLength": 160}, "route": {"type": "string", "maxLength": 160}, "destination": {"type": "string", "maxLength": 160}, "anchor": {"type": "string", "maxLength": 120}}},
-      "example": {"type": "affiliate_banner", "variant": "static", "affiliate_asset_id": "trip-planner-banner", "provider": "Trip.com", "asset_type": "STATIC_BANNER", "product_category": "PLANNER", "title": "Continue planning with Trip.com", "description": "Check current options and provider terms.", "cta_label": "Open Trip.com", "target_url": "https://www.trip.com/", "image_url": "https://pages.trip.com/banner.jpg", "alt_text": "Trip.com travel planning", "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.", "scope_type": "GLOBAL", "scope_key": "global", "slot_key": "end-resource-banner-1", "placement": "end_resource", "strategy_version": "commercial-v1"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-renderers.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+        "wp-content/themes/solo-to-china/assets/js/commercial-events.js"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "affiliate_asset_id",
+          "provider",
+          "asset_type",
+          "product_category",
+          "title",
+          "description",
+          "cta_label",
+          "target_url",
+          "disclosure",
+          "scope_type",
+          "scope_key",
+          "slot_key",
+          "placement",
+          "strategy_version"
+        ],
+        "oneOf": [
+          {
+            "properties": {
+              "asset_type": {
+                "const": "STATIC_BANNER"
+              }
+            },
+            "required": [
+              "image_url",
+              "alt_text"
+            ]
+          },
+          {
+            "properties": {
+              "asset_type": {
+                "const": "DYNAMIC_BANNER"
+              }
+            },
+            "required": [
+              "embed_config"
+            ]
+          }
+        ],
+        "properties": {
+          "affiliate_asset_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "asset_type": {
+            "type": "string",
+            "enum": [
+              "STATIC_BANNER",
+              "DYNAMIC_BANNER"
+            ]
+          },
+          "product_category": {
+            "type": "string",
+            "enum": [
+              "HOTEL",
+              "FLIGHT",
+              "TRAIN",
+              "ATTRACTION",
+              "TOUR_ACTIVITY",
+              "FLIGHT_HOTEL",
+              "CAR_RENTAL",
+              "AIRPORT_TRANSFER",
+              "PLANNER"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "cta_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "image_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "alt_text": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "embed_config": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "embed_type",
+              "src",
+              "width",
+              "height",
+              "language",
+              "theme",
+              "variant"
+            ],
+            "properties": {
+              "embed_type": {
+                "const": "dynamic_banner"
+              },
+              "src": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 240,
+                "maximum": 1600
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 80,
+                "maximum": 800
+              },
+              "language": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "zh-CN",
+                  "zh-TW"
+                ]
+              },
+              "theme": {
+                "type": "string",
+                "enum": [
+                  "light",
+                  "dark"
+                ]
+              },
+              "variant": {
+                "type": "string",
+                "enum": [
+                  "compact",
+                  "standard"
+                ]
+              }
+            }
+          },
+          "disclosure": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "scope_type": {
+            "type": "string",
+            "enum": [
+              "ENTITY",
+              "ROUTE",
+              "AREA",
+              "DESTINATION",
+              "COUNTRY",
+              "CATEGORY",
+              "GLOBAL"
+            ]
+          },
+          "scope_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "slot_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "placement": {
+            "const": "end_resource"
+          },
+          "strategy_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "entity": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "route": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "affiliate_banner",
+        "variant": "static",
+        "affiliate_asset_id": "trip-planner-banner",
+        "provider": "Trip.com",
+        "asset_type": "STATIC_BANNER",
+        "product_category": "PLANNER",
+        "title": "Continue planning with Trip.com",
+        "description": "Check current options and provider terms.",
+        "cta_label": "Open Trip.com",
+        "target_url": "https://www.trip.com/",
+        "image_url": "https://pages.trip.com/banner.jpg",
+        "alt_text": "Trip.com travel planning",
+        "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+        "scope_type": "GLOBAL",
+        "scope_key": "global",
+        "slot_key": "end-resource-banner-1",
+        "placement": "end_resource",
+        "strategy_version": "commercial-v1"
+      },
       "accessibility": "Static images require alt text; dynamic embeds have titles and disclosure outside the frame.",
       "responsive": "Banner media is width-bounded and cannot overflow the article."
     },
@@ -370,13 +1807,171 @@
       "category": "commercial",
       "purpose": "Renders a time-bounded CMS-selected Trip.com promotion without changing editorial conclusions.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "page_block",
       "render_mode": "shortcode",
-      "implementation_paths": ["wp-content/themes/solo-to-china/inc/content-renderers.php", "wp-content/themes/solo-to-china-child/assets/css/content-components.css", "wp-content/themes/solo-to-china/assets/js/commercial-events.js"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["affiliate_asset_id", "provider", "asset_type", "product_category", "title", "description", "cta_label", "target_url", "disclosure", "scope_type", "scope_key", "slot_key", "placement", "strategy_version"], "properties": {"affiliate_asset_id": {"type": "string", "minLength": 1, "maxLength": 120}, "provider": {"type": "string", "minLength": 1, "maxLength": 80}, "asset_type": {"const": "PROMOTION"}, "product_category": {"type": "string", "enum": ["HOTEL", "FLIGHT", "TRAIN", "ATTRACTION", "TOUR_ACTIVITY", "FLIGHT_HOTEL", "CAR_RENTAL", "AIRPORT_TRANSFER", "PLANNER"]}, "title": {"type": "string", "minLength": 1, "maxLength": 160}, "description": {"type": "string", "minLength": 1, "maxLength": 500}, "price_text": {"type": "string", "maxLength": 120}, "cta_label": {"type": "string", "minLength": 1, "maxLength": 80}, "target_url": {"type": "string", "format": "uri", "pattern": "^https://"}, "disclosure": {"type": "string", "minLength": 1, "maxLength": 300}, "scope_type": {"type": "string", "enum": ["ENTITY", "ROUTE", "AREA", "DESTINATION", "COUNTRY", "CATEGORY", "GLOBAL"]}, "scope_key": {"type": "string", "minLength": 1, "maxLength": 160}, "slot_key": {"type": "string", "minLength": 1, "maxLength": 120}, "placement": {"type": "string", "enum": ["contextual", "end_resource"]}, "strategy_version": {"type": "string", "minLength": 1, "maxLength": 40}, "valid_from": {"type": "string", "format": "date-time"}, "valid_until": {"type": "string", "format": "date-time"}, "entity": {"type": "string", "maxLength": 160}, "route": {"type": "string", "maxLength": 160}, "destination": {"type": "string", "maxLength": 160}, "anchor": {"type": "string", "maxLength": 120}}},
-      "example": {"type": "affiliate_promotion_card", "variant": "default", "affiliate_asset_id": "trip-autumn-campaign", "provider": "Trip.com", "asset_type": "PROMOTION", "product_category": "HOTEL", "title": "Review the current campaign", "description": "Confirm dates and provider terms before booking.", "cta_label": "View promotion", "target_url": "https://www.trip.com/", "disclosure": "Affiliate promotion. SoloToChina may earn a commission at no extra cost to you.", "scope_type": "COUNTRY", "scope_key": "china", "slot_key": "promotion-end-1", "placement": "end_resource", "strategy_version": "commercial-v1"},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/content-renderers.php",
+        "wp-content/themes/solo-to-china-child/assets/css/content-components.css",
+        "wp-content/themes/solo-to-china/assets/js/commercial-events.js"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "affiliate_asset_id",
+          "provider",
+          "asset_type",
+          "product_category",
+          "title",
+          "description",
+          "cta_label",
+          "target_url",
+          "disclosure",
+          "scope_type",
+          "scope_key",
+          "slot_key",
+          "placement",
+          "strategy_version"
+        ],
+        "properties": {
+          "affiliate_asset_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "asset_type": {
+            "const": "PROMOTION"
+          },
+          "product_category": {
+            "type": "string",
+            "enum": [
+              "HOTEL",
+              "FLIGHT",
+              "TRAIN",
+              "ATTRACTION",
+              "TOUR_ACTIVITY",
+              "FLIGHT_HOTEL",
+              "CAR_RENTAL",
+              "AIRPORT_TRANSFER",
+              "PLANNER"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "price_text": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "cta_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "disclosure": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "scope_type": {
+            "type": "string",
+            "enum": [
+              "ENTITY",
+              "ROUTE",
+              "AREA",
+              "DESTINATION",
+              "COUNTRY",
+              "CATEGORY",
+              "GLOBAL"
+            ]
+          },
+          "scope_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "slot_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "placement": {
+            "type": "string",
+            "enum": [
+              "contextual",
+              "end_resource"
+            ]
+          },
+          "strategy_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "entity": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "route": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "affiliate_promotion_card",
+        "variant": "default",
+        "affiliate_asset_id": "trip-autumn-campaign",
+        "provider": "Trip.com",
+        "asset_type": "PROMOTION",
+        "product_category": "HOTEL",
+        "title": "Review the current campaign",
+        "description": "Confirm dates and provider terms before booking.",
+        "cta_label": "View promotion",
+        "target_url": "https://www.trip.com/",
+        "disclosure": "Affiliate promotion. SoloToChina may earn a commission at no extra cost to you.",
+        "scope_type": "COUNTRY",
+        "scope_key": "china",
+        "slot_key": "promotion-end-1",
+        "placement": "end_resource",
+        "strategy_version": "commercial-v1"
+      },
       "accessibility": "States the provider relationship and validity without false urgency.",
       "responsive": "Stacks copy and action while preserving readable conditions and dates."
     },
@@ -386,13 +1981,56 @@
       "category": "layout",
       "purpose": "Frames CMS-owned article identity and featured media without selecting body components.",
       "status": "stable",
-      "variants": ["default", "attraction", "city", "survival"],
+      "variants": [
+        "default",
+        "attraction",
+        "city",
+        "survival",
+        "compact",
+        "image-led"
+      ],
       "cms_usable": true,
       "cms_interface": "presentation_meta",
       "render_mode": "template",
-      "implementation_paths": ["wp-content/themes/solo-to-china/single.php", "wp-content/themes/solo-to-china-child/assets/css/article.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["title"], "properties": {"title": {"type": "string"}, "excerpt": {"type": "string"}, "featured_media_id": {"type": "integer"}, "variant": {"type": "string", "enum": ["default", "attraction", "city", "survival"]}}},
-      "example": {"type": "article_hero", "variant": "attraction", "title": "Forbidden City: First-Time Visitor Guide", "featured_media_id": 123},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/single.php",
+        "wp-content/themes/solo-to-china-child/assets/css/article.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "featured_media_id": {
+            "type": "integer"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "default",
+              "attraction",
+              "city",
+              "survival",
+              "compact",
+              "image-led"
+            ]
+          }
+        }
+      },
+      "example": {
+        "type": "article_hero",
+        "variant": "attraction",
+        "title": "Forbidden City: First-Time Visitor Guide",
+        "featured_media_id": 123
+      },
       "accessibility": "Provides the only H1 and preserves responsive image alt text.",
       "responsive": "Uses a bounded image-led desktop frame and edge-to-edge mobile composition."
     },
@@ -402,13 +2040,34 @@
       "category": "utility",
       "purpose": "Shares the canonical page URL without accounts or persisted state.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "presentation_meta",
       "render_mode": "template_utility",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/themes/solo-to-china/assets/js/main.js", "wp-content/themes/solo-to-china-child/assets/css/article.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["enabled"], "properties": {"enabled": {"type": "boolean"}}},
-      "example": {"type": "share_this_page", "variant": "default", "enabled": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php",
+        "wp-content/themes/solo-to-china/assets/js/main.js",
+        "wp-content/themes/solo-to-china-child/assets/css/article.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "example": {
+        "type": "share_this_page",
+        "variant": "default",
+        "enabled": true
+      },
       "accessibility": "Supports native share, dialog labeling, live status, Escape, outside click, and focus return.",
       "responsive": "Uses a desktop popover and a mobile bottom panel."
     },
@@ -418,13 +2077,34 @@
       "category": "utility",
       "purpose": "Builds article navigation from rendered H2 headings only when explicitly enabled.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": true,
       "cms_interface": "presentation_meta",
       "render_mode": "template_utility",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/themes/solo-to-china/assets/js/main.js", "wp-content/themes/solo-to-china-child/assets/css/article.css"],
-      "schema": {"type": "object", "additionalProperties": false, "required": ["enabled"], "properties": {"enabled": {"type": "boolean"}}},
-      "example": {"type": "table_of_contents", "variant": "default", "enabled": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php",
+        "wp-content/themes/solo-to-china/assets/js/main.js",
+        "wp-content/themes/solo-to-china-child/assets/css/article.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "example": {
+        "type": "table_of_contents",
+        "variant": "default",
+        "enabled": true
+      },
       "accessibility": "Uses a labeled nav and stable public heading anchors.",
       "responsive": "Renders as a sticky sidebar on desktop and a horizontal navigator on mobile."
     },
@@ -434,13 +2114,24 @@
       "category": "layout",
       "purpose": "Provides the generic single-article document frame around CMS content.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": false,
       "cms_interface": "internal",
       "render_mode": "template",
-      "implementation_paths": ["wp-content/themes/solo-to-china/single.php"],
-      "schema": {"type": "object", "additionalProperties": false, "required": [], "properties": {}},
-      "example": {"internal": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/single.php"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "example": {
+        "internal": true
+      },
       "accessibility": "Maintains main, article, header, content, and optional aside landmarks.",
       "responsive": "Controls reading measure and optional navigation columns."
     },
@@ -450,13 +2141,24 @@
       "category": "utility",
       "purpose": "Shows Home, guide hub, and current article hierarchy.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": false,
       "cms_interface": "internal",
       "render_mode": "theme_filter",
-      "implementation_paths": ["wp-content/themes/solo-to-china-child/functions.php"],
-      "schema": {"type": "object", "additionalProperties": false, "required": [], "properties": {}},
-      "example": {"internal": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china-child/functions.php"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "example": {
+        "internal": true
+      },
       "accessibility": "Uses a labeled nav, list semantics, and aria-current.",
       "responsive": "Wraps long hierarchy labels without overflow."
     },
@@ -466,13 +2168,24 @@
       "category": "travel",
       "purpose": "Renders guide summaries in archives, search, and latest-guide lists.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": false,
       "cms_interface": "internal",
       "render_mode": "theme_renderer",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php"],
-      "schema": {"type": "object", "additionalProperties": false, "required": [], "properties": {}},
-      "example": {"internal": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "example": {
+        "internal": true
+      },
       "accessibility": "Uses meaningful titles, image alt text, and a single clear destination.",
       "responsive": "Grid density and image ratio adapt by viewport."
     },
@@ -482,15 +2195,251 @@
       "category": "travel",
       "purpose": "Queries category-matched posts for selected core landing pages.",
       "status": "stable",
-      "variants": ["default"],
+      "variants": [
+        "default"
+      ],
       "cms_usable": false,
       "cms_interface": "internal",
       "render_mode": "theme_renderer",
-      "implementation_paths": ["wp-content/themes/solo-to-china/functions.php", "wp-content/themes/solo-to-china/page.php"],
-      "schema": {"type": "object", "additionalProperties": false, "required": [], "properties": {}},
-      "example": {"internal": true},
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/functions.php",
+        "wp-content/themes/solo-to-china/page.php"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "example": {
+        "internal": true
+      },
       "accessibility": "Uses a labeled section and semantic guide cards.",
       "responsive": "Uses the shared responsive guide-card grid."
+    },
+    {
+      "id": "place_info_card",
+      "name": "Place Information Card",
+      "category": "contextual",
+      "purpose": "A canonical place, optional editorial media, published guide and existing Taxi Card link.",
+      "status": "stable",
+      "variants": [
+        "default"
+      ],
+      "cms_usable": true,
+      "cms_interface": "page_block",
+      "render_mode": "shortcode",
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/experience-components.php",
+        "wp-content/themes/solo-to-china/assets/css/experience-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entity_key"
+        ],
+        "properties": {
+          "entity_key": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "media_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "alt": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "place_info_card",
+        "variant": "default",
+        "entity_key": "forbidden-city",
+        "title": "Forbidden City"
+      },
+      "accessibility": "Semantic text and links remain available without JavaScript; interactive enlargement supports keyboard close and focus return.",
+      "responsive": "Wraps at narrow widths; images reserve intrinsic dimensions."
+    },
+    {
+      "id": "annotated_image",
+      "name": "Annotated Image",
+      "category": "media",
+      "purpose": "An uncropped image with normalized numbered markers and always-visible descriptions.",
+      "status": "stable",
+      "variants": [
+        "default"
+      ],
+      "cms_usable": true,
+      "cms_interface": "page_block",
+      "render_mode": "shortcode",
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/experience-components.php",
+        "wp-content/themes/solo-to-china/assets/css/experience-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "media_id",
+          "alt",
+          "annotations"
+        ],
+        "properties": {
+          "media_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "alt": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "annotations": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "x",
+                "y",
+                "text"
+              ],
+              "properties": {
+                "x": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "y": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 800
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "annotated_image",
+        "variant": "default",
+        "media_id": 123,
+        "alt": "Entrance diagram",
+        "annotations": [
+          {
+            "x": 0.5,
+            "y": 0.5,
+            "text": "The numbered entrance shown in this illustration."
+          }
+        ]
+      },
+      "accessibility": "Semantic text and links remain available without JavaScript; interactive enlargement supports keyboard close and focus return.",
+      "responsive": "Wraps at narrow widths; images reserve intrinsic dimensions."
+    },
+    {
+      "id": "related_guides",
+      "name": "Related Guides",
+      "category": "contextual",
+      "purpose": "Explicitly related public guides, deduplicated and excluding the current post.",
+      "status": "stable",
+      "variants": [
+        "default"
+      ],
+      "cms_usable": true,
+      "cms_interface": "page_block",
+      "render_mode": "shortcode",
+      "implementation_paths": [
+        "wp-content/themes/solo-to-china/inc/experience-components.php",
+        "wp-content/themes/solo-to-china/assets/css/experience-components.css"
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "entity_keys": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "string",
+              "maxLength": 120
+            }
+          },
+          "post_ids": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "guide_type": {
+            "type": "string",
+            "enum": [
+              "city-guide",
+              "attraction-guide",
+              "survival-kit",
+              "travel-guide"
+            ],
+            "default": "attraction-guide"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "anchor": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      },
+      "example": {
+        "type": "related_guides",
+        "variant": "default",
+        "entity_keys": [
+          "forbidden-city"
+        ],
+        "guide_type": "attraction-guide",
+        "title": "Read next"
+      },
+      "accessibility": "Semantic text and links remain available without JavaScript; interactive enlargement supports keyboard close and focus return.",
+      "responsive": "Wraps at narrow widths; images reserve intrinsic dimensions."
     }
   ]
 }

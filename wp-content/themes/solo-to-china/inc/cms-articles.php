@@ -369,6 +369,13 @@ function stc_cms_validate_page_block( $block, $index ) {
 			return stc_cms_publish_error( 'INVALID_COMPONENT_DATA', __( 'Heading level and variant disagree.', 'solo-to-china' ), 422, $path );
 		}
 	}
+	if ( 'steps' === $component_id && !empty($block['data']['screenshots']) ) {
+		$seen_steps=array();
+		foreach($block['data']['screenshots'] as $shot) {
+			if ($shot['step']>count($block['data']['items']) || isset($seen_steps[$shot['step']])) {return stc_cms_publish_error('INVALID_COMPONENT_DATA','A screenshot must reference one existing, unique step.',422,$path.'.data.screenshots');}
+			$seen_steps[$shot['step']]=true;
+		}
+	}
 	if ( 'list' === $component_id && isset( $block['data']['ordered'] ) && (bool) $block['data']['ordered'] !== ( 'ordered' === $block['variant'] ) ) {
 		return stc_cms_publish_error( 'INVALID_COMPONENT_DATA', __( 'List ordering and variant disagree.', 'solo-to-china' ), 422, $path );
 	}
@@ -589,13 +596,15 @@ function stc_cms_serialize_image( $data, $variant ) {
 	$role    = empty( $data['role'] ) ? $variant : $data['role'];
 	$anchor  = stc_cms_component_anchor( $data );
 	$class   = 'stc-content-image stc-content-image--' . sanitize_html_class( $role );
-	$attrs   = array( 'id' => $media_id, 'sizeSlug' => 'full', 'linkDestination' => 'none', 'className' => $class );
+	$class .= ' stc-image-frame--' . sanitize_html_class( $data['frame'] ?? 'natural' ) . ' stc-image-focus--' . sanitize_html_class( $data['focal_point'] ?? 'center' );
+	if ( ! empty( $data['enlarge'] ) ) { $class .= ' stc-image-enlarge'; }
+	$attrs   = array( 'id' => $media_id, 'sizeSlug' => 'full', 'linkDestination' => ! empty( $data['enlarge'] ) ? 'media' : 'none', 'className' => $class );
 	if ( $anchor ) {
 		$attrs['anchor'] = $anchor;
 	}
 	$id      = $anchor ? ' id="' . esc_attr( $anchor ) . '"' : '';
 	$caption = empty( $data['caption'] ) ? '' : '<figcaption class="wp-element-caption">' . esc_html( $data['caption'] ) . '</figcaption>';
-	return stc_cms_open_block( 'image', $attrs ) . '<figure' . $id . ' class="wp-block-image size-full ' . esc_attr( $class ) . '"><img src="' . esc_url( $url ) . '" alt="' . esc_attr( $data['alt'] ) . '" class="wp-image-' . $media_id . '"/>' . $caption . '</figure>' . stc_cms_close_block( 'image' );
+	return stc_cms_open_block( 'image', $attrs ) . '<figure' . $id . ' class="wp-block-image size-full ' . esc_attr( $class ) . '">' . ( ! empty( $data['enlarge'] ) ? '<a href="' . esc_url( $url ) . '">' : '' ) . '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $data['alt'] ) . '" class="wp-image-' . $media_id . '"/>' . ( ! empty( $data['enlarge'] ) ? '</a>' : '' ) . $caption . '</figure>' . stc_cms_close_block( 'image' );
 }
 
 /**
@@ -609,6 +618,7 @@ function stc_cms_serialize_image( $data, $variant ) {
 function stc_cms_serialize_semantic_group( $modifier, $inner, $data ) {
 	$anchor = stc_cms_component_anchor( $data );
 	$class  = 'stc-content-block stc-content-block--' . sanitize_html_class( $modifier );
+	if ( ! empty( $data['_variant'] ) ) { $class .= ' stc-variant--' . sanitize_html_class( $data['_variant'] ); }
 	$attrs  = array( 'className' => $class, 'layout' => array( 'type' => 'constrained' ) );
 	if ( $anchor ) {
 		$attrs['anchor'] = $anchor;
@@ -676,8 +686,12 @@ function stc_cms_serialize_semantic_list( $component_id, $data ) {
 	$title   = empty( $data['title'] ) ? $config[0] : $data['title'];
 	$ordered = $config[1];
 	$items   = '';
-	foreach ( $data['items'] as $item ) {
-		$items .= stc_cms_open_block( 'list-item' ) . '<li>' . esc_html( $item ) . '</li>' . stc_cms_close_block( 'list-item' );
+	foreach ( $data['items'] as $step_index => $item ) {
+        $media = '';
+        foreach ( ( $data['screenshots'] ?? array() ) as $shot ) {
+            if ( (int) $shot['step'] === $step_index + 1 ) { $image = stc_cms_serialize_image( array( 'media_id' => $shot['media_id'], 'alt' => $shot['alt'], 'caption' => $shot['caption'] ?? '', 'enlarge' => true ), 'illustration' ); if ( ! is_wp_error( $image ) ) { $media .= $image; } }
+        }
+        $items .= stc_cms_open_block( 'list-item' ) . '<li>' . esc_html( $item ) . $media . '</li>' . stc_cms_close_block( 'list-item' );
 	}
 	$attrs = $ordered ? array( 'ordered' => true ) : array();
 	$tag   = $ordered ? 'ol' : 'ul';
@@ -719,6 +733,8 @@ function stc_cms_serialize_route_timeline( $data ) {
 		if ( ! empty( $item['detail'] ) ) {
 			$content .= '<span>' . esc_html( $item['detail'] ) . '</span>';
 		}
+        foreach ( array( 'transport_mode','travel_time','note' ) as $field ) { if ( ! empty( $item[$field] ) ) { $content .= '<span>' . esc_html( $item[$field] ) . '</span>'; } }
+        if ( ! empty( $item['entity_key'] ) ) { $guide = stc_resolve_entity_guide( $item['entity_key'] ); if ( $guide ) { $content .= '<a href="' . esc_url( $guide['url'] ) . '">' . esc_html( $guide['title'] ) . '</a>'; } }
 		$items .= stc_cms_open_block( 'list-item' ) . '<li>' . $content . '</li>' . stc_cms_close_block( 'list-item' );
 	}
 	$list  = stc_cms_open_block( 'list', array( 'ordered' => true, 'className' => 'stc-content-block__timeline' ) ) . '<ol class="wp-block-list stc-content-block__timeline">' . $items . '</ol>' . stc_cms_close_block( 'list' );
@@ -843,7 +859,7 @@ function stc_render_cms_component_shortcode( $attributes ) {
 		return '';
 	}
 
-	return (string) call_user_func( $callback, $block['data'] );
+	return (string) call_user_func( $callback, $block['data'], $block['variant'] );
 }
 add_shortcode( 'stc_cms_component', 'stc_render_cms_component_shortcode' );
 
@@ -856,6 +872,7 @@ add_shortcode( 'stc_cms_component', 'stc_render_cms_component_shortcode' );
 function stc_serialize_cms_component_to_post_content( $block ) {
 	$definition = stc_get_component_definition( $block['type'] );
 	$data       = $block['data'];
+	if ( in_array( $block['type'], array( 'quick_facts','steps' ), true ) ) { $data['_variant'] = $block['variant']; }
 	$variant    = $block['variant'];
 	$mode       = isset( $definition['render_mode'] ) ? $definition['render_mode'] : '';
 
@@ -1087,8 +1104,13 @@ function stc_cms_validate_wordpress_references( $package ) {
 		return stc_cms_publish_error( 'INVALID_PAGE_SCHEMA', __( 'featuredMediaId is not a WordPress image.', 'solo-to-china' ), 422, 'page.metadata.featuredMediaId' );
 	}
 	foreach ( $package['page']['blocks'] as $index => $block ) {
-		if ( 'image' === $block['type'] && ! wp_attachment_is_image( (int) $block['data']['media_id'] ) ) {
+		if ( in_array($block['type'],array('image','annotated_image','place_info_card'),true) && !empty($block['data']['media_id']) && ! wp_attachment_is_image( (int) $block['data']['media_id'] ) ) {
 			return stc_cms_publish_error( 'INVALID_COMPONENT_DATA', __( 'An image block does not reference a WordPress image.', 'solo-to-china' ), 422, 'page.blocks[' . $index . '].data.media_id' );
+		}
+		if ('steps'===$block['type']) {
+			foreach(($block['data']['screenshots'] ?? array()) as $shot) {
+				if (!wp_attachment_is_image((int)$shot['media_id'])) {return stc_cms_publish_error('INVALID_COMPONENT_DATA','A step screenshot does not reference a WordPress image.',422,'page.blocks['.$index.'].data.screenshots');}
+			}
 		}
 	}
 	foreach ( $package['media'] as $index => $media ) {

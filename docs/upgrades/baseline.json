@@ -1,0 +1,27 @@
+{
+  "head": "f44ce1092ced93dfb47d9b3eae83d0d5e4b97086",
+  "files": {
+    "README.md": "4b79e6ae1968381acc8e4e191551a561ee28948ff9323bbe9b467a27437e3637",
+    "docs/architecture/content-component-system.md": "c184a216a1ef718ed823a6057bc57930a53d89c48ef1d9e27998fbc42c96fd2d",
+    "docs/deployment/wordpress-install.md": "851efbd5b9473dc11944981048b6095251c6afdf570723c071655922364af8f6",
+    "docs/handoff/current-progress.md": "44776413cf422866e2699bf397f805ffae8a45a579e3ea218e31e6b3b05a0f04",
+    "docs/handoff/new-chat-handoff.md": "da0d7c0af787ef12b293e6edf4d602d1fca9d3c6800d7fc774fe9e55ee3f040e",
+    "scripts/package-release.ps1": "aa1db5b12555ec487adfaed1060e12093a41d09130b07faeada4c9d1e72e0baa",
+    "scripts/verify-content-contract.ps1": "bd5d4f77ffd0bb70472a8022c91765583a3fc5f216fdc83d4fc780daf8d2c1bb",
+    "scripts/verify-content-runtime.ps1": "333a758518f6f0d54ce0a1fe8cbcd9eca7bb1c8d854f7bcdcc35d661d788c9da",
+    "scripts/verify-project.php": "e1984af778300550e2e637909be96379ce89e9dd64461b819ce59aab4d884df4",
+    "scripts/verify-project.ps1": "742edf1c2f6325e1326fb305ea47b6a2bc7f98cef539b669b11e6a10b789a708",
+    "wp-content/themes/solo-to-china-child/README.md": "d1c5a25d99810588abc868a6a8adb8d0649aafb11a44334d2aa592894e224570",
+    "wp-content/themes/solo-to-china-child/assets/css/site.css": "a698bc75e526340f015b30890d97397cd60969e8293a534de644dcd87cc91f83",
+    "wp-content/themes/solo-to-china-child/functions.php": "873c28eee1fe877a62f3a43040261472ed10e7bbc8fd853639a34eb732fadb92",
+    "wp-content/themes/solo-to-china-child/style.css": "378c5a2de7ee7a96bab0c57fb132967a88293c53481e2b3ff57da8e7638d50cb",
+    "wp-content/themes/solo-to-china/README.md": "015831cc117f28f05db4ff91e5cd5a70d964444f2c288b1a8390abd7fe04b5a8",
+    "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json": "aab9e9bb03e1d6e18c6c8ba2ce44a706451b40f9ccf961d6a8cf59bb5b7ab7c6",
+    "wp-content/themes/solo-to-china/content-contract/content-contract.v2.json": "930c55465b64965e5682dbc9c8047e694f737e7c96338f36bd737467e76549b3",
+    "wp-content/themes/solo-to-china/footer.php": "1dd43eda18f36bc6a32d878baff1a7e77f82f6306cf1d5182def0a3d91d15f44",
+    "wp-content/themes/solo-to-china/front-page.php": "8aaf072a0eb327f92e925bca92916848e05a30715877e52b04cef225987b6d1c",
+    "wp-content/themes/solo-to-china/functions.php": "629dd3513a12e3849358a63f328f5b76c619060af247eed9241e5278bb7fbdea",
+    "wp-content/themes/solo-to-china/page.php": "9086f0225be83786c59d362833ff7dfce7da3e46de58608c49b327d014220374",
+    "wp-content/themes/solo-to-china/style.css": "149d10215f6bc0e7655df74f21117ffeba00b09bac614fabaf51ec66c513f2db"
+  }
+}

@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.32.0`.
+Current version: `0.33.0`.
 
 ## Responsibility
 
@@ -39,7 +39,7 @@ The CMS delivery adapter accepts `contracts/cms-publish-package.schema.json` at 
 
 The Theme does not own vision providers, place/address data, destination resolution, Ticket data, booking-window calculations, or tool validation. Those responsibilities remain in `wp-content/plugins/solo-to-china-tools/`. The `destination_card` and legacy `ticket_reminder` component IDs are thin Plugin adapters.
 
-Version `0.32.0` adds Route Timeline and Pros and Cons as registered, CMS-serializable Gutenberg components and expands the internal Gallery with reusable foundations. Version `0.31.3` shortened the Tools landing-page introduction. Version `0.31.2` removed the legacy red STC square from inner-page Headers and retained `SoloToChina` as a compact text wordmark. The homepage and Footer continue to use the true-alpha white artwork introduced in `0.31.1`. Existing pages and administrator-edited content are never overwritten.
+Version `0.32.1` turns Planner into a focused AI-itinerary landing page, applies the approved affiliate URL with sponsored/nofollow semantics, and removes low-value Footer links and slogans. Version `0.32.0` added Route Timeline and Pros and Cons as registered, CMS-serializable Gutenberg components and expanded the internal Gallery with reusable foundations. The homepage and Footer continue to use the true-alpha white artwork introduced in `0.31.1`. Existing pages and administrator-edited content are never overwritten.
 
 The theme should not own tool business logic.
 

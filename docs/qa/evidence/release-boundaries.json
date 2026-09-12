@@ -1,0 +1,72 @@
+{
+  "passed": [
+    "Fresh PHP and data invariants: 9411",
+    "Fresh PHP and data invariants: 9412",
+    "Fresh PHP and data invariants: 9413",
+    "Initial More is collapsed while images are delayed",
+    "More responds before delayed image completion",
+    "More collapses without a slow-image race",
+    "Article images decoded at 390",
+    "Step screenshots use the text column at 390",
+    "Article images decoded at 1440",
+    "Step screenshots use the text column at 1440",
+    "Desktop navigation has dark text on its light header"
+  ],
+  "php": {
+    "9411": {
+      "passed": [
+        "All owned PHP token-parses",
+        "Bundled catalog validates",
+        "Rejected catalog leaves active data intact: version",
+        "Rejected catalog leaves active data intact: unknown",
+        "Rejected catalog leaves active data intact: duplicate",
+        "Rejected catalog leaves active data intact: evidence",
+        "Rejected catalog leaves active data intact: unknown-evidence",
+        "Valid catalog update activates",
+        "Provider cannot overwrite verified viewpoint text",
+        "Catalog rollback restores prior active pointer",
+        "City-qualified alias disambiguates locally",
+        "Lease excludes concurrent owner",
+        "Late lease release cannot unlock a newer owner",
+        "Fixed-window rate limit enforces attempt ceiling",
+        "Pre-head discovery resolves nested synced blocks",
+        "Screenshot cannot target a missing step",
+        "Resolver service failure stays distinct from unknown: 504",
+        "Resolver service failure stays distinct from unknown: 503"
+      ],
+      "php_files": 42,
+      "catalog_records": 9
+    },
+    "9412": {
+      "passed": [
+        "All owned PHP token-parses",
+        "Bundled catalog validates",
+        "Rejected catalog leaves active data intact: version",
+        "Rejected catalog leaves active data intact: unknown",
+        "Rejected catalog leaves active data intact: duplicate",
+        "Rejected catalog leaves active data intact: evidence",
+        "Rejected catalog leaves active data intact: unknown-evidence",
+        "Valid catalog update activates",
+        "Provider cannot overwrite verified viewpoint text",
+        "Catalog rollback restores prior active pointer",
+        "City-qualified alias disambiguates locally",
+        "Lease excludes concurrent owner",
+        "Late lease release cannot unlock a newer owner",
+        "Fixed-window rate limit enforces attempt ceiling",
+        "Pre-head discovery resolves nested synced blocks",
+        "Screenshot cannot target a missing step",
+        "Resolver service failure stays distinct from unknown: 504",
+        "Resolver service failure stays distinct from unknown: 503"
+      ],
+      "php_files": 40,
+      "catalog_records": 9
+    },
+    "9413": {
+      "passed": [
+        "All owned PHP token-parses"
+      ],
+      "php_files": 42,
+      "tools": "inactive"
+    }
+  }
+}

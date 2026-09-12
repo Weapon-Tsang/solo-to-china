@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.0",
+  "version": "1.0.0",
+  "places": [
+    {
+      "entity_key": "forbidden-city",
+      "name_en": "Forbidden City",
+      "name_zh": "故宫博物院",
+      "city_en": "Beijing",
+      "city_zh": "北京",
+      "province_en": "Beijing",
+      "province_zh": "北京市",
+      "country": "China",
+      "verified_address_zh": "北京市东城区景山前街4号",
+      "verified_address_en": "4 Jingshan Front Street, Dongcheng District, Beijing",
+      "attraction_guide_slug": "forbidden-city-first-time-visitor-guide",
+      "city_guide_slug": "beijing-first-time-city-guide",
+      "entity_type": "attraction",
+      "aliases": [
+        "forbidden city",
+        "palace museum",
+        "故宫",
+        "故宫博物院"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "VERIFIED",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://www.dpm.org.cn/singles_detail/252829.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://www.dpm.org.cn/singles_detail/252829.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "address": {
+          "source_url": "https://www.dpm.org.cn/singles_detail/252829.html",
+          "checked_at": "2026-09-12",
+          "note": "Official contact address; not a visitor entrance or vehicle drop-off."
+        }
+      }
+    },
+    {
+      "entity_key": "jingshan-park",
+      "name_en": "Jingshan Park",
+      "name_zh": "景山公园",
+      "city_en": "Beijing",
+      "city_zh": "北京",
+      "province_en": "Beijing",
+      "province_zh": "北京市",
+      "country": "China",
+      "city_guide_slug": "beijing-first-time-city-guide",
+      "entity_type": "attraction",
+      "aliases": [
+        "jingshan park",
+        "景山公园"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_732675.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_732675.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_key": "hongya-cave",
+      "name_en": "Hongya Cave",
+      "name_zh": "洪崖洞民俗风貌区",
+      "city_en": "Chongqing",
+      "city_zh": "重庆",
+      "province_en": "Chongqing",
+      "province_zh": "重庆市",
+      "country": "China",
+      "city_guide_slug": "chongqing-city-guide",
+      "entity_type": "attraction",
+      "aliases": [
+        "hongya cave",
+        "hongyadong",
+        "洪崖洞",
+        "洪崖洞民俗风貌区"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://mzj.cq.gov.cn/sy_218/bmdt/mzyw/202401/t20240119_12841031.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://mzj.cq.gov.cn/sy_218/bmdt/mzyw/202401/t20240119_12841031.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_key": "qiansimen-bridge",
+      "name_en": "Qiansimen Bridge",
+      "name_zh": "千厮门嘉陵江大桥",
+      "city_en": "Chongqing",
+      "city_zh": "重庆",
+      "province_en": "Chongqing",
+      "province_zh": "重庆市",
+      "country": "China",
+      "city_guide_slug": "chongqing-city-guide",
+      "entity_type": "attraction",
+      "aliases": [
+        "qiansimen bridge",
+        "千厮门大桥",
+        "千厮门嘉陵江大桥"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://zfcxjw.cq.gov.cn/zjzj/tszj/qdcq/202211/t20221128_11339950.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://zfcxjw.cq.gov.cn/zjzj/tszj/qdcq/202211/t20221128_11339950.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_key": "the-bund",
+      "name_en": "The Bund",
+      "name_zh": "外滩",
+      "city_en": "Shanghai",
+      "city_zh": "上海",
+      "province_en": "Shanghai",
+      "province_zh": "上海市",
+      "country": "China",
+      "city_guide_slug": "shanghai-city-guide",
+      "entity_type": "attraction",
+      "aliases": [
+        "the bund",
+        "bund",
+        "外滩"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://www.shanghai.gov.cn/citywalk/20260625/9dfb6f86b9664e018607b5cc9ec9a53c.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://www.shanghai.gov.cn/citywalk/20260625/9dfb6f86b9664e018607b5cc9ec9a53c.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_type": "station",
+      "entity_key": "shanghai-hongqiao-railway-station",
+      "name_en": "Shanghai Hongqiao Railway Station",
+      "name_zh": "上海虹桥站",
+      "city_en": "Shanghai",
+      "city_zh": "上海",
+      "province_en": "Shanghai",
+      "province_zh": "上海市",
+      "country": "China",
+      "city_guide_slug": "shanghai-city-guide",
+      "aliases": [
+        "shanghai hongqiao railway station",
+        "shanghai hongqiao station",
+        "上海虹桥站",
+        "虹桥火车站"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://english.shanghai.gov.cn/en-Transportation/20250126/484b92f86eeb49d7b26086d25010d782.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://english.shanghai.gov.cn/en-Transportation/20250126/484b92f86eeb49d7b26086d25010d782.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_key": "west-lake-hangzhou",
+      "name_en": "West Lake",
+      "name_zh": "西湖",
+      "city_en": "Hangzhou",
+      "city_zh": "杭州",
+      "province_en": "Zhejiang",
+      "province_zh": "浙江省",
+      "country": "China",
+      "city_guide_slug": "hangzhou-city-guide",
+      "entity_type": "attraction",
+      "aliases": [
+        "west lake",
+        "hangzhou west lake",
+        "杭州西湖",
+        "西湖"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://whc.unesco.org/en/list/1334",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://whc.unesco.org/en/list/1334",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_key": "west-lake-huizhou",
+      "name_en": "West Lake",
+      "name_zh": "西湖",
+      "city_en": "Huizhou",
+      "city_zh": "惠州",
+      "province_en": "Guangdong",
+      "province_zh": "广东省",
+      "country": "China",
+      "entity_type": "attraction",
+      "aliases": [
+        "west lake",
+        "huizhou west lake",
+        "惠州西湖",
+        "西湖"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://wgltj.huizhou.gov.cn/gkmlpt/content/5/5823/post_5823398.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://wgltj.huizhou.gov.cn/gkmlpt/content/5/5823/post_5823398.html",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    },
+    {
+      "entity_type": "hotel",
+      "entity_key": "mandarin-oriental-shanghai",
+      "name_en": "Mandarin Oriental Pudong, Shanghai",
+      "name_zh": "上海浦东文华东方酒店",
+      "city_en": "Shanghai",
+      "city_zh": "上海",
+      "province_en": "Shanghai",
+      "province_zh": "上海市",
+      "country": "China",
+      "city_guide_slug": "shanghai-city-guide",
+      "aliases": [
+        "mandarin oriental shanghai",
+        "mandarin oriental pudong shanghai",
+        "上海浦东文华东方酒店"
+      ],
+      "sources": {
+        "name_zh": "VERIFIED",
+        "city": "VERIFIED",
+        "address": "UNKNOWN",
+        "entrance": "UNKNOWN",
+        "dropoff": "UNKNOWN",
+        "arrival_note": "UNKNOWN",
+        "viewpoint": "UNKNOWN"
+      },
+      "evidence": {
+        "name_zh": {
+          "source_url": "https://www.mandarinoriental.com.cn/zh-cn/shanghai/pudong",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        },
+        "city": {
+          "source_url": "https://www.mandarinoriental.com.cn/zh-cn/shanghai/pudong",
+          "checked_at": "2026-09-12",
+          "note": "Identity and city only; no entrance, drop-off or photo-position claim."
+        }
+      }
+    }
+  ]
+}

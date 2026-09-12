@@ -1,0 +1,572 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://solotochina.com/contracts/destination-catalog.schema.json",
+  "title": "SoloToChina destination catalog 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "version",
+    "places"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "places": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entity_key",
+          "entity_type",
+          "name_en",
+          "name_zh",
+          "city_en",
+          "city_zh",
+          "aliases",
+          "sources",
+          "evidence"
+        ],
+        "properties": {
+          "entity_key": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "entity_type": {
+            "enum": [
+              "city",
+              "attraction",
+              "neighborhood",
+              "exact_viewpoint",
+              "restaurant",
+              "hotel",
+              "station"
+            ]
+          },
+          "name_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "name_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "city_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "city_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "province_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "province_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "aliases": {
+            "type": "array",
+            "maxItems": 30,
+            "items": {
+              "type": "string",
+              "maxLength": 300
+            }
+          },
+          "verified_address_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "verified_address_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "recommended_entrance_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "recommended_dropoff_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "arrival_note": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "viewpoint_name_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "viewpoint_name_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "viewpoint_description": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "sources": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name_zh": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              },
+              "city": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              },
+              "address": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              },
+              "entrance": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              },
+              "dropoff": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              },
+              "arrival_note": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              },
+              "viewpoint": {
+                "enum": [
+                  "VERIFIED",
+                  "UNKNOWN"
+                ]
+              }
+            }
+          },
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name_zh": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              },
+              "city": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              },
+              "address": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              },
+              "entrance": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              },
+              "dropoff": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              },
+              "arrival_note": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              },
+              "viewpoint": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "checked_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 1500
+                  }
+                },
+                "required": [
+                  "source_url",
+                  "checked_at"
+                ]
+              }
+            }
+          },
+          "attraction_guide_slug": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "city_guide_slug": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "related_entity_key": {
+            "type": "string",
+            "maxLength": 1500
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "name_zh": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "name_zh"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "name_zh"
+              ],
+              "properties": {
+                "name_zh": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "name_zh"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "city": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "city"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "city_zh"
+              ],
+              "properties": {
+                "city_zh": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "city"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "address": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "address"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "verified_address_zh"
+              ],
+              "properties": {
+                "verified_address_zh": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "address"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "entrance": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "entrance"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "recommended_entrance_zh"
+              ],
+              "properties": {
+                "recommended_entrance_zh": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "entrance"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "dropoff": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "dropoff"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "recommended_dropoff_zh"
+              ],
+              "properties": {
+                "recommended_dropoff_zh": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "dropoff"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "arrival_note": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "arrival_note"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "arrival_note"
+              ],
+              "properties": {
+                "arrival_note": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "arrival_note"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "sources": {
+                  "properties": {
+                    "viewpoint": {
+                      "const": "VERIFIED"
+                    }
+                  },
+                  "required": [
+                    "viewpoint"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "viewpoint_name_zh"
+              ],
+              "properties": {
+                "viewpoint_name_zh": {
+                  "minLength": 1
+                },
+                "evidence": {
+                  "required": [
+                    "viewpoint"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

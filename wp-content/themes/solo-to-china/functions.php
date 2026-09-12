@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.32.0' );
+define( 'STC_THEME_VERSION', '0.33.0' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -18,6 +18,10 @@ require_once get_template_directory() . '/inc/content-components.php';
 require_once get_template_directory() . '/inc/content-renderers.php';
 require_once get_template_directory() . '/inc/commercial-events.php';
 require_once get_template_directory() . '/inc/cms-articles.php';
+require_once get_template_directory() . '/inc/entity-links.php';
+require_once get_template_directory() . '/inc/site-collections.php';
+require_once get_template_directory() . '/inc/experience-assets.php';
+require_once get_template_directory() . '/inc/experience-components.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -52,7 +56,9 @@ function stc_add_stable_content_heading_ids( $content ) {
 	}
 
 	$used_ids = array();
-	$index    = 0;
+    preg_match_all('/<(?!h2\b)[a-z][^>]*\sid=[\"\']([^\"\']+)[\"\']/i', $content, $reserved);
+    foreach ($reserved[1] as $id) { $used_ids[html_entity_decode($id,ENT_QUOTES,'UTF-8')]=true; }
+    $index    = 0;
 
 	return preg_replace_callback(
 		'/<h2\b([^>]*)>(.*?)<\/h2>/is',
@@ -107,6 +113,7 @@ function stc_enqueue_assets() {
 		true
 	);
 
+	if ( preg_match( '/stc_(affiliate|hotel|ticket_cta|booking|esim|transport|commercial)|stc-affiliate/', stc_page_asset_content() ) ) {
 	wp_enqueue_script(
 		'stc-commercial-events',
 		get_template_directory_uri() . '/assets/js/commercial-events.js',
@@ -119,6 +126,7 @@ function stc_enqueue_assets() {
 		'stcCommercialEvents',
 		array( 'endpoint' => esc_url_raw( rest_url( 'stc/v1/commercial-events' ) ) )
 	);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'stc_enqueue_assets' );
 
@@ -142,7 +150,7 @@ function stc_primary_navigation_items() {
  * @return string
  */
 function stc_get_trip_planner_url() {
-	return 'https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage';
+	return 'https://www.trip.com/t/bCPFQ85ZHW2';
 }
 
 function stc_render_primary_navigation() {
@@ -496,10 +504,8 @@ function stc_get_guide_type_label( $post_id = null ) {
 }
 
 function stc_render_guide_card_media( $image_file, $alt = '' ) {
-	$image_url = get_template_directory_uri() . '/assets/images/' . ltrim( $image_file, '/' );
-
 	echo '<span class="stc-image-card__media">';
-	echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $alt ) . '" width="960" height="1200" loading="lazy" decoding="async">';
+	stc_render_theme_image( pathinfo( $image_file, PATHINFO_FILENAME ), $alt );
 	echo '</span>';
 }
 
@@ -554,11 +560,18 @@ function stc_render_guide_card( $post_id = null ) {
 }
 
 function stc_render_guide_toc( $modifier_class = '' ) {
+	$content = isset( $GLOBALS['stc_rendered_article_content'] ) ? $GLOBALS['stc_rendered_article_content'] : '';
+	preg_match_all( '/<h2\b[^>]*\bid=["\']([^"\']+)["\'][^>]*>(.*?)<\/h2>/is', $content, $headings, PREG_SET_ORDER );
+	if ( ! $headings ) { return; }
 	$classes = trim( 'stc-guide-toc ' . sanitize_html_class( $modifier_class ) );
 
 	echo '<nav class="' . esc_attr( $classes ) . '" aria-label="' . esc_attr__( 'On this page', 'solo-to-china' ) . '" data-stc-guide-toc>';
 	echo '<h2>' . esc_html__( 'On this page', 'solo-to-china' ) . '</h2>';
-	echo '<ol data-stc-guide-toc-list></ol>';
+	echo '<ol data-stc-guide-toc-list>';
+    foreach ( $headings as $heading ) {
+        echo '<li><a href="#' . esc_attr( $heading[1] ) . '">' . esc_html( wp_strip_all_tags( $heading[2] ) ) . '</a></li>';
+    }
+    echo '</ol>';
 	echo '</nav>';
 }
 
@@ -575,10 +588,10 @@ function stc_render_share_this_page( $args = array() ) {
 	$description = isset( $args['description'] ) ? sanitize_text_field( $args['description'] ) : get_the_excerpt( $post_id );
 	$canonical   = $post_id ? wp_get_canonical_url( $post_id ) : '';
 	$canonical   = $canonical ? $canonical : ( $post_id ? get_permalink( $post_id ) : home_url( '/' ) );
-	$panel_id    = 'stc-share-panel-' . ( $post_id ? $post_id : wp_unique_id() );
+	$panel_id    = wp_unique_id( 'stc-share-panel-' );
 	$heading_id  = $panel_id . '-title';
 
-	if ( ! $title || ! wp_http_validate_url( $canonical ) ) {
+	if ( ( $post_id && ( 'publish' !== get_post_status( $post_id ) || post_password_required( $post_id ) ) ) || ! $title || ! wp_http_validate_url( $canonical ) ) {
 		return;
 	}
 
@@ -597,17 +610,18 @@ function stc_render_share_this_page( $args = array() ) {
 	echo '<button class="stc-share__close" type="button" aria-label="' . esc_attr__( 'Close sharing options', 'solo-to-china' ) . '" data-stc-share-close><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>';
 	echo '<p class="stc-share__panel-copy">' . esc_html__( 'Choose a social platform or copy the link.', 'solo-to-china' ) . '</p>';
 	echo '<div class="stc-share__channels">';
+	echo '<button class="stc-share__channel stc-share__copy" type="button" data-stc-share-copy><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9.5 14.5 14.5 9"/><path d="M7.5 16.5 5 19a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0" transform="translate(3)"/><path d="m13.5 7.5 2.5-2.5a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0" transform="translate(-3)"/></svg></span><span class="stc-share__channel-label" data-stc-share-copy-label>' . esc_html__( 'Copy link', 'solo-to-china' ) . '</span></button>';
 	echo '<a class="stc-share__channel stc-share__channel--whatsapp" href="' . esc_url( $whatsapp_url ) . '" target="_blank" rel="noopener" data-stc-share-whatsapp><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 2a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l5.3-1.3A9.5 9.5 0 1 0 12 2Zm5.4 13.4c-.2.7-1.2 1.3-2 1.5-.5.1-1.2.2-3.7-.8-3.1-1.3-5.1-4.5-5.3-4.7-.1-.2-1.2-1.6-1.2-3.1 0-1.5.8-2.2 1.1-2.5.3-.3.7-.4 1-.4h.7c.2 0 .5-.1.8.6l1 2.4c.1.2.1.5 0 .7l-.4.7-.6.6c-.2.2-.4.4-.2.8.2.4.8 1.3 1.8 2.1 1.2 1.1 2.2 1.4 2.6 1.6.3.2.6.1.8-.1l1.1-1.3c.2-.3.5-.3.8-.2l2.2 1c.4.2.6.3.7.5.1.2.1.8-.2 1.5Z"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'WhatsApp', 'solo-to-china' ) . '</span></a>';
+	echo '<details class="stc-share__extras"><summary>More sharing options</summary><div>';
 	echo '<a class="stc-share__channel stc-share__channel--facebook" href="' . esc_url( $facebook_url ) . '" target="_blank" rel="noopener" data-stc-share-facebook><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M13.7 22v-8h2.8l.4-3h-3.2V9.1c0-.9.3-1.6 1.7-1.6H17V4.8c-.8-.1-1.7-.2-2.8-.2-2.9 0-4.9 1.8-4.9 5.1V11H6v3h3.3v8h4.4Z"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Facebook', 'solo-to-china' ) . '</span></a>';
 	echo '<a class="stc-share__channel stc-share__channel--reddit" href="' . esc_url( $reddit_url ) . '" target="_blank" rel="noopener" data-stc-share-reddit><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="13" r="7"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M8.5 15c1.8 1.3 5.2 1.3 7 0M16.8 7.7l1-3.7 3 1M5.7 10a2 2 0 1 0-2.4 3.1M18.3 10a2 2 0 1 1 2.4 3.1"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Reddit', 'solo-to-china' ) . '</span></a>';
 	echo '<a class="stc-share__channel stc-share__channel--x" href="' . esc_url( $x_url ) . '" target="_blank" rel="noopener" data-stc-share-x><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 3h5.2l3.9 5.3L17.7 3H20l-5.8 6.8L20.8 21h-5.2l-4.4-6-5.1 6H3.8l6.3-7.5L4 3Zm3.9 2 8.7 14h1.5L9.4 5H7.9Z"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'X', 'solo-to-china' ) . '</span></a>';
-	echo '<a class="stc-share__channel stc-share__channel--instagram" href="https://www.instagram.com/" target="_blank" rel="noopener" data-stc-share-instagram><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.7" r="1"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'Instagram', 'solo-to-china' ) . '</span></a>';
 	echo '<button class="stc-share__channel stc-share__channel--more" type="button" data-stc-share-more hidden><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></span><span class="stc-share__channel-label">' . esc_html__( 'More apps', 'solo-to-china' ) . '</span></button>';
-	echo '<button class="stc-share__channel stc-share__copy" type="button" data-stc-share-copy><span class="stc-share__channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9.5 14.5 14.5 9"/><path d="M7.5 16.5 5 19a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0" transform="translate(3)"/><path d="m13.5 7.5 2.5-2.5a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0" transform="translate(-3)"/></svg></span><span class="stc-share__channel-label" data-stc-share-copy-label>' . esc_html__( 'Copy link', 'solo-to-china' ) . '</span></button>';
+	echo '</div></details>';
 	echo '</div>';
 	echo '<input class="stc-share__url-field" type="text" value="' . esc_attr( $canonical ) . '" readonly aria-label="' . esc_attr__( 'Canonical page link', 'solo-to-china' ) . '" data-stc-share-url>';
 	echo '<p class="stc-share__status" role="status" aria-live="polite" data-stc-share-status></p>';
-	echo '</div></div>';
+	echo '</div><noscript><p class="stc-share__nojs">Share this page: <a href="' . esc_url( $canonical ) . '">' . esc_html( $canonical ) . '</a></p></noscript></div>';
 }
 
 function stc_core_page_latest_guides_config( $slug ) {
@@ -691,3 +705,6 @@ function stc_render_survival_icon( $icon ) {
 
 	echo '<span class="stc-survival-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">' . $path . '</svg></span>';
 }
+
+/** Small pre-paint progressive-enhancement flag; content remains visible without JS. */
+add_action( 'wp_head', function () { echo '<script>document.documentElement.classList.add("stc-js")</script>'; }, 0 );

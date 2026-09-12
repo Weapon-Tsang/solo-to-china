@@ -1,0 +1,44 @@
+/* Shared by the parent, child and block editor. */
+.stc-content-block--quick-facts.stc-variant--compact .stc-content-block__facts { display:flex; flex-wrap:wrap; gap:16px 32px; }
+.stc-content-block--quick-facts.stc-variant--detailed .stc-content-block__facts { display:block; }
+.stc-variant--detailed .stc-content-block__fact { display:grid; grid-template-columns:minmax(8rem,1fr) 2fr; gap:16px; padding:12px 0; border-bottom:1px solid var(--stc-line,#dce2ea); }
+.stc-content-block--steps li > .wp-block-image { margin:16px 0 32px; max-width:38rem; }
+.stc-content-block__timeline li > span { display:block; margin-top:8px; }
+.stc-content-block--place-info-card { border:1px solid var(--stc-line,#dce2ea); border-radius:12px; padding:24px; background:var(--stc-paper,#fafaf7); }
+.stc-content-block--place-info-card img { height:auto; max-height:420px; object-fit:contain; }
+.stc-field-note { font-size:14px; color:var(--stc-muted,#586577); }
+.stc-content-block--related-guides a { display:inline-block; padding:12px 0; text-decoration:underline; text-underline-offset:4px; }
+.stc-annotated-media { position:relative; }
+.stc-annotated-media img { display:block; width:100%; height:auto; object-fit:contain; }
+.stc-image-marker { position:absolute; transform:translate(-50%,-50%); border:2px solid white; border-radius:50%; background:var(--stc-green,#2f66e8); color:white; font:700 14px/28px system-ui; width:32px; height:32px; text-align:center; pointer-events:none; }
+.stc-image-annotations { line-height:1.75; }
+.stc-image-frame--landscape img { aspect-ratio:16/10; object-fit:cover; }
+.stc-image-frame--portrait img { aspect-ratio:3/4; object-fit:cover; }
+.stc-image-focus--top img { object-position:center top; }
+.stc-image-focus--bottom img { object-position:center bottom; }
+.stc-image-focus--left img { object-position:left center; }
+.stc-image-focus--right img { object-position:right center; }
+.stc-image-dialog { border:0; padding:20px; width:min(96vw,1280px); max-height:95dvh; overflow:auto; background:white; color:var(--stc-ink,#202832); }
+.stc-image-dialog::backdrop { background:rgba(0,0,0,.75); }
+.stc-image-dialog img { display:block; max-width:100%; height:auto; margin:auto; }
+.stc-image-dialog button { position:sticky; top:0; min-height:44px; float:right; background:white; border:1px solid var(--stc-line,#dce2ea); border-radius:8px; padding:8px 16px; }
+.stc-article-hero--compact { min-height:0; background:var(--stc-paper,#fafaf7); }
+.stc-article-hero--compact .stc-article-hero__content { position:static; padding:32px; color:var(--stc-ink,#202832); }
+.stc-article-hero--compact :is(h1,p) { color:inherit; text-shadow:none; }
+@media(max-width:599px) { .stc-variant--detailed .stc-content-block__fact { grid-template-columns:1fr; gap:4px; } }
+
+/* Loaded after child article styles: a missing photo is an editorial header. */
+.stc-article-hero.stc-article-hero--compact { min-block-size:0; padding:clamp(24px,4vw,48px); color:var(--stc-ink,#202832); background:#fafaf7; box-shadow:none; }
+.stc-article-hero--compact::after { display:none; }
+.stc-article-hero--compact .stc-article-hero__content { padding:0; max-width:70ch; }
+.stc-article-hero--compact h1 { max-width:24ch; font-family:system-ui,sans-serif; font-size:clamp(2rem,4vw,3.5rem); line-height:1.12; }
+.stc-article-hero--compact :is(.stc-article-hero__eyebrow,.stc-article-hero__meta,.stc-article-hero__deck) { color:#586577; }
+.stc-article-hero--compact .stc-share__trigger { color:#202832; background:white; border-color:#dce2ea; }
+.stc-article-hero--compact .stc-share__trigger-icon { background:#f1f4f9; border-color:#dce2ea; }
+.stc-image-annotations { padding-left:1.75em; }
+.stc-annotated-media { margin:16px; }
+.stc-image-dialog .stc-annotated-media { width:calc(100% - 32px); }
+
+/* A screenshot occupies the text column, never the narrow step-number column. */
+.stc-content-block--steps li > .wp-block-image { grid-column:2 / -1; min-width:0; width:100%; box-sizing:border-box; }
+.stc-content-block--steps .wp-block-image a { display:block; width:100%; }

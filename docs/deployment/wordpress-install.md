@@ -1,3 +1,5 @@
+> Current release: Parent 0.33.0 / Child 0.12.0 / Tools 0.26.0. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for catalog, caching, provider/privacy and CMS changes. Older release narratives below are historical.
+
 # WordPress Install Handoff
 
 This handoff is for the current SoloToChina WordPress setup on aaPanel.
@@ -47,7 +49,7 @@ When the theme is activated, it creates any missing core IA pages:
 - Affiliate Disclosure
 - Disclaimer
 
-When Tools Plugin `0.25.1` is activated, it creates missing child pages at `/tools/find-this-place/` and `/tools/taxi-card/`. It never overwrites existing page content.
+When Tools Plugin `0.26.0` is activated, it creates missing child pages at `/tools/find-this-place/` and `/tools/taxi-card/`. It never overwrites existing page content.
 
 It only creates missing pages. It does not overwrite existing WordPress page content or publish drafts. Theme `0.29.0` also runs this idempotent bootstrap once from the WordPress admin after an upgrade, so the six support/legal pages are created even when the Theme was already active. If an unpublished page already reserves one of the required slugs—as a fresh WordPress install commonly does for Privacy Policy—the public URL uses a read-only Theme fallback until an administrator publishes that page. If WordPress has no configured privacy page, the new or existing `/privacy-policy/` page is assigned; an existing privacy-page setting is preserved.
 
@@ -88,7 +90,7 @@ After activation, check these pages in WordPress:
 - City Guides: guide articles use the same shared shell; guide type affects taxonomy and breadcrumb context, not layout.
 - Attraction Guides: guide articles use the same shared shell and retain responsive featured-image output.
 - Guide articles: verify one H1, Home / Hub / Article Breadcrumb, CMS-authored component order, and no automatically injected checklist, FAQ, CTA, Share, or TOC.
-- Planner: the shared CTA opens `https://www.trip.com/tripplanner` in a new tab with sponsored/noopener semantics.
+- Planner: the primary `Generate my AI itinerary` CTA opens `https://www.trip.com/t/bCPFQ85ZHW2` in a new tab with sponsored/nofollow/noopener/noreferrer semantics; the removed affiliate sentence and Share action are absent.
 - Tools: the directory lists Find This Place, Taxi Card, and Ticket Booking Window without clipping or overflow.
 - Find This Place: multi-file picker, drag/drop, and paste all reach the preview state; one to four same-location photos are accepted at 20 MB each and 60 MB total; unsupported/oversized files show actionable errors; an unconfigured provider fails safely without a fabricated location.
 - Taxi Card: Forbidden City resolves to `故宫博物院`, West Lake asks the traveler to choose a city, Copy destination works, and Driver Mode supports Escape and keyboard focus containment.
@@ -115,7 +117,7 @@ Also check:
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.32.0`, verify these public read-only endpoints:
+After installing Parent Theme `0.33.0`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`

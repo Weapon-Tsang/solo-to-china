@@ -2,7 +2,7 @@
 
 Project-owned planning functionality for SoloToChina.
 
-Current version: `0.25.1`.
+Current version: `0.26.0`.
 
 This plugin owns:
 

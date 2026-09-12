@@ -1,0 +1,28 @@
+{
+  "passed": [
+    "China date remains correct on a Los Angeles device",
+    "Reviewed fixture rule uses UTC calendar subtraction",
+    "Explicit ticket destination is actionable",
+    "Expired rule never claims a current opening date",
+    "Long Chinese Driver Mode wraps at 320",
+    "Long destination stays legible at 320",
+    "Driver controls remain in viewport while long content scrolls at 320",
+    "Long Chinese Driver Mode wraps at 390",
+    "Long destination stays legible at 390",
+    "Driver controls remain in viewport while long content scrolls at 390",
+    "Long Chinese Driver Mode wraps at 844",
+    "Long destination stays legible at 844",
+    "Driver controls remain in viewport while long content scrolls at 844",
+    "Paste outside finder is ignored",
+    "Text-field paste is not stolen",
+    "Image paste stays in the target finder",
+    "Back navigation clears released photo resources cleanly",
+    "Collapsing breakpoint restores focus before hiding a card"
+  ],
+  "preparation": {
+    "wallMs": 260,
+    "longTasks": [],
+    "workerSupported": true,
+    "ready": "Photo 1 路 215 KB ready"
+  }
+}

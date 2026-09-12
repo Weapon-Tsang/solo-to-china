@@ -1,0 +1,20 @@
+[
+  {
+    "archive": "solo-to-china-theme.zip",
+    "bytes": 14058441,
+    "sha256": "DAACD48CCAC483CCEC19790ACD9E853126A35F96094D862C7E6896326530AFB0",
+    "matching_files": 115
+  },
+  {
+    "archive": "solo-to-china-child-theme.zip",
+    "bytes": 27665,
+    "sha256": "E0160E0F02625F4CC57B2BBE0E43782A7C61D9AB24934E390A3660BD1E54DD9F",
+    "matching_files": 13
+  },
+  {
+    "archive": "solo-to-china-tools-plugin.zip",
+    "bytes": 39336,
+    "sha256": "430A813DC42E8E588893EEEDCFD62FD2F23ABA4A727F120F3917FF9E65F02E28",
+    "matching_files": 15
+  }
+]

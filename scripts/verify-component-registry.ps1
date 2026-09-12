@@ -77,7 +77,7 @@ if ($Registry) {
 	Assert-Registry ($PublishedContractRaw -ceq $ThemePublishedContractRaw) "Theme generated Component Contract must exactly match the repository artifact."
 	Assert-Registry ($PageSchemaRaw -ceq $ThemePageSchemaRaw) "Theme generated Page Schema must exactly match the repository artifact."
 	Assert-Registry ($PublishPackageSchemaRaw -ceq $ThemePublishPackageSchemaRaw) "Theme generated Publish Package Schema must exactly match the repository artifact."
-    Assert-Registry ($Registry.registry_version -eq "1.3.0") "Component Registry version must be 1.3.0."
+    Assert-Registry ($Registry.registry_version -eq "1.4.0") "Component Registry version must be 1.4.0."
     Assert-Registry ($Registry.principles.frontend -eq "Frontend defines what can be rendered.") "Frontend component capability principle is missing."
     Assert-Registry ($Registry.principles.cms -eq "CMS decides what should be rendered.") "CMS selection principle is missing."
 
@@ -92,7 +92,7 @@ if ($Registry) {
     $DuplicateIds = @($ActualIds | Group-Object | Where-Object { $_.Count -gt 1 })
 
     Assert-Registry ($DuplicateIds.Count -eq 0) "Component IDs must be unique stable API values."
-    Assert-Registry ($CmsComponents.Count -eq 26) "Registry must expose exactly the 26 capabilities that currently exist for CMS selection."
+    Assert-Registry ($CmsComponents.Count -eq 29) "Registry must expose exactly the 29 capabilities that currently exist for CMS selection."
     foreach ($ExpectedId in $ExpectedCmsIds) {
         Assert-Registry ($CmsComponents.id -contains $ExpectedId) "CMS component is missing from Registry: $ExpectedId"
     }
@@ -126,7 +126,7 @@ if ($Registry) {
     if ($PublishedContract) {
         Assert-Registry ($PublishedContract.contractVersion -eq $Registry.registry_version) "Published Contract version must match the canonical Registry."
         Assert-Registry ($PublishedContract.schemaVersion -eq "2020-12") "Published Contract must declare schemaVersion 2020-12."
-        Assert-Registry ($PublishedContract.components.Count -eq 26) "Published Contract must contain only the 26 CMS-usable capabilities."
+        Assert-Registry ($PublishedContract.components.Count -eq 29) "Published Contract must contain only the 29 CMS-usable capabilities."
         Assert-Registry (-not ($PublishedContract.components.cmsUsable -contains $false)) "Published Contract must not include internal components."
         Assert-Registry ((@($PublishedContract.components.id) -join ",") -eq (@($CmsComponents.id) -join ",")) "Published Contract component IDs/order must derive from the canonical Registry."
 
@@ -158,7 +158,7 @@ if ($Registry) {
         $BlockTypeIds = @($BlockSchemas | ForEach-Object { $_.properties.type.const })
         Assert-Registry ($PageSchema.contractVersion -eq $Registry.registry_version) "Page Schema Contract version must match the Registry."
         Assert-Registry ($PageSchema.schemaVersion -eq "2020-12") "Page Schema must declare schemaVersion 2020-12."
-        Assert-Registry ($BlockSchemas.Count -eq 23) "Page Schema must expose exactly the 23 ordered page-block components."
+        Assert-Registry ($BlockSchemas.Count -eq 26) "Page Schema must expose exactly the 26 ordered page-block components."
         Assert-Registry (($BlockTypeIds -join ",") -eq (@($PageBlockComponents.id) -join ",")) "Page Schema block types must derive from the Registry."
         Assert-Registry ($PageSchema.properties.blocks.description -match "final render order") "Page Schema must define blocks array order as final render order."
         Assert-Registry ($PageSchema.properties.metadata.properties.contentType.description -match "taxonomy, not layout") "Page Schema must define content type as taxonomy, not layout."
@@ -216,7 +216,7 @@ Assert-Registry ($Catalog.Contains("Proposed, Not Available")) "Component Catalo
 foreach ($Token in @("Frontend defines what CAN be rendered", "CMS decides what SHOULD be rendered", "contracts/component-registry.json", "contracts/page-schema.json", "docs/COMPONENT_LIBRARY.md", "docs/COMPONENT_CHANGELOG.md")) {
     Assert-Registry ($CmsContractDoc.Contains($Token)) "CMS/Frontend Contract documentation is missing: $Token"
 }
-Assert-Registry ($ComponentChangelog.Contains("## 1.3.0")) "Component Changelog must record Registry 1.3.0."
+Assert-Registry ($ComponentChangelog.Contains("## 1.4.0")) "Component Changelog must record Registry 1.4.0."
 Assert-Registry ($ComponentChangelog.Contains("Pure visual changes are excluded")) "Component Changelog must exclude visual-only changes."
 foreach ($Token in @("contracts/component-registry.json", "contracts/page-schema.json", "contracts/cms-publish-package.schema.json", "docs/COMPONENT_LIBRARY.md", "ConvertTo-CanonicalJson")) {
     Assert-Registry ($Generator.Contains($Token)) "Registry generator must publish: $Token"

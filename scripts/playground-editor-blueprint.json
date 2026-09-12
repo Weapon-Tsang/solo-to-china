@@ -32,6 +32,14 @@
     {
       "step": "runPHP",
       "code": "<?php require_once '/wordpress/wp-load.php'; try { require_once '/tmp/solo-to-china-scripts/playground-fixtures.php'; require_once '/tmp/solo-to-china-scripts/playground-cms-publish.php'; stc_playground_verify_cms_publish_path(); } catch (Throwable $error) { echo $error->getMessage() . PHP_EOL . $error->getTraceAsString() . PHP_EOL; exit(1); } ?>"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php require_once '/wordpress/wp-load.php'; try { require_once '/tmp/solo-to-china-scripts/playground-fixtures.php'; require_once '/tmp/solo-to-china-scripts/playground-upgrade.php'; stc_playground_upgrade(); } catch (Throwable $error) { echo $error->getMessage() . PHP_EOL . $error->getTraceAsString(); exit(1); } ?>"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php @mkdir('/wordpress/scripts'); copy('/tmp/solo-to-china-scripts/verify-commercial-components.php','/wordpress/scripts/verify-commercial-components.php'); require '/wordpress/scripts/verify-commercial-components.php'; ?>"
     }
   ]
 }

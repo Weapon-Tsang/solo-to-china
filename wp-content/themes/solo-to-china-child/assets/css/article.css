@@ -61,17 +61,11 @@
 	z-index: 1;
 }
 
-.stc-article-hero--attraction {
-	background-image: url("../../../solo-to-china/assets/images/card-forbidden-city-hd.webp");
-}
 
-.stc-article-hero--city {
-	background-image: url("../../../solo-to-china/assets/images/card-beijing-hd.webp");
-}
 
-.stc-article-hero--survival {
-	background-image: url("../../../solo-to-china/assets/images/card-hangzhou-hd.webp");
-}
+
+
+
 
 .stc-article-hero__media {
 	border-radius: inherit;

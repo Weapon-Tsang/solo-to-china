@@ -1,4 +1,8 @@
-# SoloToChina Component Contract Changelog
+# Component Changelog
+
+## 1.4.0 — 2026-09-12
+
+Adds place_info_card, annotated_image and related_guides. Extends Quick Facts, screenshot Steps, route details, image framing/enlargement and explicit compact/image-led heroes. Existing IDs and payloads remain supported. Generated Page Schema includes 26 ordered blocks and 29 total capabilities. CMS integration in the other repository is pending.
 
 This changelog records only changes that affect the capability contract consumed by `solo-to-china-CMS`. Pure visual changes are excluded unless they change CMS-visible semantics, supported input, or rendering behavior.
 

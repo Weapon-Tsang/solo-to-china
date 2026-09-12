@@ -9,23 +9,23 @@ Core product direction:
 - Guest-first access
 - Low-friction personalization later
 
-Current repository status:
+Original exported-site audit context (historical, not a live deployment check):
 
-- The live WordPress site is online at `https://solotochina.com`.
-- The current live site uses third-party WordPress theme/plugin packages.
+- The audited WordPress site was `https://solotochina.com`.
+- That exported site used third-party WordPress theme/plugin packages.
 - No custom SoloToChina theme or custom SoloToChina plugin was present in the exported `wp-content` audit package.
 - Future development should happen in project-owned theme/plugin directories rather than editing third-party theme/plugin source directly.
 
-Recommended future code ownership:
+Current code ownership:
 
 - `wp-content/themes/solo-to-china/` for the custom site theme.
 - `wp-content/plugins/solo-to-china-tools/` for project-owned Find This Place, Taxi Card, and Ticket Booking Window logic.
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.32.0` in `wp-content/themes/solo-to-china/`.
-- SoloToChina Child Theme `0.11.0` in `wp-content/themes/solo-to-china-child/`.
-- SoloToChina Tools plugin `0.25.1` in `wp-content/plugins/solo-to-china-tools/`.
+- Custom SoloToChina theme `0.33.0` in `wp-content/themes/solo-to-china/`.
+- SoloToChina Child Theme `0.12.0` in `wp-content/themes/solo-to-china-child/`.
+- SoloToChina Tools plugin `0.26.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
 - WordPress/aaPanel install notes in `docs/deployment/wordpress-install.md`.
 - Current progress handoff in `docs/handoff/current-progress.md`.
@@ -38,9 +38,18 @@ Current development branch deliverables:
 
 The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
 
-Registry `1.3.0` adds the backward-compatible `route_timeline` and `pros_cons` page blocks. WordPress publishes CMS-ready generated shapes at `GET /wp-json/stc/v1/component-registry/generated` and `GET /wp-json/stc/v1/page-schema`.
+Current release: Parent **0.33.0**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0** (29 capabilities / 26 page block types). Content Contract **2.1.0** and Publish Package **1.0.0** remain compatible. The existing Planner, Survival Kit, FAQ and Footer work was preserved.
 
-Parent Theme `0.32.0` expands the reusable content library with route timelines and pros/cons blocks while retaining the transparent white homepage/Footer artwork and compact inner-page wordmark. Child Theme `0.11.0` adds layout, action, badge, field, and panel primitives plus a more legible Component Gallery. Tools Plugin remains `0.25.1`. Content Contract `2.1.0` remains compatible through stable component IDs.
+This upgrade adds published entity links, responsive WebP images, a warm-white/blue visual system, server-rendered TOC, accessible Share/More, new optional editorial components, sequential image preparation with Worker support, cancellation guards, versioned destination data and partial-accuracy Taxi cards. Homepage tool entries no longer load tool execution code. Ticket estimates remain auxiliary and require a current reviewed rule.
+
+- [Requirement ledger](docs/upgrades/frontend-experience-v1.md)
+- [Design system](docs/design/frontend-experience-v1.md)
+- [Tools and privacy contracts](docs/architecture/tools-upgrade-v1.md)
+- [CMS integration notes](docs/CMS_UPGRADE_1_4.md)
+- [QA and performance evidence](docs/qa/frontend-upgrade-v1.md)
+- [Deployment and rollback](docs/deployment/frontend-upgrade-v1.md)
+
+Development and local verification are complete only to the extent recorded in the ledger. Production deployment, real gateway/retention verification, wider editorial coverage and the separate CMS integration require external access. No production deployment or paid recognition call was performed.
 
 Generate install artifacts with:
 
@@ -69,7 +78,7 @@ Content Component System verification:
 .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
 ```
 
-Use `.\scripts\start-preview.ps1 -Port 9403 -Editor` for the authenticated Gutenberg editor fixture. Preview modes are disposable and do not create production content.
+Use `.\scripts\start-preview.ps1 -Port 9404 -NoTools` to test plugin deactivation. Use `.\scripts\start-preview.ps1 -Port 9403 -Editor` for the authenticated Gutenberg editor fixture. Preview modes are disposable and do not create production content.
 
 The script creates:
 

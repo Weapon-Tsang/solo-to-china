@@ -1,215 +1,37 @@
-# SoloToChina New Chat Handoff
+# SoloToChina 后续任务交接
 
-Date: 2026-09-09
+当前工作区：`C:\Users\Mloong\Documents\ChatGPT\solo-to-china`。先看 [当前进度](current-progress.md)、[42 项台账](../upgrades/frontend-experience-v1.md)、[QA](../qa/frontend-upgrade-v1.md)；archive 中旧交接仅作历史。
 
-## Product Boundary
+用户已确认并要求实施完整 Frontend Upgrade v1 任务书，阶段 0–4 的本地代码、契约、测试、视觉复查和安装包已完成。开发基线是 main 的 f44ce1092ced93dfb47d9b3eae83d0d5e4b97086，提交范围包含保留的正确原有修改和本轮成果。验收后用户已授权提交并推送 origin/main；没有 reset 或生产部署。继续工作前先检查实时 git status/diff/log，不要按旧版本或审查快照回退。
 
-SoloToChina is a guest-first, content-first, mobile-first independent China travel guide for international visitors.
+版本：Parent 0.33.0 / Child 0.12.0 / Tools 0.26.0 / Registry 1.4.0 / Contract 2.1.0 / Publish Package 1.0.0。
 
-Fixed top-level navigation:
+稳定入口：
+- `pwsh -File scripts/verify-upgrade.ps1`：PowerShell 7，静态/契约/图像。可加 `-BaseUrl` 执行现有 runtime。
+- `scripts/start-preview.ps1`：默认 parent+child+plugin；`-ParentOnly` 或 `-NoTools`。预览中有真实长文章、8 城市、双工具及动态 Share fixture。
+- 浏览器 scripts/verify-experience-browser.js、verify-tool-interactions.js、verify-experience-edges.js、verify-final-states.js、verify-editor-browser.js、verify-release-boundaries.js。本轮本地端口 9411/9412/9413；新会话不要假设进程仍活着。
+- 本地测试 MU 路由 stc-test 仅存在于临时 Playground。重复上传套件要重置其测试限流桶，不能削弱产品限流。
+- PHP CLI 缺失，以 PHP 8.3.32 TOKEN_PARSE 全量解析 42 个 PHP 文件及真实 WordPress harness 替代。不要报告原生 php -l 已运行。
+- Authoring Registry 是 `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json`。修改它后运行生成器；不要分叉生成契约。
 
-- Home
-- Survival Kit
-- City Guides
-- Attraction Guides
-- Planner
-- Tools
-- FAQ
+核心边界：父主题负责语义和 CMS 契约、子主题视觉、插件工具。CMS 决定文章块选择/顺序；禁止自动插入整组工具或按分类重建文章。目的地目录来源和识别置信度独立，模型不能升级 UNKNOWN 为 VERIFIED。现有 9 条记录到达细节大多未核实，绝不能编造入口或下车点。没有 provider 配置时准确显示不可用。本轮测试全部使用本地 stub，无实际付费识别请求。
 
-Do not add top-level Hotels, Tickets, Flights, Trains, or Book.
+下一步只有明确外部待办或新用户需求：真实网关/隐私/预算配置、独立 CMS draft 联调、真实资料与票务规则维护、用户授权的 staging/production 安装和缓存策略、物理设备/线上性能验收。部署顺序和回滚见 [部署文档](../deployment/frontend-upgrade-v1.md)。未经授权不要发布生产环境。
 
-Project-owned code:
-
-- wp-content/themes/solo-to-china/
-- wp-content/themes/solo-to-china-child/
-- wp-content/plugins/solo-to-china-tools/
-
-Do not edit WordPress Core, third-party themes/plugins, uploads, language/cache/database files, or wp-config.php.
-
-## Current Versions
-
-- Parent Theme: 0.32.0
-- Child Theme: 0.11.0
-- SoloToChina Tools Plugin: 0.25.1
-- Content Contract: 2.1.0
-- Component Registry: 1.3.0
-
-## Architecture Rule
-
-Frontend responsibility: “Render what CMS requests.”
-
-CMS responsibility: “Decide what the page contains.”
-
-Content type is taxonomy, not layout.
-
-The Parent Theme now uses one generic single.php article shell. It renders post content in CMS/Gutenberg order and does not infer or inject FAQ, checklist, quick facts, warning, steps, ticket reminder, affiliate CTA, Share, or TOC from guide taxonomy.
-
-Guide type remains useful for category/archive routing, URL hierarchy, breadcrumbs, labels, related-content discovery, and restrained visual context.
-
-CMS-facing presentation metadata:
-
-- _stc_guide_type
-- _stc_content_contract_version
-- _stc_show_share
-- _stc_show_toc
-- _stc_hero_variant
-
-Share and TOC are off when their explicit metadata is absent. Hero variant supports default, attraction, city, and survival. Featured image remains the CMS-owned Hero media source.
-
-Canonical Contract:
-
-    wp-content/themes/solo-to-china/content-contract/content-contract.v2.json
-    GET /wp-json/stc/v1/content-contract
-
-Canonical Component Registry:
-
-    wp-content/themes/solo-to-china/content-contract/component-registry.v1.json
-    GET /wp-json/stc/v1/component-registry
-
-Published contracts for the independent CMS repository:
-
-    contracts/component-registry.json
-    contracts/page-schema.json
-    contracts/cms-publish-package.schema.json
-
-CMS-to-WordPress draft delivery:
-
-    GET /wp-json/stc/v1/cms-publish-package-schema
-    POST /wp-json/stc/v1/cms-articles
-    PUT /wp-json/stc/v1/cms-articles/{post_id}
-
-The write endpoints require WordPress Application Password authentication plus `edit_posts`/`edit_post`. They are draft-only, idempotent by CMS page/draft IDs, serialize `page.blocks[]` to editable Gutenberg/shortcode content in exact order, and refuse to overwrite published posts.
-
-CMS integration guidance and compatibility history:
-
-    docs/CMS_FRONTEND_CONTRACT.md
-    docs/COMPONENT_CHANGELOG.md
-
-Unknown Gutenberg blocks must degrade safely instead of breaking the page.
-
-## Share This Page
-
-Share This Page replaced the discontinued Save Guide system.
-
-Current behavior:
-
-- No account, localStorage, saved state, or cross-device implication
-- Uses page title, excerpt, and canonical URL
-- Uses a branded SoloToChina popover on desktop/fine-pointer devices and never invokes the desktop system share UI
-- Prioritizes `navigator.share()` on mobile/coarse-pointer devices
-- Falls back to a branded bottom sheet with WhatsApp, Facebook, Reddit, X, Instagram, system apps, and Copy link
-- Includes clipboard fallback and manual-selection error path
-- Uses ARIA live status, busy state, Escape, outside click, close button, and focus return
-- Appears as a refined translucent Hero utility
-- Uses a 340-380px-class desktop popover and compact mobile bottom sheet
-- Remains visually quieter than the H1 and primary planner/booking CTAs
-
-The Theme no longer contains Save guide, Saved, Unsave, Saved Guides, guide export/import/clear/delete, or guide localStorage behavior.
-
-## Component System
-
-Registry 1.3 publishes 26 stable CMS capabilities: 23 ordered page blocks and three explicit presentation controls.
-
-- Core: Paragraph, Heading, List, Image
-- Editorial: Quick Answer, Key Takeaways, Quick Facts, Tip, Warning, Steps, Checklist, Comparison Table, FAQ
-- Contextual/travel: Planner CTA, Ticket Booking Window compatibility adapter, Destination / Taxi Card, Affiliate CTA
-- Commercial: Affiliate Booking Card, Affiliate Search Card, Affiliate Banner, Affiliate Promotion Card
-- Presentation: Article Hero, Share This Page, Table of Contents
-
-All components are available independently of content type. The CMS decides their presence, order, data, and variants. Four additional renderer components are documented as internal and are not valid CMS types: Article Shell, Guide Breadcrumb, Guide Card, and Latest Guides List. The Parent Theme keeps small reusable component patterns; topic-wide Attraction, City, and Survival article patterns were removed.
-
-`contracts/component-registry.json`, `contracts/page-schema.json`, and `docs/COMPONENT_LIBRARY.md` are generated from the Theme Registry. The CMS should read the root contracts or deployed generated endpoints and must not scan frontend implementation code to discover capabilities. Playground exposes an ephemeral `/design-system/` Gallery with all 26 capability records, reusable foundations, the major Hero variants, and real examples for all 23 page-block components. The Theme does not auto-create this page in production.
-
-Commercial blocks are rendered only when the CMS explicitly supplies them after QA. Official HTTPS hostname validation, structured embeds, visible disclosure, promotion date windows, privacy-minimal event attributes, and a same-origin WordPress relay are implemented. Server forwarding requires `STC_COMMERCIAL_EVENTS_ENDPOINT` and `STC_COMMERCIAL_EVENTS_TOKEN` in the PHP process environment; neither value belongs in Git, Theme files, WordPress options, browser output, or logs.
-
-Responsive Media, server-rendered stable H2 IDs, editor parity, semantic HTML, long-text containment, keyboard focus, reduced motion, and safe affiliate rel/disclosure behavior remain in place.
-
-## Web Tools and Plugin Boundary
-
-SoloToChina Tools owns `/tools/find-this-place/`, `/tools/taxi-card/`, and the stateless Ticket Booking Window. Find This Place accepts one to four same-location photos (20 MB each, 60 MB total), performs private temporary upload validation, and calls only a server-configured provider; without one it fails safely. Taxi Card resolves Plugin-owned canonical place data, marks field provenance, omits unverified addresses/drop-off points, handles ambiguity, copies Chinese output, and provides full-screen Driver Mode. Provider details and deployment variables are documented in `docs/architecture/web-tools.md`.
-
-The Plugin also owns Ticket Booking Window:
-
-- Attraction data
-- Booking lead days and date calculations
-- Form validation
-- Booking-not-open, booking-window-reached, and visit-date-passed states
-- Rule-based timing language with no live-inventory claim
-
-The Theme only renders contextual presentation and delegates the form shortcode. The historical `ticket_reminder` Contract ID remains as a compatibility adapter. Do not move Plugin data or date logic into either Theme. Reminder state, localStorage, JSON, ICS, calendar, push, email, and SMS behavior are intentionally absent.
-
-## Local Fixtures And QA
-
-scripts/playground-fixtures.php creates disposable Survival, City, and Attraction articles.
-
-- All three explicitly enable Share.
-- Survival and Attraction explicitly enable TOC.
-- City explicitly disables TOC, proving taxonomy does not dictate layout.
-- City retains category-only historical classification coverage.
-- Attraction contains the Plugin-delegated Ticket Booking Window compatibility adapter and responsive Media fixture.
-
-Static verification:
-
-    .\scripts\verify-page-architecture.ps1
-    .\scripts\verify-component-registry.ps1
-    .\scripts\verify-content-contract.ps1
-    .\scripts\verify-project.ps1
-    .\.tools\php\php.exe scripts\verify-project.php
-
-Runtime preview:
-
-    .\scripts\start-preview.ps1 -Port 9400
-    .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9400
-
-Parent-only fallback:
-
-    .\scripts\start-preview.ps1 -Port 9402 -ParentOnly
-    .\scripts\verify-content-runtime.ps1 -BaseUrl http://127.0.0.1:9402 -ParentOnly
-
-Playground content is disposable and is not a static demo or production content.
-
-## Installation
-
-Generate packages with:
-
-    .\scripts\package-release.ps1
-
-Install in this order:
-
-1. Install SoloToChina Parent Theme and keep it installed.
-2. Install and activate SoloToChina Child Theme.
-3. Install and activate SoloToChina Tools Plugin.
-
-Artifacts:
-
-- dist/solo-to-china-theme.zip
-- dist/solo-to-china-child-theme.zip
-- dist/solo-to-china-tools-plugin.zip
-- dist/release-manifest.txt
-
-No production deployment is authorized by this handoff.
-
-## Next Safe Work
-
-- Connect the external CMS to Contract 2.0 in a non-production environment.
-- Verify CMS writes the explicit Share, TOC, Hero variant, guide type, and Contract version metadata.
-- Import three deliberately different block combinations and confirm exact order.
-- Run staging screenshots and accessibility checks with representative real content.
-
-Do not start accounts, cross-device sync, reminder delivery or management, custom tables, real inventory checks, payments, new tools, or new top-level navigation without a separate approved design.
-
-## Fixed Information Architecture
-
-Keep Home / Survival Kit / City Guides / Attraction Guides / Planner / Tools / FAQ as the complete top-level navigation. Content types classify and route content; they must not select fixed article layouts.
-
-## Development Style For Next Chat
-
-Work in small, independently verifiable commits. Update verification first, implement within the Parent/Child/Plugin ownership boundary, run static and real Playground checks, inspect 1440 / 768 / 390 / 375 layouts, package only after validation, and update the existing handoff instead of starting a parallel status document.
-
-## Do Not Start Without Explicit Approval
-
-Do not deploy to production, change WordPress Core or third-party packages, introduce accounts or cross-device sync, add reminder delivery or management, create database tables, add live inventory checks, add tools, or expand the top-level navigation without a separate approved scope.
+本地安装包和 SHA-256 见 dist/release-manifest.txt。生成包来自 dirty 工作区，不能以基础 HEAD 单独重建本轮成果。QA JSON 和未经编辑的截图在 docs/qa/evidence；更完整本机原始日志位于被忽略的 output/playwright。
 
 ## Suggested New Chat Opening Message
 
-Continue the existing SoloToChina WordPress repository from Contract 2.1. Read the current handoff and architecture document first, preserve the generic CMS-driven article shell and explicit Share/TOC metadata, keep Ticket Booking Window data and date logic in the Plugin, verify changes in real WordPress Playground at all required widths, and do not create a static replacement project.
+请读取当前进度、实施台账和 QA，检查实时工作区与已有修改。在已完成的 0.33.0/0.12.0/0.26.0 基础上继续处理我指定的外部联调或新需求；不要从旧审查快照重做本轮升级。
+
+## Fixed Information Architecture
+
+主导航仍为 Home、Survival Kit、City Guides、Attraction Guides、Planner、Tools、FAQ。Contact、About、Privacy Policy、Terms of Use 在既有辅助/页脚路径。Tools 包含 Find This Place、Taxi Card 与辅助 Ticket Booking Window；不要把票务提升成独立提醒或登录产品。
+
+## Do Not Start Without Explicit Approval
+
+用户本轮未授权生产部署。生产发布、真实付费服务启用、外部 CMS 发布按用户后续明确授权处理。本轮本地改造方向已经全部批准，不需要重新请求设计或代码实施许可。
+
+## Development Style For Next Chat
+
+先检查实际分支、dirty 和代码，保留正确实现。父主题/子主题/插件遵守既有边界；修改能力时同步单一 Registry 和生成器产物。运行与变更相关的真实检查，记录未测/外部依赖，不把文档、mock 或截图数量当成完整生产验收。

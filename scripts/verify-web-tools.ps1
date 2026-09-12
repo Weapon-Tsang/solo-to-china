@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+﻿$ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 $Failures = New-Object System.Collections.Generic.List[string]
 
@@ -22,10 +22,12 @@ foreach ($File in $Files) {
 
 $Plugin = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/solo-to-china-tools.php")
 $Places = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/includes/places.php")
+$Places += Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/data/destinations-v1.json")
 $Providers = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/includes/providers.php")
 $Rest = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/includes/rest-api.php")
 $Shortcodes = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/includes/shortcodes.php")
 $Javascript = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/assets/js/tools.js")
+$Javascript += Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/plugins/solo-to-china-tools/assets/js/place-finder.js")
 $Registry = Get-Content -Raw -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.v1.json")
 $AllToolSource = $Plugin + $Places + $Providers + $Rest + $Shortcodes + $Javascript
 
@@ -41,10 +43,10 @@ foreach ($Token in @("confidence", "match_level", "exact_viewpoint", "AI_INFERRE
 foreach ($Token in @("forbidden-city", "west-lake-hangzhou", "west-lake-huizhou", "上海虹桥站", "外滩", "_stc_entity_key", "related_city_guide", "related_attraction_guide")) {
     Require-Token $Places $Token "Canonical place/guide resolver is missing: $Token"
 }
-foreach ($Token in @("data-stc-place-finder", "data-stc-place-dropzone", "data-stc-place-preview", 'name="images[]"', "multiple", "Choose 1–4 photos", "20 MB each", "Photos are discarded after identification.", "data-stc-taxi-tool", "data-stc-driver-mode", "Copy destination", "Show full-screen card", '<a class="stc-tool-card"', "stc-tool-card__action")) {
+foreach ($Token in @("data-stc-place-finder", "data-stc-place-dropzone", "data-stc-place-preview", 'name="images[]"', "multiple", "Choose 1–4 photos", "20 MB each", "Provider retention is separate.", "data-stc-taxi-tool", "data-stc-driver-mode", "Copy destination", "Show full-screen card", '<a class="stc-tool-card"', "stc-tool-card__action")) {
     Require-Token $Shortcodes $Token "Tool interface is missing: $Token"
 }
-foreach ($Token in @("entity_key", "FormData", "images[]", "currentFiles", "maxImageCount", "maxUploadBytes", "clipboard", "dragover", "paste", "HIGH CONFIDENCE", "LIKELY MATCH", "Address not verified", "AI inferred", "Escape")) {
+foreach ($Token in @("entity_key", "FormData", "images[]", "snapshot", "items.length + selected.length > 4", "2500000", "clipboard", "dragover", "paste", "AbortController", "LIKELY MATCH", "Address not verified", "AI inferred", "showModal")) {
     Require-Token $Javascript $Token "Tool interaction is missing: $Token"
 }
 Require-Token $Registry '"id": "destination_card"' "Registry does not publish destination_card."

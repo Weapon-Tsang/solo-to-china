@@ -4,7 +4,9 @@ param(
 
     [switch]$ParentOnly,
 
-    [switch]$Editor
+    [switch]$Editor,
+
+    [switch]$NoTools
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,7 +17,9 @@ if ($ParentOnly -and $Editor) {
     throw "Choose either -ParentOnly or -Editor, not both."
 }
 
-$BlueprintName = if ($ParentOnly) {
+$BlueprintName = if ($NoTools) {
+    "playground-no-tools-blueprint.json"
+} elseif ($ParentOnly) {
     "playground-parent-blueprint.json"
 } elseif ($Editor) {
     "playground-editor-blueprint.json"

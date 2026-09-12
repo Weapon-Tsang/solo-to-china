@@ -51,24 +51,24 @@ Assert-Runtime ($ContractResponse.StatusCode -eq 200) "Content Contract endpoint
 Assert-Runtime ($ContractResponse.Content -eq $ContractAgain.Content) "Content Contract JSON changed between consecutive reads."
 Assert-Runtime ([string]$ContractResponse.Headers.ETag -eq [string]$ContractAgain.Headers.ETag) "Content Contract ETag is not stable."
 Assert-Runtime ($Contract.contract_version -eq "2.1.0") "Content Contract version is not 2.1.0."
-Assert-Runtime ($Contract.theme_version -eq "0.32.0") "Content Contract Theme version is not 0.32.0."
+Assert-Runtime ($Contract.theme_version -eq "0.33.0") "Content Contract Theme version is not 0.33.0."
 Assert-Runtime ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."
 Assert-Runtime ($Contract.principles.cms -eq "Decide what the page contains.") "CMS responsibility principle is missing."
 Assert-Runtime ($Contract.principles.content_type -eq "Content type is taxonomy, not layout.") "Content type boundary principle is missing."
 Assert-Runtime ($RegistryResponse.StatusCode -eq 200) "Component Registry endpoint did not return HTTP 200."
 Assert-Runtime ($RegistryResponse.Content -eq $RegistryAgain.Content) "Component Registry JSON changed between consecutive reads."
 Assert-Runtime ([string]$RegistryResponse.Headers.ETag -eq [string]$RegistryAgain.Headers.ETag) "Component Registry ETag is not stable."
-Assert-Runtime ($Registry.registry_version -eq "1.3.0") "Component Registry version is not 1.3.0."
+Assert-Runtime ($Registry.registry_version -eq "1.4.0") "Component Registry version is not 1.4.0."
 $CmsRegistryComponents = @($Registry.components | Where-Object { $_.cms_usable -eq $true })
-Assert-Runtime ($CmsRegistryComponents.Count -eq 26) "Component Registry does not expose exactly 26 current CMS capabilities."
-Assert-Runtime ($GeneratedRegistry.contractVersion -eq "1.3.0") "Generated Component Contract version is not 1.3.0."
+Assert-Runtime ($CmsRegistryComponents.Count -eq 29) "Component Registry does not expose exactly 26 current CMS capabilities."
+Assert-Runtime ($GeneratedRegistry.contractVersion -eq "1.4.0") "Generated Component Contract version is not 1.4.0."
 Assert-Runtime ($GeneratedRegistry.schemaVersion -eq "2020-12") "Generated Component Contract schemaVersion is wrong."
-Assert-Runtime ($GeneratedRegistry.components.Count -eq 26) "Generated Component Contract capability count is wrong."
+Assert-Runtime ($GeneratedRegistry.components.Count -eq 29) "Generated Component Contract capability count is wrong."
 Assert-Runtime ($GeneratedRegistryResponse.Content -eq $GeneratedRegistryAgain.Content) "Generated Component Contract JSON is not reproducible."
 Assert-Runtime ([string]$GeneratedRegistryResponse.Headers.ETag -eq [string]$GeneratedRegistryAgain.Headers.ETag) "Generated Component Contract ETag is not stable."
 Assert-Runtime (-not [string]::IsNullOrWhiteSpace([string]$GeneratedRegistryResponse.Headers."Last-Modified")) "Generated Component Contract Last-Modified is missing."
 Assert-Runtime ([string]$GeneratedRegistryResponse.Headers."Cache-Control" -match "public") "Generated Component Contract public Cache-Control is missing."
-Assert-Runtime ($PageSchema.contractVersion -eq "1.3.0") "Generated Page Schema version is not 1.3.0."
+Assert-Runtime ($PageSchema.contractVersion -eq "1.4.0") "Generated Page Schema version is not 1.4.0."
 Assert-Runtime ($PageSchema.schemaVersion -eq $GeneratedRegistry.schemaVersion) "Generated Contract schemaVersion values differ."
 Assert-Runtime ($PageSchemaResponse.Content -eq $PageSchemaAgain.Content) "Generated Page Schema JSON is not reproducible."
 Assert-Runtime ([string]$PageSchemaResponse.Headers.ETag -eq [string]$PageSchemaAgain.Headers.ETag) "Generated Page Schema ETag is not stable."
@@ -76,7 +76,7 @@ Assert-Runtime (-not [string]::IsNullOrWhiteSpace([string]$PageSchemaResponse.He
 Assert-Runtime ([string]$PageSchemaResponse.Headers."Cache-Control" -match "public") "Generated Page Schema public Cache-Control is missing."
 Assert-Runtime ($PublishSchemaResponse.StatusCode -eq 200) "Publish Package Schema endpoint did not return HTTP 200."
 Assert-Runtime ($PublishSchema.publishPackageVersion -eq "1.0.0") "Publish Package Schema version is wrong."
-Assert-Runtime ($PublishSchema.contractVersion -eq "1.3.0") "Publish Package Component Contract version is wrong."
+Assert-Runtime ($PublishSchema.contractVersion -eq "1.4.0") "Publish Package Component Contract version is wrong."
 Assert-Runtime ($PublishSchemaResponse.Content -eq $PublishSchemaAgain.Content) "Publish Package Schema JSON is not reproducible."
 Assert-Runtime ([string]$PublishSchemaResponse.Headers.ETag -eq [string]$PublishSchemaAgain.Headers.ETag) "Publish Package Schema ETag is not stable."
 $ExpectedChecksum = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/content-contract/component-registry.generated.json")).Hash.ToLowerInvariant()
@@ -134,6 +134,7 @@ $SurvivalHtml = Get-FixtureHtml $SurvivalSlug
 $CityHtml = Get-FixtureHtml $CitySlug
 $AttractionHtml = Get-FixtureHtml $AttractionSlug
 $GalleryHtml = Get-FixtureHtml "design-system"
+$PlannerHtml = Get-FixtureHtml "planner"
 $SurvivalPost = Get-FixturePost $SurvivalSlug
 $CityPost = Get-FixturePost $CitySlug
 $AttractionPost = Get-FixturePost $AttractionSlug
@@ -151,9 +152,21 @@ foreach ($LegalPageSlug in @("privacy-policy", "terms-of-use", "affiliate-disclo
 }
 Assert-Runtime ($StaticPageHtml["contact"].Contains("mailto:alex@solotochina.com")) "Contact page email is missing."
 Assert-Runtime ($StaticPageHtml["contact"].Contains("https://wa.me/19098361987")) "Contact page WhatsApp link is missing."
-foreach ($FooterSlug in $StaticPageSlugs) {
+foreach ($FooterSlug in @("about", "contact", "privacy-policy", "terms-of-use")) {
     Assert-Runtime ($SurvivalHtml.Contains("/$FooterSlug/")) "Footer is missing static-page link: $FooterSlug"
 }
+foreach ($RemovedFooterSlug in @("affiliate-disclosure", "disclaimer")) {
+    Assert-Runtime (-not $SurvivalHtml.Contains("/$RemovedFooterSlug/")) "Footer still exposes removed low-value link: $RemovedFooterSlug"
+}
+Assert-Runtime (-not $SurvivalHtml.Contains("Guest-first. Practical. Independent.")) "Footer still exposes the removed principles slogan."
+
+Assert-Runtime (([regex]::Matches($PlannerHtml, "<h1\b")).Count -eq 1) "Planner page must render exactly one H1."
+foreach ($PlannerToken in @("Build your China trip with AI.", "Generate my AI itinerary", "data-stc-planner-cta", "stc-planner-hero__preview", "stc-planner__steps", "https://www.trip.com/t/bCPFQ85ZHW2")) {
+    Assert-Runtime ($PlannerHtml.Contains($PlannerToken)) "Planner page is missing the high-impact AI planning experience: $PlannerToken"
+}
+Assert-Runtime ($PlannerHtml.Contains('rel="sponsored nofollow noopener noreferrer"')) "Planner affiliate CTA does not prevent SEO weight transfer."
+Assert-Runtime (-not $PlannerHtml.Contains("Opens in a new tab. We may earn a commission at no extra cost to you.")) "Planner page still renders the removed affiliate sentence."
+Assert-Runtime (-not $PlannerHtml.Contains("data-stc-share-trigger")) "Planner page still renders a competing Share action."
 
 foreach ($Fixture in @(
     @{ Slug = $SurvivalSlug; Html = $SurvivalHtml },
@@ -184,7 +197,7 @@ Assert-Runtime (([regex]::Matches($AttractionHtml, "data-stc-ticket-tool")).Coun
 Assert-Runtime ([regex]::IsMatch($AttractionHtml, '<option(?=[^>]*value="forbidden-city")(?=[^>]*selected)[^>]*>', "IgnoreCase")) "Ticket Booking Window did not preselect the Plugin-owned Forbidden City option."
 Assert-Runtime ($AttractionHtml.Contains("Ticket Booking Window")) "Ticket Booking Window heading is missing."
 Assert-Runtime ($AttractionHtml.Contains("Check date")) "Ticket Booking Window submit action is missing."
-Assert-Runtime ($AttractionHtml.Contains('rel="sponsored noopener"')) "Ticket Booking Window affiliate link is missing sponsored noopener."
+Assert-Runtime ($AttractionHtml.Contains('rel="sponsored nofollow noopener"')) "Ticket Booking Window affiliate link is missing sponsored nofollow noopener."
 foreach ($RemovedReminderToken in @("data-stc-save-reminder", "data-stc-reminder-list", "Saved reminders", "Add to calendar")) {
     Assert-Runtime (-not $AttractionHtml.Contains($RemovedReminderToken)) "Rendered Ticket Booking Window still contains reminder behavior: $RemovedReminderToken"
 }
@@ -212,14 +225,14 @@ Assert-Runtime ($CityHtml.Contains("stc-single--city-guide")) "Historical catego
 Assert-Runtime ($SurvivalHtml.Contains("data-stc-share-trigger")) "Survival fixture did not render explicitly enabled ShareThisPage."
 Assert-Runtime ($CityHtml.Contains("data-stc-share-trigger")) "City fixture did not render explicitly enabled ShareThisPage."
 Assert-Runtime ($AttractionHtml.Contains("data-stc-share-trigger")) "Attraction fixture did not render explicitly enabled ShareThisPage."
-foreach ($ShareChannel in @("WhatsApp", "Facebook", "Reddit", "Instagram", ">X<", "Copy link", "data-stc-share-more")) {
+foreach ($ShareChannel in @("WhatsApp", "Facebook", "Reddit", ">X<", "Copy link", "data-stc-share-more")) {
     Assert-Runtime ($AttractionHtml.Contains($ShareChannel)) "ShareThisPage is missing social channel: $ShareChannel"
 }
 Assert-Runtime (-not $AttractionHtml.Contains("data-stc-share-email")) "ShareThisPage still renders the removed Email channel."
 Assert-Runtime (-not $CityHtml.Contains("data-stc-guide-toc")) "City fixture rendered TOC even though CMS presentation metadata disabled it."
 Assert-Runtime ($AttractionHtml.Contains("data-stc-guide-toc")) "Attraction fixture did not render its explicitly enabled TOC."
 Assert-Runtime ($GalleryHtml.Contains("stc-component-gallery")) "Internal Component Gallery did not render its dedicated template."
-Assert-Runtime (([regex]::Matches($GalleryHtml, 'data-component-id="')).Count -eq 26) "Component Gallery Registry cards do not match the 26 CMS capabilities."
+Assert-Runtime (([regex]::Matches($GalleryHtml, 'data-component-id="')).Count -eq 29) "Component Gallery Registry cards do not match the 29 CMS capabilities."
 foreach ($GalleryComponentId in @("paragraph", "heading", "list", "image", "quick_answer", "key_takeaways", "quick_facts", "tip", "warning", "steps", "route_timeline", "checklist", "comparison_table", "pros_cons", "faq", "planner_cta", "ticket_reminder", "destination_card", "affiliate_cta", "affiliate_booking_card", "affiliate_search_card", "affiliate_banner", "affiliate_promotion_card", "article_hero", "share_this_page", "table_of_contents")) {
     Assert-Runtime ($GalleryHtml.Contains('data-component-id="' + $GalleryComponentId + '"')) "Component Gallery is missing Registry card: $GalleryComponentId"
 }

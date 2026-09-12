@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SoloToChina Tools
  * Description: Privacy-first place finding, taxi cards, and ticket planning for SoloToChina.
- * Version: 0.25.1
+ * Version: 0.26.0
  * Author: SoloToChina
  * Text Domain: solo-to-china-tools
  * Requires at least: 6.5
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_TOOLS_VERSION', '0.25.1' );
+define( 'STC_TOOLS_VERSION', '0.26.0' );
 define( 'STC_TOOLS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'STC_TOOLS_URL', plugin_dir_url( __FILE__ ) );
 define( 'STC_TOOLS_MAX_IMAGE_BYTES', 20 * 1024 * 1024 );
@@ -23,31 +23,22 @@ define( 'STC_TOOLS_MAX_IMAGE_COUNT', 4 );
 define( 'STC_TOOLS_MAX_UPLOAD_BYTES', 60 * 1024 * 1024 );
 
 require_once STC_TOOLS_PATH . 'includes/attractions.php';
+require_once STC_TOOLS_PATH . 'includes/catalog.php';
 require_once STC_TOOLS_PATH . 'includes/places.php';
 require_once STC_TOOLS_PATH . 'includes/providers.php';
 require_once STC_TOOLS_PATH . 'includes/shortcodes.php';
+require_once STC_TOOLS_PATH . 'includes/cost-controls.php';
 require_once STC_TOOLS_PATH . 'includes/rest-api.php';
 
-function stc_tools_should_enqueue_assets() {
-	if ( is_front_page() || is_page( array( 'tools', 'find-this-place', 'taxi-card' ) ) ) {
-		return true;
-	}
-
-	if ( ! is_singular() ) {
-		return false;
-	}
-
-	$post = get_post();
-
-	return $post && (
-		has_shortcode( $post->post_content, 'solo_to_china_ticket_tool' ) ||
-		has_shortcode( $post->post_content, 'solo_to_china_place_finder' ) ||
-		has_shortcode( $post->post_content, 'solo_to_china_taxi_card' ) ||
-		has_shortcode( $post->post_content, 'solo_to_china_tools_directory' ) ||
-		has_shortcode( $post->post_content, 'stc_destination_card' ) ||
-		has_shortcode( $post->post_content, 'stc_ticket_reminder' )
-	);
+function stc_tools_page_capabilities() {
+    $content = function_exists( 'stc_page_asset_content' ) ? stc_page_asset_content() : ( is_singular() ? stc_tools_scan_content((string) get_post_field( 'post_content', get_queried_object_id() )) : '' );
+    $caps = array( 'finder' => is_page( 'find-this-place' ), 'taxi' => is_page( 'taxi-card' ), 'ticket' => is_page( 'tools' ), 'directory' => is_page( 'tools' ) );
+    foreach ( array( 'finder' => array( 'solo_to_china_place_finder' ), 'taxi' => array( 'solo_to_china_taxi_card', 'stc_destination_card' ), 'ticket' => array( 'solo_to_china_ticket_tool', 'stc_ticket_reminder', 'solo_to_china_tools_directory' ), 'directory' => array( 'solo_to_china_tools_directory' ) ) as $cap => $codes ) {
+        foreach ( $codes as $code ) { $caps[$cap] = $caps[$cap] || has_shortcode( $content, $code ); }
+    }
+    return $caps;
 }
+function stc_tools_should_enqueue_assets() { return in_array( true, stc_tools_page_capabilities(), true ); }
 
 function stc_tools_enqueue_assets() {
 	if ( ! stc_tools_should_enqueue_assets() ) {
@@ -68,8 +59,11 @@ function stc_tools_enqueue_assets() {
 		STC_TOOLS_VERSION,
 		true
 	);
+	$caps = stc_tools_page_capabilities();
+	if ( $caps['finder'] ) { wp_enqueue_script( 'stc-place-finder', STC_TOOLS_URL . 'assets/js/place-finder.js', array( 'stc-tools' ), STC_TOOLS_VERSION, true ); }
 	wp_localize_script( 'stc-tools', 'stcToolsConfig', array(
 		'placeEndpoint' => esc_url_raw( rest_url( 'stc/v1/place-finder' ) ),
+		'imageWorkerUrl' => esc_url_raw( STC_TOOLS_URL . 'assets/js/image-worker.js?ver=' . STC_TOOLS_VERSION ),
 		'taxiEndpoint'  => esc_url_raw( rest_url( 'stc/v1/taxi-card' ) ),
 		'taxiUrl'       => esc_url_raw( home_url( '/tools/taxi-card/' ) ),
 		'maxImageBytes' => STC_TOOLS_MAX_IMAGE_BYTES,
@@ -119,3 +113,15 @@ function stc_tools_maybe_ensure_pages() {
 	}
 }
 add_action( 'admin_init', 'stc_tools_maybe_ensure_pages' );
+
+/** Standalone plugin capability discovery, including nested synced Gutenberg blocks. */
+function stc_tools_scan_content($content,&$seen=array()) {
+ $result=$content;
+ foreach(parse_blocks($content) as $block) {
+  if ('core/block'===($block['blockName'] ?? '') && !empty($block['attrs']['ref']) && empty($seen[$block['attrs']['ref']])) {
+   $seen[$block['attrs']['ref']]=true;$post=get_post($block['attrs']['ref']);if($post){$result.=stc_tools_scan_content($post->post_content,$seen);}
+  }
+  if (!empty($block['innerBlocks'])) {$result.=stc_tools_scan_content(serialize_blocks($block['innerBlocks']),$seen);}
+ }
+ return $result;
+}

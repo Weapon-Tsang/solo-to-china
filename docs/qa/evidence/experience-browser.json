@@ -1,0 +1,411 @@
+{
+  "environment": "Chromium desktop browser; simulated viewports; localhost; no CPU/network throttle",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": [
+        "http://127.0.0.1:9411/beijing-first-time-city-guide/",
+        "http://127.0.0.1:9411/upgrade-shanghai/",
+        "http://127.0.0.1:9411/upgrade-guangzhou/",
+        "http://127.0.0.1:9411/upgrade-chengdu/",
+        "http://127.0.0.1:9411/upgrade-chongqing/",
+        "http://127.0.0.1:9411/upgrade-xian/",
+        "http://127.0.0.1:9411/upgrade-hangzhou/",
+        "http://127.0.0.1:9411/upgrade-zhangjiajie/",
+        "http://127.0.0.1:9411/forbidden-city-first-time-visitor-guide/"
+      ]
+    },
+    {
+      "path": "/survival-kit/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/city-guides/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": [
+        "http://127.0.0.1:9411/beijing-first-time-city-guide/",
+        "http://127.0.0.1:9411/upgrade-shanghai/",
+        "http://127.0.0.1:9411/upgrade-guangzhou/",
+        "http://127.0.0.1:9411/upgrade-chengdu/",
+        "http://127.0.0.1:9411/upgrade-chongqing/",
+        "http://127.0.0.1:9411/upgrade-xian/",
+        "http://127.0.0.1:9411/upgrade-hangzhou/",
+        "http://127.0.0.1:9411/upgrade-zhangjiajie/"
+      ]
+    },
+    {
+      "path": "/attraction-guides/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": [
+        "http://127.0.0.1:9411/forbidden-city-first-time-visitor-guide/"
+      ]
+    },
+    {
+      "path": "/upgrade-long-guide/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/planner/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/tools/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/tools/find-this-place/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/tools/taxi-card/?entity_key=jingshan-park",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/faq/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/contact/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/about/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/privacy-policy/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/terms-of-use/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/not-a-real-page/",
+      "status": 404,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    },
+    {
+      "path": "/design-system/",
+      "status": 200,
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "links": []
+    }
+  ],
+  "errors": [],
+  "performance": [
+    {
+      "cls": 0,
+      "lcp": 768,
+      "longTasks": [],
+      "hero": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-640.webp",
+      "resources": [
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/css/main.css?ver=0.33.0",
+          "transfer": 52282,
+          "decoded": 51982
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/style.css?ver=0.12.0",
+          "transfer": 805,
+          "decoded": 505
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/design-system.css?ver=0.12.0",
+          "transfer": 11125,
+          "decoded": 10825
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/site.css?ver=0.12.0",
+          "transfer": 40626,
+          "decoded": 40326
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/home.css?ver=0.12.0",
+          "transfer": 4058,
+          "decoded": 3758
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/solotochina-logo-white.png",
+          "transfer": 58183,
+          "decoded": 57883
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-640.webp",
+          "transfer": 32560,
+          "decoded": 32260
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/js/main.js?ver=0.33.0",
+          "transfer": 12706,
+          "decoded": 12406
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/js/site.js?ver=0.12.0",
+          "transfer": 377,
+          "decoded": 77
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-1600.webp",
+          "transfer": 0,
+          "decoded": 0
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-includes/js/wp-emoji-release.min.js?ver=7.0.4",
+          "transfer": 23052,
+          "decoded": 22752
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-shanghai-hd-320.webp",
+          "transfer": 18172,
+          "decoded": 17872
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-beijing-hd-320.webp",
+          "transfer": 29124,
+          "decoded": 28824
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-chengdu-hd-320.webp",
+          "transfer": 37188,
+          "decoded": 36888
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-guangzhou-hd-320.webp",
+          "transfer": 16512,
+          "decoded": 16212
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-forbidden-city-hd-320.webp",
+          "transfer": 25010,
+          "decoded": 24710
+        }
+      ]
+    },
+    {
+      "cls": 0,
+      "lcp": 796,
+      "longTasks": [],
+      "hero": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-640.webp",
+      "resources": [
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/css/main.css?ver=0.33.0",
+          "transfer": 52282,
+          "decoded": 51982
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/style.css?ver=0.12.0",
+          "transfer": 805,
+          "decoded": 505
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/design-system.css?ver=0.12.0",
+          "transfer": 11125,
+          "decoded": 10825
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/site.css?ver=0.12.0",
+          "transfer": 40626,
+          "decoded": 40326
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/home.css?ver=0.12.0",
+          "transfer": 4058,
+          "decoded": 3758
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/solotochina-logo-white.png",
+          "transfer": 58183,
+          "decoded": 57883
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-640.webp",
+          "transfer": 32560,
+          "decoded": 32260
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/js/site.js?ver=0.12.0",
+          "transfer": 377,
+          "decoded": 77
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/js/main.js?ver=0.33.0",
+          "transfer": 12706,
+          "decoded": 12406
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-beijing-hd-320.webp",
+          "transfer": 29124,
+          "decoded": 28824
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-guangzhou-hd-320.webp",
+          "transfer": 16512,
+          "decoded": 16212
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-forbidden-city-hd-320.webp",
+          "transfer": 25010,
+          "decoded": 24710
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-chengdu-hd-320.webp",
+          "transfer": 37188,
+          "decoded": 36888
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-shanghai-hd-320.webp",
+          "transfer": 18172,
+          "decoded": 17872
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-includes/js/wp-emoji-release.min.js?ver=7.0.4",
+          "transfer": 23052,
+          "decoded": 22752
+        }
+      ]
+    },
+    {
+      "cls": 0,
+      "lcp": 772,
+      "longTasks": [],
+      "hero": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-640.webp",
+      "resources": [
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/css/main.css?ver=0.33.0",
+          "transfer": 52282,
+          "decoded": 51982
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/style.css?ver=0.12.0",
+          "transfer": 805,
+          "decoded": 505
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/site.css?ver=0.12.0",
+          "transfer": 40626,
+          "decoded": 40326
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/design-system.css?ver=0.12.0",
+          "transfer": 11125,
+          "decoded": 10825
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/css/home.css?ver=0.12.0",
+          "transfer": 4058,
+          "decoded": 3758
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/solotochina-logo-white.png",
+          "transfer": 58183,
+          "decoded": 57883
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/hero-home-640.webp",
+          "transfer": 32560,
+          "decoded": 32260
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/js/main.js?ver=0.33.0",
+          "transfer": 12706,
+          "decoded": 12406
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china-child/assets/js/site.js?ver=0.12.0",
+          "transfer": 377,
+          "decoded": 77
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-includes/js/wp-emoji-release.min.js?ver=7.0.4",
+          "transfer": 23052,
+          "decoded": 22752
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-beijing-hd-320.webp",
+          "transfer": 29124,
+          "decoded": 28824
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-shanghai-hd-320.webp",
+          "transfer": 18172,
+          "decoded": 17872
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-chengdu-hd-320.webp",
+          "transfer": 37188,
+          "decoded": 36888
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-guangzhou-hd-320.webp",
+          "transfer": 16512,
+          "decoded": 16212
+        },
+        {
+          "url": "http://127.0.0.1:9411/wp-content/themes/solo-to-china/assets/images/card-forbidden-city-hd-320.webp",
+          "transfer": 25010,
+          "decoded": 24710
+        }
+      ]
+    }
+  ]
+}

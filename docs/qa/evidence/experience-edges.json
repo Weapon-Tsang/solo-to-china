@@ -1,0 +1,183 @@
+{
+  "passed": [
+    "Native share cancellation does not open a second surface",
+    "Synchronous native share failure falls back",
+    "Absent Clipboard API provides manual copy",
+    "Enlargement preserves image annotations and text",
+    "Deadline abort allows retry; timer accelerated only by test fixture",
+    "REST provider fixture maps ok to 200",
+    "Private responses and upstream secrets stay protected: ok",
+    "Provider cannot replace canonical name or verify an inferred viewpoint",
+    "REST provider fixture maps 413 to 413",
+    "Private responses and upstream secrets stay protected: 413",
+    "REST provider fixture maps 415 to 415",
+    "Private responses and upstream secrets stay protected: 415",
+    "REST provider fixture maps 429 to 429",
+    "Private responses and upstream secrets stay protected: 429",
+    "REST provider fixture maps 503 to 503",
+    "Private responses and upstream secrets stay protected: 503",
+    "REST provider fixture maps 504 to 504",
+    "Private responses and upstream secrets stay protected: 504",
+    "REST provider fixture maps throw to 503",
+    "Private responses and upstream secrets stay protected: throw",
+    "REST provider fixture maps malformed to 503",
+    "Private responses and upstream secrets stay protected: malformed",
+    "REST provider fixture maps missing to 503",
+    "Private responses and upstream secrets stay protected: missing",
+    "REST provider fixture maps schema to 503",
+    "Private responses and upstream secrets stay protected: schema",
+    "All owned PHP parsed and upgrade integration assertions passed",
+    "WordPress re-encodes uploaded pixels before forwarding",
+    "Runtime fallback 9412 /",
+    "Runtime fallback 9412 /upgrade-long-guide/",
+    "Runtime fallback 9412 /tools/",
+    "Runtime fallback 9412 /tools/find-this-place/",
+    "Runtime fallback 9412 /tools/taxi-card/",
+    "Runtime fallback 9412 /design-system/",
+    "Runtime fallback 9413 /",
+    "Plugin unavailable shows safe fallback /",
+    "Runtime fallback 9413 /upgrade-long-guide/",
+    "Plugin unavailable shows safe fallback /upgrade-long-guide/",
+    "Runtime fallback 9413 /tools/",
+    "Plugin unavailable shows safe fallback /tools/",
+    "Runtime fallback 9413 /tools/find-this-place/",
+    "Plugin unavailable shows safe fallback /tools/find-this-place/",
+    "Runtime fallback 9413 /tools/taxi-card/",
+    "Plugin unavailable shows safe fallback /tools/taxi-card/",
+    "Runtime fallback 9413 /design-system/",
+    "Plugin unavailable shows safe fallback /design-system/"
+  ],
+  "api": [
+    {
+      "mode": "ok",
+      "status": 200,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "413",
+      "status": 413,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "415",
+      "status": 415,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "429",
+      "status": 429,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "503",
+      "status": 503,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "504",
+      "status": 504,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "throw",
+      "status": 503,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "malformed",
+      "status": 503,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "missing",
+      "status": 503,
+      "cache": "private, no-store, max-age=0"
+    },
+    {
+      "mode": "schema",
+      "status": 503,
+      "cache": "private, no-store, max-age=0"
+    }
+  ],
+  "fallbacks": [
+    {
+      "port": 9412,
+      "route": "/",
+      "status": 200
+    },
+    {
+      "port": 9412,
+      "route": "/upgrade-long-guide/",
+      "status": 200
+    },
+    {
+      "port": 9412,
+      "route": "/tools/",
+      "status": 200
+    },
+    {
+      "port": 9412,
+      "route": "/tools/find-this-place/",
+      "status": 200
+    },
+    {
+      "port": 9412,
+      "route": "/tools/taxi-card/",
+      "status": 200
+    },
+    {
+      "port": 9412,
+      "route": "/design-system/",
+      "status": 200
+    },
+    {
+      "port": 9413,
+      "route": "/",
+      "status": 200
+    },
+    {
+      "port": 9413,
+      "route": "/upgrade-long-guide/",
+      "status": 200
+    },
+    {
+      "port": 9413,
+      "route": "/tools/",
+      "status": 200
+    },
+    {
+      "port": 9413,
+      "route": "/tools/find-this-place/",
+      "status": 200
+    },
+    {
+      "port": 9413,
+      "route": "/tools/taxi-card/",
+      "status": 200
+    },
+    {
+      "port": 9413,
+      "route": "/design-system/",
+      "status": 200
+    }
+  ],
+  "diagnostics": {
+    "php_syntax": {
+      "php": "8.3.32",
+      "files": 41,
+      "passed": true
+    },
+    "image": {
+      "mime": "image/jpeg",
+      "width": 640,
+      "height": 360,
+      "bytes": 41379,
+      "metadata_found": false
+    },
+    "upgrade": {
+      "passed": true,
+      "registry": "1.4.0",
+      "catalog": "1.0.0"
+    }
+  }
+}

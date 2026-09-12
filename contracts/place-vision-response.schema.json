@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "stc-place-v2 upstream response",
+  "type": "object",
+  "required": [
+    "status",
+    "confidence",
+    "match_level",
+    "primary_candidate",
+    "alternative_candidates"
+  ],
+  "properties": {
+    "schema": {
+      "const": "stc-place-v2"
+    },
+    "status": {
+      "enum": [
+        "matched",
+        "identified",
+        "unknown",
+        "ambiguous",
+        "possible"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "match_level": {
+      "enum": [
+        "exact_viewpoint",
+        "attraction",
+        "neighborhood",
+        "city",
+        "unknown"
+      ]
+    },
+    "primary_candidate": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "candidate_entity_key": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "canonical_name_en": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "canonical_name_zh": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "city_en": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "city_zh": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "province": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "recognition_reason": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "viewpoint_name_en": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "viewpoint_name_zh": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "viewpoint_description": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "match_level": {
+              "type": "string",
+              "maxLength": 1500
+            },
+            "visible_clues": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "alternative_candidates": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "properties": {
+          "candidate_entity_key": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "canonical_name_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "canonical_name_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "city_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "city_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "province": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "recognition_reason": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "viewpoint_name_en": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "viewpoint_name_zh": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "viewpoint_description": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "match_level": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "visible_clues": {
+            "type": "array",
+            "maxItems": 8,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

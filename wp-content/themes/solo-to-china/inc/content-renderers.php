@@ -653,3 +653,10 @@ function stc_register_content_component_shortcodes() {
 	add_shortcode( 'stc_affiliate_promotion_card', 'stc_render_affiliate_promotion_card_component' );
 }
 add_action( 'init', 'stc_register_content_component_shortcodes' );
+
+/** Render a useful fallback for stored tool shortcodes if the plugin is inactive. */
+add_action('init',function(){
+ foreach(array('solo_to_china_place_finder'=>'Photo identification','solo_to_china_taxi_card'=>'Taxi Card','solo_to_china_ticket_tool'=>'Ticket timing','solo_to_china_tools_directory'=>'Interactive tools') as $code=>$label) {
+  if(!shortcode_exists($code)) {add_shortcode($code,function() use($label){return '<p class="stc-dynamic-component__fallback">'.esc_html($label.' is temporarily unavailable. ').'<a href="'.esc_url(home_url('/survival-kit/')).'">Browse practical travel guides</a>.</p>';});}
+ }
+},99);

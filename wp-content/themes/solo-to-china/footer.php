@@ -38,8 +38,6 @@
 		<nav class="stc-footer__column" aria-label="<?php esc_attr_e( 'About', 'solo-to-china' ); ?>">
 			<h2>About</h2>
 			<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About SoloToChina</a>
-			<a href="<?php echo esc_url( home_url( '/affiliate-disclosure/' ) ); ?>">Affiliate Disclosure</a>
-			<a href="<?php echo esc_url( home_url( '/disclaimer/' ) ); ?>">Disclaimer</a>
 		</nav>
 	</div>
 	<div class="stc-footer__bottom">
@@ -47,9 +45,7 @@
 		<nav class="stc-footer__legal" aria-label="<?php esc_attr_e( 'Legal', 'solo-to-china' ); ?>">
 			<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a>
 			<a href="<?php echo esc_url( home_url( '/terms-of-use/' ) ); ?>">Terms of Use</a>
-			<a href="<?php echo esc_url( home_url( '/affiliate-disclosure/' ) ); ?>">Affiliate Disclosure</a>
 		</nav>
-		<p class="stc-footer__principles">Guest-first. Practical. Independent.</p>
 	</div>
 </footer>
 <?php wp_footer(); ?>

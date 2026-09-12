@@ -3,25 +3,25 @@
  *
  * Breakpoint contract:
  * - compact mobile: 0-599px (including 375, 390, and 430px QA widths)
- * - tablet: 600-839px (including 768px QA width)
- * - desktop: 840px+ (including 1280 and 1440px QA widths)
+ * - tablet: 600-840px (including 768px QA width)
+ * - desktop: 841px+ (including 1280 and 1440px QA widths)
  */
 
 :root {
 	/* Colors */
-	--stc-color-ink: #13211b;
-	--stc-color-ink-soft: #33443c;
-	--stc-color-muted: #627068;
-	--stc-color-canvas: #f6f7f3;
+	--stc-color-ink: #202832;
+	--stc-color-ink-soft: #374453;
+	--stc-color-muted: #586577;
+	--stc-color-canvas: #fafaf7;
 	--stc-color-surface: #ffffff;
-	--stc-color-surface-muted: #eef1eb;
-	--stc-color-line: #dfe5df;
-	--stc-color-brand: #b63f2d;
-	--stc-color-brand-hover: #963222;
-	--stc-color-jade: #155f4a;
-	--stc-color-jade-hover: #0f4c3b;
-	--stc-color-gold-muted: #8b6a32;
-	--stc-color-focus: #2b78c5;
+	--stc-color-surface-muted: #f1f4f9;
+	--stc-color-line: #dce2ea;
+	--stc-color-brand: #2f66e8;
+	--stc-color-brand-hover: #2053c5;
+	--stc-color-jade: #2f66e8;
+	--stc-color-jade-hover: #2053c5;
+	--stc-color-gold-muted: #586577;
+	--stc-color-focus: #2053c5;
 	--stc-color-on-dark: #f9fbf8;
 
 	/* Typography */
@@ -79,7 +79,7 @@
 	/* Motion */
 	--stc-motion-duration-fast: 140ms;
 	--stc-motion-duration-base: 220ms;
-	--stc-motion-duration-slow: 420ms;
+	--stc-motion-duration-slow: 200ms;
 	--stc-motion-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 	--stc-motion-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -113,7 +113,7 @@ body {
 
 :where(h1, h2, h3) {
 	color: var(--stc-color-ink);
-	font-family: var(--stc-font-display);
+	font-family: var(--stc-font-sans);
 	font-weight: 600;
 	letter-spacing: -0.025em;
 	line-height: var(--stc-leading-heading);

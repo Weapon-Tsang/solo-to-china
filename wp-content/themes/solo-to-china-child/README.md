@@ -1,8 +1,8 @@
 # SoloToChina Child Theme
 
-Current version: `0.11.0`
+Current version: `0.12.0`
 
-This Child Theme is the presentation layer for the SoloToChina `0.32.0` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
+This Child Theme is the presentation layer for the SoloToChina `0.33.0` Parent Theme. It owns the visual system, responsive layout, editor parity, and restrained interaction styling without duplicating Parent templates or Plugin business logic.
 
 ## Installation
 
@@ -22,7 +22,7 @@ The article stylesheet targets the generic `.stc-article-hero`, `.stc-article-la
 
 Share This Page is styled as a compact utility action rather than a booking CTA. Desktop/fine-pointer devices use the branded popover; mobile/coarse-pointer devices try native Web Share first and use the branded bottom sheet if unavailable or unsuccessful.
 
-Version `0.11.0` adds reusable Stack, Cluster, Outline/Quiet Button, Badge, Field, and Panel primitives; styles the Route Timeline and Pros and Cons content blocks; and gives the Component Gallery stronger hierarchy, category accents, and responsive foundation examples. Version `0.10.3` gave the Tools directory a distinct panel and stronger full-card affordances.
+Version `0.11.1` adds the responsive Planner hero, AI itinerary preview, high-emphasis action, and concise three-step explanation. Version `0.11.0` added reusable Stack, Cluster, Outline/Quiet Button, Badge, Field, and Panel primitives; styled the Route Timeline and Pros and Cons content blocks; and strengthened the Component Gallery hierarchy.
 
 ## Asset order
 

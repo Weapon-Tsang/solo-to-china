@@ -2,9 +2,9 @@
 
 Generated from `component-registry.v1.json`. Do not edit component capability details here by hand; update the Registry, implementations, Gallery, and tests, then run `.\scripts\generate-component-catalog.ps1`.
 
-Registry version: `1.3.0`
+Registry version: `1.4.0`
 
-CMS-usable capabilities: `26`
+CMS-usable capabilities: `29`
 
 Internal rendering components recorded: `4`
 
@@ -35,10 +35,10 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `image` | Responsive Image | media | `page_block` | `stable` | evidence, context, illustration, decorative | Renders WordPress Media with intrinsic dimensions and responsive candidates. |
 | `quick_answer` | Quick Answer | information | `page_block` | `stable` | default | Places a direct answer before supporting detail for fast human and search scanning. |
 | `key_takeaways` | Key Takeaways | information | `page_block` | `stable` | default | Summarizes the decisions that matter most. |
-| `quick_facts` | Quick Facts | information | `page_block` | `stable` | default | Shows practical label and value pairs without dashboard styling. |
+| `quick_facts` | Quick Facts | information | `page_block` | `stable` | default, compact, detailed | Shows practical label and value pairs without dashboard styling. |
 | `tip` | Tip | information | `page_block` | `stable` | default | Highlights friendly supporting advice with low urgency. |
 | `warning` | Warning | information | `page_block` | `stable` | default | Highlights a travel risk, prerequisite, or failure condition. |
-| `steps` | Steps | travel | `page_block` | `stable` | default | Explains an ordered setup, booking, or route process. |
+| `steps` | Steps | travel | `page_block` | `stable` | default, screenshots | Explains an ordered setup, booking, or route process. |
 | `route_timeline` | Route Timeline | travel | `page_block` | `stable` | default | Shows a sequence of travel stops with concise supporting details. |
 | `checklist` | Checklist | travel | `page_block` | `stable` | default | Provides a scannable preparation list without saved completion state. |
 | `comparison_table` | Comparison Table | information | `page_block` | `stable` | default | Compares options with native table semantics and local mobile scrolling. |
@@ -52,9 +52,12 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `affiliate_search_card` | Affiliate Search Card | commercial | `page_block` | `stable` | link, search_box | Renders a CMS-selected Trip.com search link or allowlisted structured search box. |
 | `affiliate_banner` | Affiliate Banner | commercial | `page_block` | `stable` | static, dynamic | Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback. |
 | `affiliate_promotion_card` | Affiliate Promotion Card | commercial | `page_block` | `stable` | default | Renders a time-bounded CMS-selected Trip.com promotion without changing editorial conclusions. |
-| `article_hero` | Article Hero | layout | `presentation_meta` | `stable` | default, attraction, city, survival | Frames CMS-owned article identity and featured media without selecting body components. |
+| `article_hero` | Article Hero | layout | `presentation_meta` | `stable` | default, attraction, city, survival, compact, image-led | Frames CMS-owned article identity and featured media without selecting body components. |
 | `share_this_page` | Share This Page | utility | `presentation_meta` | `stable` | default | Shares the canonical page URL without accounts or persisted state. |
 | `table_of_contents` | Table of Contents | utility | `presentation_meta` | `stable` | default | Builds article navigation from rendered H2 headings only when explicitly enabled. |
+| `place_info_card` | Place Information Card | contextual | `page_block` | `stable` | default | A canonical place, optional editorial media, published guide and existing Taxi Card link. |
+| `annotated_image` | Annotated Image | media | `page_block` | `stable` | default | An uncropped image with normalized numbered markers and always-visible descriptions. |
+| `related_guides` | Related Guides | contextual | `page_block` | `stable` | default | Explicitly related public guides, deduplicated and excluding the current post. |
 
 ### `paragraph` — Paragraph
 
@@ -216,7 +219,7 @@ Example:
 - Purpose: Renders WordPress Media with intrinsic dimensions and responsive candidates.
 - Variants: `evidence, context, illustration, decorative`
 - Required fields: `media_id`, `alt`
-- Optional fields: `caption`, `role`, `anchor`, `after_block_id`
+- Optional fields: `caption`, `role`, `anchor`, `after_block_id`, `focal_point`, `frame`, `enlarge`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-components.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `core/image`
 - Accessibility: Alt may be empty only when role is decorative; captions stay visible and semantic.
 - Responsive behavior: Uses srcset, sizes, lazy loading, async decoding, and stable intrinsic dimensions.
@@ -257,6 +260,30 @@ Schema:
     },
     "after_block_id": {
       "type": "string"
+    },
+    "focal_point": {
+      "type": "string",
+      "enum": [
+        "center",
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "default": "center"
+    },
+    "frame": {
+      "type": "string",
+      "enum": [
+        "natural",
+        "landscape",
+        "portrait"
+      ],
+      "default": "natural"
+    },
+    "enlarge": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
@@ -381,7 +408,7 @@ Example:
 - Status: `stable`
 - CMS usable: `true` via `page_block`
 - Purpose: Shows practical label and value pairs without dashboard styling.
-- Variants: `default`
+- Variants: `default, compact, detailed`
 - Required fields: `items`
 - Optional fields: `title`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-components.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`
@@ -544,9 +571,9 @@ Example:
 - Status: `stable`
 - CMS usable: `true` via `page_block`
 - Purpose: Explains an ordered setup, booking, or route process.
-- Variants: `default`
+- Variants: `default, screenshots`
 - Required fields: `items`
-- Optional fields: `title`, `anchor`
+- Optional fields: `title`, `anchor`, `screenshots`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-components.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`
 - Accessibility: Render as an ordered list with visible numbering.
 - Responsive behavior: Number and copy remain aligned on narrow screens.
@@ -573,6 +600,37 @@ Schema:
     },
     "anchor": {
       "type": "string"
+    },
+    "screenshots": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step",
+          "media_id",
+          "alt"
+        ],
+        "properties": {
+          "step": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "media_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "alt": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 300
+          }
+        }
+      }
     }
   }
 }
@@ -632,6 +690,22 @@ Schema:
           },
           "detail": {
             "type": "string"
+          },
+          "transport_mode": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "travel_time": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "entity_key": {
+            "type": "string",
+            "maxLength": 300
           }
         }
       }
@@ -2027,7 +2101,7 @@ Example:
 - Status: `stable`
 - CMS usable: `true` via `presentation_meta`
 - Purpose: Frames CMS-owned article identity and featured media without selecting body components.
-- Variants: `default, attraction, city, survival`
+- Variants: `default, attraction, city, survival, compact, image-led`
 - Required fields: `title`
 - Optional fields: `excerpt`, `featured_media_id`, `variant`
 - Implementation: `wp-content/themes/solo-to-china/single.php`, `wp-content/themes/solo-to-china-child/assets/css/article.css`
@@ -2059,7 +2133,9 @@ Schema:
         "default",
         "attraction",
         "city",
-        "survival"
+        "survival",
+        "compact",
+        "image-led"
       ]
     }
   }
@@ -2154,6 +2230,242 @@ Example:
   "type": "table_of_contents",
   "variant": "default",
   "enabled": true
+}
+```
+
+### `place_info_card` — Place Information Card
+
+- Category: `contextual`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: A canonical place, optional editorial media, published guide and existing Taxi Card link.
+- Variants: `default`
+- Required fields: `entity_key`
+- Optional fields: `media_id`, `alt`, `caption`, `description`, `title`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/experience-components.php`, `wp-content/themes/solo-to-china/assets/css/experience-components.css`
+- Accessibility: Semantic text and links remain available without JavaScript; interactive enlargement supports keyboard close and focus return.
+- Responsive behavior: Wraps at narrow widths; images reserve intrinsic dimensions.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entity_key"
+  ],
+  "properties": {
+    "entity_key": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "media_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "alt": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "caption": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "place_info_card",
+  "variant": "default",
+  "entity_key": "forbidden-city",
+  "title": "Forbidden City"
+}
+```
+
+### `annotated_image` — Annotated Image
+
+- Category: `media`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: An uncropped image with normalized numbered markers and always-visible descriptions.
+- Variants: `default`
+- Required fields: `media_id`, `alt`, `annotations`
+- Optional fields: `caption`, `title`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/experience-components.php`, `wp-content/themes/solo-to-china/assets/css/experience-components.css`
+- Accessibility: Semantic text and links remain available without JavaScript; interactive enlargement supports keyboard close and focus return.
+- Responsive behavior: Wraps at narrow widths; images reserve intrinsic dimensions.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "media_id",
+    "alt",
+    "annotations"
+  ],
+  "properties": {
+    "media_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "alt": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "caption": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "annotations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "x",
+          "y",
+          "text"
+        ],
+        "properties": {
+          "x": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "y": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 800
+          }
+        }
+      }
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "annotated_image",
+  "variant": "default",
+  "media_id": 123,
+  "alt": "Entrance diagram",
+  "annotations": [
+    {
+      "x": 0.5,
+      "y": 0.5,
+      "text": "The numbered entrance shown in this illustration."
+    }
+  ]
+}
+```
+
+### `related_guides` — Related Guides
+
+- Category: `contextual`
+- Status: `stable`
+- CMS usable: `true` via `page_block`
+- Purpose: Explicitly related public guides, deduplicated and excluding the current post.
+- Variants: `default`
+- Required fields: None
+- Optional fields: `entity_keys`, `post_ids`, `guide_type`, `title`, `anchor`
+- Implementation: `wp-content/themes/solo-to-china/inc/experience-components.php`, `wp-content/themes/solo-to-china/assets/css/experience-components.css`
+- Accessibility: Semantic text and links remain available without JavaScript; interactive enlargement supports keyboard close and focus return.
+- Responsive behavior: Wraps at narrow widths; images reserve intrinsic dimensions.
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [],
+  "properties": {
+    "entity_keys": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "maxLength": 120
+      }
+    },
+    "post_ids": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "guide_type": {
+      "type": "string",
+      "enum": [
+        "city-guide",
+        "attraction-guide",
+        "survival-kit",
+        "travel-guide"
+      ],
+      "default": "attraction-guide"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "anchor": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}
+```
+
+Example:
+
+```json
+{
+  "type": "related_guides",
+  "variant": "default",
+  "entity_keys": [
+    "forbidden-city"
+  ],
+  "guide_type": "attraction-guide",
+  "title": "Read next"
 }
 ```
 

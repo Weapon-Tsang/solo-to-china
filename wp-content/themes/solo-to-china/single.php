@@ -20,12 +20,16 @@ get_header();
 			$guide_type  = stc_get_guide_type_slug();
 			$guide_label = stc_get_guide_type_label();
 			$hero_variant = stc_get_hero_variant();
+			if ( ! has_post_thumbnail() ) { $hero_variant = 'compact'; }
 			$show_share  = stc_page_presentation_enabled( 'share' );
 			$show_toc    = stc_page_presentation_enabled( 'toc' );
+			$rendered_content = apply_filters( 'the_content', get_the_content() );
+			$GLOBALS['stc_rendered_article_content'] = $rendered_content;
+			$show_toc = $show_toc && (bool) preg_match( '/<h2\b[^>]*\bid=["\'][^"\']+["\']/i', $rendered_content );
 			?>
 			<article <?php post_class( array( 'stc-single', 'stc-single--' . $guide_type ) ); ?>>
 				<header class="stc-article-hero stc-article-hero--<?php echo esc_attr( $hero_variant ); ?>">
-					<?php if ( has_post_thumbnail() ) : ?>
+					<?php if ( has_post_thumbnail() && 'compact' !== $hero_variant ) : ?>
 						<div class="stc-article-hero__media">
 							<?php
 							echo wp_get_attachment_image(
@@ -66,7 +70,7 @@ get_header();
 					<?php endif; ?>
 
 					<div class="stc-entry-content stc-entry-content--guide">
-						<?php the_content(); ?>
+						<?php echo $rendered_content; // Already filtered once through WordPress. ?>
 					</div>
 
 					<?php if ( $show_toc ) : ?>

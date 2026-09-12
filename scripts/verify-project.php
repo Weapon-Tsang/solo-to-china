@@ -172,7 +172,7 @@ if (is_file($packageScriptPath)) {
             $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
         }
     }
-    if (strpos($packageScript, 'Theme version: 0.32.0') === false || strpos($packageScript, 'Child Theme version: 0.11.0') === false || strpos($packageScript, 'Plugin version: 0.25.1') === false) {
+    if (strpos($packageScript, 'Theme version: 0.33.0') === false || strpos($packageScript, 'Child Theme version: 0.12.0') === false || strpos($packageScript, 'Plugin version: 0.26.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -225,8 +225,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.32.0') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.32.0.';
+    if (strpos($themeStyle, 'Version: 0.33.0') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.33.0.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -239,7 +239,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.32.0`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.33.0`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -305,10 +305,10 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.32.0'") === false) {
-        $failures[] = 'Theme asset version is not 0.32.0.';
+    if (strpos($functions, "'0.33.0'") === false) {
+        $failures[] = 'Theme asset version is not 0.33.0.';
     }
-    foreach (['STC_SITE_PAGE_MIGRATION_VERSION', 'stc_static_page_content', 'stc_static_page_metadata', 'stc_static_page_fallback', 'admin_init', 'wp_page_for_privacy_policy', 'stc_get_trip_planner_url', 'https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage'] as $sitePageToken) {
+    foreach (['STC_SITE_PAGE_MIGRATION_VERSION', 'stc_static_page_content', 'stc_static_page_metadata', 'stc_static_page_fallback', 'admin_init', 'wp_page_for_privacy_policy', 'stc_get_trip_planner_url', 'https://www.trip.com/t/bCPFQ85ZHW2'] as $sitePageToken) {
         if (strpos($functions, $sitePageToken) === false) {
             $failures[] = 'Theme is missing static-page migration or Planner configuration: ' . $sitePageToken;
         }
@@ -349,7 +349,7 @@ $childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo
 $childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
 if (is_file($childThemeStylePath)) {
     $childThemeStyle = file_get_contents($childThemeStylePath);
-    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.11.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.12.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
         if (strpos($childThemeStyle, $childHeaderToken) === false) {
             $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
         }
@@ -395,7 +395,7 @@ if (is_file($childThemeHeaderPath)) {
 $childThemeSiteCssPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/site.css';
 if (is_file($childThemeSiteCssPath)) {
     $childThemeSiteCss = file_get_contents($childThemeSiteCssPath);
-    foreach (['.stc-header', '.home .stc-brand--image', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)'] as $childSiteCssToken) {
+    foreach (['.stc-header', '.home .stc-brand--image', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '.stc-page-hero--planner', '.stc-planner-hero__cta', '.stc-planner-hero__preview', '.stc-planner__steps', '.stc-page-hero--survival-kit', '.stc-survival-topic-grid', '.stc-survival-guide-card', '.stc-survival-checklist', '.stc-page-hero--faq', '.stc-faq-page__topics', '.stc-faq-group', '@media (max-width: 840px)'] as $childSiteCssToken) {
         if (strpos($childThemeSiteCss, $childSiteCssToken) === false) {
             $failures[] = "Child Theme shared site CSS is missing: {$childSiteCssToken}";
         }
@@ -433,9 +433,14 @@ foreach ($themePhpFiles as $themePhpFile) {
 $footerPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/footer.php';
 if (is_file($footerPath)) {
     $footer = file_get_contents($footerPath);
-    foreach (['stc-footer__inner', 'stc-footer__contact', 'stc-footer__bottom', 'stc-footer__legal', 'stc-brand__logo--footer', 'solotochina-logo-white.png', 'Privacy Policy', 'Terms of Use', 'Affiliate Disclosure', 'Disclaimer', 'Find This Place', 'Taxi Card', 'Ticket Booking Window', 'alex@solotochina.com', '19098361987', 'Guest-first. Practical. Independent.'] as $footerToken) {
+    foreach (['stc-footer__inner', 'stc-footer__contact', 'stc-footer__bottom', 'stc-footer__legal', 'stc-brand__logo--footer', 'solotochina-logo-white.png', 'Privacy Policy', 'Terms of Use', 'Find This Place', 'Taxi Card', 'Ticket Booking Window', 'alex@solotochina.com', '19098361987'] as $footerToken) {
         if (strpos($footer, $footerToken) === false) {
             $failures[] = "Footer does not preserve the selected homepage-reference footer token: {$footerToken}";
+        }
+    }
+    foreach (['Affiliate Disclosure', 'Disclaimer', 'Guest-first. Practical. Independent.', 'stc-footer__principles'] as $removedFooterToken) {
+        if (strpos($footer, $removedFooterToken) !== false) {
+            $failures[] = "Footer still contains removed low-value content: {$removedFooterToken}";
         }
     }
     if (strpos($functions, 'data-stc-share-email') !== false) {
@@ -471,6 +476,11 @@ if (is_file($pageTemplatePath)) {
     if (strpos($pageTemplate, 'stc_render_faq_chevron') === false || strpos($pageTemplate, 'stc-faq__answer') === false) {
         $failures[] = 'FAQ page template is missing the shared SVG chevron or answer wrapper.';
     }
+    foreach (['stc-survival-topic-card', 'stc-survival-guide-card', 'stc-survival-checklist', 'Carry this fallback', 'You are ready when', 'stc-faq-page__topics', 'stc-faq-group', '240-hour visa-free transit'] as $survivalAndFaqToken) {
+        if (strpos($pageTemplate, $survivalAndFaqToken) === false) {
+            $failures[] = "Survival Kit or FAQ renovation is missing: {$survivalAndFaqToken}";
+        }
+    }
     if (strpos($pageTemplate, 'stc_render_core_page_latest_guides') === false) {
         $failures[] = 'Core guide pages do not render latest published guide posts.';
     }
@@ -482,7 +492,7 @@ if (is_file($pageTemplatePath)) {
             $failures[] = "Guide landing pages are missing shared four-card fold markup: {$guideLandingToken}";
         }
     }
-    foreach (['$guide_landing_slugs', 'stc-planner--page', 'stc-planner__icon', 'stc-planner__art', 'stc-faq--page', 'stc-faq__answer-link'] as $utilityPageToken) {
+    foreach (['$guide_landing_slugs', 'stc-planner--page', 'stc-planner__icon', 'stc-planner__art', 'stc-planner-hero__cta', 'data-stc-planner-cta', 'stc-planner-hero__preview', 'stc-planner__steps', 'Generate my AI itinerary', 'stc-faq--page', 'stc-faq__answer-link'] as $utilityPageToken) {
         if (strpos($pageTemplate, $utilityPageToken) === false) {
             $failures[] = "Core page template is missing utility-page presentation token: {$utilityPageToken}";
         }
@@ -540,7 +550,7 @@ if (is_file($pluginPath)) {
     $pluginReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/plugins/solo-to-china-tools/README.md';
     if (is_file($pluginReadmePath)) {
         $pluginReadme = file_get_contents($pluginReadmePath);
-        if (strpos($pluginReadme, 'Current version: `0.25.1`') === false) {
+        if (strpos($pluginReadme, 'Current version: `0.26.0`') === false) {
             $failures[] = 'Tools plugin README does not document the current plugin version.';
         }
         if (strpos($pluginReadme, 'Ticket Booking Window') === false) {
@@ -548,11 +558,11 @@ if (is_file($pluginPath)) {
         }
     }
 
-    if (strpos($plugin, 'Version: 0.25.1') === false) {
-        $failures[] = 'Tools plugin header version is not 0.25.1.';
+    if (strpos($plugin, 'Version: 0.26.0') === false) {
+        $failures[] = 'Tools plugin header version is not 0.26.0.';
     }
-    if (strpos($plugin, "STC_TOOLS_VERSION', '0.25.1'") === false) {
-        $failures[] = 'Tools plugin version constant is not 0.25.1.';
+    if (strpos($plugin, "STC_TOOLS_VERSION', '0.26.0'") === false) {
+        $failures[] = 'Tools plugin version constant is not 0.26.0.';
     }
     if (strpos($plugin, 'Requires at least: 6.5') === false) {
         $failures[] = 'Tools plugin header is missing the minimum WordPress version.';
@@ -597,6 +607,9 @@ if (is_file($pluginPath)) {
         if (strpos($pluginSource, $bookingWindowToken) === false) {
             $failures[] = 'Ticket Booking Window markup is missing: ' . $bookingWindowToken;
         }
+    }
+    if (strpos($pageTemplate, 'rel="sponsored nofollow noopener noreferrer"') === false || strpos($functions, 'https://www.trip.com/t/bCPFQ85ZHW2') === false || strpos($pageTemplate, 'Opens in a new tab. We may earn a commission at no extra cost to you.') !== false) {
+        $failures[] = 'Planner page does not preserve the affiliate URL, nofollow relationship, or concise CTA presentation.';
     }
     foreach (['data-stc-save-reminder', 'data-stc-reminder-list', 'data-stc-export-reminders', 'data-stc-clear-reminders', 'data-stc-import-reminders', 'Saved reminders', 'Add to calendar'] as $removedReminderToken) {
         if (strpos($pluginSource, $removedReminderToken) !== false) {
@@ -714,7 +727,7 @@ if (is_file($frontPagePath)) {
     if (strpos($frontPage, 'data-stc-collapsible-grid') !== false || strpos($frontPage, 'data-stc-grid-toggle') !== false) {
         $failures[] = 'Homepage still includes the removed vertical city-card expansion control.';
     }
-    if (strpos($frontPage, 'stc_get_trip_planner_url()') === false || strpos($frontPage, 'rel="sponsored noopener"') === false) {
+    if (strpos($frontPage, 'stc_get_trip_planner_url()') === false || strpos($frontPage, 'rel="sponsored nofollow noopener noreferrer"') === false) {
         $failures[] = 'Homepage Planner CTA does not use the shared sponsored Trip.Planner destination.';
     }
     foreach (['Plan Your Trip', 'Book hotels, trains &amp; flights with confidence.', 'Open Trip.Planner', 'Ticket Booking Window', 'See when you should start checking tickets for your visit.', 'Choose a visit date', 'Get booking timing', 'Check booking date', 'Rule-based estimate', 'No login required'] as $toolCopy) {

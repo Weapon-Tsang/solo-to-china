@@ -201,7 +201,7 @@ function stc_sanitize_presentation_flag_meta( $value ) {
  */
 function stc_sanitize_hero_variant_meta( $value ) {
 	$value   = sanitize_key( (string) $value );
-	$allowed = array( 'default', 'attraction', 'city', 'survival' );
+	$allowed = array( 'default', 'attraction', 'city', 'survival', 'compact', 'image-led' );
 
 	return in_array( $value, $allowed, true ) ? $value : 'default';
 }
@@ -283,7 +283,7 @@ function stc_register_content_contract_meta() {
 			'show_in_rest'      => array(
 				'schema' => array(
 					'type' => 'string',
-					'enum' => array( 'default', 'attraction', 'city', 'survival' ),
+					'enum' => array( 'default', 'attraction', 'city', 'survival', 'compact', 'image-led' ),
 				),
 			),
 		)

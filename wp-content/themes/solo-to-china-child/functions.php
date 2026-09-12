@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.11.0' );
+define( 'STC_CHILD_VERSION', '0.12.0' );
 
 /**
  * Replace the Parent fallback editor stylesheet with the Child visual system.
@@ -68,7 +68,7 @@ function stc_child_enqueue_assets() {
 		);
 	}
 
-	if ( is_singular() || $is_component_gallery ) {
+	if ( ( is_singular() && ! is_front_page() ) || $is_component_gallery ) {
 		wp_enqueue_style(
 			'stc-child-article',
 			get_stylesheet_directory_uri() . '/assets/css/article.css',
@@ -84,11 +84,11 @@ function stc_child_enqueue_assets() {
 		);
 	}
 
-	if ( is_page( array( 'tools', 'find-this-place', 'taxi-card' ) ) || ( is_singular() && has_shortcode( (string) get_post_field( 'post_content', get_queried_object_id() ), 'stc_destination_card' ) ) ) {
+	if ( function_exists( 'stc_tools_should_enqueue_assets' ) && stc_tools_should_enqueue_assets() ) {
 		wp_enqueue_style(
 			'stc-child-tools',
 			get_stylesheet_directory_uri() . '/assets/css/tools.css',
-			array( 'stc-tools', 'stc-child-content-components' ),
+			array( 'stc-tools', 'stc-child-site' ),
 			STC_CHILD_VERSION
 		);
 	}

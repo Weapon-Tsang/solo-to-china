@@ -2,18 +2,19 @@
 	document.documentElement.classList.add('stc-js');
 
 	function stcMobileNav() {
-		var header = document.querySelector('.stc-header');
-		var toggle = document.querySelector('.stc-menu-toggle');
-
-		if (!header || !toggle) {
-			return;
-		}
-
-		toggle.addEventListener('click', function () {
-			var isOpen = header.classList.toggle('is-menu-open');
-			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-		});
-	}
+        var header = document.querySelector('.stc-header'), toggle = document.querySelector('.stc-menu-toggle'), nav = document.querySelector('.stc-nav');
+        if (!header || !toggle || !nav) { return; }
+        var media = matchMedia('(max-width: 840px)');
+        function set(open, restore) {
+            header.classList.toggle('is-menu-open', open); toggle.setAttribute('aria-expanded', String(open));
+            var label = toggle.querySelector('.screen-reader-text'); if (label) { label.textContent = open ? 'Close menu' : 'Open menu'; }
+            if (restore) { toggle.focus(); }
+        }
+        toggle.addEventListener('click', function () { set(toggle.getAttribute('aria-expanded') !== 'true', false); });
+        document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { set(false, true); } });
+        nav.addEventListener('click', function (event) { if (media.matches && event.target.closest('a')) { set(false, false); } });
+        media.addEventListener('change', function () { if (!media.matches) { set(false, false); } });
+    }
 
 	function stcClampText(value, maxLength) {
 		return String(value || '').trim().slice(0, maxLength);
@@ -28,6 +29,7 @@
 			var button = shell.querySelector('[data-stc-guide-reveal]');
 			var label = shell.querySelector('[data-stc-guide-reveal-label]');
 			var guideLabel = shell.getAttribute('data-stc-guide-label') || 'Guides';
+			var expandedState = false;
 			var cards = grid ? Array.from(grid.querySelectorAll('.stc-image-card')) : [];
 
 			if (!grid || !button || !label || cards.length <= 4) {
@@ -38,6 +40,7 @@
 				cards.forEach(function (card, index) {
 					var shouldHide = media.matches && !expanded && index >= 4;
 
+					if (shouldHide && card.contains(document.activeElement)) { button.focus(); }
 					card.hidden = shouldHide;
 					card.classList.remove('is-revealing');
 
@@ -52,22 +55,26 @@
 			function syncResponsiveState() {
 				if (!media.matches) {
 					setCardVisibility(true, false);
-					shell.classList.remove('is-ready', 'is-expanded');
-					button.setAttribute('aria-expanded', 'false');
+					shell.classList.remove('is-expanded');
+                    shell.classList.add('is-ready');
+					button.setAttribute('aria-expanded', String(expandedState));
 					button.hidden = true;
 					return;
 				}
 
-				setCardVisibility(false, false);
-				label.textContent = '+' + (cards.length - 4) + ' More ' + guideLabel;
 				button.hidden = false;
-				button.setAttribute('aria-expanded', 'false');
-				shell.classList.remove('is-expanded');
+                shell.classList.add('is-ready');
+				setCardVisibility(expandedState, false);
+				label.textContent = expandedState ? 'Show fewer' : '+' + (cards.length - 4) + ' More ' + guideLabel;
+				button.hidden = false;
+				button.setAttribute('aria-expanded', String(expandedState));
+				shell.classList.toggle('is-expanded', expandedState);
 				shell.classList.add('is-ready');
 			}
 
 			button.addEventListener('click', function () {
 				var expanded = button.getAttribute('aria-expanded') === 'true';
+				expandedState = !expanded;
 
 				button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
 				shell.classList.toggle('is-expanded', !expanded);
@@ -86,11 +93,14 @@
 
 	function stcPageShare() {
 		var shareUtilities = document.querySelectorAll('[data-stc-share]');
+		var closeOpen = function () {};
+		document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeOpen(true); } });
+		document.addEventListener('click', function (event) { if (!event.target.closest('[data-stc-share]')) { closeOpen(false); } });
 		var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
 		function copyToClipboard(text) {
 			if (navigator.clipboard && navigator.clipboard.writeText) {
-				return navigator.clipboard.writeText(text);
+				return Promise.resolve().then(function(){return navigator.clipboard.writeText(text);});
 			}
 
 			return new Promise(function (resolve, reject) {
@@ -127,7 +137,7 @@
 			var facebook = utility.querySelector('[data-stc-share-facebook]');
 			var reddit = utility.querySelector('[data-stc-share-reddit]');
 			var x = utility.querySelector('[data-stc-share-x]');
-			var instagram = utility.querySelector('[data-stc-share-instagram]');
+
 			var moreApps = utility.querySelector('[data-stc-share-more]');
 			var title = utility.getAttribute('data-share-title') || document.title;
 			var description = utility.getAttribute('data-share-description') || '';
@@ -168,23 +178,25 @@
 			function shareNatively(fallback) {
 				setBusy(true);
 				announce('Opening sharing options');
-				return navigator.share(shareData()).then(function () {
+				return Promise.resolve().then(function () { return navigator.share(shareData()); }).then(function () {
 					announce('Page shared');
 				}).catch(function (error) {
-					if (!error || error.name !== 'AbortError') {
+					if (error && error.name === 'AbortError') {announce('Sharing cancelled.');}
+                    if (!error || error.name !== 'AbortError') {
 						if (fallback) { fallback(); } else { announce('Could not open sharing options.'); }
 					}
 				}).finally(function () { setBusy(false); });
 			}
 
 			function openPanel(message) {
+				closeOpen(false); closeOpen = closePanel;
 				panel.hidden = false;
 				trigger.setAttribute('aria-expanded', 'true');
 				utility.classList.add('is-open');
 				utility.classList.toggle('is-mobile-fallback', !finePointer.matches);
 				announce(message || '');
 				window.requestAnimationFrame(function () {
-					(closeButton || whatsapp || facebook || reddit || x || instagram || copyButton).focus();
+					(closeButton || whatsapp || facebook || reddit || x || copyButton).focus();
 				});
 			}
 
@@ -215,16 +227,6 @@
 				moreApps.addEventListener('click', function () { if (navigator.share) { shareNatively(); } });
 			}
 
-			if (instagram) {
-				instagram.addEventListener('click', function (event) {
-					event.preventDefault();
-					if (!finePointer.matches && navigator.share) { shareNatively(); return; }
-					window.open(instagram.href, '_blank', 'noopener');
-					copyToClipboard(canonicalUrl).then(function () {
-						announce('Link copied. Paste it into Instagram.');
-					}).catch(function () { announce('Open Instagram, then copy and paste the page link manually.'); });
-				});
-			}
 
 			if (copyButton) {
 				copyButton.addEventListener('click', function () {
@@ -244,6 +246,7 @@
 						copyButton.disabled = false;
 						announce('Copy failed. Select the link and copy it manually.');
 						if (urlInput) {
+                            utility.classList.add('has-copy-fallback');
 							urlInput.focus();
 							urlInput.select();
 						}
@@ -257,107 +260,40 @@
 				});
 			}
 
-			document.addEventListener('keydown', function (event) {
-				if (event.key === 'Escape' && !panel.hidden) {
-					event.preventDefault();
-					closePanel(true);
-					return;
-				}
 
-				if (event.key === 'Tab' && !panel.hidden) {
-					var focusable = Array.from(panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])'));
-					var first = focusable[0];
-					var last = focusable[focusable.length - 1];
-
-					if (event.shiftKey && document.activeElement === first) {
-						event.preventDefault();
-						last.focus();
-					} else if (!event.shiftKey && document.activeElement === last) {
-						event.preventDefault();
-						first.focus();
-					}
-				}
-			});
-
-			document.addEventListener('click', function (event) {
-				if (!panel.hidden && !utility.contains(event.target)) {
-					closePanel(false);
-				}
-			});
 		});
 	}
-	function stcTocSlug(text, index) {
-		var slug = String(text || '')
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/^-|-$/g, '');
-
-		return slug || 'section-' + (index + 1);
-	}
-
 	function stcGuideToc() {
-		var tocs = document.querySelectorAll('[data-stc-guide-toc]');
-		var content = document.querySelector('.stc-entry-content--guide');
-
-		if (!tocs.length || !content) {
-			return;
-		}
-
-		var headings = Array.prototype.slice.call(content.querySelectorAll('h2')).filter(function (heading) {
-			return stcClampText(heading.textContent, 80);
-		});
-
-		if (!headings.length) {
-			tocs.forEach(function (toc) {
-				toc.hidden = true;
-			});
-			return;
-		}
-
-		var usedIds = {};
-		var tocItems = headings.map(function (heading, index) {
-			var baseId = heading.id || stcTocSlug(heading.textContent, index);
-			var id = baseId;
-			var count = 2;
-			var existing = document.getElementById(id);
-
-			while (usedIds[id] || (existing && existing !== heading)) {
-				id = baseId + '-' + count;
-				count += 1;
-				existing = document.getElementById(id);
-			}
-
-			usedIds[id] = true;
-			heading.id = id;
-
-			return {
-				id: id,
-				text: stcClampText(heading.textContent, 80)
-			};
-		});
-
-		tocs.forEach(function (toc) {
-			var list = toc.querySelector('[data-stc-guide-toc-list]');
-			var fragment = document.createDocumentFragment();
-
-			if (!list) {
-				return;
-			}
-
-			tocItems.forEach(function (tocItem) {
-				var item = document.createElement('li');
-				var link = document.createElement('a');
-				link.href = '#' + tocItem.id;
-				link.textContent = tocItem.text;
-				item.append(link);
-				fragment.append(item);
-			});
-
-			list.replaceChildren(fragment);
-		});
-	}
+        var links = Array.from(document.querySelectorAll('[data-stc-guide-toc-list] a'));
+        if (!('IntersectionObserver' in window) || !links.length) { return; }
+        var ids = Array.from(new Set(links.map(function (link) { return decodeURIComponent(link.hash.slice(1)); })));
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) { if (entry.isIntersecting) { links.forEach(function (link) { if (decodeURIComponent(link.hash.slice(1)) === entry.target.id) { link.setAttribute('aria-current','location'); } else { link.removeAttribute('aria-current'); } }); } });
+        }, {rootMargin:'-100px 0px -60% 0px'});
+        ids.forEach(function (id) { var heading = document.getElementById(id); if (heading) { observer.observe(heading); } });
+    }
 
 	stcMobileNav();
+	// Ordinary image links remain the no-JS fallback; native dialog handles modality.
+	document.addEventListener('click', function (event) {
+		var link = event.target.closest('[data-stc-enlarge], .stc-image-enlarge a');
+		if (!link || !window.HTMLDialogElement || event.ctrlKey || event.metaKey) { return; }
+		event.preventDefault();
+		var dialog = document.createElement('dialog'); dialog.className = 'stc-image-dialog'; dialog.setAttribute('aria-label', 'Enlarged image');
+		var close = document.createElement('button'); close.type = 'button'; close.textContent = 'Close image';
+		var image = document.createElement('img'); image.src = link.href; image.alt = link.querySelector('img') ? link.querySelector('img').alt : '';
+		dialog.append(close);
+        var annotated = link.closest('.stc-annotated-media');
+        if (annotated) {
+            var enlarged = annotated.cloneNode(true), oldLink = enlarged.querySelector('a'); oldLink.replaceWith(image);
+            dialog.append(enlarged);
+            var notes = annotated.closest('section').querySelector('.stc-image-annotations'); if(notes){dialog.append(notes.cloneNode(true));}
+        } else {dialog.append(image);}
+        document.body.append(dialog);
+		close.addEventListener('click', function () { dialog.close(); });
+		dialog.addEventListener('close', function () { dialog.remove(); link.focus(); });
+		dialog.showModal(); close.focus();
+	});
 	stcGuideGridReveal();
 	stcPageShare();
 	stcGuideToc();

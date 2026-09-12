@@ -1,0 +1,60 @@
+{
+  "9411": {
+    "passed": [
+      "All owned PHP token-parses",
+      "An article without H2 does not render an empty navigation",
+      "Bundled catalog validates",
+      "Rejected catalog leaves active data intact: version",
+      "Rejected catalog leaves active data intact: unknown",
+      "Rejected catalog leaves active data intact: duplicate",
+      "Rejected catalog leaves active data intact: evidence",
+      "Rejected catalog leaves active data intact: unknown-evidence",
+      "Valid catalog update activates",
+      "Provider cannot overwrite verified viewpoint text",
+      "Catalog rollback restores prior active pointer",
+      "City-qualified alias disambiguates locally",
+      "Lease excludes concurrent owner",
+      "Late lease release cannot unlock a newer owner",
+      "Fixed-window rate limit enforces attempt ceiling",
+      "Pre-head discovery resolves nested synced blocks",
+      "Screenshot cannot target a missing step",
+      "Resolver service failure stays distinct from unknown: 504",
+      "Resolver service failure stays distinct from unknown: 503"
+    ],
+    "php_files": 42,
+    "catalog_records": 9
+  },
+  "9412": {
+    "passed": [
+      "All owned PHP token-parses",
+      "An article without H2 does not render an empty navigation",
+      "Bundled catalog validates",
+      "Rejected catalog leaves active data intact: version",
+      "Rejected catalog leaves active data intact: unknown",
+      "Rejected catalog leaves active data intact: duplicate",
+      "Rejected catalog leaves active data intact: evidence",
+      "Rejected catalog leaves active data intact: unknown-evidence",
+      "Valid catalog update activates",
+      "Provider cannot overwrite verified viewpoint text",
+      "Catalog rollback restores prior active pointer",
+      "City-qualified alias disambiguates locally",
+      "Lease excludes concurrent owner",
+      "Late lease release cannot unlock a newer owner",
+      "Fixed-window rate limit enforces attempt ceiling",
+      "Pre-head discovery resolves nested synced blocks",
+      "Screenshot cannot target a missing step",
+      "Resolver service failure stays distinct from unknown: 504",
+      "Resolver service failure stays distinct from unknown: 503"
+    ],
+    "php_files": 40,
+    "catalog_records": 9
+  },
+  "9413": {
+    "passed": [
+      "All owned PHP token-parses",
+      "An article without H2 does not render an empty navigation"
+    ],
+    "php_files": 42,
+    "tools": "inactive"
+  }
+}

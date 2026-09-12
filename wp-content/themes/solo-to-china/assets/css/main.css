@@ -1,11 +1,11 @@
 :root {
-	--stc-ink: #111714;
-	--stc-muted: #5f6863;
-	--stc-line: #e6ebe7;
-	--stc-paper: #fbfcfa;
-	--stc-red: #d92727;
-	--stc-green: #146b54;
-	--stc-gold: #a97824;
+	--stc-ink: #202832;
+	--stc-muted: #586577;
+	--stc-line: #dce2ea;
+	--stc-paper: #fafaf7;
+	--stc-red: #2f66e8;
+	--stc-green: #2f66e8;
+	--stc-gold: #586577;
 	--stc-radius: 8px;
 	--stc-max: 1240px;
 	--stc-card-shadow: 0 14px 34px rgba(17, 23, 20, .12);
@@ -33,7 +33,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 label:focus-visible {
-	outline: 3px solid rgba(217, 39, 39, .78);
+	outline: 3px solid rgba(32, 83, 197, .9);
 	outline-offset: 3px;
 }
 
@@ -204,8 +204,8 @@ label:focus-visible {
 	background:
 		linear-gradient(180deg, rgba(5, 15, 18, .28), rgba(5, 15, 18, .03) 40%, rgba(5, 15, 18, .08)),
 		linear-gradient(90deg, rgba(5, 15, 18, .56), rgba(5, 15, 18, .16) 48%, transparent),
-		url("../images/hero-home.png") center / cover no-repeat,
-		linear-gradient(135deg, #12392f, #b76a35 48%, #d9e6ef);
+		none center / cover no-repeat,
+		linear-gradient(135deg, #202832, #b76a35 48%, #d9e6ef);
 	min-height: clamp(460px, 53vw, 720px);
 	position: relative;
 }
@@ -503,7 +503,7 @@ label:focus-visible {
 
 .stc-image-card__content span {
 	color: rgba(255, 255, 255, .86);
-	font-size: 11px;
+	font-size: 12px;
 	line-height: 1.2;
 }
 
@@ -526,7 +526,7 @@ label:focus-visible {
 }
 
 .stc-card-grid--attractions .stc-image-card__content span {
-	font-size: 10px;
+	font-size: 12px;
 }
 
 .stc-image-card__tag {
@@ -536,7 +536,7 @@ label:focus-visible {
 	border: 1px solid rgba(255, 255, 255, .18);
 	border-radius: 6px;
 	color: #fff;
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: 700;
 	left: 10px;
 	line-height: 1;
@@ -632,7 +632,7 @@ label:focus-visible {
 
 .stc-affiliate-disclosure {
 	color: #8c9ba5 !important;
-	font-size: 11px !important;
+	font-size: 12px !important;
 	line-height: 1.4;
 	margin: 0;
 }
@@ -741,7 +741,7 @@ label:focus-visible {
 
 .stc-ticket-band__trust {
 	color: #8c9ba5;
-	font-size: 11px;
+	font-size: 12px;
 	line-height: 1.4;
 	margin: 0;
 }
@@ -1507,7 +1507,7 @@ label:focus-visible {
 }
 
 .stc-footer {
-	background: #0d1714;
+	background: #202832;
 	color: #fff;
 	padding: 0 max(32px, calc((100vw - var(--stc-max)) / 2 + 32px));
 }
@@ -1694,8 +1694,8 @@ label:focus-visible {
 	.home .stc-hero {
 		background:
 			linear-gradient(to top, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%),
-			url("../images/hero-home.png") 62% center / cover no-repeat,
-			linear-gradient(135deg, #12392f, #b76a35 48%, #d9e6ef);
+			none 62% center / cover no-repeat,
+			linear-gradient(135deg, #202832, #b76a35 48%, #d9e6ef);
 		height: 75vh;
 		max-height: 580px;
 		min-height: 480px;
@@ -1722,7 +1722,7 @@ label:focus-visible {
 	}
 
 	.home .stc-hero .stc-button--primary {
-		background: #c84832;
+		background: var(--stc-red);
 		border-radius: 10px;
 		box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
 		font-size: 14px;
@@ -1810,7 +1810,7 @@ label:focus-visible {
 
 	.home .stc-survival-card strong {
 		color: #2d3748;
-		font-size: 11px;
+		font-size: 12px;
 		font-weight: 500;
 		line-height: 1.2;
 		overflow: hidden;
@@ -1957,7 +1957,7 @@ label:focus-visible {
 	}
 
 	.stc-planner__partner > span {
-		font-size: 11px;
+		font-size: 12px;
 		line-height: 1.3;
 	}
 
@@ -2384,4 +2384,45 @@ label:focus-visible {
 	.stc-image-card.is-revealing { animation: none !important; }
 	.stc-guide-grid-reveal button,
 	.stc-guide-grid-reveal__chevron { transition: none !important; }
+}
+
+/* Shared responsive media and lightweight utility entries. */
+.stc-hero__image { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:60% center; }
+.stc-hero__content { text-shadow:0 1px 12px rgba(0,0,0,.35); }
+.stc-hero__secondary { display:block; width:fit-content; padding:12px 0; margin-top:8px; color:#fff; text-decoration:underline; text-underline-offset:4px; }
+.stc-tool-entry-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.stc-tool-entry { display:block; background:var(--stc-paper); border:1px solid var(--stc-line); border-radius:12px; padding:28px; }
+.stc-tool-entry > span { color:var(--stc-green); font-size:32px; }
+.stc-tool-entry h3 { margin:12px 0; font:600 24px/1.25 system-ui,sans-serif; }
+.stc-tool-entry p { color:var(--stc-muted); line-height:1.7; }
+.stc-tool-entry strong { color:var(--stc-green); }
+[hidden] { display:none !important; }
+.stc-entry-content--guide { min-width:0; overflow-wrap:anywhere; }
+.stc-entry-content--guide > :where(p,ul,ol) { max-width:70ch; font-size:1.0625rem; line-height:1.75; }
+.stc-entry-content--guide :where(h2,h3) { scroll-margin-top:110px; }
+.stc-share__extras { grid-column:1 / -1; }
+.stc-share__extras > summary { padding:12px; cursor:pointer; font-size:14px; }
+.stc-share__extras > div { display:flex; flex-wrap:wrap; gap:8px; }
+.stc-share__nojs { overflow-wrap:anywhere; }
+@media (max-width:840px) { .stc-tool-entry-grid { grid-template-columns:1fr; gap:16px; } }
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine) { .stc-tool-entry:hover { transform:translateY(-2px); } }
+
+html:not(.stc-js) .stc-share__trigger, html:not(.stc-js) .stc-menu-toggle { display:none; }
+@media(max-width:840px) {
+ .stc-js .stc-guide-grid-shell:not(.is-ready) .stc-image-card:nth-child(n+5) { display:none; }
+ html:not(.stc-js) .stc-nav { display:flex; position:static; flex-wrap:wrap; width:100%; background:#fafaf7; color:#202832; padding:12px; }
+ html:not(.stc-js) .stc-header__inner { flex-wrap:wrap; }
+ html:not(.stc-js) .home .stc-header { position:relative; background:#202832; }
+}
+
+.stc-home-latest__links { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:24px; }
+.stc-home-latest__links a { display:grid; gap:8px; padding:16px 0; border-top:1px solid var(--stc-line); line-height:1.6; }
+.stc-home-latest__links span { color:var(--stc-muted); font-size:16px; }
+@media(max-width:840px) { html:not(.stc-js) .stc-header { flex-wrap:wrap; } }
+
+.stc-share.has-copy-fallback .stc-share__url-field { clip:auto; clip-path:none; height:auto; min-height:44px; position:static; white-space:normal; width:100%; margin-top:16px; padding:8px; border:1px solid #8a96a8; border-radius:6px; background:white; color:#202832; font-size:16px; }
+
+@media(max-width:840px) {
+ html:not(.stc-js) .stc-nav { max-height:none; height:auto; opacity:1; visibility:visible; pointer-events:auto; transform:none; overflow:visible; box-shadow:none; }
+ html:not(.stc-js) .stc-header { position:relative; height:auto; max-height:none; }
 }

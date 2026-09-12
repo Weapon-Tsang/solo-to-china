@@ -1,0 +1,18 @@
+SoloToChina release artifacts
+Generated: 2026-09-12 15:01:06 +08:00
+Source branch: main
+Source base HEAD: f44ce1092ced93dfb47d9b3eae83d0d5e4b97086
+Source includes uncommitted workspace changes; ZIP contents are authoritative.
+Registry: 1.4.0; Content Contract: 2.1.0; Publish Package: 1.0.0
+
+Theme version: 0.33.0
+Theme: solo-to-china-theme.zip
+Theme SHA256: DAACD48CCAC483CCEC19790ACD9E853126A35F96094D862C7E6896326530AFB0
+
+Child Theme version: 0.12.0
+Child Theme: solo-to-china-child-theme.zip
+Child Theme SHA256: E0160E0F02625F4CC57B2BBE0E43782A7C61D9AB24934E390A3660BD1E54DD9F
+
+Plugin version: 0.26.0
+Plugin: solo-to-china-tools-plugin.zip
+Plugin SHA256: 430A813DC42E8E588893EEEDCFD62FD2F23ABA4A727F120F3917FF9E65F02E28

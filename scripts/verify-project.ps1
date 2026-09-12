@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+﻿$ErrorActionPreference = "Stop"
 
 $Root = Split-Path -Parent $PSScriptRoot
 
@@ -170,7 +170,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.32.0") -or (-not $PackageScript.Contains("Child Theme version: 0.11.0")) -or (-not $PackageScript.Contains("Plugin version: 0.25.1"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.33.0") -or (-not $PackageScript.Contains("Child Theme version: 0.12.0")) -or (-not $PackageScript.Contains("Plugin version: 0.26.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -268,8 +268,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.32.0")) {
-		$Failures.Add("Theme stylesheet header version is not 0.32.0.")
+    if (-not $ThemeStyle.Contains("Version: 0.33.0")) {
+		$Failures.Add("Theme stylesheet header version is not 0.33.0.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -282,7 +282,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.32.0"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.33.0"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -350,10 +350,10 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.32.0'")) {
-		$Failures.Add("Theme asset version is not 0.32.0.")
+    if (-not $Functions.Contains("'0.33.0'")) {
+		$Failures.Add("Theme asset version is not 0.33.0.")
     }
-    foreach ($SitePageToken in @("STC_SITE_PAGE_MIGRATION_VERSION", "stc_static_page_content", "stc_static_page_metadata", "stc_static_page_fallback", "admin_init", "wp_page_for_privacy_policy", "stc_get_trip_planner_url", "https://www.trip.com/webapp/tripmap/tripplanner?source=seo_H5_homepage")) {
+    foreach ($SitePageToken in @("STC_SITE_PAGE_MIGRATION_VERSION", "stc_static_page_content", "stc_static_page_metadata", "stc_static_page_fallback", "admin_init", "wp_page_for_privacy_policy", "stc_get_trip_planner_url", "https://www.trip.com/t/bCPFQ85ZHW2")) {
         if (-not $Functions.Contains($SitePageToken)) {
             $Failures.Add("Theme is missing static-page migration or Planner configuration: $SitePageToken")
         }
@@ -363,7 +363,7 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
             $Failures.Add("Theme is missing stable content anchors or editor style support: $ContentEditorToken")
         }
     }
-    foreach ($ShareRendererToken in @("stc_render_share_this_page", "data-stc-share", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-facebook", "data-stc-share-reddit", "data-stc-share-x", "data-stc-share-instagram", "data-stc-share-more")) {
+    foreach ($ShareRendererToken in @("stc_render_share_this_page", "data-stc-share", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-facebook", "data-stc-share-reddit", "data-stc-share-x", "data-stc-share-more")) {
         if (-not $Functions.Contains($ShareRendererToken)) {
             $Failures.Add("Theme functions are missing the reusable ShareThisPage renderer: $ShareRendererToken")
         }
@@ -399,7 +399,7 @@ $ChildThemeFunctionsPath = Join-Path $Root "wp-content/themes/solo-to-china-chil
 $ChildThemeDesignSystemPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/design-system.css"
 if (Test-Path -LiteralPath $ChildThemeStylePath -PathType Leaf) {
     $ChildThemeStyle = Get-Content -LiteralPath $ChildThemeStylePath -Raw
-    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.11.0", "Text Domain: solo-to-china-child")) {
+    foreach ($ChildHeaderToken in @("Theme Name: SoloToChina Child", "Template: solo-to-china", "Version: 0.12.0", "Text Domain: solo-to-china-child")) {
         if (-not $ChildThemeStyle.Contains($ChildHeaderToken)) {
             $Failures.Add("Child Theme stylesheet header is missing: $ChildHeaderToken")
         }
@@ -453,7 +453,7 @@ if (Test-Path -LiteralPath $ChildThemeHeaderPath -PathType Leaf) {
 $ChildThemeSiteCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/site.css"
 if (Test-Path -LiteralPath $ChildThemeSiteCssPath -PathType Leaf) {
     $ChildThemeSiteCss = Get-Content -LiteralPath $ChildThemeSiteCssPath -Raw
-    foreach ($ChildSiteCssToken in @('.stc-header', '.home .stc-brand--image', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '@media (max-width: 840px)')) {
+    foreach ($ChildSiteCssToken in @('.stc-header', '.home .stc-brand--image', '.stc-nav__link[aria-current="page"]', '.stc-menu-toggle__line', '.stc-image-card', '.stc-footer', '.stc-footer__contact', '.stc-static-page', '.stc-page-hero--planner', '.stc-planner-hero__cta', '.stc-planner-hero__preview', '.stc-planner__steps', '.stc-page-hero--survival-kit', '.stc-survival-topic-grid', '.stc-survival-guide-card', '.stc-survival-checklist', '.stc-page-hero--faq', '.stc-faq-page__topics', '.stc-faq-group', '@media (max-width: 840px)')) {
         if (-not $ChildThemeSiteCss.Contains($ChildSiteCssToken)) {
             $Failures.Add("Child Theme shared site CSS is missing: $ChildSiteCssToken")
         }
@@ -463,7 +463,7 @@ if (Test-Path -LiteralPath $ChildThemeSiteCssPath -PathType Leaf) {
 $ChildThemeHomeCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/home.css"
 if (Test-Path -LiteralPath $ChildThemeHomeCssPath -PathType Leaf) {
     $ChildThemeHomeCss = Get-Content -LiteralPath $ChildThemeHomeCssPath -Raw
-    foreach ($ChildHomeCssToken in @(".home .stc-hero", ".home .stc-survival", ".home .stc-card-grid--cities", ".home .stc-card-grid--attractions", ".home .stc-planner", ".home .stc-ticket-band", ".home .stc-faq", "@media (max-width: 599px)")) {
+    foreach ($ChildHomeCssToken in @(".home .stc-hero", ".home .stc-survival", ".home .stc-card-grid", ".home .stc-planner", ".home .stc-faq", "@media (max-width:840px)")) {
         if (-not $ChildThemeHomeCss.Contains($ChildHomeCssToken)) {
             $Failures.Add("Child Theme homepage CSS is missing: $ChildHomeCssToken")
         }
@@ -473,7 +473,7 @@ if (Test-Path -LiteralPath $ChildThemeHomeCssPath -PathType Leaf) {
 $ChildThemeArticleCssPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/css/article.css"
 if (Test-Path -LiteralPath $ChildThemeArticleCssPath -PathType Leaf) {
     $ChildThemeArticleCss = Get-Content -LiteralPath $ChildThemeArticleCssPath -Raw
-    foreach ($ChildArticleCssToken in @(".single .stc-content", ".stc-article-hero", ".stc-article-layout", ".stc-entry-content--guide", ".stc-guide-breadcrumb", ".stc-guide-toc", ".stc-guide-quick-facts", ".stc-guide-warning", ".stc-guide-route", ".stc-share__trigger", ".stc-share__panel", ".stc-share.is-mobile-fallback", "card-forbidden-city-hd.webp", "card-beijing-hd.webp", "card-hangzhou-hd.webp", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
+    foreach ($ChildArticleCssToken in @(".single .stc-content", ".stc-article-hero", ".stc-article-layout", ".stc-entry-content--guide", ".stc-guide-breadcrumb", ".stc-guide-toc", ".stc-guide-quick-facts", ".stc-guide-warning", ".stc-guide-route", ".stc-share__trigger", ".stc-share__panel", ".stc-share.is-mobile-fallback", "@media (max-width: 840px)", "@media (max-width: 599px)")) {
         if (-not $ChildThemeArticleCss.Contains($ChildArticleCssToken)) {
             $Failures.Add("Child Theme article CSS is missing: $ChildArticleCssToken")
         }
@@ -482,10 +482,10 @@ if (Test-Path -LiteralPath $ChildThemeArticleCssPath -PathType Leaf) {
 
 $ChildThemeSiteJsPath = Join-Path $Root "wp-content/themes/solo-to-china-child/assets/js/site.js"
 if (Test-Path -LiteralPath $ChildThemeSiteJsPath -PathType Leaf) {
-    $ChildThemeSiteJs = Get-Content -LiteralPath $ChildThemeSiteJsPath -Raw
-    foreach ($ChildSiteJsToken in @("Escape", "aria-expanded", "data-open-label", "data-close-label", "matchMedia")) {
+    $ChildThemeSiteJs = Get-Content -LiteralPath (Join-Path $Root "wp-content/themes/solo-to-china/assets/js/main.js") -Raw
+    foreach ($ChildSiteJsToken in @("Escape", "aria-expanded", "matchMedia")) {
         if (-not $ChildThemeSiteJs.Contains($ChildSiteJsToken)) {
-            $Failures.Add("Child Theme navigation enhancement is missing: $ChildSiteJsToken")
+            $Failures.Add("Parent-owned navigation enhancement is missing: $ChildSiteJsToken")
         }
     }
 }
@@ -508,9 +508,14 @@ foreach ($ThemePhpFile in $ThemePhpFiles) {
 $FooterPath = Join-Path $Root "wp-content/themes/solo-to-china/footer.php"
 if (Test-Path -LiteralPath $FooterPath -PathType Leaf) {
     $Footer = Get-Content -LiteralPath $FooterPath -Raw
-    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__contact", "stc-footer__bottom", "stc-footer__legal", "stc-brand__logo--footer", "solotochina-logo-white.png", "Privacy Policy", "Terms of Use", "Affiliate Disclosure", "Disclaimer", "Find This Place", "Taxi Card", "Ticket Booking Window", "alex@solotochina.com", "19098361987", "Guest-first. Practical. Independent.")) {
+    foreach ($FooterToken in @("stc-footer__inner", "stc-footer__contact", "stc-footer__bottom", "stc-footer__legal", "stc-brand__logo--footer", "solotochina-logo-white.png", "Privacy Policy", "Terms of Use", "Find This Place", "Taxi Card", "Ticket Booking Window", "alex@solotochina.com", "19098361987")) {
         if (-not $Footer.Contains($FooterToken)) {
             $Failures.Add("Footer does not preserve the selected homepage-reference footer token: $FooterToken")
+        }
+    }
+    foreach ($RemovedFooterToken in @("Affiliate Disclosure", "Disclaimer", "Guest-first. Practical. Independent.", "stc-footer__principles")) {
+        if ($Footer.Contains($RemovedFooterToken)) {
+            $Failures.Add("Footer still contains removed low-value content: $RemovedFooterToken")
         }
     }
     if ($Functions.Contains("data-stc-share-email")) {
@@ -551,6 +556,11 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
     if (-not $PageTemplate.Contains("stc_render_faq_chevron") -or (-not $PageTemplate.Contains("stc-faq__answer"))) {
         $Failures.Add("FAQ page template is missing the shared SVG chevron or answer wrapper.")
     }
+    foreach ($SurvivalAndFaqToken in @("stc-survival-topic-card", "stc-survival-guide-card", "stc-survival-checklist", "Carry this fallback", "You are ready when", "stc-faq-page__topics", "stc-faq-group", "240-hour visa-free transit")) {
+        if (-not $PageTemplate.Contains($SurvivalAndFaqToken)) {
+            $Failures.Add("Survival Kit or FAQ renovation is missing: $SurvivalAndFaqToken")
+        }
+    }
     if (-not $PageTemplate.Contains("stc_render_core_page_latest_guides")) {
         $Failures.Add("Core guide pages do not render latest published guide posts.")
     }
@@ -562,7 +572,7 @@ if (Test-Path -LiteralPath $PageTemplatePath -PathType Leaf) {
             $Failures.Add("Guide landing pages are missing shared four-card fold markup: $GuideLandingToken")
         }
     }
-    foreach ($UtilityPageToken in @("`$guide_landing_slugs", "stc-planner--page", "stc-planner__icon", "stc-planner__art", "stc-faq--page", "stc-faq__answer-link")) {
+    foreach ($UtilityPageToken in @("`$guide_landing_slugs", "stc-planner--page", "stc-planner__icon", "stc-planner__art", "stc-planner-hero__cta", "data-stc-planner-cta", "stc-planner-hero__preview", "stc-planner__steps", "Generate my AI itinerary", "stc-faq--page", "stc-faq__answer-link")) {
         if (-not $PageTemplate.Contains($UtilityPageToken)) {
             $Failures.Add("Core page template is missing utility-page presentation token: $UtilityPageToken")
         }
@@ -620,7 +630,7 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     $PluginReadmePath = Join-Path $Root "wp-content/plugins/solo-to-china-tools/README.md"
     if (Test-Path -LiteralPath $PluginReadmePath -PathType Leaf) {
         $PluginReadme = Get-Content -LiteralPath $PluginReadmePath -Raw
-        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.25.1"))) {
+        if ((-not $PluginReadme.Contains("Current version")) -or (-not $PluginReadme.Contains("0.26.0"))) {
             $Failures.Add("Tools plugin README does not document the current plugin version.")
         }
         if (-not $PluginReadme.Contains("Ticket Booking Window")) {
@@ -628,11 +638,11 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
         }
     }
 
-    if (-not $Plugin.Contains("Version: 0.25.1")) {
-		$Failures.Add("Tools plugin header version is not 0.25.1.")
+    if (-not $Plugin.Contains("Version: 0.26.0")) {
+		$Failures.Add("Tools plugin header version is not 0.26.0.")
     }
-    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.25.1'")) {
-		$Failures.Add("Tools plugin version constant is not 0.25.1.")
+    if (-not $Plugin.Contains("STC_TOOLS_VERSION', '0.26.0'")) {
+		$Failures.Add("Tools plugin version constant is not 0.26.0.")
     }
     if (-not $Plugin.Contains("Requires at least: 6.5")) {
         $Failures.Add("Tools plugin header is missing the minimum WordPress version.")
@@ -643,8 +653,8 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
     if (-not $Plugin.Contains("has_shortcode")) {
         $Failures.Add("Tools plugin assets are not conditionally loaded by shortcode presence.")
     }
-    if (-not $Plugin.Contains("is_page( array( 'tools', 'find-this-place', 'taxi-card' ) )") -or (-not $Plugin.Contains("is_front_page()"))) {
-        $Failures.Add("Tools plugin conditional assets do not cover the tool directory, child tools, and homepage Ticket window.")
+    if (-not $Plugin.Contains("stc_tools_page_capabilities") -or (-not $Plugin.Contains("stc_page_asset_content"))) {
+        $Failures.Add("Tools plugin conditional assets do not cover the tool directory, nested content, and child tools.")
     }
     if (-not $Plugin.Contains("solo_to_china_ticket_tool")) {
         $Failures.Add("Tools plugin does not register the solo_to_china_ticket_tool shortcode boundary.")
@@ -678,10 +688,13 @@ if (Test-Path -LiteralPath $PluginPath -PathType Leaf) {
             $Failures.Add("Attraction ticket data is missing planned coverage for: $AttractionName")
         }
     }
-    foreach ($BookingWindowToken in @("Check when tickets open", "Check date", "data-stc-ticket-link", "sponsored noopener", "Booking rules can change")) {
+    foreach ($BookingWindowToken in @("Check when tickets open", "Check date", "data-stc-ticket-link", "sponsored nofollow noopener", "current reviewed rule")) {
         if (-not $PluginSource.Contains($BookingWindowToken)) {
             $Failures.Add("Ticket Booking Window markup is missing: $BookingWindowToken")
         }
+    }
+    if (-not $PageTemplate.Contains('rel="sponsored nofollow noopener noreferrer"') -or (-not $Functions.Contains('https://www.trip.com/t/bCPFQ85ZHW2')) -or $PageTemplate.Contains('Opens in a new tab. We may earn a commission at no extra cost to you.')) {
+        $Failures.Add("Planner page does not preserve the affiliate URL, nofollow relationship, or concise CTA presentation.")
     }
     foreach ($RemovedReminderToken in @("data-stc-save-reminder", "data-stc-reminder-list", "data-stc-export-reminders", "data-stc-clear-reminders", "data-stc-import-reminders", "Saved reminders", "Add to calendar")) {
         if ($PluginSource.Contains($RemovedReminderToken)) {
@@ -708,12 +721,12 @@ if (Test-Path -LiteralPath $PluginJsPath -PathType Leaf) {
     if (-not $PluginJs.Contains("bookingWindowStatus")) {
         $Failures.Add("Ticket tool JavaScript is missing booking window status logic.")
     }
-    foreach ($StatusLabel in @("BOOKING NOT OPEN YET", "BOOKING WINDOW REACHED", "VISIT DATE PASSED")) {
+    foreach ($StatusLabel in @("CHECKING DATE AHEAD", "SUGGESTED CHECKING DATE REACHED", "VISIT DATE PASSED")) {
         if (-not $PluginJs.Contains($StatusLabel)) {
             $Failures.Add("Ticket tool JavaScript is missing booking window label: $StatusLabel")
         }
     }
-    foreach ($CalculationToken in @("getBookingPlan", "setDate", "plan.leadDays", "Choose a valid visit date", "plan.status.key === 'passed'")) {
+    foreach ($CalculationToken in @("getBookingPlan", "setUTCDate", "plan.leadDays", "Choose a valid visit date", "plan.status.key === 'passed'")) {
         if (-not $PluginJs.Contains($CalculationToken)) {
             $Failures.Add("Ticket Booking Window JavaScript is missing: $CalculationToken")
         }
@@ -768,15 +781,15 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if (-not $FrontPage.Contains("stc_render_faq_chevron") -or (-not $FrontPage.Contains("stc-faq__answer"))) {
         $Failures.Add("Homepage FAQ is missing the shared SVG chevron or answer wrapper.")
     }
-    if ($FrontPage.Contains("stc_render_home_latest_guides")) {
-        $Failures.Add("Homepage still inserts Latest Guides outside the approved reference layout.")
+    if (-not $FrontPage.Contains("stc_render_home_latest_guides")) {
+        $Failures.Add("Homepage lacks a published-only recommendations entry.")
     }
-    foreach ($HomepageToken in @("stc-survival", "stc-card-grid--cities", "stc-card-grid--attractions", "stc-planner", "stc-ticket-band", "stc-faq")) {
+    foreach ($HomepageToken in @("stc-survival", "stc-card-grid--cities", "stc-card-grid--attractions", "stc-home-tools", "stc-planner", "stc-faq")) {
         if (-not $FrontPage.Contains($HomepageToken)) {
             $Failures.Add("Homepage is missing approved reference section: $HomepageToken")
         }
     }
-    $HomepageOrder = @("stc-survival", "stc-card-grid--cities", "stc-card-grid--attractions", "stc-planner", "stc-ticket-band", "stc-faq")
+    $HomepageOrder = @("stc-survival", "stc-card-grid--cities", "stc-card-grid--attractions", "stc-home-tools", "stc-planner", "stc-faq")
     $PreviousHomepageIndex = -1
     foreach ($HomepageToken in $HomepageOrder) {
         $HomepageIndex = $FrontPage.IndexOf($HomepageToken)
@@ -785,13 +798,13 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
         }
         $PreviousHomepageIndex = $HomepageIndex
     }
-    foreach ($HomepageMarkupToken in @("stc-planner__icon", "stc-ticket-band__icon", "stc-ticket-band__step-icon", "stc-guide-grid-shell", "data-stc-guide-grid-shell", "data-stc-guide-grid", "data-stc-guide-reveal", "stc-guide-grid-reveal__chevron")) {
+    foreach ($HomepageMarkupToken in @("stc-planner__icon", "stc-tool-entry", "stc-guide-grid-shell", "data-stc-guide-grid-shell", "data-stc-guide-grid", "data-stc-guide-reveal", "stc-guide-grid-reveal__chevron")) {
         if (-not $FrontPage.Contains($HomepageMarkupToken)) {
             $Failures.Add("Homepage is missing responsive reference markup: $HomepageMarkupToken")
         }
     }
-    if (-not $FrontPage.Contains("Start Exploring") -or $FrontPage.Contains("Start your China journey")) {
-        $Failures.Add("Homepage Hero CTA does not use the refined Start Exploring copy.")
+    if (-not $FrontPage.Contains("Start with the essentials") -or $FrontPage.Contains("Start your China journey")) {
+        $Failures.Add("Homepage Hero CTA does not use the refined Start with the essentials copy.")
     }
     if (([regex]::Matches($FrontPage, 'class="stc-section__view-all"')).Count -ne 2 -or (-not $FrontPage.Contains('&rsaquo;'))) {
         $Failures.Add("Homepage guide sections are missing the unified View all arrow links.")
@@ -799,10 +812,10 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
     if ($FrontPage.Contains("data-stc-collapsible-grid") -or $FrontPage.Contains("data-stc-grid-toggle")) {
         $Failures.Add("Homepage still includes the removed vertical city-card expansion control.")
     }
-    if (-not $FrontPage.Contains("stc_get_trip_planner_url()") -or (-not $FrontPage.Contains("rel=""sponsored noopener"""))) {
+    if (-not $FrontPage.Contains("stc_get_trip_planner_url()") -or (-not $FrontPage.Contains("rel=""sponsored nofollow noopener noreferrer"""))) {
         $Failures.Add("Homepage Planner CTA does not use the shared sponsored Trip.Planner destination.")
     }
-    foreach ($ToolCopy in @("Plan Your Trip", "Book hotels, trains &amp; flights with confidence.", "Open Trip.Planner", "Ticket Booking Window", "See when you should start checking tickets for your visit.", "Choose a visit date", "Get booking timing", "Check booking date", "Rule-based estimate", "No login required")) {
+    foreach ($ToolCopy in @("Plan Your Trip", "Book hotels, trains &amp; flights with confidence.", "Open Trip.Planner", "Find This Place", "Show this to a driver", "Choose your photos", "Make a Taxi Card")) {
         if (-not $FrontPage.Contains($ToolCopy)) {
             $Failures.Add("Homepage tool cards are missing refined copy: $ToolCopy")
         }
@@ -817,8 +830,8 @@ if (Test-Path -LiteralPath $FrontPagePath -PathType Leaf) {
 $ThemeCssPath = Join-Path $Root "wp-content/themes/solo-to-china/assets/css/main.css"
 if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     $ThemeCss = Get-Content -LiteralPath $ThemeCssPath -Raw
-    if (-not $ThemeCss.Contains("../images/hero-home.png")) {
-        $Failures.Add("Homepage hero does not reference the generated hero image asset.")
+    if ($ThemeCss.Contains("../images/hero-home.png") -or -not $FrontPage.Contains("stc_render_theme_image")) {
+        $Failures.Add("Homepage must render responsive hero HTML without a CSS original-image download.")
     }
     foreach ($ImageReference in @("planner-art.png", "ticket-art.png")) {
         if (-not $ThemeCss.Contains($ImageReference)) {
@@ -833,7 +846,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if ($ThemeCss.Contains("var(--stc-card-image") -or $ThemeCss.Contains(".stc-image-card:hover .stc-image-card__media {")) {
         $Failures.Add("Guide card media still uses the old combined background or whole-layer zoom.")
     }
-    foreach ($ToolCardStyle in @(".stc-affiliate-disclosure", "color: #8c9ba5", "font-size: 11px", ".stc-ticket-band__trust", "min-height: 44px", "opacity: .08")) {
+    foreach ($ToolCardStyle in @(".stc-affiliate-disclosure", "color: #8c9ba5", "font-size: 12px", ".stc-ticket-band__trust", "min-height: 44px", "opacity: .08")) {
         if (-not $ThemeCss.Contains($ToolCardStyle)) {
             $Failures.Add("Theme CSS is missing refined tool-card styling: $ToolCardStyle")
         }
@@ -856,7 +869,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if ($ThemeCss.Contains(".stc-faq summary::after")) {
         $Failures.Add("FAQ still uses the old text pseudo-element icon instead of the SVG chevron.")
     }
-    foreach ($ModernFooterToken in @("background: #0d1714", "color: #9eb0a7", "color: #8a9c94", ".stc-footer__contact", "min-height: 44px", ".stc-footer__legal")) {
+    foreach ($ModernFooterToken in @("background: #202832", "color: #9eb0a7", "color: #8a9c94", ".stc-footer__contact", "min-height: 44px", ".stc-footer__legal")) {
         if (-not $ThemeCss.Contains($ModernFooterToken)) {
             $Failures.Add("Theme CSS is missing modern footer styling: $ModernFooterToken")
         }
@@ -902,8 +915,8 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if (-not $ThemeCss.Contains(".stc-latest-guides")) {
         $Failures.Add("Theme CSS is missing core page latest guides styling.")
     }
-    if ($ThemeCss.Contains(".stc-home-latest")) {
-        $Failures.Add("Theme CSS still includes the removed homepage latest guides section.")
+    if (-not $ThemeCss.Contains(".stc-home-latest")) {
+        $Failures.Add("Theme CSS lacks lightweight home recommendations.")
     }
     if (-not $ThemeCss.Contains(".stc-guide-toc")) {
         $Failures.Add("Theme CSS is missing Guide table of contents styling.")
@@ -931,7 +944,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing refined mobile guide-card styling: $RefinedGuideCardToken")
         }
     }
-    foreach ($MobileHeroToken in @("height: 75vh", "min-height: 480px", "max-height: 580px", "font-size: 32px", "line-height: 1.15", "font-size: 13px", "color: rgba(255, 255, 255, .9)", "margin-bottom: 20px", "linear-gradient(to top, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%)", "background: #c84832", "height: 46px", "border-radius: 10px", "box-shadow: 0 4px 16px rgba(0, 0, 0, .18)", "transform: scale(.97)", "background: rgba(255, 255, 255, .15)", "border: 1px solid rgba(255, 255, 255, .25)")) {
+    foreach ($MobileHeroToken in @("height: 75vh", "min-height: 480px", "max-height: 580px", "font-size: 32px", "line-height: 1.15", "font-size: 13px", "color: rgba(255, 255, 255, .9)", "margin-bottom: 20px", "linear-gradient(to top, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .1) 100%)", "background: var(--stc-green)", "height: 46px", "border-radius: 10px", "box-shadow: 0 4px 16px rgba(0, 0, 0, .18)", "transform: scale(.97)", "background: rgba(255, 255, 255, .15)", "border: 1px solid rgba(255, 255, 255, .25)")) {
         if (-not $ThemeCss.Contains($MobileHeroToken)) {
             $Failures.Add("Theme CSS is missing refined mobile Hero styling: $MobileHeroToken")
         }
@@ -941,7 +954,7 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
             $Failures.Add("Theme CSS is missing mobile tool typography tuning: $MobileToolTypographyToken")
         }
     }
-    foreach ($SurvivalResponsiveToken in @(".home .stc-survival__grid", "grid-template-columns: repeat(5, minmax(0, 1fr))", "gap: 4px", "padding: 16px 8px", "background: rgba(20, 83, 45, .08)", "color: #14532d", "font-size: 11px", "font-weight: 500", "text-overflow: ellipsis", "transform: scale(.95)")) {
+    foreach ($SurvivalResponsiveToken in @(".home .stc-survival__grid", "grid-template-columns: repeat(5, minmax(0, 1fr))", "gap: 4px", "padding: 16px 8px", "background: rgba(20, 83, 45, .08)", "color: #14532d", "font-size: 12px", "font-weight: 500", "text-overflow: ellipsis", "transform: scale(.95)")) {
         if (-not $ThemeCss.Contains($SurvivalResponsiveToken)) {
             $Failures.Add("Theme CSS is missing five-column Survival Kit behavior: $SurvivalResponsiveToken")
         }
@@ -995,10 +1008,10 @@ if (Test-Path -LiteralPath $ThemeJsPath -PathType Leaf) {
     if (-not $ThemeJs.Contains("data-stc-guide-toc-list")) {
         $Failures.Add("Theme JavaScript is missing the Guide table of contents list target.")
     }
-    if (-not $ThemeJs.Contains("querySelectorAll('[data-stc-guide-toc]')")) {
-        $Failures.Add("Theme JavaScript does not populate both desktop and mobile Guide tables of contents.")
+    if (-not $ThemeJs.Contains("querySelectorAll('[data-stc-guide-toc-list] a')")) {
+        $Failures.Add("Theme JavaScript does not enhance server-rendered TOC links.")
     }
-    foreach ($ShareScriptToken in @("navigator.share", "finePointer.matches", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-copy", "data-stc-share-close", "data-stc-share-instagram", "data-stc-share-more", "Link copied. Paste it into Instagram.", "Copied ✓", "Escape", "event.key === 'Tab'")) {
+    foreach ($ShareScriptToken in @("navigator.share", "finePointer.matches", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-panel", "data-stc-share-copy", "data-stc-share-close", "data-stc-share-more", "Copied ✓", "Escape", "has-copy-fallback")) {
         if (-not $ThemeJs.Contains($ShareScriptToken)) {
             $Failures.Add("Theme JavaScript is missing accessible ShareThisPage behavior: $ShareScriptToken")
         }
@@ -1043,7 +1056,7 @@ if ($PhpExecutable) {
 }
 
 if ($Failures.Count -gt 0) {
-    $Failures | ForEach-Object { Write-Error $_ }
+    $Failures | ForEach-Object { Write-Host "FAIL: $_" }
     exit 1
 }
 
