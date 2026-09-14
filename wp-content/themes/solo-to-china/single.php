@@ -54,7 +54,7 @@ get_header();
 							<p class="stc-article-hero__deck"><?php echo esc_html( get_the_excerpt() ); ?></p>
 						<?php endif; ?>
 						<p class="stc-article-hero__meta">
-							<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+							<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( stc_get_article_date_label( get_the_ID() ) ); ?></time>
 						</p>
 						<?php if ( $show_share ) : ?>
 							<div class="stc-article-hero__utilities">

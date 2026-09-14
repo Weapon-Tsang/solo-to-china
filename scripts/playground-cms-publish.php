@@ -92,6 +92,7 @@ function stc_playground_verify_cms_publish_path() {
 			'@context' => 'https://schema.org',
 			'@type'    => 'Article',
 			'headline' => 'CMS Runtime Draft',
+			'inLanguage' => 'en',
 		),
 		'media'         => array(
 			array(
@@ -128,12 +129,33 @@ function stc_playground_verify_cms_publish_path() {
 	stc_playground_cms_assert( 'attraction' === get_post_meta( $post_id, '_stc_hero_variant', true ), 'Hero presentation metadata was not mapped.' );
 	stc_playground_cms_assert( STC_COMPONENT_REGISTRY_VERSION === get_post_meta( $post_id, '_stc_component_contract_version', true ), 'Contract provenance was not stored.' );
 	stc_playground_cms_assert( 'CMS Runtime Draft SEO' === get_post_meta( $post_id, '_stc_seo_title', true ), 'SEO metadata was not stored.' );
+	stc_playground_cms_assert( 'en-US' === get_post_meta( $post_id, '_stc_content_language', true ), 'Schema language was not stored for document semantics.' );
 	stc_playground_cms_assert( get_post_thumbnail_id( $post_id ) === $media_id, 'Featured media was not applied.' );
 	$jsonld_markup = stc_get_cms_jsonld_markup( $post_id );
 	stc_playground_cms_assert( false !== strpos( $jsonld_markup, '<script type="application/ld+json">' ) && false !== strpos( $jsonld_markup, '"@type":"Article"' ), 'Structured JSON-LD output is unavailable.' );
 
 	$GLOBALS['post'] = $post;
 	setup_postdata( $post );
+	// Exercise the head filters in the same singular-query scope used by a real
+	// preview request. Merely assigning the global post is not sufficient for
+	// is_singular() and get_queried_object_id().
+	$GLOBALS['wp_query']->queried_object    = $post;
+	$GLOBALS['wp_query']->queried_object_id = $post_id;
+	$GLOBALS['wp_query']->is_single         = true;
+	$GLOBALS['wp_query']->is_singular       = true;
+	$GLOBALS['wp_query']->is_home           = false;
+	$GLOBALS['wp_query']->is_archive        = false;
+	stc_playground_cms_assert( 'CMS Runtime Draft SEO' === stc_filter_rank_math_cms_title( 'fallback' ), 'Rank Math title mapper ignored CMS metadata.' );
+	stc_playground_cms_assert( 'Runtime verification for the CMS WordPress delivery path.' === stc_filter_rank_math_cms_description( 'fallback' ), 'Rank Math description mapper ignored CMS metadata.' );
+	stc_playground_cms_assert( get_permalink( $post_id ) === stc_filter_rank_math_cms_canonical( 'https://invalid.example/' ), 'Rank Math canonical mapper is not permalink-bound.' );
+	$draft_robots = stc_filter_rank_math_cms_robots( array( 'index' => 'index', 'follow' => 'follow' ) );
+	stc_playground_cms_assert( 'noindex' === $draft_robots['index'] && 'nofollow' === $draft_robots['follow'], 'Rank Math draft robots mapper did not fail closed.' );
+	stc_playground_cms_assert( false !== strpos( stc_filter_cms_language_attributes( 'lang="zh-CN" dir="ltr"' ), 'lang="en-US"' ), 'Document language did not follow the CMS schema.' );
+	stc_playground_cms_assert( (bool) preg_match( '/^[A-Z][a-z]+ [0-9]{1,2}, [0-9]{4}$/', stc_get_article_date_label( $post_id ) ), 'English CMS date is still localized by the administrator locale.' );
+	if ( ! stc_cms_seo_plugin_active() ) {
+		$draft_core_robots = stc_filter_cms_robots( array( 'index' => true, 'follow' => true ) );
+		stc_playground_cms_assert( ! empty( $draft_core_robots['noindex'] ) && ! empty( $draft_core_robots['nofollow'] ), 'Core draft robots mapper did not fail closed.' );
+	}
 	$rendered = apply_filters( 'the_content', $post->post_content );
 	wp_reset_postdata();
 	foreach ( array(
@@ -215,6 +237,12 @@ function stc_playground_verify_cms_publish_path() {
 	stc_playground_cms_expect_error( $invalid, 'POST_NOT_DRAFT', 'Publish attempt' );
 
 	wp_update_post( array( 'ID' => $post_id, 'post_status' => 'publish' ) );
+	$published_robots = stc_filter_rank_math_cms_robots( array( 'index' => 'noindex', 'follow' => 'nofollow' ) );
+	stc_playground_cms_assert( 'index' === $published_robots['index'] && 'follow' === $published_robots['follow'], 'An explicitly published CMS post remained noindex.' );
+	if ( ! stc_cms_seo_plugin_active() ) {
+		$published_core_robots = stc_filter_cms_robots( array( 'noindex' => true, 'nofollow' => true ) );
+		stc_playground_cms_assert( ! empty( $published_core_robots['index'] ) && ! empty( $published_core_robots['follow'] ), 'An explicitly published CMS post remained noindex in the core mapper.' );
+	}
 	$published_guard = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $package );
 	$published_data  = $published_guard->get_data();
 	stc_playground_cms_assert( 409 === $published_guard->get_status() && 'POST_NOT_DRAFT' === $published_data['code'], 'Published post overwrite was not blocked.' );

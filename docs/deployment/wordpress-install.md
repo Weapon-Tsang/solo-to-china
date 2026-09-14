@@ -1,4 +1,4 @@
-> Current release: Parent 0.33.0 / Child 0.12.0 / Tools 0.26.0. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for catalog, caching, provider/privacy and CMS changes. Older release narratives below are historical.
+> Current release: Parent 0.33.1 / Child 0.12.0 / Tools 0.26.0. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for catalog, caching, provider/privacy and CMS changes. Older release narratives below are historical.
 
 # WordPress Install Handoff
 
@@ -117,7 +117,7 @@ Also check:
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.33.0`, verify these public read-only endpoints:
+After installing Parent Theme `0.33.1`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`

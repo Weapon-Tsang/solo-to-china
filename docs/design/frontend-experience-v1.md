@@ -1,6 +1,6 @@
 # Frontend experience v1 — 2026-09-12
 
-Applies to Parent 0.33.0, Child 0.12.0, Tools 0.26.0. The original user work on Planner, Survival Kit, FAQ and Footer was retained and refined. The existing logo artwork, name and approved Trip.Planner affiliate destination were preserved.
+Applies to Parent 0.33.1, Child 0.12.0, Tools 0.26.0. The original user work on Planner, Survival Kit, FAQ and Footer was retained and refined. The existing logo artwork, name and approved Trip.Planner affiliate destination were preserved. The 0.33.1 patch changes CMS document semantics and SEO/robots delivery, not the established visual system.
 
 ## Design tokens and roles
 

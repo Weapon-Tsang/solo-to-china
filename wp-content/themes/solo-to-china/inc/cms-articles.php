@@ -982,6 +982,7 @@ function stc_register_cms_article_meta() {
 		'_stc_strategy_version',
 		'_stc_canonical_url',
 		'_stc_robots',
+		'_stc_content_language',
 		'_stc_cms_synced_post_modified_gmt',
 	);
 	foreach ( $text_keys as $meta_key ) {
@@ -1214,7 +1215,28 @@ function stc_cms_store_publish_metadata( $post_id, $package ) {
 	update_post_meta( $post_id, '_stc_media_manifest', wp_json_encode( $package['media'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
 	update_post_meta( $post_id, '_stc_canonical_url', get_permalink( $post_id ) );
 	update_post_meta( $post_id, '_stc_robots', isset( $page_seo['robots'] ) ? $page_seo['robots'] : '' );
+	update_post_meta( $post_id, '_stc_content_language', stc_cms_schema_language( $final_schema ) );
 	update_post_meta( $post_id, '_stc_cms_synced_post_modified_gmt', (string) get_post_field( 'post_modified_gmt', $post_id ) );
+}
+
+/**
+ * Resolve the reader-facing language already declared by the CMS schema.
+ *
+ * @param array<string, mixed> $schema Final CMS schema graph.
+ * @return string
+ */
+function stc_cms_schema_language( $schema ) {
+	$nodes = ! empty( $schema['@graph'] ) && is_array( $schema['@graph'] ) ? $schema['@graph'] : array( $schema );
+	foreach ( $nodes as $node ) {
+		if ( ! is_array( $node ) || empty( $node['inLanguage'] ) ) {
+			continue;
+		}
+		$language = str_replace( '_', '-', sanitize_text_field( (string) $node['inLanguage'] ) );
+		if ( preg_match( '/^[a-z]{2,3}(?:-[a-z]{2,4})?$/i', $language ) ) {
+			return strtolower( substr( $language, 0, 2 ) ) === 'en' ? 'en-US' : $language;
+		}
+	}
+	return '';
 }
 
 /**
@@ -1544,6 +1566,108 @@ function stc_cms_seo_plugin_active() {
 }
 
 /**
+ * Return the current CMS-managed post, if the request is rendering one.
+ *
+ * @return int
+ */
+function stc_current_cms_post_id() {
+	if ( ! is_singular( 'post' ) ) {
+		return 0;
+	}
+	$post_id = (int) get_queried_object_id();
+	return $post_id && get_post_meta( $post_id, '_stc_cms_page_id', true ) ? $post_id : 0;
+}
+
+/**
+ * Apply the CMS-declared language without changing the administrator locale or
+ * unrelated WordPress content.
+ *
+ * @param string $output Current HTML language attributes.
+ * @return string
+ */
+function stc_filter_cms_language_attributes( $output ) {
+	$post_id  = stc_current_cms_post_id();
+	$language = $post_id ? (string) get_post_meta( $post_id, '_stc_content_language', true ) : '';
+	if ( ! $language ) {
+		return $output;
+	}
+	$replacement = 'lang="' . esc_attr( $language ) . '"';
+	if ( preg_match( '/\blang=(?:"[^"]*"|\'[^\']*\')/i', $output ) ) {
+		return preg_replace( '/\blang=(?:"[^"]*"|\'[^\']*\')/i', $replacement, $output, 1 );
+	}
+	return trim( $output . ' ' . $replacement );
+}
+add_filter( 'language_attributes', 'stc_filter_cms_language_attributes', 20 );
+
+/**
+ * Format English CMS article dates independently from the administrator locale.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function stc_get_article_date_label( $post_id ) {
+	$language = (string) get_post_meta( $post_id, '_stc_content_language', true );
+	$date     = get_post_datetime( $post_id );
+	if ( 0 === strpos( strtolower( $language ), 'en' ) && $date ) {
+		return $date->format( 'F j, Y' );
+	}
+	return get_the_date( '', $post_id );
+}
+
+/**
+ * Map CMS SEO fields into Rank Math when it owns the document head.
+ *
+ * @param string $value Rank Math value.
+ * @param string $meta_key CMS post-meta key.
+ * @return string
+ */
+function stc_filter_rank_math_cms_text( $value, $meta_key ) {
+	$post_id = stc_current_cms_post_id();
+	$stored  = $post_id ? (string) get_post_meta( $post_id, $meta_key, true ) : '';
+	return $stored ? $stored : $value;
+}
+
+function stc_filter_rank_math_cms_title( $title ) {
+	return stc_filter_rank_math_cms_text( $title, '_stc_seo_title' );
+}
+add_filter( 'rank_math/frontend/title', 'stc_filter_rank_math_cms_title', 20 );
+add_filter( 'rank_math/opengraph/facebook/og_title', 'stc_filter_rank_math_cms_title', 20 );
+add_filter( 'rank_math/opengraph/twitter/twitter_title', 'stc_filter_rank_math_cms_title', 20 );
+
+function stc_filter_rank_math_cms_description( $description ) {
+	return stc_filter_rank_math_cms_text( $description, '_stc_seo_description' );
+}
+add_filter( 'rank_math/frontend/description', 'stc_filter_rank_math_cms_description', 20 );
+add_filter( 'rank_math/opengraph/facebook/og_description', 'stc_filter_rank_math_cms_description', 20 );
+add_filter( 'rank_math/opengraph/twitter/twitter_description', 'stc_filter_rank_math_cms_description', 20 );
+
+function stc_filter_rank_math_cms_canonical( $canonical ) {
+	$post_id = stc_current_cms_post_id();
+	return $post_id ? get_permalink( $post_id ) : $canonical;
+}
+add_filter( 'rank_math/frontend/canonical', 'stc_filter_rank_math_cms_canonical', 20 );
+add_filter( 'rank_math/opengraph/url', 'stc_filter_rank_math_cms_canonical', 20 );
+
+/**
+ * A CMS delivery is always a WordPress draft. Draft previews remain
+ * noindex/nofollow; a later explicit WordPress publish becomes index/follow.
+ *
+ * @param array<string, string> $robots Rank Math robots directives.
+ * @return array<string, string>
+ */
+function stc_filter_rank_math_cms_robots( $robots ) {
+	$post_id = stc_current_cms_post_id();
+	if ( ! $post_id ) {
+		return $robots;
+	}
+	$published        = 'publish' === get_post_status( $post_id );
+	$robots['index']  = $published ? 'index' : 'noindex';
+	$robots['follow'] = $published ? 'follow' : 'nofollow';
+	return $robots;
+}
+add_filter( 'rank_math/frontend/robots', 'stc_filter_rank_math_cms_robots', 20 );
+
+/**
  * Output social metadata for CMS-managed posts when no SEO plugin owns it.
  */
 function stc_output_cms_social_meta() {
@@ -1574,16 +1698,20 @@ add_action( 'wp_head', 'stc_output_cms_social_meta', 19 );
  * @return array<string, bool|string>
  */
 function stc_filter_cms_robots( $robots ) {
-	if ( ! is_singular( 'post' ) || stc_cms_seo_plugin_active() ) {
+	if ( stc_cms_seo_plugin_active() ) {
 		return $robots;
 	}
-	$value = strtolower( (string) get_post_meta( get_the_ID(), '_stc_robots', true ) );
-	if ( false !== strpos( $value, 'noindex' ) ) {
-		$robots['noindex'] = true;
-	} elseif ( false !== strpos( $value, 'index' ) ) {
-		$robots['index'] = true;
+	$post_id = stc_current_cms_post_id();
+	if ( ! $post_id ) {
+		return $robots;
 	}
-	if ( false !== strpos( $value, 'nofollow' ) ) {
+	if ( 'publish' === get_post_status( $post_id ) ) {
+		unset( $robots['noindex'], $robots['nofollow'] );
+		$robots['index']  = true;
+		$robots['follow'] = true;
+	} else {
+		unset( $robots['index'], $robots['follow'] );
+		$robots['noindex'] = true;
 		$robots['nofollow'] = true;
 	}
 	return $robots;

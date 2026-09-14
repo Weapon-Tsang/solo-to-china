@@ -1,6 +1,6 @@
 # Upgrade deployment and rollback — local artifacts only
 
-Release set: Parent **0.33.0**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0**, Content Contract **2.1.0**, Publish Package **1.0.0**. No production installation, database update, cache purge or provider configuration was performed by this task.
+Release set: Parent **0.33.1**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0**, Content Contract **2.1.0**, Publish Package **1.0.0**. The 0.33.1 patch is parent-theme-only and must be installed atomically with an immediate copy of the previous parent directory available for rollback. It changes no WordPress database schema and requires no catalog import.
 
 1. Back up the database, current three component directories, site options, server settings and active destination catalog revision. Preserve the existing approved Trip.Planner option/filter destination. Record the live versions before replacing anything.
 2. Verify SHA-256 against `dist/release-manifest.txt`. Install the parent ZIP first; install/activate the child ZIP second; install/activate Tools third. Test in staging before production. The child still depends on the parent; plugin deactivation now provides readable shortcode fallbacks.

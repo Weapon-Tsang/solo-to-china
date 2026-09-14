@@ -1,6 +1,6 @@
 # SoloToChina CMS / Frontend Capability Contract
 
-Current Component Contract version: `1.3.0`
+Current Component Contract version: `1.4.0` (Parent Theme `0.33.1`)
 
 This document defines the integration boundary between the independent `solo-to-china` frontend repository and `solo-to-china-CMS` repository.
 

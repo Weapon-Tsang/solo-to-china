@@ -6,7 +6,7 @@
 
 | 部件 | 当前版本 |
 |---|---|
-| Parent Theme | 0.33.0 |
+| Parent Theme | 0.33.1 |
 | Child Theme | 0.12.0 |
 | Tools Plugin | 0.26.0 |
 | Component Registry | 1.4.0 |

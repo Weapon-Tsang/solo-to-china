@@ -1,5 +1,9 @@
 # Component Changelog
 
+## Registry 1.4.0 / Parent Theme 0.33.1 - 2026-09-14
+
+This compatible runtime patch stores the CMS schema language, renders English CMS article dates independently of the administrator locale, maps CMS SEO/social/canonical fields into Rank Math, and derives robots from the actual WordPress post status. CMS delivery remains draft-only and therefore noindex/nofollow; an explicit later WordPress publication becomes index/follow. No component ID, field, variant, Content Contract, Page Schema, Publish Package schema or Frontend rendering ownership changes.
+
 ## 1.4.0 — 2026-09-12
 
 Adds place_info_card, annotated_image and related_guides. Extends Quick Facts, screenshot Steps, route details, image framing/enlargement and explicit compact/image-led heroes. Existing IDs and payloads remain supported. Generated Page Schema includes 26 ordered blocks and 29 total capabilities. CMS integration in the other repository is pending.

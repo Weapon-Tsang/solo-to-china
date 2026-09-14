@@ -23,7 +23,7 @@ Current code ownership:
 
 Current development branch deliverables:
 
-- Custom SoloToChina theme `0.33.0` in `wp-content/themes/solo-to-china/`.
+- Custom SoloToChina theme `0.33.1` in `wp-content/themes/solo-to-china/`.
 - SoloToChina Child Theme `0.12.0` in `wp-content/themes/solo-to-china-child/`.
 - SoloToChina Tools plugin `0.26.0` in `wp-content/plugins/solo-to-china-tools/`.
 - Release packaging script in `scripts/package-release.ps1`.
@@ -38,7 +38,7 @@ Current development branch deliverables:
 
 The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
 
-Current release: Parent **0.33.0**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0** (29 capabilities / 26 page block types). Content Contract **2.1.0** and Publish Package **1.0.0** remain compatible. The existing Planner, Survival Kit, FAQ and Footer work was preserved.
+Current release: Parent **0.33.1**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0** (29 capabilities / 26 page block types). Content Contract **2.1.0** and Publish Package **1.0.0** remain compatible. The existing Planner, Survival Kit, FAQ and Footer work was preserved.
 
 This upgrade adds published entity links, responsive WebP images, a warm-white/blue visual system, server-rendered TOC, accessible Share/More, new optional editorial components, sequential image preparation with Worker support, cancellation guards, versioned destination data and partial-accuracy Taxi cards. Homepage tool entries no longer load tool execution code. Ticket estimates remain auxiliary and require a current reviewed rule.
 
