@@ -1,6 +1,6 @@
 # CMS synchronization — Registry 1.4.0
 
-Frontend-side contracts and the separate CMS integration are active. Parent 0.33.1 ships Registry 1.4.0 with 29 CMS capabilities / 26 Page Schema block types. Content Contract stays 2.1.0 and Publish Package stays 1.0.0: existing payloads remain valid. The patch adds CMS language/date/SEO/robots delivery semantics without moving JSX/CSS ownership into the CMS. Do not downgrade to the old review snapshot.
+Frontend-side contracts and the separate CMS integration are active. Parent 0.33.2 ships Registry 1.4.0 with 29 CMS capabilities / 26 Page Schema block types. Content Contract stays 2.1.0 and Publish Package stays 1.0.0: existing payloads remain valid. The patch adds CMS language/date/SEO/robots delivery semantics and scoped final-preview tickets without moving JSX/CSS ownership into the CMS. Do not downgrade to the old review snapshot.
 
 The single authoring source remains `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json`. Run `scripts/generate-component-catalog.ps1` to regenerate public schemas, bundled copies and component documentation. Never edit generated JSON as an independent source. Additions are selectable; the frontend never inserts article sections based on the guide category.
 

@@ -249,7 +249,7 @@ function stc_render_commercial_component_shell( $data, $component, $variant, $me
 	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-commercial-component stc-commercial-component--<?php echo esc_attr( $component ); ?> stc-commercial-component--<?php echo esc_attr( $variant ); ?>" aria-labelledby="<?php echo esc_attr( $title_id ); ?>"<?php echo stc_commercial_event_data_attributes( $data, $component, $variant ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from escaped attributes. ?>>
 		<div class="stc-dynamic-component__body">
 			<p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $data['provider'] . ' · ' . str_replace( '_', ' ', $data['product_category'] ) ); ?></p>
-			<h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $data['title'] ); ?></h2>
+			<h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php echo esc_html( $data['title'] ); ?></h2>
 			<p><?php echo esc_html( $data['description'] ); ?></p>
 			<?php if ( $media_html ) : ?>
 				<div class="stc-commercial-component__media"><?php echo $media_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Renderer-owned HTML is escaped at construction. ?></div>
@@ -321,7 +321,7 @@ function stc_render_planner_cta_component( $attributes ) {
 	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--planner" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 		<div class="stc-dynamic-component__body">
 			<p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $provider ? $provider : __( 'Trip planning', 'solo-to-china' ) ); ?></p>
-			<h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $title ); ?></h2>
+			<h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php echo esc_html( $title ); ?></h2>
 			<p><?php echo esc_html( $description ); ?></p>
 			<?php if ( $disclosure ) : ?>
 				<p class="stc-dynamic-component__disclosure"><?php echo esc_html( $disclosure ); ?></p>
@@ -370,7 +370,7 @@ function stc_render_ticket_reminder_component( $attributes ) {
 	<section id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--ticket" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 		<div class="stc-dynamic-component__body">
 			<p class="stc-dynamic-component__eyebrow"><?php esc_html_e( 'Ticket Booking Window', 'solo-to-china' ); ?></p>
-			<h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $title ); ?></h2>
+			<h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php echo esc_html( $title ); ?></h2>
 			<?php if ( $description ) : ?>
 				<p><?php echo esc_html( $description ); ?></p>
 			<?php endif; ?>
@@ -399,7 +399,7 @@ function stc_render_destination_card_component( $attributes ) {
 	$title_id = $component_id . '-title';
 	ob_start(); ?>
 	<section id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--destination" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
-		<div class="stc-dynamic-component__body"><p class="stc-dynamic-component__eyebrow"><?php esc_html_e( 'Taxi Card', 'solo-to-china' ); ?></p><h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $title ); ?></h2><?php if ( $description ) : ?><p><?php echo esc_html( $description ); ?></p><?php endif; ?></div>
+		<div class="stc-dynamic-component__body"><p class="stc-dynamic-component__eyebrow"><?php esc_html_e( 'Taxi Card', 'solo-to-china' ); ?></p><h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php echo esc_html( $title ); ?></h2><?php if ( $description ) : ?><p><?php echo esc_html( $description ); ?></p><?php endif; ?></div>
 		<div class="stc-dynamic-component__tool"><?php if ( shortcode_exists( 'solo_to_china_taxi_card' ) ) { echo do_shortcode( '[solo_to_china_taxi_card entity_key="' . esc_attr( $entity_key ) . '" heading_level="3"]' ); } else { echo '<p class="stc-dynamic-component__fallback">' . esc_html__( 'Taxi Card is temporarily unavailable.', 'solo-to-china' ) . '</p>'; } ?></div>
 	</section>
 	<?php return ob_get_clean();
@@ -449,7 +449,7 @@ function stc_render_affiliate_cta_component( $attributes ) {
 	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--affiliate" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 		<div class="stc-dynamic-component__body">
 			<p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $category . ' · ' . $provider ); ?></p>
-			<h2 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $title ); ?></h2>
+			<h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php echo esc_html( $title ); ?></h2>
 			<p><?php echo esc_html( $description ); ?></p>
 			<?php if ( $price_text ) : ?>
 				<p class="stc-dynamic-component__price"><?php echo esc_html( $price_text ); ?></p>

@@ -197,6 +197,32 @@ function stc_playground_verify_cms_publish_path() {
 	$put = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $package );
 	stc_playground_cms_assert( 200 === $put->get_status() && 'CMS Runtime Draft Updated' === get_the_title( $post_id ), 'Explicit PUT did not update the draft.' );
 
+	$page_hash = (string) get_post_meta( $post_id, '_stc_page_payload_hash', true );
+	$ticket_request = new WP_REST_Request( 'POST', '/stc/v1/cms-articles/' . $post_id . '/preview-ticket' );
+	$ticket_request->set_url_params( array( 'post_id' => $post_id ) );
+	$ticket_request->set_header( 'content-type', 'application/json' );
+	$ticket_request->set_body( wp_json_encode( array( 'cms_draft_id' => 'runtime-draft-001', 'cms_revision' => 1, 'page_payload_hash' => $page_hash ) ) );
+	$ticket_response = rest_do_request( $ticket_request );
+	$ticket_data = $ticket_response->get_data();
+	stc_playground_cms_assert( 201 === $ticket_response->get_status() && false !== strpos( $ticket_data['preview_url'], '#stc_preview_ticket=' ), 'Scoped preview ticket was not minted in a URL fragment.' );
+	stc_playground_cms_assert( false === strpos( wp_parse_url( $ticket_data['preview_url'], PHP_URL_QUERY ), 'stc_preview_ticket' ), 'Preview bearer leaked into the request query string.' );
+	parse_str( (string) wp_parse_url( $ticket_data['preview_url'], PHP_URL_FRAGMENT ), $fragment );
+	$exchange_request = new WP_REST_Request( 'POST', '/stc/v1/cms-preview/exchange' );
+	$exchange_request->set_header( 'content-type', 'application/json' );
+	$exchange_request->set_body( wp_json_encode( array( 'token' => $fragment['stc_preview_ticket'] ) ) );
+	$exchange_response = rest_do_request( $exchange_request );
+	$exchange_data = $exchange_response->get_data();
+	stc_playground_cms_assert( 200 === $exchange_response->get_status() && false === strpos( $exchange_data['preview_url'], 'stc_preview_ticket' ) && false !== strpos( $exchange_data['preview_url'], 'stc_cms_preview=1' ), 'Preview exchange did not return a bearer-free scoped URL.' );
+	$tampered_request = new WP_REST_Request( 'POST', '/stc/v1/cms-preview/exchange' );
+	$tampered_request->set_header( 'content-type', 'application/json' );
+	$tampered_request->set_body( wp_json_encode( array( 'token' => str_repeat( '0', 64 ) ) ) );
+	stc_playground_cms_assert( 403 === rest_do_request( $tampered_request )->get_status(), 'Tampered preview token was accepted.' );
+	$stale_request = new WP_REST_Request( 'POST', '/stc/v1/cms-articles/' . $post_id . '/preview-ticket' );
+	$stale_request->set_url_params( array( 'post_id' => $post_id ) );
+	$stale_request->set_header( 'content-type', 'application/json' );
+	$stale_request->set_body( wp_json_encode( array( 'cms_draft_id' => 'runtime-draft-001', 'cms_revision' => 1, 'page_payload_hash' => str_repeat( '0', 64 ) ) ) );
+	stc_playground_cms_assert( 409 === rest_do_request( $stale_request )->get_status(), 'Stale preview revision was accepted.' );
+
 	$invalid = stc_playground_cms_clone( $package );
 	$invalid['page']['blocks'][0]['type'] = 'unknown_component';
 	stc_playground_cms_expect_error( $invalid, 'UNKNOWN_COMPONENT', 'Unknown component' );
@@ -236,6 +262,13 @@ function stc_playground_verify_cms_publish_path() {
 	$invalid['publication']['status'] = 'publish';
 	stc_playground_cms_expect_error( $invalid, 'POST_NOT_DRAFT', 'Publish attempt' );
 
+	global $wpdb;
+	$wpdb->update( $wpdb->posts, array( 'post_modified_gmt' => gmdate( 'Y-m-d H:i:s', time() + 60 ) ), array( 'ID' => $post_id ), array( '%s' ), array( '%d' ) );
+	clean_post_cache( $post_id );
+	$external_guard = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $package );
+	$external_data  = $external_guard->get_data();
+	stc_playground_cms_assert( 409 === $external_guard->get_status() && 'POST_EXTERNALLY_MODIFIED' === $external_data['code'], 'Externally modified draft overwrite was not blocked.' );
+
 	wp_update_post( array( 'ID' => $post_id, 'post_status' => 'publish' ) );
 	$published_robots = stc_filter_rank_math_cms_robots( array( 'index' => 'noindex', 'follow' => 'nofollow' ) );
 	stc_playground_cms_assert( 'index' === $published_robots['index'] && 'follow' === $published_robots['follow'], 'An explicitly published CMS post remained noindex.' );
@@ -248,5 +281,5 @@ function stc_playground_verify_cms_publish_path() {
 	stc_playground_cms_assert( 409 === $published_guard->get_status() && 'POST_NOT_DRAFT' === $published_data['code'], 'Published post overwrite was not blocked.' );
 	wp_update_post( array( 'ID' => $post_id, 'post_status' => 'draft' ) );
 
-	update_option( 'stc_playground_cms_publish_verified', array( 'post_id' => $post_id, 'block_count' => count( $blocks ), 'contract_checksum' => stc_cms_component_contract_checksum() ), false );
+	update_option( 'stc_playground_cms_publish_verified', array( 'post_id' => $post_id, 'block_count' => count( $blocks ), 'contract_checksum' => stc_cms_component_contract_checksum(), 'preview_url' => $ticket_data['preview_url'] ), false );
 }

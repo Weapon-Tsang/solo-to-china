@@ -23,7 +23,7 @@ add_filter('stc_tools_place_vision_provider',function($provider){
 });
 add_action('rest_api_init',function(){
     register_rest_route('stc-test/v1','/recheck',array('methods'=>'POST','permission_callback'=>'__return_true','callback'=>function(){require_once '/tmp/solo-to-china-scripts/verify-upgrade-invariants.php';return stc_verify_upgrade_invariants();}));
-    register_rest_route('stc-test/v1','/status',array('methods'=>'GET','permission_callback'=>'__return_true','callback'=>function(){return array('php_syntax'=>get_option('stc_upgrade_php_syntax'),'image'=>get_option('stc_test_prepared_image'),'upgrade'=>get_option('stc_upgrade_results'));}));
+    register_rest_route('stc-test/v1','/status',array('methods'=>'GET','permission_callback'=>'__return_true','callback'=>function(){return array('php_syntax'=>get_option('stc_upgrade_php_syntax'),'image'=>get_option('stc_test_prepared_image'),'upgrade'=>get_option('stc_upgrade_results'),'cms_publish'=>get_option('stc_playground_cms_publish_verified'));}));
     register_rest_route('stc-test/v1','/reset',array('methods'=>'POST','permission_callback'=>'__return_true','callback'=>function(){
         if(!function_exists('stc_tools_client_key')){return false;}
         delete_transient('stc_tool_vision_'.substr(stc_tools_client_key(),0,32));return true;

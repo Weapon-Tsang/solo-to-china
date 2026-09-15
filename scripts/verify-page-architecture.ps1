@@ -1,6 +1,7 @@
 param()
 
 $ErrorActionPreference = "Stop"
+$PSDefaultParameterValues['Get-Content:Encoding'] = 'UTF8'
 $Root = Split-Path -Parent $PSScriptRoot
 $Failures = New-Object System.Collections.Generic.List[string]
 
@@ -16,6 +17,7 @@ function Read-ProjectFile([string]$Path) {
 
 $Single = Read-ProjectFile "wp-content/themes/solo-to-china/single.php"
 $Functions = Read-ProjectFile "wp-content/themes/solo-to-china/functions.php"
+$Renderers = Read-ProjectFile "wp-content/themes/solo-to-china/inc/content-renderers.php"
 $ContractRuntime = Read-ProjectFile "wp-content/themes/solo-to-china/inc/content-contract.php"
 $ThemeJs = Read-ProjectFile "wp-content/themes/solo-to-china/assets/js/main.js"
 $PageTemplate = Read-ProjectFile "wp-content/themes/solo-to-china/page.php"
@@ -47,10 +49,12 @@ foreach ($MetaToken in @("_stc_show_share", "_stc_show_toc", "_stc_hero_variant"
 foreach ($ShareToken in @("stc_render_share_this_page", "data-stc-share", "data-stc-share-trigger", "data-stc-share-panel", 'role="dialog"', "aria-labelledby", "canonical", "aria-live")) {
     Assert-Architecture ($Functions.Contains($ShareToken)) "ShareThisPage renderer is missing: $ShareToken"
 }
-foreach ($ShareJsToken in @("navigator.share", "finePointer.matches", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-copy", "data-stc-share-close", "aria-expanded", "Escape", "Copied ✓", "closeOpen")) {
+foreach ($ShareJsToken in @("navigator.share", "finePointer.matches", "navigator.clipboard", "data-stc-share-trigger", "data-stc-share-copy", "data-stc-share-close", "aria-expanded", "Escape", ("Copied " + [char]0x2713), "closeOpen")) {
     Assert-Architecture ($ThemeJs.Contains($ShareJsToken)) "ShareThisPage interaction is missing: $ShareJsToken"
 }
 Assert-Architecture ($ThemeJs.Contains("document.addEventListener('keydown'")) "ShareThisPage Escape handling must work after a control becomes disabled and loses focus."
+Assert-Architecture ($Functions.Contains("data-stc-toc-exclude")) "The table of contents must exclude explicitly marked utility and commercial headings."
+Assert-Architecture ($Renderers.Contains("data-stc-toc-exclude")) "Dynamic and commercial component headings must opt out of the article table of contents."
 foreach ($ShareStyleToken in @(".stc-share", ".stc-share__trigger", ".stc-share__panel", ".stc-share__copy", ".stc-share__status", "@media (max-width: 599px)", "prefers-reduced-motion")) {
     Assert-Architecture (($ParentCss + $ChildCss).Contains($ShareStyleToken)) "ShareThisPage presentation is missing: $ShareStyleToken"
 }

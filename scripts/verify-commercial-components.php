@@ -78,6 +78,8 @@ $booking_html = stc_render_affiliate_booking_card_component( $booking );
 stc_test( false !== strpos( $booking_html, 'rel="sponsored nofollow noopener"' ), 'Safe sponsored relationship attributes are missing.' );
 stc_test( false !== strpos( $booking_html, 'Affiliate link.' ), 'Visible disclosure is missing.' );
 stc_test( false !== strpos( $booking_html, 'data-stc-commercial="true"' ), 'Event attribution data is missing.' );
+stc_test( false !== strpos( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot identity is missing from visible DOM.' );
+stc_test( 1 === substr_count( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot rendered more than once.' );
 
 $unknown = $booking;
 $unknown['html'] = '<script>alert(1)</script>';

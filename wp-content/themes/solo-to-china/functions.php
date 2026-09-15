@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.33.1' );
+define( 'STC_THEME_VERSION', '0.33.2' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -113,7 +113,7 @@ function stc_enqueue_assets() {
 		true
 	);
 
-	if ( preg_match( '/stc_(affiliate|hotel|ticket_cta|booking|esim|transport|commercial)|stc-affiliate/', stc_page_asset_content() ) ) {
+	if ( ! defined( 'STC_CMS_SCOPED_PREVIEW' ) && preg_match( '/stc_(affiliate|hotel|ticket_cta|booking|esim|transport|commercial)|stc-affiliate/', stc_page_asset_content() ) ) {
 	wp_enqueue_script(
 		'stc-commercial-events',
 		get_template_directory_uri() . '/assets/js/commercial-events.js',
@@ -561,7 +561,7 @@ function stc_render_guide_card( $post_id = null ) {
 
 function stc_render_guide_toc( $modifier_class = '' ) {
 	$content = isset( $GLOBALS['stc_rendered_article_content'] ) ? $GLOBALS['stc_rendered_article_content'] : '';
-	preg_match_all( '/<h2\b[^>]*\bid=["\']([^"\']+)["\'][^>]*>(.*?)<\/h2>/is', $content, $headings, PREG_SET_ORDER );
+	preg_match_all( '/<h2\b(?![^>]*\bdata-stc-toc-exclude\b)[^>]*\bid=["\']([^"\']+)["\'][^>]*>(.*?)<\/h2>/is', $content, $headings, PREG_SET_ORDER );
 	if ( ! $headings ) { return; }
 	$classes = trim( 'stc-guide-toc ' . sanitize_html_class( $modifier_class ) );
 

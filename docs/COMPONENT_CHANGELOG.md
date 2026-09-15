@@ -1,5 +1,10 @@
 # Component Changelog
 
+## Registry 1.4.0 / Parent Theme 0.33.2 - 2026-09-15
+
+- Preserve Registry 1.4.0 while returning exact commercial slot/page-hash receipts from CMS draft delivery.
+- Add a 15-minute opaque single-draft preview capability; a new ticket revokes the old one, and preview requests are no-store/noindex with commercial event collection disabled.
+
 ## Registry 1.4.0 / Parent Theme 0.33.1 - 2026-09-14
 
 This compatible runtime patch stores the CMS schema language, renders English CMS article dates independently of the administrator locale, maps CMS SEO/social/canonical fields into Rank Math, and derives robots from the actual WordPress post status. CMS delivery remains draft-only and therefore noindex/nofollow; an explicit later WordPress publication becomes index/follow. No component ID, field, variant, Content Contract, Page Schema, Publish Package schema or Frontend rendering ownership changes.

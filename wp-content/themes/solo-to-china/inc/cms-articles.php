@@ -1201,6 +1201,7 @@ function stc_cms_store_publish_metadata( $post_id, $package ) {
 	update_post_meta( $post_id, '_stc_cms_page_id', (string) $metadata['pageId'] );
 	update_post_meta( $post_id, '_stc_cms_draft_id', isset( $package['publication']['cms_draft_id'] ) ? (string) $package['publication']['cms_draft_id'] : '' );
 	update_post_meta( $post_id, '_stc_page_payload', wp_json_encode( $page, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+	update_post_meta( $post_id, '_stc_page_payload_hash', hash( 'sha256', wp_json_encode( $page, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) ) );
 	update_post_meta( $post_id, '_stc_component_contract_version', $package['contract']['componentContractVersion'] );
 	update_post_meta( $post_id, '_stc_page_schema_version', $package['contract']['pageSchemaVersion'] );
 	update_post_meta( $post_id, '_stc_contract_checksum', strtolower( $package['contract']['contractChecksum'] ) );
@@ -1217,6 +1218,29 @@ function stc_cms_store_publish_metadata( $post_id, $package ) {
 	update_post_meta( $post_id, '_stc_robots', isset( $page_seo['robots'] ) ? $page_seo['robots'] : '' );
 	update_post_meta( $post_id, '_stc_content_language', stc_cms_schema_language( $final_schema ) );
 	update_post_meta( $post_id, '_stc_cms_synced_post_modified_gmt', (string) get_post_field( 'post_modified_gmt', $post_id ) );
+}
+
+/**
+ * Return the commercial slots persisted in the exact Page Payload revision.
+ * This is a delivery receipt for the CMS; it never exposes affiliate URLs.
+ *
+ * @param array<string, mixed> $page Validated page payload.
+ * @return array<int, array<string, string>>
+ */
+function stc_cms_commercial_delivery_manifest( $page ) {
+	$manifest = array();
+	foreach ( isset( $page['blocks'] ) && is_array( $page['blocks'] ) ? $page['blocks'] : array() as $block ) {
+		if ( ! is_array( $block ) || 0 !== strpos( (string) $block['type'], 'affiliate_' ) || empty( $block['data']['slot_key'] ) ) {
+			continue;
+		}
+		$manifest[] = array(
+			'slot_key'           => sanitize_text_field( (string) $block['data']['slot_key'] ),
+			'affiliate_asset_id' => sanitize_text_field( (string) $block['data']['affiliate_asset_id'] ),
+			'component_type'     => sanitize_key( (string) $block['type'] ),
+			'placement'          => sanitize_key( (string) $block['data']['placement'] ),
+		);
+	}
+	return $manifest;
 }
 
 /**
@@ -1378,6 +1402,13 @@ function stc_cms_upsert_article_locked( $package, $route_post_id = 0 ) {
 	if ( is_wp_error( $target_id ) ) {
 		return $target_id;
 	}
+	if ( $target_id ) {
+		$synced_modified  = (string) get_post_meta( $target_id, '_stc_cms_synced_post_modified_gmt', true );
+		$current_modified = (string) get_post_field( 'post_modified_gmt', $target_id );
+		if ( $synced_modified && $current_modified && ! hash_equals( $synced_modified, $current_modified ) ) {
+			return stc_cms_publish_error( 'POST_EXTERNALLY_MODIFIED', __( 'The WordPress draft changed after the last CMS delivery. Refresh was stopped to preserve the external edit.', 'solo-to-china' ), 409 );
+		}
+	}
 
 	$metadata = $package['page']['metadata'];
 	$postarr  = array(
@@ -1429,6 +1460,8 @@ function stc_cms_upsert_article_locked( $package, $route_post_id = 0 ) {
 			'slug'             => $post->post_name,
 			'contract_version' => STC_COMPONENT_REGISTRY_VERSION,
 			'updated'          => $updated,
+			'commercial_slots' => stc_cms_commercial_delivery_manifest( $package['page'] ),
+			'page_payload_hash'=> hash( 'sha256', wp_json_encode( $package['page'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) ),
 		),
 		$updated ? 200 : 201
 	);
@@ -1506,8 +1539,185 @@ function stc_register_cms_article_routes() {
 			'permission_callback' => 'stc_cms_articles_permission',
 		)
 	);
+	register_rest_route(
+		'stc/v1',
+		'/cms-articles/(?P<post_id>[1-9][0-9]*)/preview-ticket',
+		array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => 'stc_rest_create_cms_preview_ticket',
+			'permission_callback' => 'stc_cms_articles_permission',
+		)
+	);
+	register_rest_route(
+		'stc/v1',
+		'/cms-preview/exchange',
+		array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => 'stc_rest_exchange_cms_preview_ticket',
+			'permission_callback' => '__return_true',
+		)
+	);
 }
 add_action( 'rest_api_init', 'stc_register_cms_article_routes' );
+
+/**
+ * Mint a short-lived, single-post preview capability for an authenticated CMS
+ * editor. Only a hash is stored; minting a new ticket revokes the prior one.
+ *
+ * @param WP_REST_Request $request Request object.
+ * @return WP_REST_Response|WP_Error
+ */
+function stc_rest_create_cms_preview_ticket( $request ) {
+	$post_id   = (int) $request->get_param( 'post_id' );
+	$post      = get_post( $post_id );
+	$body      = $request->get_json_params();
+	$draft_id  = isset( $body['cms_draft_id'] ) ? sanitize_text_field( (string) $body['cms_draft_id'] ) : '';
+	$revision  = isset( $body['cms_revision'] ) ? (int) $body['cms_revision'] : 0;
+	$page_hash = isset( $body['page_payload_hash'] ) ? strtolower( sanitize_text_field( (string) $body['page_payload_hash'] ) ) : '';
+	if ( ! $post || 'draft' !== $post->post_status ) {
+		return stc_cms_publish_error( 'PREVIEW_POST_NOT_DRAFT', __( 'Only the bound WordPress draft can receive a preview ticket.', 'solo-to-china' ), 409 );
+	}
+	if ( ! $draft_id || $draft_id !== (string) get_post_meta( $post_id, '_stc_cms_draft_id', true ) ) {
+		return stc_cms_publish_error( 'PREVIEW_DRAFT_ID_MISMATCH', __( 'The CMS draft identity does not match this WordPress post.', 'solo-to-china' ), 409 );
+	}
+	$stored_hash = strtolower( (string) get_post_meta( $post_id, '_stc_page_payload_hash', true ) );
+	if ( ! preg_match( '/^[a-f0-9]{64}$/', $page_hash ) || ! hash_equals( $stored_hash, $page_hash ) ) {
+		return stc_cms_publish_error( 'PREVIEW_REVISION_MISMATCH', __( 'The delivered page revision is stale or unavailable.', 'solo-to-china' ), 409 );
+	}
+	$prior_hash = (string) get_post_meta( $post_id, '_stc_preview_ticket_hash', true );
+	if ( $prior_hash ) {
+		delete_transient( 'stc_preview_' . $prior_hash );
+	}
+	$token      = bin2hex( random_bytes( 32 ) );
+	$token_hash = hash( 'sha256', $token );
+	$expires    = time() + 15 * MINUTE_IN_SECONDS;
+	set_transient( 'stc_preview_' . $token_hash, array(
+		'post_id' => $post_id, 'draft_id' => $draft_id, 'revision' => $revision,
+		'page_payload_hash' => $page_hash, 'expires' => $expires,
+	), 15 * MINUTE_IN_SECONDS );
+	update_post_meta( $post_id, '_stc_preview_ticket_hash', $token_hash );
+	$bridge_url = add_query_arg( 'stc_preview_exchange', '1', home_url( '/' ) );
+	$url        = $bridge_url . '#stc_preview_ticket=' . rawurlencode( $token );
+	return new WP_REST_Response( array( 'preview_url' => $url, 'expires_at' => gmdate( 'c', $expires ) ), 201 );
+}
+
+/** Resolve a stored capability without granting a WordPress login session. */
+function stc_cms_preview_ticket_by_hash( $token_hash ) {
+	if ( ! preg_match( '/^[a-f0-9]{64}$/', (string) $token_hash ) ) {
+		return null;
+	}
+	$ticket     = get_transient( 'stc_preview_' . $token_hash );
+	$post       = is_array( $ticket ) ? get_post( (int) $ticket['post_id'] ) : null;
+	$valid      = $post && 'draft' === $post->post_status && time() <= (int) $ticket['expires']
+		&& hash_equals( (string) get_post_meta( $post->ID, '_stc_preview_ticket_hash', true ), $token_hash )
+		&& hash_equals( (string) get_post_meta( $post->ID, '_stc_page_payload_hash', true ), (string) $ticket['page_payload_hash'] )
+		&& (string) get_post_meta( $post->ID, '_stc_cms_draft_id', true ) === (string) $ticket['draft_id'];
+	return $valid ? $ticket : null;
+}
+
+/** Exchange a fragment-only bearer token for an HttpOnly scoped capability. */
+function stc_rest_exchange_cms_preview_ticket( $request ) {
+	$body       = $request->get_json_params();
+	$token      = isset( $body['token'] ) ? sanitize_text_field( (string) $body['token'] ) : '';
+	$token_hash = preg_match( '/^[a-f0-9]{64}$/', $token ) ? hash( 'sha256', $token ) : '';
+	$ticket     = stc_cms_preview_ticket_by_hash( $token_hash );
+	if ( ! $ticket ) {
+		return stc_cms_publish_error( 'PREVIEW_TICKET_INVALID', __( 'This preview ticket expired, was revoked, or belongs to another draft revision.', 'solo-to-china' ), 403 );
+	}
+	setcookie( 'stc_preview_cap', $token_hash, array(
+		'expires'  => (int) $ticket['expires'],
+		'path'     => COOKIEPATH ? COOKIEPATH : '/',
+		'domain'   => defined( 'COOKIE_DOMAIN' ) ? COOKIE_DOMAIN : '',
+		'secure'   => is_ssl(),
+		'httponly' => true,
+		'samesite' => 'Lax',
+	) );
+	$response = new WP_REST_Response( array(
+		'preview_url' => add_query_arg( array( 'p' => (int) $ticket['post_id'], 'preview' => 'true', 'stc_cms_preview' => '1' ), home_url( '/' ) ),
+	), 200 );
+	$response->header( 'Cache-Control', 'private, no-store, max-age=0' );
+	return $response;
+}
+
+/** Serve the same-origin fragment bridge before a theme template can disclose it. */
+function stc_render_cms_preview_exchange() {
+	if ( empty( $_GET['stc_preview_exchange'] ) ) {
+		return;
+	}
+	nocache_headers();
+	header( 'Cache-Control: private, no-store, max-age=0', true );
+	header( 'Referrer-Policy: no-referrer', true );
+	header( 'X-Robots-Tag: noindex, nofollow, noarchive', true );
+	$endpoint = rest_url( 'stc/v1/cms-preview/exchange' );
+	?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title><?php echo esc_html__( 'Opening secure preview', 'solo-to-china' ); ?></title></head><body><main><p id="stc-preview-status"><?php echo esc_html__( 'Opening the requested draft preview…', 'solo-to-china' ); ?></p></main><script>(async function(){var status=document.getElementById('stc-preview-status');try{var params=new URLSearchParams(location.hash.slice(1));var token=params.get('stc_preview_ticket')||'';history.replaceState(null,'',location.pathname+location.search);if(!/^[a-f0-9]{64}$/.test(token)){throw new Error('invalid');}var response=await fetch(<?php echo wp_json_encode( $endpoint ); ?>,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:token})});var data=await response.json();if(!response.ok||!data.preview_url){throw new Error('rejected');}location.replace(data.preview_url);}catch(error){status.textContent=<?php echo wp_json_encode( __( 'This secure preview link is invalid or has expired.', 'solo-to-china' ) ); ?>;}})();</script></body></html><?php
+	exit;
+}
+add_action( 'template_redirect', 'stc_render_cms_preview_exchange', -100 );
+
+/** Canonicalize tampered post parameters to the capability-bound draft ID. */
+function stc_canonicalize_cms_preview_url() {
+	if ( empty( $GLOBALS['stc_cms_preview_ticket'] ) ) {
+		return;
+	}
+	$post_id = (int) $GLOBALS['stc_cms_preview_ticket']['post_id'];
+	if ( isset( $_GET['p'] ) && (int) $_GET['p'] === $post_id ) {
+		return;
+	}
+	wp_safe_redirect( add_query_arg( array( 'p' => $post_id, 'preview' => 'true', 'stc_cms_preview' => '1' ), home_url( '/' ) ), 302, 'SoloToChina secure preview' );
+	exit;
+}
+add_action( 'template_redirect', 'stc_canonicalize_cms_preview_url', -90 );
+
+/** Validate the HttpOnly scoped capability before WordPress resolves the draft query. */
+function stc_bootstrap_cms_preview_ticket() {
+	if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || empty( $_GET['stc_cms_preview'] ) || empty( $_COOKIE['stc_preview_cap'] ) ) {
+		return;
+	}
+	$token_hash = sanitize_text_field( wp_unslash( $_COOKIE['stc_preview_cap'] ) );
+	$ticket     = stc_cms_preview_ticket_by_hash( $token_hash );
+	if ( ! $ticket ) {
+		wp_die( esc_html__( 'This preview ticket expired, was revoked, or belongs to another draft revision.', 'solo-to-china' ), '', array( 'response' => 403 ) );
+	}
+	$GLOBALS['stc_cms_preview_ticket'] = $ticket;
+	define( 'STC_CMS_SCOPED_PREVIEW', true );
+	$post = get_post( (int) $ticket['post_id'] );
+	wp_set_current_user( (int) $post->post_author );
+}
+add_action( 'init', 'stc_bootstrap_cms_preview_ticket', 1 );
+
+/** Reduce the temporary front-end identity to read-only for this request. */
+function stc_limit_cms_preview_capabilities( $allcaps ) {
+	if ( empty( $GLOBALS['stc_cms_preview_ticket'] ) ) {
+		return $allcaps;
+	}
+	return array( 'exist' => true, 'read' => true );
+}
+add_filter( 'user_has_cap', 'stc_limit_cms_preview_capabilities', PHP_INT_MAX, 1 );
+
+/** Keep the capability-bound request on its one draft. */
+function stc_scope_cms_preview_query( $query ) {
+	if ( empty( $GLOBALS['stc_cms_preview_ticket'] ) || ! $query->is_main_query() ) {
+		return;
+	}
+	$query->set( 'p', (int) $GLOBALS['stc_cms_preview_ticket']['post_id'] );
+	$query->set( 'post_type', 'post' );
+	$query->set( 'post_status', 'draft' );
+}
+add_action( 'pre_get_posts', 'stc_scope_cms_preview_query', 1 );
+
+/** Prevent ticket caching, indexing, referrer leakage, and admin affordances. */
+function stc_secure_cms_preview_response() {
+	if ( empty( $GLOBALS['stc_cms_preview_ticket'] ) ) {
+		return;
+	}
+	nocache_headers();
+	header( 'Cache-Control: private, no-store, max-age=0', true );
+	header( 'Referrer-Policy: no-referrer', true );
+	header( 'X-Robots-Tag: noindex, nofollow, noarchive', true );
+	header( 'Vary: Cookie', false );
+}
+add_action( 'send_headers', 'stc_secure_cms_preview_response', 1 );
+add_filter( 'show_admin_bar', function ( $show ) { return defined( 'STC_CMS_SCOPED_PREVIEW' ) ? false : $show; } );
 
 /**
  * Build JSON-LD markup from structured stored data.
