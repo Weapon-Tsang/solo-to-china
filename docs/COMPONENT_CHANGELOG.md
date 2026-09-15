@@ -1,5 +1,9 @@
 # Component Changelog
 
+## Registry 1.4.0 / Parent Theme 0.33.3 - 2026-09-16
+
+- Keep the identity boundary fail-closed while accepting a page fingerprint rotation only when the explicit WordPress post and stored CMS draft ID both match the incoming package.
+
 ## Registry 1.4.0 / Parent Theme 0.33.2 - 2026-09-15
 
 - Preserve Registry 1.4.0 while returning exact commercial slot/page-hash receipts from CMS draft delivery.

@@ -1087,7 +1087,11 @@ function stc_cms_resolve_target_post_id( $package, $route_post_id = 0 ) {
 	}
 	$stored_page_id = get_post_meta( $target_id, '_stc_cms_page_id', true );
 	if ( '' !== $stored_page_id && (string) $stored_page_id !== (string) $package['page']['metadata']['pageId'] ) {
-		return stc_cms_publish_error( 'INVALID_PAGE_SCHEMA', __( 'The draft belongs to a different CMS page.', 'solo-to-china' ), 409 );
+		$stored_draft_id  = (string) get_post_meta( $target_id, '_stc_cms_draft_id', true );
+		$package_draft_id = isset( $publication['cms_draft_id'] ) ? (string) $publication['cms_draft_id'] : '';
+		if ( '' === $stored_draft_id || '' === $package_draft_id || ! hash_equals( $stored_draft_id, $package_draft_id ) ) {
+			return stc_cms_publish_error( 'INVALID_PAGE_SCHEMA', __( 'The draft belongs to a different CMS page.', 'solo-to-china' ), 409 );
+		}
 	}
 
 	return $target_id;

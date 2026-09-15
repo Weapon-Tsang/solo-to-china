@@ -197,6 +197,21 @@ function stc_playground_verify_cms_publish_path() {
 	$put = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $package );
 	stc_playground_cms_assert( 200 === $put->get_status() && 'CMS Runtime Draft Updated' === get_the_title( $post_id ), 'Explicit PUT did not update the draft.' );
 
+	// A page composition fingerprint may rotate during a bounded layout refresh.
+	// The stable CMS draft identity must authorize that exact same-post update,
+	// while a different or missing draft identity must remain blocked.
+	$rotated = stc_playground_cms_clone( $package );
+	$rotated['page']['metadata']['pageId'] = 'runtime-page-002';
+	$rotation = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $rotated );
+	stc_playground_cms_assert( 200 === $rotation->get_status() && 'runtime-page-002' === get_post_meta( $post_id, '_stc_cms_page_id', true ), 'Same-draft page identity rotation was rejected.' );
+	$wrong_draft = stc_playground_cms_clone( $rotated );
+	$wrong_draft['page']['metadata']['pageId'] = 'runtime-page-003';
+	$wrong_draft['publication']['cms_draft_id'] = 'runtime-draft-other';
+	$wrong_rotation = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $wrong_draft );
+	$wrong_rotation_data = $wrong_rotation->get_data();
+	stc_playground_cms_assert( 409 === $wrong_rotation->get_status() && 'INVALID_PAGE_SCHEMA' === $wrong_rotation_data['code'], 'Cross-draft page identity rotation was accepted.' );
+	$package = $rotated;
+
 	$page_hash = (string) get_post_meta( $post_id, '_stc_page_payload_hash', true );
 	$ticket_request = new WP_REST_Request( 'POST', '/stc/v1/cms-articles/' . $post_id . '/preview-ticket' );
 	$ticket_request->set_url_params( array( 'post_id' => $post_id ) );
