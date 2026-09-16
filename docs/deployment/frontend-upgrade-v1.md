@@ -1,6 +1,6 @@
 # Upgrade deployment and rollback — local artifacts only
 
-Release set: Parent **0.33.3**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0**, Content Contract **2.1.0**, Publish Package **1.0.0**. The 0.33.3 patch is parent-theme-only and must be installed atomically with an immediate copy of the previous parent directory available for rollback. It changes no WordPress database schema and requires no catalog import. Production installation requires explicit authorization.
+Development release set: Parent **0.33.4**, Child **0.12.1**, Tools **0.26.0**, Registry **1.4.0**, Content Contract **2.1.0**, Publish Package **1.0.0**. Parent and Child must be installed atomically with immediate copies of both previous theme directories available for rollback. The patch changes no WordPress database schema and requires no catalog import. Production installation requires explicit authorization.
 
 1. Back up the database, current three component directories, site options, server settings and active destination catalog revision. Preserve the existing approved Trip.Planner option/filter destination. Record the live versions before replacing anything.
 2. Verify SHA-256 against `dist/release-manifest.txt`. Install the parent ZIP first; install/activate the child ZIP second; install/activate Tools third. Test in staging before production. The child still depends on the parent; plugin deactivation now provides readable shortcode fallbacks.
@@ -15,4 +15,4 @@ Release set: Parent **0.33.3**, Child **0.12.0**, Tools **0.26.0**, Registry **1
 
 Rollback: restore the prior three directories as a set, restore relevant site options/DB backup if a migration or CMS publish occurred, restore the previous catalog revision with the rollback endpoint, and purge HTML/assets. Catalog rollback swaps the active and previous pointers; take your own export before multiple successive imports. Do not roll back article content just because a prior screenshot differs. The initial dirty workspace was preserved in the local baseline patch and historical handoff archive.
 
-Only the user/server administrator can perform the production steps above: this workspace has no production deployment authorization, hosting login, selected gateway credentials, or external CMS checkout.
+Production installation of Parent 0.33.4 and Child 0.12.1 was explicitly authorized on 2026-09-16. The active WordPress administrator session may be used for this bounded theme rollout. No gateway credential change, catalog import, article-body write or external CMS draft repair is included.

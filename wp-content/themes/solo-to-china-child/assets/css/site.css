@@ -850,6 +850,17 @@ body {
 }
 
 @media (max-width: 599px) {
+	.stc-header,
+	.home .stc-header {
+		padding-inline: clamp(0.5rem, 3vw, 1rem);
+	}
+
+	.stc-nav,
+	.home .stc-nav {
+		inset-inline: clamp(0.5rem, 3vw, 1rem);
+		max-inline-size: calc(100vw - 2 * clamp(0.5rem, 3vw, 1rem));
+	}
+
 	.stc-page-hero--planner {
 		padding-block: var(--stc-space-16);
 		row-gap: var(--stc-space-4);
@@ -916,6 +927,19 @@ body {
 
 	.stc-footer__inner {
 		gap: 1.75rem 1.25rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.stc-footer__brand,
+	.stc-footer__column,
+	.stc-footer__contact,
+	.stc-footer__contact a,
+	.stc-footer__column a {
+		grid-column: 1;
+		min-inline-size: 0;
+		max-inline-size: 100%;
+		overflow-wrap: anywhere;
+		white-space: normal;
 	}
 
 	.stc-footer__bottom {

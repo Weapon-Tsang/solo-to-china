@@ -51,7 +51,7 @@ Assert-Runtime ($ContractResponse.StatusCode -eq 200) "Content Contract endpoint
 Assert-Runtime ($ContractResponse.Content -eq $ContractAgain.Content) "Content Contract JSON changed between consecutive reads."
 Assert-Runtime ([string]$ContractResponse.Headers.ETag -eq [string]$ContractAgain.Headers.ETag) "Content Contract ETag is not stable."
 Assert-Runtime ($Contract.contract_version -eq "2.1.0") "Content Contract version is not 2.1.0."
-Assert-Runtime ($Contract.theme_version -eq "0.33.3") "Content Contract Theme version is not 0.33.3."
+Assert-Runtime ($Contract.theme_version -eq "0.33.4") "Content Contract Theme version is not 0.33.4."
 Assert-Runtime ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."
 Assert-Runtime ($Contract.principles.cms -eq "Decide what the page contains.") "CMS responsibility principle is missing."
 Assert-Runtime ($Contract.principles.content_type -eq "Content type is taxonomy, not layout.") "Content type boundary principle is missing."
@@ -83,7 +83,11 @@ $ExpectedChecksum = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $Roo
 Assert-Runtime ($PublishSchema.properties.contract.properties.contractChecksum.const -eq $ExpectedChecksum) "Publish Package Schema checksum does not match the deployed Component Contract."
 if (-not $ParentOnly) {
     try {
-        Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/cms-articles" -Method Post -ContentType "application/json" -Body "{}" | Out-Null
+        # WordPress Playground auto-login redirects the first anonymous request
+        # unless its local-only guard cookie is present. Set the guard without
+        # carrying an auth cookie so this probes the real anonymous API boundary.
+        Invoke-WebRequest -UseBasicParsing "$BaseUrl/wp-json/stc/v1/cms-articles" -Method Post -ContentType "application/json" -Body "{}" `
+            -Headers @{ Cookie = "playground_auto_login_already_happened=1" } | Out-Null
         Add-RuntimeFailure "Anonymous CMS Article POST was not rejected."
     } catch {
         Assert-Runtime ($_.Exception.Response.StatusCode.value__ -eq 403) "Anonymous CMS Article POST did not return HTTP 403."

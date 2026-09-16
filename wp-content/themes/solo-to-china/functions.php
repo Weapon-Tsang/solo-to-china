@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.33.3' );
+define( 'STC_THEME_VERSION', '0.33.4' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -566,12 +566,19 @@ function stc_render_guide_toc( $modifier_class = '' ) {
 	$classes = trim( 'stc-guide-toc ' . sanitize_html_class( $modifier_class ) );
 
 	echo '<nav class="' . esc_attr( $classes ) . '" aria-label="' . esc_attr__( 'On this page', 'solo-to-china' ) . '" data-stc-guide-toc>';
-	echo '<h2>' . esc_html__( 'On this page', 'solo-to-china' ) . '</h2>';
+	$is_mobile = false !== strpos( $modifier_class, 'stc-guide-toc--mobile' );
+	if ( $is_mobile ) {
+		echo '<details class="stc-guide-toc__disclosure">';
+		echo '<summary><span>' . esc_html__( 'On this page', 'solo-to-china' ) . '</span><small>' . esc_html( sprintf( _n( '%d section', '%d sections', count( $headings ), 'solo-to-china' ), count( $headings ) ) ) . '</small></summary>';
+	} else {
+		echo '<h2>' . esc_html__( 'On this page', 'solo-to-china' ) . '</h2>';
+	}
 	echo '<ol data-stc-guide-toc-list>';
     foreach ( $headings as $heading ) {
         echo '<li><a href="#' . esc_attr( $heading[1] ) . '">' . esc_html( wp_strip_all_tags( $heading[2] ) ) . '</a></li>';
     }
     echo '</ol>';
+	if ( $is_mobile ) { echo '</details>'; }
 	echo '</nav>';
 }
 

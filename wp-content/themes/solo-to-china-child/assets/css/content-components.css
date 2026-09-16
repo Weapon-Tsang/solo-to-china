@@ -19,12 +19,13 @@
 .stc-content-block > h3 {
 	font-size: clamp(1.35rem, 2.4vw, 1.8rem);
 	margin-bottom: var(--stc-space-4);
+	overflow-wrap: anywhere;
 }
 
 .stc-content-block--quick-answer {
-	background: color-mix(in srgb, var(--stc-color-jade) 9%, var(--stc-color-surface));
-	border-block: 1px solid color-mix(in srgb, var(--stc-color-jade) 28%, var(--stc-color-line));
-	border-inline-start: var(--stc-space-1) solid var(--stc-color-jade);
+	background: color-mix(in srgb, var(--stc-color-brand) 7%, var(--stc-color-surface));
+	border-block: 1px solid color-mix(in srgb, var(--stc-color-brand) 24%, var(--stc-color-line));
+	border-inline-start: var(--stc-space-1) solid var(--stc-color-brand);
 	padding: clamp(var(--stc-space-6), 4vw, var(--stc-space-10));
 }
 
@@ -93,13 +94,13 @@
 
 .stc-content-block--tip {
 	background: var(--stc-color-surface-muted);
-	border-inline-start: var(--stc-space-1) solid var(--stc-color-jade);
+	border-inline-start: var(--stc-space-1) solid var(--stc-color-brand);
 	border-radius: 0 var(--stc-radius-sm) var(--stc-radius-sm) 0;
 	padding: var(--stc-space-6);
 }
 
 .stc-content-block--tip h3 {
-	color: var(--stc-color-jade);
+	color: var(--stc-color-brand);
 }
 
 .stc-content-block--warning {
@@ -154,7 +155,7 @@
 	background: var(--stc-color-surface);
 	border: 1px solid var(--stc-color-line);
 	border-radius: var(--stc-radius-md);
-	box-shadow: var(--stc-shadow-card);
+	box-shadow: none;
 	padding: clamp(var(--stc-space-6), 4vw, var(--stc-space-10));
 }
 
@@ -182,10 +183,10 @@
 
 .stc-content-block__timeline li::before {
 	align-items: center;
-	background: color-mix(in srgb, var(--stc-color-jade) 12%, var(--stc-color-surface));
-	border: 1px solid color-mix(in srgb, var(--stc-color-jade) 36%, var(--stc-color-line));
+	background: color-mix(in srgb, var(--stc-color-brand) 7%, var(--stc-color-surface));
+	border: 1px solid color-mix(in srgb, var(--stc-color-brand) 32%, var(--stc-color-line));
 	border-radius: var(--stc-radius-pill);
-	color: var(--stc-color-jade);
+	color: var(--stc-color-brand);
 	content: counter(stc-route-stop, decimal-leading-zero);
 	display: flex;
 	font-size: var(--stc-font-size-xs);

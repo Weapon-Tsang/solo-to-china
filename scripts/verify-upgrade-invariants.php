@@ -10,6 +10,9 @@ function stc_verify_upgrade_invariants() {
     $GLOBALS['stc_rendered_article_content']='<p>A short article without headings.</p>';
     ob_start();stc_render_guide_toc();$toc=ob_get_clean();
     $assert(''===$toc,'An article without H2 does not render an empty navigation');
+	$GLOBALS['stc_rendered_article_content']='<h2 id="long-title">A very long practical heading with 09:00–17:00 opening hours</h2><h2 id="route">Route</h2>';
+	ob_start();stc_render_guide_toc('stc-guide-toc--mobile');$mobile_toc=ob_get_clean();
+	$assert(false!==strpos($mobile_toc,'<details class="stc-guide-toc__disclosure">') && false!==strpos($mobile_toc,'2 sections') && false!==strpos($mobile_toc,'09:00–17:00 opening hours'),'Mobile TOC is a complete native disclosure with untruncated labels');
     $GLOBALS['stc_rendered_article_content']=$saved_content;
     if (!function_exists('stc_tools_get_places')) {return array('passed'=>$passed,'php_files'=>$count,'tools'=>'inactive');}
     $catalog=json_decode(file_get_contents(STC_TOOLS_PATH.'data/destinations-v1.json'),true);
