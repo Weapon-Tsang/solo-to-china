@@ -1,5 +1,11 @@
 # Component Changelog
 
+## 1.4.1 / Parent Theme 0.33.5 - 2026-09-19
+
+- Make disclosure optional on every commercial Registry component so older and leaner CMS payloads remain renderable.
+- Preserve a visible compact `Paid link` fallback in the renderer; explicit disclosure text remains supported.
+- Replace horizontal mobile TOC pills with a native vertical disclosure list and add Parent-only dynamic-component styling parity.
+
 ## Registry 1.4.0 / Parent Theme 0.33.3 - 2026-09-16
 
 - Keep the identity boundary fail-closed while accepting a page fingerprint rotation only when the explicit WordPress post and stored CMS draft ID both match the incoming package.

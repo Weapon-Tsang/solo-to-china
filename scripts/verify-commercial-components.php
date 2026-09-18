@@ -81,6 +81,13 @@ stc_test( false !== strpos( $booking_html, 'data-stc-commercial="true"' ), 'Even
 stc_test( false !== strpos( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot identity is missing from visible DOM.' );
 stc_test( 1 === substr_count( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot rendered more than once.' );
 
+$booking_without_disclosure = $booking;
+unset( $booking_without_disclosure['disclosure'] );
+$booking_without_disclosure_html = stc_render_affiliate_booking_card_component( $booking_without_disclosure );
+stc_test( '' !== $booking_without_disclosure_html, 'Commercial card without disclosure was rejected.' );
+stc_test( false !== strpos( $booking_without_disclosure_html, 'Paid link' ), 'Compact default disclosure is missing.' );
+stc_test( false === strpos( $booking_without_disclosure_html, 'commission' ), 'Long commission sentence leaked into the default disclosure.' );
+
 $unknown = $booking;
 $unknown['html'] = '<script>alert(1)</script>';
 stc_test( '' === stc_render_affiliate_booking_card_component( $unknown ), 'Unknown/raw HTML field was not rejected.' );

@@ -6,10 +6,10 @@
 
 | 部件 | 当前版本 |
 |---|---|
-| Parent Theme | 0.33.4 |
-| Child Theme | 0.12.1 |
+| Parent Theme | 0.33.5 |
+| Child Theme | 0.12.2 |
 | Tools Plugin | 0.26.0 |
-| Component Registry | 1.4.0 |
+| Component Registry | 1.4.1 |
 | Content Contract | 2.1.0 |
 | Publish Package | 1.0.0 |
 

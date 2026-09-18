@@ -77,7 +77,7 @@ if ($Registry) {
 	Assert-Registry ($PublishedContractRaw -ceq $ThemePublishedContractRaw) "Theme generated Component Contract must exactly match the repository artifact."
 	Assert-Registry ($PageSchemaRaw -ceq $ThemePageSchemaRaw) "Theme generated Page Schema must exactly match the repository artifact."
 	Assert-Registry ($PublishPackageSchemaRaw -ceq $ThemePublishPackageSchemaRaw) "Theme generated Publish Package Schema must exactly match the repository artifact."
-    Assert-Registry ($Registry.registry_version -eq "1.4.0") "Component Registry version must be 1.4.0."
+    Assert-Registry ($Registry.registry_version -eq "1.4.1") "Component Registry version must be 1.4.1."
     Assert-Registry ($Registry.principles.frontend -eq "Frontend defines what can be rendered.") "Frontend component capability principle is missing."
     Assert-Registry ($Registry.principles.cms -eq "CMS decides what should be rendered.") "CMS selection principle is missing."
 
@@ -216,7 +216,7 @@ Assert-Registry ($Catalog.Contains("Proposed, Not Available")) "Component Catalo
 foreach ($Token in @("Frontend defines what CAN be rendered", "CMS decides what SHOULD be rendered", "contracts/component-registry.json", "contracts/page-schema.json", "docs/COMPONENT_LIBRARY.md", "docs/COMPONENT_CHANGELOG.md")) {
     Assert-Registry ($CmsContractDoc.Contains($Token)) "CMS/Frontend Contract documentation is missing: $Token"
 }
-Assert-Registry ($ComponentChangelog.Contains("## 1.4.0")) "Component Changelog must record Registry 1.4.0."
+Assert-Registry ($ComponentChangelog.Contains("## 1.4.1")) "Component Changelog must record Registry 1.4.1."
 Assert-Registry ($ComponentChangelog.Contains("Pure visual changes are excluded")) "Component Changelog must exclude visual-only changes."
 foreach ($Token in @("contracts/component-registry.json", "contracts/page-schema.json", "contracts/cms-publish-package.schema.json", "docs/COMPONENT_LIBRARY.md", "ConvertTo-CanonicalJson")) {
     Assert-Registry ($Generator.Contains($Token)) "Registry generator must publish: $Token"

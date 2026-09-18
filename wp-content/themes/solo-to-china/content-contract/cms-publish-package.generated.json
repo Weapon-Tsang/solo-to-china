@@ -2,22 +2,22 @@
   "$id": "https://solotochina.com/contracts/cms-publish-package.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "contractVersion": "1.4.0",
+  "contractVersion": "1.4.1",
   "description": "Authenticated CMS-to-WordPress draft delivery package. WordPress validates and serializes page.blocks[] in the supplied order.",
   "properties": {
     "contract": {
       "additionalProperties": false,
       "properties": {
         "componentContractVersion": {
-          "const": "1.4.0"
+          "const": "1.4.1"
         },
         "contractChecksum": {
-          "const": "02695fda5c4a517021dad277a66098f61a9ce81fa99e7a8c6061ab81162b8332",
+          "const": "57246c1300cdfb1ed9d6cbdc9bdca8f70af9c5a8765bbb6b8fe1856c49349f18",
           "pattern": "^[a-f0-9]{64}$",
           "type": "string"
         },
         "pageSchemaVersion": {
-          "const": "1.4.0"
+          "const": "1.4.1"
         }
       },
       "required": [
@@ -77,7 +77,7 @@
       "$id": "https://solotochina.com/contracts/page-schema.json",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "additionalProperties": false,
-      "contractVersion": "1.4.0",
+      "contractVersion": "1.4.1",
       "description": "CMS-authored page metadata and ordered content blocks for the SoloToChina frontend.",
       "properties": {
         "blocks": {
@@ -1233,7 +1233,6 @@
                       "description",
                       "cta_label",
                       "target_url",
-                      "disclosure",
                       "scope_type",
                       "scope_key",
                       "slot_key",
@@ -1445,7 +1444,6 @@
                       "title",
                       "description",
                       "cta_label",
-                      "disclosure",
                       "scope_type",
                       "scope_key",
                       "slot_key",
@@ -1679,7 +1677,6 @@
                       "description",
                       "cta_label",
                       "target_url",
-                      "disclosure",
                       "scope_type",
                       "scope_key",
                       "slot_key",
@@ -1838,7 +1835,6 @@
                       "description",
                       "cta_label",
                       "target_url",
-                      "disclosure",
                       "scope_type",
                       "scope_key",
                       "slot_key",
