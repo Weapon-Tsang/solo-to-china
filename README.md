@@ -38,7 +38,7 @@ Current development branch deliverables:
 
 The Theme Registry at `wp-content/themes/solo-to-china/content-contract/component-registry.v1.json` is the authoring source. Run `scripts/generate-component-catalog.ps1` after an approved capability change; do not maintain the published Contract, Page Schema, or Catalog as separate manual component lists.
 
-Current release: Parent **0.33.3**, Child **0.12.0**, Tools **0.26.0**, Registry **1.4.0** (29 capabilities / 26 page block types). Content Contract **2.1.0** and Publish Package **1.0.0** remain compatible. Parent 0.33.3 additionally permits a page fingerprint to rotate only when the exact stable CMS draft identity still owns the same WordPress draft.
+Current release: Parent **0.33.5**, Child **0.12.2**, Tools **0.26.0**, Registry **1.4.1** (29 capabilities / 26 page block types). Content Contract **2.1.0** and Publish Package **1.0.0** remain compatible. Registry 1.4.1 makes per-card commercial disclosure optional while preserving a visible `Paid link` renderer default.
 
 This upgrade adds published entity links, responsive WebP images, a warm-white/blue visual system, server-rendered TOC, accessible Share/More, new optional editorial components, sequential image preparation with Worker support, cancellation guards, versioned destination data and partial-accuracy Taxi cards. Homepage tool entries no longer load tool execution code. Ticket estimates remain auxiliary and require a current reviewed rule.
 

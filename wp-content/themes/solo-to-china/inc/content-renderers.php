@@ -257,7 +257,7 @@ function stc_render_commercial_component_shell( $data, $component, $variant, $me
 			<?php if ( ! empty( $data['price_text'] ) ) : ?>
 				<p class="stc-dynamic-component__price"><?php echo esc_html( $data['price_text'] ); ?></p>
 			<?php endif; ?>
-			<p class="stc-dynamic-component__disclosure"><?php echo esc_html( $data['disclosure'] ); ?></p>
+			<p class="stc-dynamic-component__disclosure"><?php echo esc_html( ! empty( $data['disclosure'] ) ? $data['disclosure'] : __( 'Paid link', 'solo-to-china' ) ); ?></p>
 		</div>
 		<?php if ( $target_url && $cta_label ) : ?>
 			<a class="stc-button stc-button--secondary stc-dynamic-component__action" data-stc-commercial-click href="<?php echo esc_url( $target_url ); ?>" target="_blank" rel="sponsored nofollow noopener"><?php echo esc_html( $cta_label ); ?></a>
@@ -454,7 +454,7 @@ function stc_render_affiliate_cta_component( $attributes ) {
 			<?php if ( $price_text ) : ?>
 				<p class="stc-dynamic-component__price"><?php echo esc_html( $price_text ); ?></p>
 			<?php endif; ?>
-			<p class="stc-dynamic-component__disclosure"><?php echo esc_html( $disclosure ? $disclosure : __( 'SoloToChina may earn a commission from this link at no extra cost to you.', 'solo-to-china' ) ); ?></p>
+			<p class="stc-dynamic-component__disclosure"><?php echo esc_html( $disclosure ? $disclosure : __( 'Paid link', 'solo-to-china' ) ); ?></p>
 		</div>
 		<a class="stc-button stc-button--secondary stc-dynamic-component__action" href="<?php echo esc_url( $target_url ); ?>" target="_blank" rel="sponsored nofollow noopener"><?php echo esc_html( $cta_label ); ?></a>
 	</aside>
@@ -478,7 +478,7 @@ function stc_commercial_common_fields() {
  * @return string[]
  */
 function stc_commercial_common_required_fields() {
-	return array( 'affiliate_asset_id', 'provider', 'asset_type', 'product_category', 'title', 'description', 'disclosure', 'scope_type', 'scope_key', 'slot_key', 'placement', 'strategy_version' );
+	return array( 'affiliate_asset_id', 'provider', 'asset_type', 'product_category', 'title', 'description', 'scope_type', 'scope_key', 'slot_key', 'placement', 'strategy_version' );
 }
 
 /**

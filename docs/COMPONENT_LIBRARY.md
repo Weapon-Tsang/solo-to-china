@@ -2,7 +2,7 @@
 
 Generated from `component-registry.v1.json`. Do not edit component capability details here by hand; update the Registry, implementations, Gallery, and tests, then run `.\scripts\generate-component-catalog.ps1`.
 
-Registry version: `1.4.0`
+Registry version: `1.4.1`
 
 CMS-usable capabilities: `29`
 
@@ -1256,7 +1256,7 @@ Example:
   "description": "Check location before price.",
   "cta_label": "View options",
   "target_url": "https://example.com",
-  "disclosure": "Sponsored link."
+  "disclosure": "Paid link"
 }
 ```
 
@@ -1267,8 +1267,8 @@ Example:
 - CMS usable: `true` via `page_block`
 - Purpose: Renders a CMS-selected high-intent Trip.com deep or category link after QA.
 - Variants: `default`
-- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
-- Optional fields: `price_text`, `entity`, `route`, `destination`, `anchor`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `price_text`, `disclosure`, `entity`, `route`, `destination`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
 - Accessibility: Uses a labeled aside, visible disclosure, and a descriptive sponsored link.
 - Responsive behavior: Stacks copy and action without horizontal overflow or urgency treatment.
@@ -1288,7 +1288,6 @@ Schema:
     "description",
     "cta_label",
     "target_url",
-    "disclosure",
     "scope_type",
     "scope_key",
     "slot_key",
@@ -1424,7 +1423,7 @@ Example:
   "description": "Review the official listing details before booking.",
   "cta_label": "View ticket options",
   "target_url": "https://www.trip.com/",
-  "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+  "disclosure": "Paid link",
   "scope_type": "ENTITY",
   "scope_key": "forbidden-city",
   "slot_key": "tickets-contextual-1",
@@ -1440,8 +1439,8 @@ Example:
 - CMS usable: `true` via `page_block`
 - Purpose: Renders a CMS-selected Trip.com search link or allowlisted structured search box.
 - Variants: `link, search_box`
-- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
-- Optional fields: `target_url`, `embed_config`, `entity`, `route`, `destination`, `anchor`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `target_url`, `embed_config`, `disclosure`, `entity`, `route`, `destination`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
 - Accessibility: Keeps instructions and disclosure visible; structured embeds include a descriptive title.
 - Responsive behavior: Uses a bounded responsive iframe or a full-width link action on phones.
@@ -1460,7 +1459,6 @@ Schema:
     "title",
     "description",
     "cta_label",
-    "disclosure",
     "scope_type",
     "scope_key",
     "slot_key",
@@ -1655,7 +1653,7 @@ Example:
   "description": "Compare location and arrival access for your dates.",
   "cta_label": "Search hotels",
   "target_url": "https://www.trip.com/hotels/",
-  "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+  "disclosure": "Paid link",
   "scope_type": "DESTINATION",
   "scope_key": "beijing",
   "slot_key": "hotel-search-1",
@@ -1671,8 +1669,8 @@ Example:
 - CMS usable: `true` via `page_block`
 - Purpose: Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback.
 - Variants: `static, dynamic`
-- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
-- Optional fields: `image_url`, `alt_text`, `embed_config`, `entity`, `route`, `destination`, `anchor`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `image_url`, `alt_text`, `embed_config`, `disclosure`, `entity`, `route`, `destination`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
 - Accessibility: Static images require alt text; dynamic embeds have titles and disclosure outside the frame.
 - Responsive behavior: Banner media is width-bounded and cannot overflow the article.
@@ -1692,7 +1690,6 @@ Schema:
     "description",
     "cta_label",
     "target_url",
-    "disclosure",
     "scope_type",
     "scope_key",
     "slot_key",
@@ -1909,7 +1906,7 @@ Example:
   "target_url": "https://www.trip.com/",
   "image_url": "https://pages.trip.com/banner.jpg",
   "alt_text": "Trip.com travel planning",
-  "disclosure": "Affiliate link. SoloToChina may earn a commission at no extra cost to you.",
+  "disclosure": "Paid link",
   "scope_type": "GLOBAL",
   "scope_key": "global",
   "slot_key": "end-resource-banner-1",
@@ -1925,8 +1922,8 @@ Example:
 - CMS usable: `true` via `page_block`
 - Purpose: Renders a time-bounded CMS-selected Trip.com promotion without changing editorial conclusions.
 - Variants: `default`
-- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `disclosure`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
-- Optional fields: `price_text`, `valid_from`, `valid_until`, `entity`, `route`, `destination`, `anchor`
+- Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
+- Optional fields: `price_text`, `disclosure`, `valid_from`, `valid_until`, `entity`, `route`, `destination`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
 - Accessibility: States the provider relationship and validity without false urgency.
 - Responsive behavior: Stacks copy and action while preserving readable conditions and dates.
@@ -1946,7 +1943,6 @@ Schema:
     "description",
     "cta_label",
     "target_url",
-    "disclosure",
     "scope_type",
     "scope_key",
     "slot_key",
@@ -2086,7 +2082,7 @@ Example:
   "description": "Confirm dates and provider terms before booking.",
   "cta_label": "View promotion",
   "target_url": "https://www.trip.com/",
-  "disclosure": "Affiliate promotion. SoloToChina may earn a commission at no extra cost to you.",
+  "disclosure": "Paid link",
   "scope_type": "COUNTRY",
   "scope_key": "china",
   "slot_key": "promotion-end-1",

@@ -126,7 +126,7 @@ $attractions = stc_get_site_collection( 'attraction-guides' );
 		<div class="stc-planner__partner">
 			<strong>Trip.com</strong>
 			<a class="stc-button stc-button--secondary" href="<?php echo esc_url( stc_get_trip_planner_url() ); ?>" target="_blank" rel="sponsored nofollow noopener noreferrer">Open Trip.Planner <span aria-hidden="true">&#8599;</span></a>
-			<p class="stc-affiliate-disclosure">Opens in a new tab. We may earn a commission at no extra cost to you.</p>
+			<p class="stc-affiliate-disclosure">Paid link · Opens in a new tab.</p>
 		</div>
 		<span class="stc-planner__art" aria-hidden="true"></span>
 	</section>

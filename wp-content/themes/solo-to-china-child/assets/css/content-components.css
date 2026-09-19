@@ -512,13 +512,14 @@
 }
 
 .stc-dynamic-component--affiliate {
-	border-inline-start: var(--stc-space-1) solid var(--stc-color-gold-muted);
+	border-inline-start: var(--stc-space-1) solid var(--stc-color-jade);
 	box-shadow: none;
 }
 
 .stc-commercial-component {
-	background: color-mix(in srgb, var(--stc-color-gold-muted) 5%, var(--stc-color-surface));
-	border-inline-start: var(--stc-space-1) solid var(--stc-color-gold-muted);
+	background: color-mix(in srgb, var(--stc-color-jade) 6%, var(--stc-color-surface));
+	border-color: color-mix(in srgb, var(--stc-color-jade) 22%, var(--stc-color-line));
+	border-inline-start: var(--stc-space-1) solid var(--stc-color-jade);
 	box-shadow: none;
 }
 
@@ -552,7 +553,7 @@
 }
 
 .stc-commercial-component--affiliate_promotion_card {
-	border-color: color-mix(in srgb, var(--stc-color-gold-muted) 45%, var(--stc-color-line));
+	border-color: color-mix(in srgb, var(--stc-color-jade) 28%, var(--stc-color-line));
 }
 
 .stc-dynamic-component--ticket {
