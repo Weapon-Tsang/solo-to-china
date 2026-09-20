@@ -1,0 +1,2 @@
+contracts/*.json text eol=lf
+wp-content/themes/solo-to-china/content-contract/*.generated.json text eol=lf

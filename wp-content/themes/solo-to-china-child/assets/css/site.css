@@ -1,7 +1,7 @@
 /* Shared presentation for the Child Theme. */
 
 body {
-	background: var(--stc-color-surface);
+	background: var(--stc-color-canvas);
 }
 
 .stc-skip-link {
@@ -21,7 +21,7 @@ body {
 	backdrop-filter: blur(1rem) saturate(125%);
 	background: color-mix(in srgb, var(--stc-color-surface) 92%, transparent);
 	border-bottom: 1px solid color-mix(in srgb, var(--stc-color-line) 84%, transparent);
-	box-shadow: 0 0.5rem 1.75rem rgba(19, 33, 27, 0.05);
+	box-shadow: 0 0.25rem 1.25rem rgba(32, 43, 56, 0.045);
 	color: var(--stc-color-ink);
 	min-block-size: 4.5rem;
 	padding: 0 max(var(--stc-container-gutter), calc((100vw - var(--stc-container-max)) / 2 + var(--stc-container-gutter)));
@@ -119,13 +119,13 @@ body {
 }
 
 .stc-button--gold:hover {
-	background: #735425;
+	background: #765b39;
 }
 
 .stc-image-card {
 	border: 1px solid rgba(255, 255, 255, 0.14);
 	border-radius: var(--stc-radius-md);
-	box-shadow: 0 0.75rem 2.25rem rgba(19, 33, 27, 0.11);
+	box-shadow: var(--stc-shadow-card);
 	isolation: isolate;
 	transition:
 		box-shadow var(--stc-motion-duration-base) var(--stc-motion-ease-standard),
@@ -178,7 +178,7 @@ body {
 }
 
 .stc-footer {
-	background: #202832;
+	background: #202b38;
 	color: var(--stc-color-on-dark);
 	padding-inline: max(var(--stc-container-gutter), calc((100vw - var(--stc-container-max)) / 2 + var(--stc-container-gutter)));
 }
@@ -190,7 +190,7 @@ body {
 }
 
 .stc-footer__brand p {
-	color: #a8b8b0;
+	color: #c2cbd3;
 	font-size: var(--stc-font-size-sm);
 	line-height: 1.7;
 	margin-block: var(--stc-space-4) 0;

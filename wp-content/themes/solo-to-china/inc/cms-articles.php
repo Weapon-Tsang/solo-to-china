@@ -43,7 +43,13 @@ function stc_cms_load_json_artifact( $path ) {
  */
 function stc_cms_component_contract_checksum() {
 	$path = stc_generated_component_artifact_path( 'component-registry.generated.json' );
-	return is_readable( $path ) ? strtolower( hash_file( 'sha256', $path ) ) : '';
+	if ( ! is_readable( $path ) ) {
+		return '';
+	}
+	// Git may check out generated JSON with CRLF on Windows. The generated
+	// schema checksum is based on canonical LF bytes, independent of checkout.
+	$contents = file_get_contents( $path );
+	return false === $contents ? '' : hash( 'sha256', str_replace( "\r\n", "\n", $contents ) );
 }
 
 /**

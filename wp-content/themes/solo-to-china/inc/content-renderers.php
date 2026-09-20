@@ -97,6 +97,21 @@ function stc_commercial_attributes_are_known( $attributes, $allowed ) {
 }
 
 /**
+ * Upgrade the exact historical default at the commercial field boundary.
+ * Editorially written disclosures are intentionally left untouched.
+ *
+ * @param string $disclosure Persisted disclosure text.
+ * @return string
+ */
+function stc_normalize_commercial_disclosure( $disclosure ) {
+	$disclosure = sanitize_text_field( (string) $disclosure );
+	if ( 'SoloToChina may earn a commission from eligible bookings, at no extra cost to you.' === trim( $disclosure ) ) {
+		return __( 'Paid link', 'solo-to-china' );
+	}
+	return $disclosure;
+}
+
+/**
  * Sanitize and validate the shared Commercial Block fields.
  *
  * @param array<string, mixed> $attributes Input attributes.
@@ -131,6 +146,9 @@ function stc_prepare_commercial_attributes( $attributes, $allowed, $required ) {
 			return array();
 		}
 		$output[ $key ] = sanitize_text_field( (string) $value );
+		if ( 'disclosure' === $key ) {
+			$output[ $key ] = stc_normalize_commercial_disclosure( $output[ $key ] );
+		}
 		$length = function_exists( 'mb_strlen' ) ? mb_strlen( $output[ $key ], 'UTF-8' ) : strlen( $output[ $key ] );
 		$limit  = isset( $max_lengths[ $key ] ) ? $max_lengths[ $key ] : 500;
 		if ( $length > $limit ) {
@@ -257,7 +275,7 @@ function stc_render_commercial_component_shell( $data, $component, $variant, $me
 			<?php if ( ! empty( $data['price_text'] ) ) : ?>
 				<p class="stc-dynamic-component__price"><?php echo esc_html( $data['price_text'] ); ?></p>
 			<?php endif; ?>
-			<p class="stc-dynamic-component__disclosure"><?php echo esc_html( ! empty( $data['disclosure'] ) ? $data['disclosure'] : __( 'Paid link', 'solo-to-china' ) ); ?></p>
+			<p class="stc-dynamic-component__disclosure"><?php echo esc_html( ! empty( $data['disclosure'] ) ? stc_normalize_commercial_disclosure( $data['disclosure'] ) : __( 'Paid link', 'solo-to-china' ) ); ?></p>
 		</div>
 		<?php if ( $target_url && $cta_label ) : ?>
 			<a class="stc-button stc-button--secondary stc-dynamic-component__action" data-stc-commercial-click href="<?php echo esc_url( $target_url ); ?>" target="_blank" rel="sponsored nofollow noopener"><?php echo esc_html( $cta_label ); ?></a>
@@ -307,7 +325,7 @@ function stc_render_planner_cta_component( $attributes ) {
 	$cta_label   = sanitize_text_field( $attributes['cta_label'] );
 	$target_url  = stc_validate_https_component_url( $attributes['target_url'] );
 	$provider    = sanitize_text_field( $attributes['provider'] );
-	$disclosure  = sanitize_text_field( $attributes['disclosure'] );
+	$disclosure  = stc_normalize_commercial_disclosure( $attributes['disclosure'] );
 
 	if ( '' === $title || '' === $description || '' === $cta_label || '' === $target_url ) {
 		return '';
@@ -435,7 +453,7 @@ function stc_render_affiliate_cta_component( $attributes ) {
 	$price_text  = sanitize_text_field( $attributes['price_text'] );
 	$cta_label   = sanitize_text_field( $attributes['cta_label'] );
 	$target_url  = stc_validate_https_component_url( $attributes['target_url'] );
-	$disclosure  = sanitize_text_field( $attributes['disclosure'] );
+	$disclosure  = stc_normalize_commercial_disclosure( $attributes['disclosure'] );
 
 	if ( '' === $category || '' === $provider || '' === $title || '' === $description || '' === $cta_label || '' === $target_url ) {
 		return '';

@@ -87,6 +87,22 @@ $booking_without_disclosure_html = stc_render_affiliate_booking_card_component( 
 stc_test( '' !== $booking_without_disclosure_html, 'Commercial card without disclosure was rejected.' );
 stc_test( false !== strpos( $booking_without_disclosure_html, 'Paid link' ), 'Compact default disclosure is missing.' );
 stc_test( false === strpos( $booking_without_disclosure_html, 'commission' ), 'Long commission sentence leaked into the default disclosure.' );
+$disclosure_cases = array(
+	'empty' => '',
+	'paid' => 'Paid link',
+	'legacy_nonempty' => 'SoloToChina may earn a commission from eligible bookings, at no extra cost to you.',
+	'custom' => 'Editorially reviewed affiliate relationship disclosure.',
+);
+foreach ( $disclosure_cases as $case => $value ) {
+	$input = $booking;
+	$input['disclosure'] = $value;
+	$html = stc_render_affiliate_booking_card_component( $input );
+	$expected = 'custom' === $case ? $value : 'Paid link';
+	stc_test( false !== strpos( $html, $expected ), 'Disclosure behavior failed for ' . $case );
+	stc_test( false === strpos( $html, 'SoloToChina may earn a commission' ), 'Historical default leaked for ' . $case );
+	stc_test( false !== strpos( $html, 'href="https://www.trip.com/"' ), 'Target URL changed for ' . $case );
+	stc_test( false !== strpos( $html, 'rel="sponsored nofollow noopener"' ), 'Attribution changed for ' . $case );
+}
 
 $unknown = $booking;
 $unknown['html'] = '<script>alert(1)</script>';

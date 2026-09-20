@@ -10,20 +10,27 @@
 .home .stc-survival-card { min-height:88px; gap:8px; padding:12px 8px; }
 .home .stc-survival-card strong { font-size:14px; white-space:normal; }
 .home .stc-survival-card__icon { color:var(--stc-color-brand); background:var(--stc-color-surface-muted); width:44px; height:44px; }
-.home .stc-section,.home .stc-faq { max-width:var(--stc-container-max); margin:auto; padding:64px var(--stc-container-gutter) 0; }
+.home .stc-section,.home .stc-faq { max-width:var(--stc-container-max); margin:auto; padding:clamp(48px,6vw,80px) var(--stc-container-gutter) 0; }
 .home .stc-section__header { gap:16px; align-items:center; margin-bottom:24px; }
-.home .stc-section h2,.home .stc-faq h2 { font:600 var(--stc-font-size-xl)/1.2 var(--stc-font-display); }
+.home .stc-section h2,.home .stc-faq h2 { font:600 clamp(1.85rem,2.5vw,2.55rem)/1.16 var(--stc-font-display); letter-spacing:-.025em; }
 .home .stc-section__header > a { color:var(--stc-color-brand-hover); font-size:14px; padding:12px 0; flex-shrink:0; }
-.home .stc-card-grid { gap:24px; }
+.home .stc-card-grid { gap:clamp(14px,2vw,24px); }
 .home .stc-image-card { border-radius:12px; border:1px solid var(--stc-color-line); box-shadow:var(--stc-shadow-card); }
 .home .stc-image-card__link { background:linear-gradient(0deg,rgba(8,15,25,.86),rgba(8,15,25,.12) 60%,transparent); }
 .home .stc-image-card__content strong { font-size:clamp(20px,2.3vw,30px); line-height:1.18; }
 .home .stc-image-card__content > span { font-size:14px; white-space:normal; line-height:1.5; }
+.home .stc-card-grid--attractions > :only-child { grid-column:span 3; }
+.home .stc-card-grid--attractions > :only-child .stc-image-card__media { aspect-ratio:16/9; }
+.home .stc-home-tools { border-top:1px solid var(--stc-color-line); margin-top:clamp(48px,6vw,80px); }
+.home .stc-home-tools .stc-section__header { margin-bottom:20px; }
 .home .stc-planner { background:var(--stc-color-surface-muted); border:1px solid var(--stc-color-line); box-shadow:none; max-width:calc(var(--stc-container-max) - 80px); margin:64px auto 0; border-radius:12px; }
 .home .stc-planner__art { display:none; }
 .home .stc-planner__partner .stc-button { color:var(--stc-color-brand-hover); background:var(--stc-color-surface); border:1px solid var(--stc-color-line); }
 .home .stc-faq { padding-bottom:64px; }
 .home .stc-faq details { box-shadow:none; border-color:var(--stc-color-line); }
+@media (hover:hover) and (pointer:fine) {
+	.home .stc-image-card:hover { transform:translateY(-2px); box-shadow:var(--stc-shadow-raised); }
+}
 @media (max-width:840px) {
 .home .stc-hero { min-height:0; height:auto; }
 .home .stc-hero__content { padding:144px 24px 32px; bottom:auto; }
@@ -36,6 +43,7 @@
 .home .stc-survival-card { padding:8px 2px; }
 .home .stc-survival-card strong { font-size:12px; }
 .home .stc-card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.home .stc-card-grid--attractions > :only-child { grid-column:span 2; }
 .home .stc-image-card__content { padding:16px 12px; }
 .home .stc-image-card__content strong { font-size:22px; }
 .home .stc-image-card__content > span { font-size:13px; }

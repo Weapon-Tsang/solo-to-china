@@ -16,6 +16,7 @@
 	border-color: var(--stc-color-line);
 	border-radius: var(--stc-radius-lg);
 	box-shadow: var(--stc-shadow-card);
+	min-width: 0;
 }
 
 .stc-page-section--tools {
@@ -69,12 +70,34 @@
 	background: var(--stc-color-ink);
 }
 
+.stc-taxi-card__card,
+.stc-driver-mode__inner {
+	overflow-wrap: anywhere;
+}
+
+.stc-tool-primary,
+.stc-taxi-card__actions button {
+	min-height: 2.75rem;
+	transition: background-color var(--stc-motion-duration-fast) var(--stc-motion-ease-standard), transform var(--stc-motion-duration-fast) var(--stc-motion-ease-standard);
+}
+
+.stc-tool-primary:active,
+.stc-taxi-card__actions button:active {
+	transform: scale(0.985);
+}
+
 @media (hover: hover) and (pointer: fine) {
 	.stc-tool-card:hover {
 		border-color: color-mix(in srgb, var(--stc-color-jade) 48%, var(--stc-color-line));
 		box-shadow: var(--stc-shadow-raised);
-		transform: translateY(-0.25rem);
+		transform: translateY(-2px);
 	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.stc-tool-card,
+	.stc-tool-primary,
+	.stc-taxi-card__actions button { transition: none; transform: none; }
 }
 
 @media (max-width: 47.99rem) {

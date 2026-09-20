@@ -2,7 +2,7 @@
 
 .single .stc-main {
 	background:
-		linear-gradient(180deg, #f0f2ed 0, var(--stc-color-canvas) 18rem, var(--stc-color-surface) 44rem);
+		linear-gradient(180deg, #f0f4f7 0, var(--stc-color-canvas) 18rem, var(--stc-color-canvas) 44rem);
 }
 
 .single .stc-content {
@@ -96,6 +96,7 @@
 
 .stc-article-hero h1 {
 	color: var(--stc-color-on-dark);
+	font-family: var(--stc-font-display);
 	font-size: clamp(2.75rem, 5.4vw, 5rem);
 	letter-spacing: -0.045em;
 	line-height: 0.98;
@@ -273,11 +274,20 @@
 	padding: 1.25rem;
 	position: absolute;
 	top: 100%;
+	opacity: 1;
+	transform: translateY(0);
+	transition: opacity var(--stc-motion-duration-base) var(--stc-motion-ease-standard), transform var(--stc-motion-duration-base) var(--stc-motion-ease-standard), display var(--stc-motion-duration-base) allow-discrete;
 	width: min(23.75rem, calc(100vw - 3rem));
 }
 
 .stc-share__panel[hidden] {
 	display: none;
+	opacity: 0;
+	transform: translateY(-6px);
+}
+
+@starting-style {
+	.stc-share__panel:not([hidden]) { opacity: 0; transform: translateY(-6px); }
 }
 
 .stc-share__panel-heading {
@@ -303,9 +313,9 @@
 	cursor: pointer;
 	display: inline-flex;
 	flex: 0 0 auto;
-	height: 2.125rem;
+	height: 2.75rem;
 	justify-content: center;
-	width: 2.125rem;
+	width: 2.75rem;
 }
 
 .stc-share__close svg {
@@ -480,23 +490,25 @@
 	background: var(--stc-color-surface);
 	border: 1px solid var(--stc-color-line);
 	border-radius: var(--stc-radius-md);
-	box-shadow: 0 1rem 3rem rgba(19, 33, 27, 0.055);
+	box-shadow: var(--stc-shadow-card);
 	color: var(--stc-color-ink-soft);
 	font-size: clamp(1.03125rem, 0.98rem + 0.18vw, 1.125rem);
 	line-height: 1.78;
 	min-width: 0;
+	overflow-wrap: anywhere;
 	padding: clamp(2rem, 4.3vw, 3.75rem);
 }
 
 .stc-entry-content--guide > :not(.alignwide):not(.alignfull) {
-	max-width: var(--stc-reading-measure);
+	max-width: 66ch;
 }
 
 .stc-entry-content--guide > h2 {
 	color: var(--stc-color-ink);
+	font-family: var(--stc-font-display);
 	font-size: clamp(1.75rem, 2.8vw, 2.35rem);
 	letter-spacing: -0.035em;
-	margin-block: clamp(3rem, 6vw, 4.75rem) 1rem;
+	margin-block: clamp(2.5rem, 5vw, 4rem) 1rem;
 	scroll-margin-top: 7rem;
 }
 
@@ -700,9 +712,39 @@
 	font-size: 1.25rem;
 	grid-column: 2;
 	grid-row: 1 / span 2;
+	transition: transform var(--stc-motion-duration-fast) var(--stc-motion-ease-standard);
 }
 
-.stc-guide-toc__disclosure[open] summary::after { content: "−"; }
+.stc-guide-toc__disclosure[open] summary::after { transform: rotate(45deg); }
+
+/* The photo-free hero is an editorial title panel, not an empty image slot. */
+.stc-article-hero.stc-article-hero--compact {
+	background: linear-gradient(125deg, #eef4fa, #faf8f3 70%);
+	border: 1px solid var(--stc-color-line);
+	border-inline-start: 4px solid var(--stc-color-brand);
+	min-block-size: 0;
+	padding: clamp(2rem, 4vw, 3.5rem);
+}
+
+.stc-article-hero--compact h1 {
+	color: var(--stc-color-ink);
+	font-family: var(--stc-font-display);
+	font-size: clamp(2.25rem, 3.8vw, 3.35rem);
+	letter-spacing: -0.04em;
+	line-height: 1.08;
+	max-width: 23ch;
+	text-shadow: none;
+}
+
+.stc-article-hero--compact .stc-article-hero__deck {
+	color: var(--stc-color-ink-soft);
+	max-width: 50ch;
+}
+
+.stc-article-hero--compact .stc-share__trigger {
+	border-color: var(--stc-color-line);
+	color: var(--stc-color-brand-hover);
+}
 
 .stc-guide-toc__disclosure summary small {
 	color: var(--stc-color-muted);
@@ -809,6 +851,11 @@
 }
 
 @media (max-width: 599px) {
+	.stc-article-hero--compact h1 {
+		font-size: clamp(2rem, 8.5vw, 2.25rem);
+		max-width: none;
+	}
+
 	.single .stc-content {
 		padding-inline: 0;
 		padding-top: 0;
@@ -846,6 +893,7 @@
 		min-height: 2.75rem;
 	}
 
+	.stc-share .stc-share__panel,
 	.stc-share.is-mobile-fallback .stc-share__panel {
 		border-radius: 1.15rem 1.15rem 0 0;
 		bottom: 0;
@@ -861,12 +909,12 @@
 		width: auto;
 	}
 
-	.stc-share.is-mobile-fallback .stc-share__channels {
+	.stc-share .stc-share__channels {
 		gap: 0.75rem;
 		grid-template-columns: minmax(0, 1fr);
 	}
 
-	.stc-share.is-mobile-fallback .stc-share__copy {
+	.stc-share .stc-share__copy {
 		grid-column: auto;
 	}
 
@@ -930,9 +978,12 @@
 @media (prefers-reduced-motion: reduce) {
 	.stc-share__trigger,
 	.stc-share__trigger-arrow,
-	.stc-share__channel {
+	.stc-share__channel,
+	.stc-share__panel,
+	.stc-guide-toc__disclosure summary::after {
 		transition: none;
 	}
+	.stc-share__panel { transform: none; }
 
 	.stc-share.is-sharing .stc-share__trigger-icon {
 		animation: none;

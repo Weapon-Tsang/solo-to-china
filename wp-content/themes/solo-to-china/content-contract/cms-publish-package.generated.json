@@ -12,7 +12,7 @@
           "const": "1.4.1"
         },
         "contractChecksum": {
-          "const": "57246c1300cdfb1ed9d6cbdc9bdca8f70af9c5a8765bbb6b8fe1856c49349f18",
+          "const": "d83d9c0df8757c96cdc3dba8f12ce4dd3d2163d2ab884af07ad3abc68276c880",
           "pattern": "^[a-f0-9]{64}$",
           "type": "string"
         },

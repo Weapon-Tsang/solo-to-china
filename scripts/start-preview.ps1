@@ -30,6 +30,10 @@ $Blueprint = Join-Path $PSScriptRoot $BlueprintName
 $ParentTheme = Join-Path $Root "wp-content/themes/solo-to-china"
 $ChildTheme = Join-Path $Root "wp-content/themes/solo-to-china-child"
 $ToolsPlugin = Join-Path $Root "wp-content/plugins/solo-to-china-tools"
+$LocalCredentialDirectory = Join-Path $Root "output/v3-preview"
+New-Item -ItemType Directory -Force -Path $LocalCredentialDirectory | Out-Null
+$LocalCredentialFile = Join-Path $LocalCredentialDirectory "wp-application-password.txt"
+if (Test-Path -LiteralPath $LocalCredentialFile) { Remove-Item -LiteralPath $LocalCredentialFile }
 $NpxCommand = Get-Command npx -ErrorAction SilentlyContinue
 
 if (-not $NpxCommand) {
@@ -49,6 +53,9 @@ $PlaygroundArguments = @(
     "--define-bool"
     "WP_AUTO_UPDATE_CORE"
     "false"
+    "--define"
+    "WP_ENVIRONMENT_TYPE"
+    "local"
     "--blueprint=$Blueprint"
     "--mount-dir"
     $ParentTheme
@@ -59,6 +66,9 @@ $PlaygroundArguments = @(
     "--mount-dir"
     $PSScriptRoot
     "/tmp/solo-to-china-scripts"
+    "--mount-dir"
+    $LocalCredentialDirectory
+    "/tmp/solo-to-china-preview-credentials"
 )
 
 if (-not $ParentOnly) {

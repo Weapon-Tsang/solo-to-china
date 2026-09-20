@@ -82,7 +82,9 @@ function Write-JsonContract([string]$Path, $Value) {
         New-Item -ItemType Directory -Path $Directory | Out-Null
     }
     $Json = ConvertTo-CanonicalJson $Value
-    [System.IO.File]::WriteAllText($Path, $Json + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
+    # The checksum is published as a contract identity. Keep its bytes stable
+    # across Windows and Linux instead of using the host newline convention.
+    [System.IO.File]::WriteAllText($Path, $Json + "`n", [System.Text.UTF8Encoding]::new($false))
 }
 
 function Add-Line([string]$Line = "") {

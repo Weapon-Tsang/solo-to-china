@@ -9,19 +9,20 @@
 
 :root {
 	/* Colors */
-	--stc-color-ink: #202832;
-	--stc-color-ink-soft: #374453;
-	--stc-color-muted: #586577;
-	--stc-color-canvas: #fafaf7;
+	--stc-color-ink: #202b38;
+	--stc-color-ink-soft: #3b4a59;
+	--stc-color-muted: #607080;
+	--stc-color-canvas: #faf8f3;
 	--stc-color-surface: #ffffff;
-	--stc-color-surface-muted: #f1f4f9;
-	--stc-color-line: #dce2ea;
-	--stc-color-brand: #2f66e8;
-	--stc-color-brand-hover: #2053c5;
-	--stc-color-jade: #2f66e8;
-	--stc-color-jade-hover: #2053c5;
-	--stc-color-gold-muted: #586577;
-	--stc-color-focus: #2053c5;
+	--stc-color-surface-muted: #f1f5f9;
+	--stc-color-surface-blue: #f4f8fc;
+	--stc-color-line: #dce3e9;
+	--stc-color-brand: #2866b0;
+	--stc-color-brand-hover: #194f91;
+	--stc-color-jade: #2866b0;
+	--stc-color-jade-hover: #194f91;
+	--stc-color-gold-muted: #96764e;
+	--stc-color-focus: #194f91;
 	--stc-color-on-dark: #f9fbf8;
 
 	/* Typography */
@@ -63,10 +64,10 @@
 	--stc-radius-xs: 0.25rem;
 	--stc-radius-sm: 0.5rem;
 	--stc-radius-md: 0.875rem;
-	--stc-radius-lg: 1.25rem;
+	--stc-radius-lg: 1rem;
 	--stc-radius-pill: 999px;
-	--stc-shadow-card: 0 0.75rem 2rem rgba(19, 33, 27, 0.08);
-	--stc-shadow-raised: 0 1.25rem 3.5rem rgba(19, 33, 27, 0.12);
+	--stc-shadow-card: 0 0.5rem 1.75rem rgba(32, 43, 56, 0.055);
+	--stc-shadow-raised: 0 1rem 2.75rem rgba(32, 43, 56, 0.11);
 	--stc-shadow-focus: 0 0 0 0.25rem rgba(43, 120, 197, 0.2);
 
 	/* Controls and media */
@@ -79,7 +80,7 @@
 	/* Motion */
 	--stc-motion-duration-fast: 140ms;
 	--stc-motion-duration-base: 220ms;
-	--stc-motion-duration-slow: 200ms;
+	--stc-motion-duration-slow: 210ms;
 	--stc-motion-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 	--stc-motion-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 

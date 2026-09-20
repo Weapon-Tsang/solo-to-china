@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.12.2' );
+define( 'STC_CHILD_VERSION', '0.13.0-dev' );
 
 /**
  * Replace the Parent fallback editor stylesheet with the Child visual system.
@@ -72,7 +72,7 @@ function stc_child_enqueue_assets() {
 		wp_enqueue_style(
 			'stc-child-article',
 			get_stylesheet_directory_uri() . '/assets/css/article.css',
-			[ 'stc-child-site' ],
+			is_singular() ? [ 'stc-child-site', 'stc-experience-components' ] : [ 'stc-child-site' ],
 			STC_CHILD_VERSION
 		);
 
