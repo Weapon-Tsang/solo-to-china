@@ -48,11 +48,11 @@ function stc_playground_upgrade() {
 	$new_offer='[stc_affiliate_booking_card affiliate_asset_id="v3-local-trip-fixture" provider="Trip.com" asset_type="DEEP_LINK" product_category="ATTRACTION" title="Local structured booking fixture" description="Test offer only: verify listing and entry terms." cta_label="Review listing" target_url="https://www.trip.com/" disclosure="'.$old_disclosure.'" scope_type="ENTITY" scope_key="forbidden-city" slot_key="v3-local-booking" placement="contextual" strategy_version="commercial-v1" anchor="v3-structured-offer"]';
 	foreach (array($legacy_offer,$new_offer) as $offer) {
 		$rendered=do_shortcode($offer);
-		stc_upgrade_assert(str_contains($rendered,'Paid link') && !str_contains($rendered,$old_disclosure),'Nonempty legacy disclosure survived the renderer.');
+		stc_upgrade_assert(!str_contains($rendered,'Paid link') && !str_contains($rendered,$old_disclosure) && !str_contains($rendered,'stc-dynamic-component__disclosure'),'Nonempty legacy disclosure survived the renderer.');
 		stc_upgrade_assert(str_contains($rendered,'href="https://www.trip.com/"'),'Commercial target URL changed.');
 	}
 	$custom_offer=str_replace($old_disclosure,'Custom editorial disclosure.', $new_offer);
-	stc_upgrade_assert(str_contains(do_shortcode($custom_offer),'Custom editorial disclosure.'),'Custom disclosure was overwritten.');
+	stc_upgrade_assert(!str_contains(do_shortcode($custom_offer),'Custom editorial disclosure.'),'Custom disclosure leaked into the card.');
 	$content='<!-- wp:heading --><h2 class="wp-block-heading">Repeated heading</h2><!-- /wp:heading --><!-- wp:paragraph --><p>'.str_repeat('Readable editorial text with practical context. ',100).'</p><!-- /wp:paragraph --><!-- wp:heading --><h2 class="wp-block-heading">Repeated heading</h2><!-- /wp:heading -->'.implode("\n",$blocks).'<!-- wp:shortcode -->'.$legacy_offer.'<!-- /wp:shortcode --><!-- wp:shortcode -->'.$new_offer.'<!-- /wp:shortcode -->';
 	$id=wp_insert_post(array('post_type'=>'post','post_status'=>'publish','post_title'=>'A long guide with annotated images and destination details','post_name'=>'upgrade-long-guide','post_content'=>$content,'post_excerpt'=>'Disposable integration fixture for the frontend experience upgrade.'));
 	update_post_meta($id,'_stc_show_toc',true);update_post_meta($id,'_stc_show_share',true);update_post_meta($id,'_stc_hero_variant','compact');

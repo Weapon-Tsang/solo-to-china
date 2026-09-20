@@ -968,7 +968,7 @@
           },
           {
             "additionalProperties": false,
-            "description": "Renders a restrained contextual commercial action with visible disclosure.",
+            "description": "Renders a compact commercial ticket with one real action and a page-level relationship notice.",
             "properties": {
               "data": {
                 "additionalProperties": false,

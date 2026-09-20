@@ -1,5 +1,12 @@
 # Component Changelog
 
+## Compatible commercial B presentation / Parent 0.33.6, Child 0.13.1 - 2026-09-21
+
+- Present commercial cards as blue/white/pink offer tickets, with an explicit numeric headline only when the payload supplies a valid offer. Existing generic links stay non-discount cards; no category-derived discount is invented.
+- Replace per-card commission copy with one visible relationship notice adjacent to the first commercial placement and a link to the independent disclosure page. Link destination, attribution, and sponsored/nofollow relation remain intact.
+- Display-only normalization removes exact historical category-title and booking-filler templates while preserving edited copy and stored content. Legacy CTA and Planner placements use the same relationship notice; parent-only rendering remains supported.
+- Registry component IDs and schema shapes are unchanged. Generated contract checksums changed with documentation/examples; CMS consumers must sync the matching contract before delivery.
+
 ## 1.4.1 / Parent Theme 0.33.5 - 2026-09-19
 
 - Make disclosure optional on every commercial Registry component so older and leaner CMS payloads remain renderable.

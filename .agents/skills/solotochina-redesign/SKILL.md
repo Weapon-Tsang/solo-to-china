@@ -25,7 +25,7 @@ Use this skill only for the public WordPress Parent Theme, Child Theme, and Tool
 - Prefer restrained borders, hierarchy, spacing, real images, and light-blue accents over generic card walls, heavy shadows, gradients, glow, texture, or forced asymmetry.
 - Motion is optional and local: use transform/opacity, keep feedback short, make it interruptible, and honor `prefers-reduced-motion`. No scroll hijacking, inertia, parallax, cursor tracking, looping motion, or height animation for long content.
 - Mobile On this page uses native `details`/`summary` and a vertical, fully wrapping list. Do not use horizontal pills, ellipsis, tiny type, or page-wide overflow clipping.
-- Commercial cards remain clear editorial utilities: one real primary link, true provider, visible compact relationship label (default `Paid link`), no fake urgency or offer language, and no hidden disclosure.
+- Commercial cards use the B ticket hierarchy: true provider, readable product category, an explicit asset-backed offer only when eligibility and landing target are verified, and one real primary link. Keep the affiliate relationship notice visible at page level, outside the card; never restore `Paid link` or an old commission sentence inside tickets. No invented urgency, discount, or eligibility claim.
 - Do not use this skill for CMS production logic, content strategy, factual rewriting, provider configuration, deployment, or paid-model calls.
 
 ## Upstream basis

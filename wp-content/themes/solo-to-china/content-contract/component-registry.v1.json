@@ -1,6 +1,6 @@
 {
   "registry_version": "1.4.1",
-  "theme_version": "0.33.5",
+  "theme_version": "0.33.6",
   "principles": {
     "frontend": "Frontend defines what can be rendered.",
     "cms": "CMS decides what should be rendered.",
@@ -1081,7 +1081,7 @@
       "id": "affiliate_cta",
       "name": "Affiliate CTA",
       "category": "commercial",
-      "purpose": "Renders a restrained contextual commercial action with visible disclosure.",
+      "purpose": "Renders a compact commercial ticket with one real action and a page-level relationship notice.",
       "status": "stable",
       "variants": [
         "default"
@@ -1145,9 +1145,9 @@
         "description": "Check location before price.",
         "cta_label": "View options",
         "target_url": "https://example.com",
-        "disclosure": "Paid link"
+        "disclosure": "We may earn a commission from bookings through these links."
       },
-      "accessibility": "External links open safely and relationship disclosure remains visible.",
+      "accessibility": "External links open safely; the relationship notice is visible outside the card.",
       "responsive": "Copy and action stack without becoming a deal wall."
     },
     {
@@ -1309,14 +1309,14 @@
         "description": "Review the official listing details before booking.",
         "cta_label": "View ticket options",
         "target_url": "https://www.trip.com/",
-        "disclosure": "Paid link",
+        "disclosure": "We may earn a commission from bookings through these links.",
         "scope_type": "ENTITY",
         "scope_key": "forbidden-city",
         "slot_key": "tickets-contextual-1",
         "placement": "contextual",
         "strategy_version": "commercial-v1"
       },
-      "accessibility": "Uses a labeled aside, visible disclosure, and a descriptive sponsored link.",
+      "accessibility": "Uses a labeled aside, page-level relationship notice, and a descriptive sponsored link.",
       "responsive": "Stacks copy and action without horizontal overflow or urgency treatment."
     },
     {
@@ -1537,7 +1537,7 @@
         "description": "Compare location and arrival access for your dates.",
         "cta_label": "Search hotels",
         "target_url": "https://www.trip.com/hotels/",
-        "disclosure": "Paid link",
+        "disclosure": "We may earn a commission from bookings through these links.",
         "scope_type": "DESTINATION",
         "scope_key": "beijing",
         "slot_key": "hotel-search-1",
@@ -1788,7 +1788,7 @@
         "target_url": "https://www.trip.com/",
         "image_url": "https://pages.trip.com/banner.jpg",
         "alt_text": "Trip.com travel planning",
-        "disclosure": "Paid link",
+        "disclosure": "We may earn a commission from bookings through these links.",
         "scope_type": "GLOBAL",
         "scope_key": "global",
         "slot_key": "end-resource-banner-1",
@@ -1961,7 +1961,7 @@
         "description": "Confirm dates and provider terms before booking.",
         "cta_label": "View promotion",
         "target_url": "https://www.trip.com/",
-        "disclosure": "Paid link",
+        "disclosure": "We may earn a commission from bookings through these links.",
         "scope_type": "COUNTRY",
         "scope_key": "china",
         "slot_key": "promotion-end-1",

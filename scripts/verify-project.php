@@ -172,7 +172,7 @@ if (is_file($packageScriptPath)) {
             $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
         }
     }
-    if (strpos($packageScript, 'Theme version: 0.33.5') === false || strpos($packageScript, 'Child Theme version: 0.13.0') === false || strpos($packageScript, 'Plugin version: 0.26.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.33.6') === false || strpos($packageScript, 'Child Theme version: 0.13.1') === false || strpos($packageScript, 'Plugin version: 0.26.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -225,8 +225,8 @@ if (is_file($newChatHandoffPath)) {
 $themeStylePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/style.css';
 if (is_file($themeStylePath)) {
     $themeStyle = file_get_contents($themeStylePath);
-    if (strpos($themeStyle, 'Version: 0.33.5') === false) {
-        $failures[] = 'Theme stylesheet header version is not 0.33.5.';
+    if (strpos($themeStyle, 'Version: 0.33.6') === false) {
+        $failures[] = 'Theme stylesheet header version is not 0.33.6.';
     }
     if (strpos($themeStyle, 'Requires at least: 6.5') === false) {
         $failures[] = 'Theme stylesheet header is missing the minimum WordPress version.';
@@ -239,7 +239,7 @@ if (is_file($themeStylePath)) {
 $themeReadmePath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china/README.md';
 if (is_file($themeReadmePath)) {
     $themeReadme = file_get_contents($themeReadmePath);
-    if (strpos($themeReadme, 'Current version: `0.33.5`') === false) {
+    if (strpos($themeReadme, 'Current version: `0.33.6`') === false) {
         $failures[] = 'Theme README does not document the current theme version.';
     }
     if (strpos($themeReadme, 'The theme should not own tool business logic') === false) {
@@ -305,8 +305,8 @@ if (is_file($headerPath) && is_file($functionsPath)) {
     if (strpos($functions, 'stc_render_guide_card_media') === false) {
         $failures[] = 'Theme functions are missing the shared high-resolution guide card media renderer.';
     }
-    if (strpos($functions, "'0.33.5'") === false) {
-        $failures[] = 'Theme asset version is not 0.33.5.';
+    if (strpos($functions, "'0.33.6'") === false) {
+        $failures[] = 'Theme asset version is not 0.33.6.';
     }
     foreach (['STC_SITE_PAGE_MIGRATION_VERSION', 'stc_static_page_content', 'stc_static_page_metadata', 'stc_static_page_fallback', 'admin_init', 'wp_page_for_privacy_policy', 'stc_get_trip_planner_url', 'https://www.trip.com/t/bCPFQ85ZHW2'] as $sitePageToken) {
         if (strpos($functions, $sitePageToken) === false) {
@@ -354,7 +354,7 @@ $childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo
 $childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
 if (is_file($childThemeStylePath)) {
     $childThemeStyle = file_get_contents($childThemeStylePath);
-    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.13.0', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.13.1', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
         if (strpos($childThemeStyle, $childHeaderToken) === false) {
             $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
         }

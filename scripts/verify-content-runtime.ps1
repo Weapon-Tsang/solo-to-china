@@ -51,7 +51,7 @@ Assert-Runtime ($ContractResponse.StatusCode -eq 200) "Content Contract endpoint
 Assert-Runtime ($ContractResponse.Content -eq $ContractAgain.Content) "Content Contract JSON changed between consecutive reads."
 Assert-Runtime ([string]$ContractResponse.Headers.ETag -eq [string]$ContractAgain.Headers.ETag) "Content Contract ETag is not stable."
 Assert-Runtime ($Contract.contract_version -eq "2.1.0") "Content Contract version is not 2.1.0."
-Assert-Runtime ($Contract.theme_version -eq "0.33.5") "Content Contract Theme version is not 0.33.5."
+Assert-Runtime ($Contract.theme_version -eq "0.33.6") "Content Contract Theme version is not 0.33.6."
 Assert-Runtime ($Contract.principles.frontend -eq "Render what CMS requests.") "Frontend responsibility principle is missing."
 Assert-Runtime ($Contract.principles.cms -eq "Decide what the page contains.") "CMS responsibility principle is missing."
 Assert-Runtime ($Contract.principles.content_type -eq "Content type is taxonomy, not layout.") "Content type boundary principle is missing."
@@ -160,7 +160,8 @@ foreach ($FooterSlug in @("about", "contact", "privacy-policy", "terms-of-use"))
     Assert-Runtime ($SurvivalHtml.Contains("/$FooterSlug/")) "Footer is missing static-page link: $FooterSlug"
 }
 foreach ($RemovedFooterSlug in @("affiliate-disclosure", "disclaimer")) {
-    Assert-Runtime (-not $SurvivalHtml.Contains("/$RemovedFooterSlug/")) "Footer still exposes removed low-value link: $RemovedFooterSlug"
+    $FooterHtml = [regex]::Match($SurvivalHtml, '<footer\b[\s\S]*?</footer>', 'IgnoreCase').Value
+    Assert-Runtime (-not $FooterHtml.Contains("/$RemovedFooterSlug/")) "Footer still exposes removed low-value link: $RemovedFooterSlug"
 }
 Assert-Runtime (-not $SurvivalHtml.Contains("Guest-first. Practical. Independent.")) "Footer still exposes the removed principles slogan."
 

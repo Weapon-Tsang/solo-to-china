@@ -1,8 +1,8 @@
 # SoloToChina CMS / Frontend Capability Contract
 
-Current Component Contract version: `1.4.1` (Parent Theme `0.33.5`)
+Current Component Contract version: `1.4.1` (Parent Theme `0.33.6`)
 
-Registry 1.4.1 keeps all existing component IDs and fields compatible. Commercial `disclosure` is optional; when omitted, the frontend renders the compact visible default `Paid link`.
+Registry 1.4.1 keeps all existing component IDs and fields compatible. Commercial `disclosure` remains optional for historical payload compatibility, but the frontend renders the affiliate relationship once at page level outside tickets. It never repeats `Paid link` or historical commission copy inside each card. Offer percentages remain explicit asset data, never inferred from provider or category.
 
 This document defines the integration boundary between the independent `solo-to-china` frontend repository and `solo-to-china-CMS` repository.
 

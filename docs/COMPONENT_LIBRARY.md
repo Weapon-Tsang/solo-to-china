@@ -47,7 +47,7 @@ These are the only capabilities currently available for CMS selection. `page_blo
 | `planner_cta` | Planner CTA | travel | `page_block` | `stable` | default | Offers a contextual trip-planning action selected by the CMS. |
 | `ticket_reminder` | Ticket Booking Window | travel | `page_block` | `stable` | default | Delegates rule-based booking-window timing to SoloToChina Tools while retaining the historical identifier as a compatibility alias. |
 | `destination_card` | Destination / Taxi Card | travel | `page_block` | `stable` | default | Renders a verified Chinese destination card that travelers can show or copy for a driver. |
-| `affiliate_cta` | Affiliate CTA | commercial | `page_block` | `stable` | default | Renders a restrained contextual commercial action with visible disclosure. |
+| `affiliate_cta` | Affiliate CTA | commercial | `page_block` | `stable` | default | Renders a compact commercial ticket with one real action and a page-level relationship notice. |
 | `affiliate_booking_card` | Affiliate Booking Card | commercial | `page_block` | `stable` | default | Renders a CMS-selected high-intent Trip.com deep or category link after QA. |
 | `affiliate_search_card` | Affiliate Search Card | commercial | `page_block` | `stable` | link, search_box | Renders a CMS-selected Trip.com search link or allowlisted structured search box. |
 | `affiliate_banner` | Affiliate Banner | commercial | `page_block` | `stable` | static, dynamic | Renders a CMS-selected static or allowlisted dynamic Trip.com banner as a restrained fallback. |
@@ -1188,12 +1188,12 @@ Example:
 - Category: `commercial`
 - Status: `stable`
 - CMS usable: `true` via `page_block`
-- Purpose: Renders a restrained contextual commercial action with visible disclosure.
+- Purpose: Renders a compact commercial ticket with one real action and a page-level relationship notice.
 - Variants: `default`
 - Required fields: `category`, `provider`, `title`, `description`, `cta_label`, `target_url`
 - Optional fields: `price_text`, `disclosure`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/functions.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`
-- Accessibility: External links open safely and relationship disclosure remains visible.
+- Accessibility: External links open safely; the relationship notice is visible outside the card.
 - Responsive behavior: Copy and action stack without becoming a deal wall.
 
 Schema:
@@ -1256,7 +1256,7 @@ Example:
   "description": "Check location before price.",
   "cta_label": "View options",
   "target_url": "https://example.com",
-  "disclosure": "Paid link"
+  "disclosure": "We may earn a commission from bookings through these links."
 }
 ```
 
@@ -1270,7 +1270,7 @@ Example:
 - Required fields: `affiliate_asset_id`, `provider`, `asset_type`, `product_category`, `title`, `description`, `cta_label`, `target_url`, `scope_type`, `scope_key`, `slot_key`, `placement`, `strategy_version`
 - Optional fields: `price_text`, `disclosure`, `entity`, `route`, `destination`, `anchor`
 - Implementation: `wp-content/themes/solo-to-china/inc/content-renderers.php`, `wp-content/themes/solo-to-china-child/assets/css/content-components.css`, `wp-content/themes/solo-to-china/assets/js/commercial-events.js`
-- Accessibility: Uses a labeled aside, visible disclosure, and a descriptive sponsored link.
+- Accessibility: Uses a labeled aside, page-level relationship notice, and a descriptive sponsored link.
 - Responsive behavior: Stacks copy and action without horizontal overflow or urgency treatment.
 
 Schema:
@@ -1423,7 +1423,7 @@ Example:
   "description": "Review the official listing details before booking.",
   "cta_label": "View ticket options",
   "target_url": "https://www.trip.com/",
-  "disclosure": "Paid link",
+  "disclosure": "We may earn a commission from bookings through these links.",
   "scope_type": "ENTITY",
   "scope_key": "forbidden-city",
   "slot_key": "tickets-contextual-1",
@@ -1653,7 +1653,7 @@ Example:
   "description": "Compare location and arrival access for your dates.",
   "cta_label": "Search hotels",
   "target_url": "https://www.trip.com/hotels/",
-  "disclosure": "Paid link",
+  "disclosure": "We may earn a commission from bookings through these links.",
   "scope_type": "DESTINATION",
   "scope_key": "beijing",
   "slot_key": "hotel-search-1",
@@ -1906,7 +1906,7 @@ Example:
   "target_url": "https://www.trip.com/",
   "image_url": "https://pages.trip.com/banner.jpg",
   "alt_text": "Trip.com travel planning",
-  "disclosure": "Paid link",
+  "disclosure": "We may earn a commission from bookings through these links.",
   "scope_type": "GLOBAL",
   "scope_key": "global",
   "slot_key": "end-resource-banner-1",
@@ -2082,7 +2082,7 @@ Example:
   "description": "Confirm dates and provider terms before booking.",
   "cta_label": "View promotion",
   "target_url": "https://www.trip.com/",
-  "disclosure": "Paid link",
+  "disclosure": "We may earn a commission from bookings through these links.",
   "scope_type": "COUNTRY",
   "scope_key": "china",
   "slot_key": "promotion-end-1",

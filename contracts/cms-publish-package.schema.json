@@ -12,7 +12,7 @@
           "const": "1.4.1"
         },
         "contractChecksum": {
-          "const": "d83d9c0df8757c96cdc3dba8f12ce4dd3d2163d2ab884af07ad3abc68276c880",
+          "const": "417022bd056c0e9cd2b67ee016610d08b6d5d7b5737ba6849979f620acddca43",
           "pattern": "^[a-f0-9]{64}$",
           "type": "string"
         },
@@ -1043,7 +1043,7 @@
               },
               {
                 "additionalProperties": false,
-                "description": "Renders a restrained contextual commercial action with visible disclosure.",
+                "description": "Renders a compact commercial ticket with one real action and a page-level relationship notice.",
                 "properties": {
                   "data": {
                     "additionalProperties": false,

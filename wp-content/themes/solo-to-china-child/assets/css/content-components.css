@@ -600,7 +600,57 @@
 
 .stc-commercial-component,
 .stc-dynamic-component--affiliate {
-	transition: border-color var(--stc-motion-duration-base) var(--stc-motion-ease-standard), box-shadow var(--stc-motion-duration-base) var(--stc-motion-ease-standard), transform var(--stc-motion-duration-base) var(--stc-motion-ease-standard);
+	transition: border-color var(--stc-motion-duration-base) var(--stc-motion-ease-standard), box-shadow var(--stc-motion-duration-base) var(--stc-motion-ease-standard);
+}
+
+/* B commercial ticket: the offer is content, never decorative pseudo-copy. */
+.stc-commercial-component,
+.stc-dynamic-component--affiliate,
+.stc-dynamic-component--planner {
+	background: var(--stc-commercial-canvas);
+	border: 1px solid var(--stc-commercial-line);
+	border-radius: 17px;
+	box-shadow: 0 6px 20px rgba(32, 76, 133, .08);
+	gap: 16px;
+	margin-block: 28px;
+	padding: 20px;
+}
+.stc-commercial-component .stc-dynamic-component__eyebrow,
+.stc-dynamic-component--affiliate .stc-dynamic-component__eyebrow { color: var(--stc-commercial-action); }
+.stc-commercial-component:hover,
+.stc-dynamic-component--affiliate:hover { transform: none; }
+.stc-commercial-component__category { color: var(--stc-commercial-ink); font-size: 1rem; font-weight: 750; line-height: 1.25; margin: 8px 0 0; }
+.stc-commercial-component__meta { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+.stc-commercial-component__badge { background: color-mix(in srgb, var(--stc-commercial-offer) 9%, var(--stc-color-surface)); border: 1px solid color-mix(in srgb, var(--stc-commercial-offer) 25%, var(--stc-color-line)); border-radius: 999px; color: var(--stc-commercial-offer); display: inline-block; font-size: .6875rem; font-weight: 800; letter-spacing: .04em; line-height: 1.2; padding: 5px 9px; }
+.stc-commercial-component :is(h2,h3),
+.stc-dynamic-component--affiliate h2 { color: var(--stc-commercial-offer); font-size: clamp(1.55rem, 3vw, 2.25rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.08; margin-block: 8px; }
+.stc-commercial-component__offer-prefix { font-size: .65em; letter-spacing: 0; white-space: nowrap; }
+.stc-commercial-component__offer-amount { font-size: clamp(2.5rem, 3.5vw, 3rem); font-weight: 850; white-space: nowrap; }
+.stc-commercial-component__detail { color: var(--stc-commercial-detail); font-size: .875rem; line-height: 1.5; margin: 0; }
+.stc-commercial-component .stc-dynamic-component__action,
+.stc-dynamic-component--affiliate .stc-dynamic-component__action {
+	background: var(--stc-commercial-action);
+	border: 1px solid var(--stc-commercial-action);
+	border-radius: 9px;
+	color: var(--stc-color-surface);
+	min-block-size: 46px;
+	padding: 10px 18px;
+	text-align: center;
+	transition: background-color 140ms ease, transform 140ms ease;
+}
+.stc-commercial-component .stc-dynamic-component__action:hover,
+.stc-dynamic-component--affiliate .stc-dynamic-component__action:hover { background: var(--stc-commercial-action-hover); border-color: var(--stc-commercial-action-hover); transform: translateY(-1px); }
+.stc-commercial-component .stc-dynamic-component__action:active,
+.stc-dynamic-component--affiliate .stc-dynamic-component__action:active { transform: translateY(0); }
+.stc-commercial-component .stc-dynamic-component__action:focus-visible,
+.stc-dynamic-component--affiliate .stc-dynamic-component__action:focus-visible { outline: 3px solid var(--stc-commercial-offer); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+	.stc-commercial-component .stc-dynamic-component__action,
+	.stc-commercial-component .stc-dynamic-component__action:hover,
+	.stc-commercial-component .stc-dynamic-component__action:active,
+	.stc-dynamic-component--affiliate .stc-dynamic-component__action,
+	.stc-dynamic-component--affiliate .stc-dynamic-component__action:hover,
+	.stc-dynamic-component--affiliate .stc-dynamic-component__action:active { transition: none; transform: none; }
 }
 
 .stc-dynamic-component--ticket {
@@ -710,6 +760,15 @@
 		white-space: normal;
 		width: 100%;
 	}
+
+	.stc-dynamic-component.stc-commercial-component,
+	.stc-dynamic-component.stc-dynamic-component--affiliate {
+		gap: 8px;
+		padding: 14px;
+	}
+	.stc-commercial-component__category { margin-top: 4px; }
+	.stc-commercial-component :is(h2,h3),
+	.stc-dynamic-component--affiliate h2 { margin-block: 4px; }
 
 	.stc-commercial-component__embed {
 		aspect-ratio: 4 / 3;

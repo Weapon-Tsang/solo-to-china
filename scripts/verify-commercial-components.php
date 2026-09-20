@@ -19,6 +19,7 @@ function esc_attr( $value ) { return htmlspecialchars( (string) $value, ENT_QUOT
 function esc_html( $value ) { return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' ); }
 function esc_url( $value ) { return esc_attr( $value ); }
 function __( $value ) { return $value; }
+function esc_html__( $value ) { return esc_html( $value ); }
 function add_action() {}
 function add_shortcode() {}
 function register_rest_route() {}
@@ -76,7 +77,8 @@ $booking = array(
 );
 $booking_html = stc_render_affiliate_booking_card_component( $booking );
 stc_test( false !== strpos( $booking_html, 'rel="sponsored nofollow noopener"' ), 'Safe sponsored relationship attributes are missing.' );
-stc_test( false !== strpos( $booking_html, 'Affiliate link.' ), 'Visible disclosure is missing.' );
+stc_test( false !== strpos( $booking_html, 'stc-affiliate-relationship' ), 'Page-level relationship notice is missing.' );
+stc_test( false === strpos( $booking_html, 'stc-dynamic-component__disclosure' ), 'Card-level disclosure node survived.' );
 stc_test( false !== strpos( $booking_html, 'data-stc-commercial="true"' ), 'Event attribution data is missing.' );
 stc_test( false !== strpos( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot identity is missing from visible DOM.' );
 stc_test( 1 === substr_count( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot rendered more than once.' );
@@ -85,8 +87,7 @@ $booking_without_disclosure = $booking;
 unset( $booking_without_disclosure['disclosure'] );
 $booking_without_disclosure_html = stc_render_affiliate_booking_card_component( $booking_without_disclosure );
 stc_test( '' !== $booking_without_disclosure_html, 'Commercial card without disclosure was rejected.' );
-stc_test( false !== strpos( $booking_without_disclosure_html, 'Paid link' ), 'Compact default disclosure is missing.' );
-stc_test( false === strpos( $booking_without_disclosure_html, 'commission' ), 'Long commission sentence leaked into the default disclosure.' );
+stc_test( false === strpos( $booking_without_disclosure_html, 'Paid link' ), 'Old compact disclosure survived.' );
 $disclosure_cases = array(
 	'empty' => '',
 	'paid' => 'Paid link',
@@ -97,12 +98,37 @@ foreach ( $disclosure_cases as $case => $value ) {
 	$input = $booking;
 	$input['disclosure'] = $value;
 	$html = stc_render_affiliate_booking_card_component( $input );
-	$expected = 'custom' === $case ? $value : 'Paid link';
-	stc_test( false !== strpos( $html, $expected ), 'Disclosure behavior failed for ' . $case );
+	stc_test( false === strpos( $html, $value ) || '' === $value, 'Card-level disclosure survived for ' . $case );
 	stc_test( false === strpos( $html, 'SoloToChina may earn a commission' ), 'Historical default leaked for ' . $case );
 	stc_test( false !== strpos( $html, 'href="https://www.trip.com/"' ), 'Target URL changed for ' . $case );
 	stc_test( false !== strpos( $html, 'rel="sponsored nofollow noopener"' ), 'Attribution changed for ' . $case );
 }
+
+$explicit_offer = $booking;
+$explicit_offer['product_category'] = 'HOTEL';
+$explicit_offer['title'] = 'Hotels & Homes';
+$explicit_offer['description'] = 'First booking deal. Terms apply.';
+$explicit_offer['price_text'] = 'Up to 20% OFF';
+$offer_html = stc_render_affiliate_booking_card_component( $explicit_offer );
+stc_test( false !== strpos( $offer_html, 'stc-commercial-component__offer-prefix">Up to</span>' ) && false !== strpos( $offer_html, 'stc-commercial-component__offer-amount">20% OFF</strong>' ), 'Explicit offer headline was not promoted into the ticket hierarchy.' );
+stc_test( false !== strpos( $offer_html, 'NEW USER OFFER' ), 'Explicit first-booking offer lost its qualification badge.' );
+stc_test( false !== strpos( $offer_html, 'Hotels &amp; Homes' ), 'Human-facing category label is missing.' );
+stc_test( false === strpos( $offer_html, 'stc-dynamic-component__disclosure' ), 'Offer card restored an internal disclosure.' );
+$tour = $booking;
+$tour['product_category'] = 'TOUR_ACTIVITY';
+$tour['disclosure'] = 'SoloToChina may earn a commission from eligible bookings, at no extra cost to you.';
+$tour_html = stc_render_affiliate_booking_card_component( $tour );
+stc_test( false !== strpos( $tour_html, 'Tours &amp; Tickets' ), 'Historical tour enum leaked into the user-facing label.' );
+stc_test( false === strpos( $tour_html, $tour['disclosure'] ), 'Nonempty historical disclosure leaked into the card.' );
+$tour['scope_type'] = 'DESTINATION';
+$tour['scope_key'] = 'beijing';
+$tour['title'] = 'Tours and activities for Beijing';
+stc_test( false !== strpos( stc_render_affiliate_booking_card_component( $tour ), 'Find your next experience' ), 'Exact historical system title was not upgraded at display time.' );
+$tour['title'] = 'Tours and activities for Shanghai';
+stc_test( false !== strpos( stc_render_affiliate_booking_card_component( $tour ), 'Tours and activities for Shanghai' ), 'Distinct manual or out-of-scope title was overwritten.' );
+$tour['description'] = 'Check current tour_activity details and availability before booking.';
+$tour_html = stc_render_affiliate_booking_card_component( $tour );
+stc_test( false !== strpos( $tour_html, 'Check what is included and current booking terms.' ) && false === strpos( $tour_html, 'tour_activity details' ), 'Historical generated category filler survived display normalization.' );
 
 $unknown = $booking;
 $unknown['html'] = '<script>alert(1)</script>';
