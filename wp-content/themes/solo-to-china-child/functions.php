@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_CHILD_VERSION', '0.13.0-dev' );
+define( 'STC_CHILD_VERSION', '0.13.0' );
 
 /**
  * Replace the Parent fallback editor stylesheet with the Child visual system.

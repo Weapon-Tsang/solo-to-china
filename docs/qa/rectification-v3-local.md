@@ -4,7 +4,7 @@
 
 ## 当前环境与代码身份
 
-- WordPress `http://127.0.0.1:9400/`，父/子主题与 Tools 插件从本机仓库挂载；父主题 main.js、子主题 site/article/content/home/tools CSS 实际加载。子主题 `0.13.0-dev`，非线上版本。
+- WordPress `http://127.0.0.1:9400/`，父/子主题与 Tools 插件从本机仓库挂载；父主题 main.js、子主题 site/article/content/home/tools CSS 实际加载。子主题已准备为发布候选 `0.13.0`；此条仍只证明本地，不能视为线上已安装。
 - 前端 Git 基线 `d1e0c078add5b988833c11a79ca995d59a237c72`，修改未提交。Contract 1.4.1，Registry checksum `d83d9c0df8757c96cdc3dba8f12ce4dd3d2163d2ab884af07ad3abc68276c880`。
 - fixture 使用 `scripts/playground-fixtures.php`、`scripts/playground-upgrade.php`，长文章、两种旧/新商业卡、目录/Share、首页、Gallery、Tools 都是隔离测试内容；无付费模型调用。
 

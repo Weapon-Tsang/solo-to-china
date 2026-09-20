@@ -1,4 +1,4 @@
-> Current development release: Parent 0.33.5 / Child 0.12.2 / Tools 0.26.0. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for catalog, caching, provider/privacy and CMS changes. Older release narratives below are historical.
+> Current release candidate: Parent 0.33.5 / Child 0.13.0 / Tools 0.26.0. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for catalog, caching, provider/privacy and CMS changes. Older release narratives below are historical.
 
 # WordPress Install Handoff
 
