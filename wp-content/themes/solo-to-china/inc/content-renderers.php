@@ -108,17 +108,6 @@ function stc_normalize_commercial_disclosure( $disclosure ) {
 	return $disclosure;
 }
 
-/** Keep the relationship notice outside the ticket, once per article render. */
-function stc_commercial_relationship_notice() {
-	static $seen = array();
-	$post_id = (int) get_the_ID();
-	if ( isset( $seen[ $post_id ] ) ) {
-		return '';
-	}
-	$seen[ $post_id ] = true;
-	return '<p class="stc-affiliate-relationship">' . esc_html__( 'We may earn a commission from bookings through these links.', 'solo-to-china' ) . ' <a href="' . esc_url( home_url( '/affiliate-disclosure/' ) ) . '">' . esc_html__( 'How affiliate links work', 'solo-to-china' ) . '</a></p>';
-}
-
 /** Human-facing product label; never expose the storage enum as marketing copy. */
 function stc_commercial_category_label( $category ) {
 	$labels = array(
@@ -163,6 +152,44 @@ function stc_commercial_display_description( $data ) {
 	);
 	$historical = 'Check current ' . strtolower( $category ) . ' details and availability before booking.';
 	return isset( $defaults[ $category ] ) && $description === $historical ? $defaults[ $category ] : $description;
+}
+
+/** B-ticket headlines fixed by the requested product category. */
+function stc_commercial_ticket_offer( $category ) {
+	$offers = array(
+		'HOTEL'            => array( 'Up to', '20% OFF', 'New users' ),
+		'FLIGHT'           => array( '', '10% OFF', '' ),
+		'TRAIN'            => array( '', '10% OFF', '' ),
+		'AIRPORT_TRANSFER' => array( '', '15% OFF', '' ),
+		'ATTRACTION'       => array( '', '10% OFF', '' ),
+		'TOUR_ACTIVITY'    => array( '', '10% OFF', '' ),
+	);
+	return isset( $offers[ $category ] ) ? $offers[ $category ] : array();
+}
+
+/** Inline category pictograms; the claim stub uses the three filled B-reference icons. */
+function stc_commercial_ticket_icon( $category ) {
+	$paths = array(
+		'HOTEL'            => '<g fill="currentColor" stroke="none"><path d="M2 14.5h20v5H2zM2 9h2.7v10.5H2zM5.5 11.5h13.3c1.8 0 2.9.9 2.9 2.7v1.2H5.5zM6 8.4h5.2c1.2 0 1.8.7 1.8 2v.5H6z"/><path d="M3 19h2v2H3zm16 0h2v2h-2z"/></g>',
+		'FLIGHT'           => '<path fill="currentColor" stroke="none" d="M21.9 2.1c-.7-.6-1.6-.4-2.5.4l-5.3 5-9-1.2-1.6 1.5 7 3.7-5.1 5.2-2.8-.2-1.1 1.1 3.9 1.9 1.9 3.9 1.1-1.1-.2-2.8 5.2-5.1 3.7 7 1.5-1.6-1.2-9 5-5.3c.8-.9 1-1.8.4-2.5z"/>',
+		'TRAIN'            => '<g fill="currentColor" stroke="none"><path d="M8 2h8v2H8zM7 4.5h10c1.2 0 2 .9 2 2v12H5v-12c0-1.1.8-2 2-2zM3 20h18v2H3z"/><path d="M7 17.5 5 21h2.5l2-3.5zm10 0 2 3.5h-2.5l-2-3.5z"/></g><g fill="#f7fbff" stroke="none"><path d="M7.5 7h9v5h-9z"/><circle cx="9" cy="15.5" r="1"/><circle cx="15" cy="15.5" r="1"/></g>',
+		'AIRPORT_TRANSFER' => '<path d="M5 16h14l-2-7H7l-2 7Zm-2 0h18v4H3zM7 9l2-4h6l2 4M7 20v2m10-2v2"/>',
+		'ATTRACTION'       => '<path d="M3 10h18M5 10l7-6 7 6M6 10v10m4-10v10m4-10v10M3 20h18"/>',
+		'TOUR_ACTIVITY'    => '<path d="m3 20 5-11 4 6 4-9 5 14H3Zm5-11 2-4 2 3"/>',
+		'PLANNER'          => '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4m8-4v4M4 10h16m-12 5h3m3 0h2"/>',
+		'FLIGHT_HOTEL'     => '<path d="M2 12h10m-8 0 3-3m-3 3 3 3m-1-5 7-4 2 1-3 3 5 1 3-2 2 1-3 4-7-1-3 4m-5 2h17M4 21v-3h16v3"/>',
+		'CAR_RENTAL'      => '<path d="M4 15 6 9h12l2 6M4 15h16v5H4zM7 20v2m10-2v2M7 17h2m6 0h2M8 9l1-3h6l1 3"/>',
+	);
+	$path = isset( $paths[ $category ] ) ? $paths[ $category ] : '<path d="M4 6h16v12H4zM8 10h8m-8 4h5"/>';
+	return '<svg data-stc-icon-category="' . esc_attr( $category ) . '" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' . $path . '</svg>';
+}
+
+/** Give each asset one stable, pseudorandom Chinese scene across cached views. */
+function stc_commercial_ticket_scene( $data ) {
+	$scenes = array( 'temple-of-heaven', 'great-wall', 'zhangjiajie' );
+	$key = $data['affiliate_asset_id'] . '|' . $data['slot_key'];
+	$index = hexdec( substr( hash( 'sha256', $key ), 0, 8 ) ) % count( $scenes );
+	return $scenes[ $index ];
 }
 
 /**
@@ -315,32 +342,54 @@ function stc_render_commercial_component_shell( $data, $component, $variant, $me
 	$title_id     = $component_id . '-title';
 	$target_url   = isset( $data['target_url'] ) ? $data['target_url'] : '';
 	$cta_label    = isset( $data['cta_label'] ) ? $data['cta_label'] : '';
-	$offer_parts  = array();
-	$offer_text   = ! empty( $data['price_text'] ) && preg_match( '/^(Up to\s+)?(\d{1,2}%\s+OFF)$/i', trim( $data['price_text'] ), $offer_parts ) ? trim( $data['price_text'] ) : '';
-	$offer_badge  = $offer_text && preg_match( '/\b(?:new[- ]user|first booking)\b/i', $data['description'] ) ? __( 'NEW USER OFFER', 'solo-to-china' ) : '';
-	$display_title = stc_commercial_display_title( $data );
-	$display_description = stc_commercial_display_description( $data );
+	$category     = $data['product_category'];
+	$offer        = stc_commercial_ticket_offer( $category );
+	$scene        = stc_commercial_ticket_scene( $data );
+	$is_planner   = 'PLANNER' === $category;
+	$display_title = $is_planner ? 'Build your itinerary with Trip.Planner.' : stc_commercial_display_title( $data );
+	$display_description = 'Explore more of China for less- your next adventure awaits.';
+	$button_label = $offer ? __( 'Claim bonus', 'solo-to-china' ) : ( $is_planner ? __( 'Open Trip.Planner', 'solo-to-china' ) : $cta_label );
 
 	ob_start();
 	?>
-	<?php echo stc_commercial_relationship_notice(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by helper. ?>
-	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-commercial-component stc-commercial-component--<?php echo esc_attr( $component ); ?> stc-commercial-component--<?php echo esc_attr( $variant ); ?><?php echo $offer_text ? ' stc-commercial-component--offer' : ''; ?>" aria-labelledby="<?php echo esc_attr( $title_id ); ?>"<?php echo stc_commercial_event_data_attributes( $data, $component, $variant ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from escaped attributes. ?>>
+	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-commercial-component stc-commercial-component--ticket stc-commercial-component--scene-<?php echo esc_attr( $scene ); ?> stc-commercial-component--<?php echo esc_attr( $component ); ?> stc-commercial-component--<?php echo esc_attr( $variant ); ?><?php echo $offer ? ' stc-commercial-component--offer' : ''; ?>" aria-labelledby="<?php echo esc_attr( $title_id ); ?>"<?php echo stc_commercial_event_data_attributes( $data, $component, $variant ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from escaped attributes. ?>>
 		<div class="stc-dynamic-component__body">
-			<div class="stc-commercial-component__meta"><p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $data['provider'] ); ?></p>
-			<?php if ( $offer_badge ) : ?><span class="stc-commercial-component__badge"><?php echo esc_html( $offer_badge ); ?></span><?php endif; ?></div>
-			<p class="stc-commercial-component__category"><?php echo esc_html( stc_commercial_category_label( $data['product_category'] ) ); ?></p>
-			<h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php if ( $offer_text ) : ?><?php if ( ! empty( $offer_parts[1] ) ) : ?><span class="stc-commercial-component__offer-prefix"><?php echo esc_html( trim( $offer_parts[1] ) ); ?></span> <?php endif; ?><strong class="stc-commercial-component__offer-amount"><?php echo esc_html( $offer_parts[2] ); ?></strong><?php else : ?><?php echo esc_html( $display_title ); ?><?php endif; ?></h2>
-			<p class="stc-commercial-component__detail"><?php echo esc_html( $offer_text && html_entity_decode( $display_title, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) !== stc_commercial_category_label( $data['product_category'] ) ? $display_title . ' · ' . $display_description : $display_description ); ?></p>
+			<?php if ( $offer ) : ?><span class="stc-commercial-component__badge"><?php echo esc_html__( 'Limited offer', 'solo-to-china' ); ?></span><?php endif; ?>
+			<h2 id="<?php echo esc_attr( $title_id ); ?>" data-stc-toc-exclude><?php if ( $offer ) : ?><?php if ( $offer[0] ) : ?><span class="stc-commercial-component__offer-prefix"><?php echo esc_html( $offer[0] ); ?></span> <?php endif; ?><strong class="stc-commercial-component__offer-amount"><?php echo esc_html( $offer[1] ); ?></strong><?php else : ?><?php echo esc_html( $display_title ); ?><?php endif; ?></h2>
+			<p class="stc-commercial-component__category"><?php if ( $offer && $offer[2] ) : ?><span><?php echo esc_html( $offer[2] ); ?> - </span><?php endif; ?><?php echo esc_html( stc_commercial_category_label( $category ) ); ?></p>
+			<p class="stc-commercial-component__detail"><?php echo esc_html( $display_description ); ?></p>
 			<?php if ( $media_html ) : ?>
 				<div class="stc-commercial-component__media"><?php echo $media_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Renderer-owned HTML is escaped at construction. ?></div>
 			<?php endif; ?>
-			<?php if ( ! empty( $data['price_text'] ) && ! $offer_text ) : ?>
-				<p class="stc-dynamic-component__price"><?php echo esc_html( $data['price_text'] ); ?></p>
-			<?php endif; ?>
 		</div>
-		<?php if ( $target_url && $cta_label ) : ?>
-			<a class="stc-button stc-button--secondary stc-dynamic-component__action" data-stc-commercial-click href="<?php echo esc_url( $target_url ); ?>" target="_blank" rel="sponsored nofollow noopener"><?php echo esc_html( $cta_label ); ?></a>
-		<?php endif; ?>
+		<div class="stc-commercial-component__claim">
+			<span class="stc-commercial-component__perforation" aria-hidden="true"></span>
+			<p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $data['provider'] ); ?></p>
+			<div class="stc-commercial-component__claim-top">
+				<div class="stc-commercial-component__products">
+					<?php foreach ( array( 'FLIGHT' => 'Flights', 'HOTEL' => 'Hotels', 'TRAIN' => 'Tickets' ) as $icon_category => $icon_label ) : ?>
+						<span class="stc-commercial-component__product"><?php echo stc_commercial_ticket_icon( $icon_category ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed inline SVG map. ?><span><?php echo esc_html( $icon_label ); ?></span></span>
+					<?php endforeach; ?>
+				</div>
+				<span class="stc-commercial-component__stamp" aria-hidden="true">
+					<svg viewBox="0 0 112 80" focusable="false">
+						<defs><path id="<?php echo esc_attr( $component_id ); ?>-stamp-arc" d="M12 38a27 27 0 0 1 54 0"/></defs>
+						<g fill="none" stroke="currentColor">
+							<path d="M39 4.5 43.6 4.8 47.9 6.9 52.5 7.5 56 10.5 60.9 11.4 63.6 15.4 67.3 18.3 68.8 22.8 71 26.8 72.9 30.9 73.6 35.4 75 40 73 44.5 73.2 49.2 70.3 53 69.8 57.8 66.8 61.3 64.1 65.1 60.4 67.8 56.1 69.6 52.5 72.6 47.9 73.2 43.7 75.9 39 74.6 34.4 75.1 30.2 73 25.6 72.2 21.3 70.6 17.6 67.8 13.7 65.3 12 60.7 8.4 57.7 7.5 53.1 4.3 49.3 4.3 44.6 3.7 40 4.6 35.5 5.9 31.1 6.3 26.4 9 22.7 10.3 18 14.8 15.8 17.5 12 21.9 10.4 25.5 7.4 29.8 5.8 34.4 5.2Z" stroke-width="1.1"/>
+							<circle cx="39" cy="40" r="30.5" stroke-width=".85" stroke-dasharray="37 2 24 1 31 2 21 2 28 2"/>
+							<circle cx="39" cy="40" r="27.5" stroke-width=".5" stroke-dasharray=".7 2.1" opacity=".7"/>
+							<path class="stc-commercial-component__stamp-tail" d="M61 18c13-6 31 7 50-2M64 27c17-5 27 7 47 1M64 38c15-8 29 5 47-3M60 49c16-8 30 5 51-3" stroke-width="1.25" stroke-linecap="round" opacity=".72"/>
+							<path d="M12 51c3 5 5 8 9 11m38-50 5 6M26 9l4 2m38 47-4 5" stroke-width=".6" opacity=".35"/>
+						</g>
+						<g fill="currentColor" opacity=".35"><circle cx="19" cy="24" r=".6"/><circle cx="57" cy="61" r=".7"/><circle cx="27" cy="65" r=".45"/><circle cx="67" cy="33" r=".55"/><circle cx="11" cy="43" r=".45"/><circle cx="48" cy="10" r=".5"/></g>
+						<text font-size="4.2" letter-spacing="1.1" fill="currentColor"><textPath href="#<?php echo esc_attr( $component_id ); ?>-stamp-arc" startOffset="50%" text-anchor="middle">SOLO TO CHINA</textPath></text>
+						<text x="39" y="34" text-anchor="middle" font-size="10.5" font-weight="800" fill="currentColor"><tspan x="39">GOOD</tspan><tspan x="39" dy="11">TRIPS</tspan><tspan x="39" dy="11">AHEAD</tspan></text>
+					</svg>
+				</span>
+			</div>
+			<?php if ( $target_url && $button_label ) : ?><a class="stc-button stc-button--primary stc-dynamic-component__action" data-stc-commercial-click href="<?php echo esc_url( $target_url ); ?>" target="_blank" rel="sponsored nofollow noopener"><?php echo esc_html( $button_label ); ?> <span aria-hidden="true">&#8594;</span></a><?php endif; ?>
+			<p class="stc-commercial-component__signature"><?php echo esc_html__( 'Save more. Travel further.', 'solo-to-china' ); ?></p>
+		</div>
 	</aside>
 	<?php
 
@@ -396,7 +445,6 @@ function stc_render_planner_cta_component( $attributes ) {
 
 	ob_start();
 	?>
-	<?php echo stc_commercial_relationship_notice(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by helper. ?>
 	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--planner" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 		<div class="stc-dynamic-component__body">
 			<p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $provider ? $provider : __( 'Trip planning', 'solo-to-china' ) ); ?></p>
@@ -521,7 +569,6 @@ function stc_render_affiliate_cta_component( $attributes ) {
 
 	ob_start();
 	?>
-	<?php echo stc_commercial_relationship_notice(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by helper. ?>
 	<aside id="<?php echo esc_attr( $component_id ); ?>" class="stc-dynamic-component stc-dynamic-component--affiliate" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 		<div class="stc-dynamic-component__body">
 			<p class="stc-dynamic-component__eyebrow"><?php echo esc_html( $provider ); ?></p>

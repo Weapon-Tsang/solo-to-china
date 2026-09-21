@@ -172,7 +172,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.33.6") -or (-not $PackageScript.Contains("Child Theme version: 0.13.1")) -or (-not $PackageScript.Contains("Plugin version: 0.26.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.33.7") -or (-not $PackageScript.Contains("Child Theme version: 0.13.1")) -or (-not $PackageScript.Contains("Plugin version: 0.26.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -270,8 +270,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.33.6")) {
-		$Failures.Add("Theme stylesheet header version is not 0.33.6.")
+    if (-not $ThemeStyle.Contains("Version: 0.33.7")) {
+		$Failures.Add("Theme stylesheet header version is not 0.33.7.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -284,7 +284,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.33.6"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.33.7"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -352,8 +352,8 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.33.6'")) {
-		$Failures.Add("Theme asset version is not 0.33.6.")
+    if (-not $Functions.Contains("'0.33.7'")) {
+		$Failures.Add("Theme asset version is not 0.33.7.")
     }
     foreach ($SitePageToken in @("STC_SITE_PAGE_MIGRATION_VERSION", "stc_static_page_content", "stc_static_page_metadata", "stc_static_page_fallback", "admin_init", "wp_page_for_privacy_policy", "stc_get_trip_planner_url", "https://www.trip.com/t/bCPFQ85ZHW2")) {
         if (-not $Functions.Contains($SitePageToken)) {

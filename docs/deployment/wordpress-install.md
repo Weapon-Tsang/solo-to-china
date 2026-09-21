@@ -1,4 +1,4 @@
-> Current release candidate: Parent 0.33.5 / Child 0.13.0 / Tools 0.26.0. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for catalog, caching, provider/privacy and CMS changes. Older release narratives below are historical.
+> Current release candidate: Parent 0.33.7 / Child 0.13.1 / Tools 0.26.0. The commercial coupon B release changes the Parent Theme only; preserve the installed Child Theme and Tools Plugin when their versions already match. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for backup, caching and rollback. Older release narratives below are historical.
 
 # WordPress Install Handoff
 
@@ -117,7 +117,7 @@ Also check:
 
 ## Generated Contract And Commercial Event Configuration
 
-After installing Parent Theme `0.33.5`, verify these public read-only endpoints:
+After installing Parent Theme `0.33.7`, verify these public read-only endpoints:
 
 - `/wp-json/stc/v1/component-registry/generated`
 - `/wp-json/stc/v1/page-schema`

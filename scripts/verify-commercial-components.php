@@ -77,9 +77,12 @@ $booking = array(
 );
 $booking_html = stc_render_affiliate_booking_card_component( $booking );
 stc_test( false !== strpos( $booking_html, 'rel="sponsored nofollow noopener"' ), 'Safe sponsored relationship attributes are missing.' );
-stc_test( false !== strpos( $booking_html, 'stc-affiliate-relationship' ), 'Page-level relationship notice is missing.' );
+stc_test( false === strpos( $booking_html, 'stc-affiliate-relationship' ), 'Redundant relationship notice survived.' );
 stc_test( false === strpos( $booking_html, 'stc-dynamic-component__disclosure' ), 'Card-level disclosure node survived.' );
 stc_test( false !== strpos( $booking_html, 'data-stc-commercial="true"' ), 'Event attribution data is missing.' );
+stc_test( false !== strpos( $booking_html, 'stc-commercial-component__stamp' ) && false !== strpos( $booking_html, 'stc-commercial-component__perforation' ), 'Coupon stamp or perforation markup is missing.' );
+stc_test( 1 === preg_match( '/stc-commercial-component__claim-top[\s\S]*stc-commercial-component__product[\s\S]*stc-commercial-component__stamp[\s\S]*stc-commercial-component__stamp-tail[\s\S]*Claim bonus/', $booking_html ), 'The waving coupon stamp is not beside the category icon above the button.' );
+stc_test( 1 === preg_match( '/stc-commercial-component--scene-(?:temple-of-heaven|great-wall|zhangjiajie)/', $booking_html ), 'A supported Chinese scene was not selected.' );
 stc_test( false !== strpos( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot identity is missing from visible DOM.' );
 stc_test( 1 === substr_count( $booking_html, 'data-stc-slot-key="slot-1"' ), 'Selected slot rendered more than once.' );
 
@@ -110,9 +113,14 @@ $explicit_offer['title'] = 'Hotels & Homes';
 $explicit_offer['description'] = 'First booking deal. Terms apply.';
 $explicit_offer['price_text'] = 'Up to 20% OFF';
 $offer_html = stc_render_affiliate_booking_card_component( $explicit_offer );
-stc_test( false !== strpos( $offer_html, 'stc-commercial-component__offer-prefix">Up to</span>' ) && false !== strpos( $offer_html, 'stc-commercial-component__offer-amount">20% OFF</strong>' ), 'Explicit offer headline was not promoted into the ticket hierarchy.' );
-stc_test( false !== strpos( $offer_html, 'NEW USER OFFER' ), 'Explicit first-booking offer lost its qualification badge.' );
+stc_test( false !== strpos( $offer_html, 'stc-commercial-component__offer-prefix">Up to</span>' ) && false !== strpos( $offer_html, 'stc-commercial-component__offer-amount">20% OFF</strong>' ), 'Hotel offer headline is wrong.' );
+stc_test( false !== strpos( $offer_html, 'Limited offer' ) && false !== strpos( $offer_html, 'New users' ), 'B-ticket badge or new-user qualifier is missing.' );
+stc_test( false !== strpos( $offer_html, 'Claim bonus' ), 'B-ticket button copy is missing.' );
 stc_test( false !== strpos( $offer_html, 'Hotels &amp; Homes' ), 'Human-facing category label is missing.' );
+foreach ( array( 'FLIGHT' => 'Flights', 'HOTEL' => 'Hotels', 'TRAIN' => 'Tickets' ) as $icon_category => $icon_label ) {
+	stc_test( 1 === preg_match( '/data-stc-icon-category="' . $icon_category . '"[\s\S]*?<span>' . $icon_label . '<\/span>/', $offer_html ), 'B-reference ' . $icon_label . ' pictogram is missing.' );
+}
+stc_test( false !== strpos( $offer_html, 'Explore more of China for less- your next adventure awaits.' ), 'The fixed final copy is missing.' );
 stc_test( false === strpos( $offer_html, 'stc-dynamic-component__disclosure' ), 'Offer card restored an internal disclosure.' );
 $tour = $booking;
 $tour['product_category'] = 'TOUR_ACTIVITY';
@@ -123,12 +131,36 @@ stc_test( false === strpos( $tour_html, $tour['disclosure'] ), 'Nonempty histori
 $tour['scope_type'] = 'DESTINATION';
 $tour['scope_key'] = 'beijing';
 $tour['title'] = 'Tours and activities for Beijing';
-stc_test( false !== strpos( stc_render_affiliate_booking_card_component( $tour ), 'Find your next experience' ), 'Exact historical system title was not upgraded at display time.' );
+stc_test( 'Find your next experience' === stc_commercial_display_title( $tour ), 'Historical system title normalization changed.' );
 $tour['title'] = 'Tours and activities for Shanghai';
-stc_test( false !== strpos( stc_render_affiliate_booking_card_component( $tour ), 'Tours and activities for Shanghai' ), 'Distinct manual or out-of-scope title was overwritten.' );
+stc_test( 'Tours and activities for Shanghai' === stc_commercial_display_title( $tour ), 'Distinct manual or out-of-scope title was overwritten.' );
 $tour['description'] = 'Check current tour_activity details and availability before booking.';
 $tour_html = stc_render_affiliate_booking_card_component( $tour );
-stc_test( false !== strpos( $tour_html, 'Check what is included and current booking terms.' ) && false === strpos( $tour_html, 'tour_activity details' ), 'Historical generated category filler survived display normalization.' );
+stc_test( false !== strpos( $tour_html, 'Explore more of China for less- your next adventure awaits.' ) && false === strpos( $tour_html, 'tour_activity details' ), 'The B-reference final copy did not replace historical filler.' );
+
+$expected_headlines = array( 'FLIGHT' => '10% OFF', 'TRAIN' => '10% OFF', 'AIRPORT_TRANSFER' => '15% OFF', 'ATTRACTION' => '10% OFF', 'TOUR_ACTIVITY' => '10% OFF' );
+foreach ( $expected_headlines as $category => $headline ) {
+	$ticket = $booking;
+	$ticket['product_category'] = $category;
+	$ticket['price_text'] = '';
+	$html = stc_render_affiliate_booking_card_component( $ticket );
+	stc_test( false !== strpos( $html, 'stc-commercial-component__offer-amount">' . $headline . '</strong>' ), $category . ' fixed headline is missing.' );
+	stc_test( false !== strpos( $html, 'Limited offer' ) && false !== strpos( $html, 'Claim bonus' ), $category . ' lost the B-ticket hierarchy.' );
+	stc_test( false !== strpos( $html, 'data-stc-icon-category="FLIGHT"' ) && false !== strpos( $html, 'data-stc-icon-category="HOTEL"' ) && false !== strpos( $html, 'data-stc-icon-category="TRAIN"' ), $category . ' is missing the three B-reference icons.' );
+	stc_test( false !== strpos( $html, '<span>Flights</span>' ) && false !== strpos( $html, '<span>Hotels</span>' ) && false !== strpos( $html, '<span>Tickets</span>' ), $category . ' is missing the reference icon labels.' );
+}
+$supported_icons = array( 'HOTEL', 'FLIGHT', 'TRAIN', 'AIRPORT_TRANSFER', 'ATTRACTION', 'TOUR_ACTIVITY', 'FLIGHT_HOTEL', 'CAR_RENTAL', 'PLANNER' );
+$icon_markup = array();
+foreach ( $supported_icons as $category ) {
+	$icon_markup[] = stc_commercial_ticket_icon( $category );
+}
+stc_test( count( $supported_icons ) === count( array_unique( $icon_markup ) ), 'Supported commercial categories share an icon.' );
+$planner = $booking;
+$planner['product_category'] = 'PLANNER';
+$planner_html = stc_render_affiliate_booking_card_component( $planner );
+stc_test( false !== strpos( $planner_html, 'Build your itinerary with Trip.Planner.' ) && false !== strpos( $planner_html, 'Open Trip.Planner' ), 'Planner headline or button copy is wrong.' );
+stc_test( false === strpos( $planner_html, 'Limited offer' ), 'Planner gained an unsupported offer badge.' );
+stc_test( false !== strpos( $planner_html, 'data-stc-icon-category="TRAIN"' ), 'Planner is missing the B-reference icon trio.' );
 
 $unknown = $booking;
 $unknown['html'] = '<script>alert(1)</script>';
@@ -202,7 +234,7 @@ $rate_limited = stc_rest_receive_commercial_event( new STC_Test_Request( 'http:/
 stc_test( is_wp_error( $rate_limited ) && 'stc_commercial_event_rate_limit' === $rate_limited->code, 'Public event rate limit was not enforced.' );
 
 if ( $failures ) {
-	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );
+	echo implode( PHP_EOL, $failures ) . PHP_EOL;
 	exit( 1 );
 }
 

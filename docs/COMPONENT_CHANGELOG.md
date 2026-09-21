@@ -1,5 +1,16 @@
 # Component Changelog
 
+## Commercial coupon B correction / Parent 0.33.7 - 2026-09-21
+
+- Render CMS-selected commercial assets as illustrated B-style coupon tickets with a perforated claim stub, Limited offer badge, and Claim bonus button.
+- Cut small semicircular and curved stamp perforations of varied sizes from the left and right sides only; keep the top and bottom straight and preserve the dotted tear line. The pale Good Trips Ahead postmark uses an uneven printed edge, faint ink marks, and waving cancellation lines near the icon group.
+- Center the reference's filled airplane, bed, and train pictograms with Flights, Hotels, and Tickets labels above every button. Keep all three visible on mobile, with the postmark allowed to touch Tickets.
+- Replace the monochrome scene treatments with the Temple of Heaven's cobalt roof and warm architecture, the Great Wall's stone and green hills, and Zhangjiajie's sandstone and foliage, fading each into the light-blue ticket background.
+- Fix visible headlines by category: new-user hotels up to 20% off; flights, trains, attractions and tours 10% off; airport transfers 15% off; Trip.Planner retains its requested itinerary headline. Stored links and sponsored relation attributes remain intact.
+- Use the same final line on every ticket: `Explore more of China for less- your next adventure awaits.`
+- Remove the repeated commission sentence and disclosure-page link from rendered commercial placements and the homepage planner block. The standalone disclosure page remains available.
+- Keep the Registry schema and CMS payloads compatible. Coupon values are presentation copy supplied by the site owner; the frontend does not verify provider redemption terms.
+
 ## Compatible commercial B presentation / Parent 0.33.6, Child 0.13.1 - 2026-09-21
 
 - Present commercial cards as blue/white/pink offer tickets, with an explicit numeric headline only when the payload supplies a valid offer. Existing generic links stay non-discount cards; no category-derived discount is invented.

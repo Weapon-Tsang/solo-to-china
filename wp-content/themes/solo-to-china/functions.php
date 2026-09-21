@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.33.6' );
+define( 'STC_THEME_VERSION', '0.33.7' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -102,7 +102,7 @@ function stc_enqueue_assets() {
 		'stc-main',
 		get_template_directory_uri() . '/assets/css/main.css',
 		[],
-		STC_THEME_VERSION
+		STC_THEME_VERSION . '.' . filemtime( get_template_directory() . '/assets/css/main.css' )
 	);
 
 	wp_enqueue_script(

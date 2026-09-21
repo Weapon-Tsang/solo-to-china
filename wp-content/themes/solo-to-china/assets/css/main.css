@@ -2426,6 +2426,237 @@ label:focus-visible {
 .stc-dynamic-component--affiliate .stc-dynamic-component__action:active { transform:translateY(0); }
 .stc-commercial-component .stc-dynamic-component__action:focus-visible,
 .stc-dynamic-component--affiliate .stc-dynamic-component__action:focus-visible { outline:3px solid #b42d6d; outline-offset:3px; }
+
+/* Option B: illustrated coupon ticket, with a separate claim stub. */
+.stc-dynamic-component.stc-commercial-component.stc-commercial-component--ticket {
+	--stc-ticket-scene: url("../images/commercial-ticket-temple-of-heaven-color.png");
+	background: #f7fbff;
+	border: 1px solid #b9d9ff;
+	border-radius: 13px;
+	box-shadow: 0 8px 22px rgba(20, 64, 116, .09);
+	display: grid;
+	gap: 0;
+	grid-template-columns: minmax(0, 1fr) minmax(220px, 36%);
+	margin: 32px 0;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	-webkit-mask-image: url("../images/commercial-ticket-edge-mask.svg?v=2");
+	mask-image: url("../images/commercial-ticket-edge-mask.svg?v=2");
+	-webkit-mask-size: 100% 264px;
+	mask-size: 100% 264px;
+	-webkit-mask-repeat: repeat-y;
+	mask-repeat: repeat-y;
+}
+.stc-dynamic-component.stc-commercial-component--ticket.stc-commercial-component--scene-great-wall { --stc-ticket-scene: url("../images/commercial-ticket-great-wall-color.png"); }
+.stc-dynamic-component.stc-commercial-component--ticket.stc-commercial-component--scene-zhangjiajie { --stc-ticket-scene: url("../images/commercial-ticket-zhangjiajie-color.png"); }
+.stc-commercial-component--ticket .stc-dynamic-component__body {
+	background-image: linear-gradient(90deg, rgba(247, 251, 255, .03) 0%, rgba(247, 251, 255, .15) 15%, rgba(247, 251, 255, .78) 28%, rgba(247, 251, 255, .96) 50%, #f7fbff 76%), var(--stc-ticket-scene);
+	background-position: center, left center;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 198px;
+	min-width: 0;
+	padding: 24px 22px 24px clamp(112px, 16vw, 172px);
+	position: relative;
+}
+.stc-commercial-component--ticket .stc-commercial-component__stamp {
+	color: #84b1e3;
+	height: 72px;
+	opacity: .74;
+	pointer-events: none;
+	position: absolute;
+	right: -30px;
+	top: -21px;
+	transform: rotate(-12deg);
+	width: 100px;
+}
+.stc-commercial-component--ticket .stc-commercial-component__stamp svg { display: block; height: 100%; width: 100%; }
+.stc-commercial-component--ticket .stc-commercial-component__badge {
+	align-self: flex-start;
+	background: #e94d59;
+	border: 0;
+	border-radius: 4px;
+	box-shadow: 0 2px 5px rgba(128, 37, 50, .15);
+	color: #fff;
+	font: 700 12px/1.2 system-ui, sans-serif;
+	letter-spacing: 0;
+	margin-bottom: 8px;
+	padding: 5px 9px;
+	text-transform: none;
+}
+.stc-dynamic-component.stc-commercial-component--ticket h2 {
+	color: #153b6c;
+	font: 700 clamp(25px, 3vw, 34px)/1.12 Georgia, "Times New Roman", serif;
+	letter-spacing: -.025em;
+	margin: 0 0 6px;
+	text-wrap: balance;
+}
+.stc-dynamic-component.stc-commercial-component--ticket.stc-commercial-component--static h2 {
+	font-size: clamp(24px, 2.4vw, 28px);
+	overflow-wrap: normal;
+}
+.stc-dynamic-component.stc-commercial-component--ticket .stc-commercial-component__offer-prefix,
+.stc-dynamic-component.stc-commercial-component--ticket .stc-commercial-component__offer-amount {
+	font: inherit;
+	white-space: normal;
+}
+.stc-commercial-component--ticket .stc-commercial-component__category {
+	color: #173d6c;
+	font: 600 15px/1.35 system-ui, sans-serif;
+	margin: 0 0 6px;
+}
+.stc-commercial-component--ticket .stc-commercial-component__detail {
+	color: #40556f;
+	font: 400 13px/1.45 system-ui, sans-serif;
+	margin: 0;
+}
+.stc-commercial-component--ticket.stc-commercial-component--static .stc-commercial-component__media {
+	border-radius: 4px;
+	height: 24px;
+	margin: 0;
+	opacity: .72;
+	position: absolute;
+	right: 16px;
+	top: 16px;
+	width: 24px;
+}
+.stc-commercial-component--ticket.stc-commercial-component--static .stc-commercial-component__media img {
+	height: 100%;
+	object-fit: contain;
+}
+.stc-commercial-component--ticket .stc-commercial-component__claim {
+	align-items: center;
+	background: #f5faff;
+	container-name: ticket-claim;
+	container-type: inline-size;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	justify-content: center;
+	min-width: 0;
+	padding: 18px 16px 18px 20px;
+	position: relative;
+	text-align: center;
+}
+.stc-commercial-component--ticket .stc-commercial-component__perforation {
+	background: radial-gradient(circle, #accaf0 1.5px, transparent 2px) center top / 5px 11px repeat-y;
+	bottom: 0;
+	left: -3px;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	width: 5px;
+}
+.stc-commercial-component--ticket .stc-commercial-component__perforation::before,
+.stc-commercial-component--ticket .stc-commercial-component__perforation::after {
+	background: #fff;
+	border: 1px solid #b9d9ff;
+	border-radius: 50%;
+	content: "";
+	height: 15px;
+	left: -6px;
+	position: absolute;
+	width: 15px;
+}
+.stc-commercial-component--ticket .stc-commercial-component__perforation::before { top: -8px; }
+.stc-commercial-component--ticket .stc-commercial-component__perforation::after { bottom: -8px; }
+.stc-commercial-component--ticket .stc-dynamic-component__eyebrow {
+	color: #37649e;
+	font: 700 11px/1.3 system-ui, sans-serif;
+	letter-spacing: .1em;
+	margin: 0;
+}
+.stc-commercial-component--ticket .stc-commercial-component__claim-top {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	min-height: 78px;
+	position: relative;
+	width: 100%;
+}
+.stc-commercial-component--ticket .stc-commercial-component__products {
+	align-items: start;
+	display: grid;
+	gap: 4px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	margin-inline: auto;
+	width: min(100%, 210px);
+}
+.stc-commercial-component--ticket .stc-commercial-component__product {
+	align-items: center;
+	color: #6594ca;
+	display: flex;
+	flex-direction: column;
+	font: 500 12px/1.25 system-ui, sans-serif;
+	gap: 4px;
+	min-width: 0;
+	text-align: center;
+}
+.stc-commercial-component--ticket .stc-commercial-component__product span { color: #1d3555; }
+.stc-commercial-component--ticket .stc-commercial-component__product svg { height: 31px; stroke-width: 2.1; width: 31px; }
+.stc-commercial-component--ticket .stc-commercial-component__claim .stc-dynamic-component__action {
+	align-items: center;
+	background: #0e4e9a;
+	border: 1px solid #0e4e9a;
+	border-radius: 5px;
+	color: #fff;
+	display: inline-flex;
+	font: 700 13px/1.25 system-ui, sans-serif;
+	gap: 8px;
+	justify-content: center;
+	min-height: 44px;
+	padding: 10px 8px;
+	white-space: nowrap;
+	width: 100%;
+}
+.stc-commercial-component--ticket .stc-commercial-component__claim .stc-dynamic-component__action:hover { background: #093d7e; border-color: #093d7e; }
+.stc-commercial-component--ticket .stc-commercial-component__claim .stc-dynamic-component__action:focus-visible { outline: 3px solid #0e4e9a; outline-offset: 3px; }
+.stc-commercial-component--ticket .stc-commercial-component__signature { color: #536477; font: 400 11px/1.3 system-ui, sans-serif; margin: 0; }
+@media (max-width: 599px) {
+	.stc-dynamic-component.stc-commercial-component.stc-commercial-component--ticket { grid-template-columns: minmax(0, 1fr); -webkit-mask-image: url("../images/commercial-ticket-edge-mask-mobile.svg?v=2"); mask-image: url("../images/commercial-ticket-edge-mask-mobile.svg?v=2"); }
+	.stc-commercial-component--ticket .stc-dynamic-component__body {
+		background: #f7fbff;
+		isolation: isolate;
+		min-height: 200px;
+		padding: 58px 18px 17px;
+	}
+	.stc-commercial-component--ticket .stc-dynamic-component__body::before {
+		background: var(--stc-ticket-scene) left -35px / cover no-repeat;
+		content: "";
+		inset: 0;
+		mask-image: linear-gradient(90deg, #000 0%, #000 10%, transparent 45%);
+		opacity: .82;
+		pointer-events: none;
+		position: absolute;
+		transform: scaleX(-1);
+		z-index: 0;
+	}
+	.stc-commercial-component--ticket .stc-dynamic-component__body::after {
+		background: linear-gradient(0deg, #f7fbff 0%, rgba(247, 251, 255, .94) 17%, transparent 58%);
+		content: "";
+		inset: 0;
+		pointer-events: none;
+		position: absolute;
+		z-index: 0;
+	}
+	.stc-commercial-component--ticket .stc-dynamic-component__body > * { position: relative; z-index: 1; }
+	.stc-dynamic-component.stc-commercial-component--ticket h2 { font-size: clamp(27px, 8vw, 34px); }
+	.stc-commercial-component--ticket .stc-dynamic-component__body :is(h2, .stc-commercial-component__category, .stc-commercial-component__detail) { text-shadow: 0 1px 5px rgba(255, 255, 255, .95); }
+	.stc-commercial-component--ticket .stc-commercial-component__claim { gap: 10px; padding: 17px 18px 16px; }
+	.stc-commercial-component--ticket .stc-commercial-component__products { width: min(100%, 150px); }
+	.stc-commercial-component--ticket .stc-commercial-component__stamp { height: 70px; right: -31px; top: -15px; width: 98px; }
+	.stc-commercial-component--ticket .stc-commercial-component__perforation { background: radial-gradient(circle, #accaf0 1.5px, transparent 2px) left center / 11px 5px repeat-x; bottom: auto; height: 5px; left: 0; right: 0; top: -3px; width: auto; }
+	.stc-commercial-component--ticket .stc-commercial-component__perforation::before { left: -8px; top: -6px; }
+	.stc-commercial-component--ticket .stc-commercial-component__perforation::after { bottom: auto; left: auto; right: -8px; top: -6px; }
+	.stc-commercial-component--ticket .stc-commercial-component__product svg { height: 29px; width: 29px; }
+	.stc-commercial-component--ticket .stc-commercial-component__claim .stc-dynamic-component__action { white-space: normal; }
+}
+@media (max-width: 360px) {
+	.stc-commercial-component--ticket .stc-dynamic-component__body::before { opacity: .66; }
+}
 @media (prefers-reduced-motion:reduce) { .stc-commercial-component .stc-dynamic-component__action,.stc-commercial-component .stc-dynamic-component__action:hover,.stc-commercial-component .stc-dynamic-component__action:active,.stc-dynamic-component--affiliate .stc-dynamic-component__action,.stc-dynamic-component--affiliate .stc-dynamic-component__action:hover,.stc-dynamic-component--affiliate .stc-dynamic-component__action:active { transition:none; transform:none; } }
 @media (max-width: 599px) {
 	.stc-dynamic-component { align-items: stretch; grid-template-columns: minmax(0, 1fr); padding: 20px; }

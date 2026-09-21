@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="264" viewBox="0 0 300 264" preserveAspectRatio="none">
+  <defs>
+    <mask id="ticket-edge" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="264">
+      <path fill="#fff" d="M0 0h300v264H0z"/>
+      <circle fill="#000" cx="0" cy="10" r="4"/>
+      <ellipse fill="#000" cx="0" cy="30" rx="6" ry="6"/>
+      <circle fill="#000" cx="0" cy="45" r="2.5"/>
+      <circle fill="#000" cx="0" cy="64" r="5"/>
+      <ellipse fill="#000" cx="0" cy="93" rx="5" ry="5.5"/>
+      <ellipse fill="#000" cx="0" cy="112" rx="3.5" ry="4.5"/>
+      <circle fill="#000" cx="0" cy="146" r="4.5"/>
+      <circle fill="#000" cx="0" cy="165" r="2.5"/>
+      <circle fill="#000" cx="0" cy="191" r="6"/>
+      <circle fill="#000" cx="0" cy="212" r="5"/>
+      <ellipse fill="#000" cx="0" cy="239" rx="3" ry="4"/>
+      <ellipse fill="#000" cx="0" cy="256" rx="4" ry="4"/>
+      <ellipse fill="#000" cx="300" cy="18" rx="6.5" ry="6"/>
+      <circle fill="#000" cx="300" cy="36" r="4.5"/>
+      <circle fill="#000" cx="300" cy="52" r="2.5"/>
+      <circle fill="#000" cx="300" cy="77" r="5.5"/>
+      <circle fill="#000" cx="300" cy="96" r="5"/>
+      <ellipse fill="#000" cx="300" cy="123" rx="3.5" ry="4"/>
+      <circle fill="#000" cx="300" cy="149" r="2.5"/>
+      <ellipse fill="#000" cx="300" cy="178" rx="5" ry="6"/>
+      <circle fill="#000" cx="300" cy="197" r="4.5"/>
+      <circle fill="#000" cx="300" cy="218" r="3"/>
+      <circle fill="#000" cx="300" cy="249" r="6"/>
+    </mask>
+  </defs>
+  <path fill="#fff" mask="url(#ticket-edge)" d="M0 0h300v264H0z"/>
+</svg>

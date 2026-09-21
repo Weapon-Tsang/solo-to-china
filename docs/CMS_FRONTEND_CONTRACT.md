@@ -1,8 +1,8 @@
 # SoloToChina CMS / Frontend Capability Contract
 
-Current Component Contract version: `1.4.1` (Parent Theme `0.33.6`)
+Current Component Contract version: `1.4.1` (Parent Theme `0.33.7`)
 
-Registry 1.4.1 keeps all existing component IDs and fields compatible. Commercial `disclosure` remains optional for historical payload compatibility, but the frontend renders the affiliate relationship once at page level outside tickets. It never repeats `Paid link` or historical commission copy inside each card. Offer percentages remain explicit asset data, never inferred from provider or category.
+Registry 1.4.1 keeps all existing component IDs and fields compatible. Commercial `disclosure` remains optional for historical payload compatibility. The frontend does not repeat the affiliate relationship or historical commission copy in tickets; the site's existing legal pages carry that information. The coupon ticket presents the site owner's requested category amounts as display copy while keeping the CMS-selected provider, destination link, and sponsored relation intact. Those amounts are not a verification of provider redemption terms.
 
 This document defines the integration boundary between the independent `solo-to-china` frontend repository and `solo-to-china-CMS` repository.
 
