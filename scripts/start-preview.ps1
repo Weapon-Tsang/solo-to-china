@@ -11,6 +11,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $PlaygroundCliVersion = "3.1.52"
+$WordPressVersion = "6.8.3"
 
 $Root = Split-Path -Parent $PSScriptRoot
 if ($ParentOnly -and $Editor) {
@@ -47,6 +48,7 @@ $PlaygroundArguments = @(
     "@wp-playground/cli@$PlaygroundCliVersion"
     "server"
     "--port=$Port"
+    "--wp=$WordPressVersion"
     "--define-bool"
     "AUTOMATIC_UPDATER_DISABLED"
     "true"

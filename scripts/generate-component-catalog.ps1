@@ -352,7 +352,7 @@ $PublishPackageSchema = @{
     '$schema' = "https://json-schema.org/draft/2020-12/schema"
     '$id' = "https://solotochina.com/contracts/cms-publish-package.schema.json"
     title = "SoloToChina CMS WordPress Publish Package"
-    description = "Authenticated CMS-to-WordPress draft delivery package. WordPress validates and serializes page.blocks[] in the supplied order."
+    description = "Authenticated CMS-to-WordPress draft delivery or guarded published-media refresh package. WordPress validates and serializes page.blocks[] in the supplied order."
     publishPackageVersion = "1.0.0"
     contractVersion = $Registry.registry_version
     schemaVersion = "2020-12"
@@ -410,7 +410,7 @@ $PublishPackageSchema = @{
             additionalProperties = $false
             required = @("status")
             properties = @{
-                status = @{ const = "draft" }
+                status = @{ type = "string"; enum = @("draft", "publish") }
                 existing_post_id = @{ type = @("integer", "null"); minimum = 1 }
                 cms_draft_id = @{ type = @("string", "integer"); description = "Optional stable CMS draft identifier used with page.metadata.pageId for idempotent upserts." }
             }

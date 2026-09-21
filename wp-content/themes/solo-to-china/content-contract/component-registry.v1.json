@@ -1,6 +1,6 @@
 {
   "registry_version": "1.4.1",
-  "theme_version": "0.33.7",
+  "theme_version": "0.33.8",
   "principles": {
     "frontend": "Frontend defines what can be rendered.",
     "cms": "CMS decides what should be rendered.",

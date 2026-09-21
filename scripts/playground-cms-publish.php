@@ -275,7 +275,7 @@ function stc_playground_verify_cms_publish_path() {
 
 	$invalid = stc_playground_cms_clone( $package );
 	$invalid['publication']['status'] = 'publish';
-	stc_playground_cms_expect_error( $invalid, 'POST_NOT_DRAFT', 'Publish attempt' );
+	stc_playground_cms_expect_error( $invalid, 'WORDPRESS_STATUS_MISMATCH', 'Publish attempt' );
 
 	global $wpdb;
 	$wpdb->update( $wpdb->posts, array( 'post_modified_gmt' => gmdate( 'Y-m-d H:i:s', time() + 60 ) ), array( 'ID' => $post_id ), array( '%s' ), array( '%d' ) );
@@ -293,7 +293,27 @@ function stc_playground_verify_cms_publish_path() {
 	}
 	$published_guard = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $package );
 	$published_data  = $published_guard->get_data();
-	stc_playground_cms_assert( 409 === $published_guard->get_status() && 'POST_NOT_DRAFT' === $published_data['code'], 'Published post overwrite was not blocked.' );
+	stc_playground_cms_assert( 409 === $published_guard->get_status() && 'WORDPRESS_STATUS_MISMATCH' === $published_data['code'], 'Published post overwrite was not blocked.' );
+	$refresh = stc_playground_cms_clone( $package );
+	$refresh['publication']['status'] = 'publish';
+	$image_index = stc_playground_cms_block_index( $refresh['page']['blocks'], 'image' );
+	stc_playground_cms_assert( $image_index >= 0, 'Published media refresh fixture has no image block.' );
+	$refresh['page']['blocks'][ $image_index ]['data']['alt'] = 'Updated accessible photograph';
+	$media_refresh = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $refresh );
+	stc_playground_cms_assert( 200 === $media_refresh->get_status() && 'publish' === $media_refresh->get_data()['status'],
+		'Published media-only refresh failed or unpublished the post.' );
+	$receipt_request = new WP_REST_Request( 'GET', '/stc/v1/cms-articles/' . $post_id . '/receipt' );
+	$receipt = rest_do_request( $receipt_request );
+	stc_playground_cms_assert( 200 === $receipt->get_status() && 'publish' === $receipt->get_data()['status']
+		&& $refresh['publication']['cms_draft_id'] === $receipt->get_data()['cms_draft_id']
+		&& $media_refresh->get_data()['page_payload_hash'] === $receipt->get_data()['page_payload_hash'],
+		'Published refresh receipt did not match the updated page.' );
+	$bad_refresh = stc_playground_cms_clone( $refresh );
+	$bad_refresh['page']['metadata']['title'] = 'Unauthorized article rewrite';
+	$blocked_refresh = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $bad_refresh );
+	stc_playground_cms_assert( 409 === $blocked_refresh->get_status()
+		&& 'PUBLISHED_REFRESH_NOT_MEDIA_ONLY' === $blocked_refresh->get_data()['code'],
+		'Published media refresh accepted an article title rewrite.' );
 	wp_update_post( array( 'ID' => $post_id, 'post_status' => 'draft' ) );
 
 	update_option( 'stc_playground_cms_publish_verified', array( 'post_id' => $post_id, 'block_count' => count( $blocks ), 'contract_checksum' => stc_cms_component_contract_checksum(), 'preview_url' => $ticket_data['preview_url'] ), false );

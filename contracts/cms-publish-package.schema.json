@@ -3,7 +3,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "contractVersion": "1.4.1",
-  "description": "Authenticated CMS-to-WordPress draft delivery package. WordPress validates and serializes page.blocks[] in the supplied order.",
+  "description": "Authenticated CMS-to-WordPress draft delivery or guarded published-media refresh package. WordPress validates and serializes page.blocks[] in the supplied order.",
   "properties": {
     "contract": {
       "additionalProperties": false,
@@ -2206,7 +2206,11 @@
           ]
         },
         "status": {
-          "const": "draft"
+          "enum": [
+            "draft",
+            "publish"
+          ],
+          "type": "string"
         }
       },
       "required": [

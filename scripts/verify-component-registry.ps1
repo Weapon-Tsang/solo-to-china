@@ -171,7 +171,8 @@ if ($Registry) {
             Assert-Registry ($PublishPackageSchema.publishPackageVersion -eq "1.0.0") "Publish Package Schema version must be 1.0.0."
             Assert-Registry ($PublishPackageSchema.contractVersion -eq $Registry.registry_version) "Publish Package Schema Contract version must match the Registry."
             Assert-Registry ($PublishPackageSchema.properties.contract.properties.contractChecksum.const -eq $ContractHash) "Publish Package checksum must match the generated Component Contract."
-            Assert-Registry ($PublishPackageSchema.properties.publication.properties.status.const -eq "draft") "Publish Package must be draft-only."
+            $PublishStatuses = @($PublishPackageSchema.properties.publication.properties.status.enum)
+            Assert-Registry (($PublishStatuses -join ',') -eq 'draft,publish') "Publish Package must allow only draft delivery and guarded published-media refresh."
         } catch {
             $Failures.Add("Publish Package Schema is not valid JSON: $($_.Exception.Message)")
         }

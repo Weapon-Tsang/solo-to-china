@@ -1,6 +1,6 @@
 <?php
 /**
- * Contract-aware CMS Publish Package ingestion for WordPress drafts.
+ * Contract-aware CMS Publish Package ingestion and guarded media refresh.
  *
  * @package SoloToChina
  */
@@ -481,8 +481,8 @@ function stc_validate_cms_publish_package( $package ) {
 		return $page_result;
 	}
 
-	if ( ! isset( $package['publication']['status'] ) || 'draft' !== $package['publication']['status'] ) {
-		return stc_cms_publish_error( 'POST_NOT_DRAFT', __( 'CMS delivery is restricted to WordPress drafts.', 'solo-to-china' ), 409, 'publication.status' );
+	if ( ! isset( $package['publication']['status'] ) || ! in_array( $package['publication']['status'], array( 'draft', 'publish' ), true ) ) {
+		return stc_cms_publish_error( 'INVALID_PUBLICATION_STATUS', __( 'CMS delivery requires a draft or a guarded published-media refresh.', 'solo-to-china' ), 409, 'publication.status' );
 	}
 	foreach ( array( 'seo', 'schema_jsonld', 'media', 'publication' ) as $field ) {
 		$result = stc_cms_validate_schema_value( $package[ $field ], $schema['properties'][ $field ], $field, 'INVALID_PAGE_SCHEMA' );
@@ -1078,6 +1078,9 @@ function stc_cms_resolve_target_post_id( $package, $route_post_id = 0 ) {
 		}
 	}
 	if ( ! $target_id ) {
+		if ( 'publish' === $package['publication']['status'] ) {
+			return stc_cms_publish_error( 'PUBLISHED_REFRESH_TARGET_MISSING', __( 'A published media refresh requires an existing CMS post.', 'solo-to-china' ), 409 );
+		}
 		return 0;
 	}
 
@@ -1085,8 +1088,8 @@ function stc_cms_resolve_target_post_id( $package, $route_post_id = 0 ) {
 	if ( ! $post || 'post' !== $post->post_type ) {
 		return stc_cms_publish_error( 'INVALID_PAGE_SCHEMA', __( 'The requested WordPress post does not exist.', 'solo-to-china' ), 404 );
 	}
-	if ( 'draft' !== $post->post_status ) {
-		return stc_cms_publish_error( 'POST_NOT_DRAFT', __( 'CMS delivery cannot overwrite a non-draft post.', 'solo-to-china' ), 409 );
+	if ( $package['publication']['status'] !== $post->post_status ) {
+		return stc_cms_publish_error( 'WORDPRESS_STATUS_MISMATCH', __( 'The requested delivery status does not match the current WordPress post.', 'solo-to-china' ), 409 );
 	}
 	if ( ! current_user_can( 'edit_post', $target_id ) ) {
 		return stc_cms_publish_error( 'rest_forbidden', __( 'You cannot edit this draft.', 'solo-to-china' ), 403 );
@@ -1101,6 +1104,46 @@ function stc_cms_resolve_target_post_id( $package, $route_post_id = 0 ) {
 	}
 
 	return $target_id;
+}
+
+/**
+ * Permit a published update only when the old CMS page still owns the live
+ * content and the replacement changes images without changing article prose.
+ *
+ * @param int                  $post_id Target post.
+ * @param array<string, mixed> $package Replacement package.
+ * @return true|WP_Error
+ */
+function stc_cms_validate_published_media_refresh( $post_id, $package ) {
+	$stored_draft_id = (string) get_post_meta( $post_id, '_stc_cms_draft_id', true );
+	$new_draft_id    = isset( $package['publication']['cms_draft_id'] ) ? (string) $package['publication']['cms_draft_id'] : '';
+	$stored_page_id  = (string) get_post_meta( $post_id, '_stc_cms_page_id', true );
+	if ( '' === $stored_draft_id || '' === $stored_page_id || ! hash_equals( $stored_draft_id, $new_draft_id )
+		|| ! hash_equals( $stored_page_id, (string) $package['page']['metadata']['pageId'] ) ) {
+		return stc_cms_publish_error( 'PUBLISHED_REFRESH_IDENTITY_MISMATCH', __( 'The published post is owned by a different CMS page.', 'solo-to-china' ), 409 );
+	}
+	$old_page = json_decode( (string) get_post_meta( $post_id, '_stc_page_payload', true ), true );
+	if ( ! is_array( $old_page ) || empty( $old_page['blocks'] ) ) {
+		return stc_cms_publish_error( 'PUBLISHED_REFRESH_BASELINE_MISSING', __( 'The published CMS page baseline is missing.', 'solo-to-china' ), 409 );
+	}
+	$old_content = stc_serialize_cms_page_to_post_content( $old_page );
+	if ( is_wp_error( $old_content ) || ! hash_equals( (string) $old_content, (string) get_post_field( 'post_content', $post_id ) ) ) {
+		return stc_cms_publish_error( 'POST_EXTERNALLY_MODIFIED', __( 'The published article content changed outside CMS.', 'solo-to-china' ), 409 );
+	}
+	$old_blocks = array_values( array_filter( $old_page['blocks'], static function ( $block ) {
+		return ! is_array( $block ) || 'image' !== (string) ( $block['type'] ?? '' );
+	} ) );
+	$new_blocks = array_values( array_filter( $package['page']['blocks'], static function ( $block ) {
+		return ! is_array( $block ) || 'image' !== (string) ( $block['type'] ?? '' );
+	} ) );
+	if ( wp_json_encode( $old_blocks ) !== wp_json_encode( $new_blocks )
+		|| (string) ( $old_page['metadata']['title'] ?? '' ) !== (string) $package['page']['metadata']['title']
+		|| (string) ( $old_page['metadata']['slug'] ?? '' ) !== (string) $package['page']['metadata']['slug']
+		|| (string) get_the_title( $post_id ) !== (string) ( $old_page['metadata']['title'] ?? '' )
+		|| (string) get_post_field( 'post_name', $post_id ) !== sanitize_title( (string) ( $old_page['metadata']['slug'] ?? '' ) ) ) {
+		return stc_cms_publish_error( 'PUBLISHED_REFRESH_NOT_MEDIA_ONLY', __( 'Published refresh cannot change article text, title or slug.', 'solo-to-china' ), 409 );
+	}
+	return true;
 }
 
 /**
@@ -1413,17 +1456,24 @@ function stc_cms_upsert_article_locked( $package, $route_post_id = 0 ) {
 		return $target_id;
 	}
 	if ( $target_id ) {
-		$synced_modified  = (string) get_post_meta( $target_id, '_stc_cms_synced_post_modified_gmt', true );
-		$current_modified = (string) get_post_field( 'post_modified_gmt', $target_id );
-		if ( $synced_modified && $current_modified && ! hash_equals( $synced_modified, $current_modified ) ) {
-			return stc_cms_publish_error( 'POST_EXTERNALLY_MODIFIED', __( 'The WordPress draft changed after the last CMS delivery. Refresh was stopped to preserve the external edit.', 'solo-to-china' ), 409 );
+		if ( 'publish' === $package['publication']['status'] ) {
+			$media_check = stc_cms_validate_published_media_refresh( $target_id, $package );
+			if ( is_wp_error( $media_check ) ) {
+				return $media_check;
+			}
+		} else {
+			$synced_modified  = (string) get_post_meta( $target_id, '_stc_cms_synced_post_modified_gmt', true );
+			$current_modified = (string) get_post_field( 'post_modified_gmt', $target_id );
+			if ( $synced_modified && $current_modified && ! hash_equals( $synced_modified, $current_modified ) ) {
+				return stc_cms_publish_error( 'POST_EXTERNALLY_MODIFIED', __( 'The WordPress draft changed after the last CMS delivery. Refresh was stopped to preserve the external edit.', 'solo-to-china' ), 409 );
+			}
 		}
 	}
 
 	$metadata = $package['page']['metadata'];
 	$postarr  = array(
 		'post_type'    => 'post',
-		'post_status'  => 'draft',
+		'post_status'  => $package['publication']['status'],
 		'post_title'   => sanitize_text_field( $metadata['title'] ),
 		'post_name'    => sanitize_title( $metadata['slug'] ),
 		'post_excerpt' => isset( $metadata['excerpt'] ) ? sanitize_textarea_field( $metadata['excerpt'] ) : '',
@@ -1497,6 +1547,29 @@ function stc_rest_upsert_cms_article( $request ) {
 }
 
 /**
+ * Return a private, read-only receipt so a timed-out published refresh can be
+ * resolved without sending the write a second time.
+ *
+ * @param WP_REST_Request $request Request.
+ * @return WP_REST_Response|WP_Error
+ */
+function stc_rest_get_cms_article_receipt( $request ) {
+	$post_id = (int) $request->get_param( 'post_id' );
+	$post    = get_post( $post_id );
+	if ( ! $post || 'post' !== $post->post_type ) {
+		return stc_cms_publish_error( 'CMS_POST_NOT_FOUND', __( 'CMS post was not found.', 'solo-to-china' ), 404 );
+	}
+	return new WP_REST_Response( array(
+		'post_id'           => $post_id,
+		'status'            => $post->post_status,
+		'cms_draft_id'      => (string) get_post_meta( $post_id, '_stc_cms_draft_id', true ),
+		'page_id'           => (string) get_post_meta( $post_id, '_stc_cms_page_id', true ),
+		'page_payload_hash' => (string) get_post_meta( $post_id, '_stc_page_payload_hash', true ),
+		'modified_gmt'      => $post->post_modified_gmt,
+	), 200 );
+}
+
+/**
  * Require post editing capabilities; Application Passwords authenticate upstream.
  *
  * @param WP_REST_Request $request Request object.
@@ -1546,6 +1619,15 @@ function stc_register_cms_article_routes() {
 		array(
 			'methods'             => 'PUT',
 			'callback'            => 'stc_rest_upsert_cms_article',
+			'permission_callback' => 'stc_cms_articles_permission',
+		)
+	);
+	register_rest_route(
+		'stc/v1',
+		'/cms-articles/(?P<post_id>[1-9][0-9]*)/receipt',
+		array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => 'stc_rest_get_cms_article_receipt',
 			'permission_callback' => 'stc_cms_articles_permission',
 		)
 	);

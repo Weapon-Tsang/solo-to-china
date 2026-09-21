@@ -1,20 +1,20 @@
 [
   {
     "archive": "solo-to-china-theme.zip",
-    "bytes": 14058441,
-    "sha256": "DAACD48CCAC483CCEC19790ACD9E853126A35F96094D862C7E6896326530AFB0",
-    "matching_files": 115
+    "bytes": 19700426,
+    "sha256": "6328389D0828A3E55F3EEA6E8E9E6C67040C01AD43E05B61E6E76030CD67CCBF",
+    "matching_files": 120
   },
   {
     "archive": "solo-to-china-child-theme.zip",
-    "bytes": 27665,
-    "sha256": "E0160E0F02625F4CC57B2BBE0E43782A7C61D9AB24934E390A3660BD1E54DD9F",
+    "bytes": 29569,
+    "sha256": "64548E48C0FFCB2A8C6A225CC957506469BBC9357BB602D434E2A6243A7C77B6",
     "matching_files": 13
   },
   {
     "archive": "solo-to-china-tools-plugin.zip",
     "bytes": 39336,
-    "sha256": "430A813DC42E8E588893EEEDCFD62FD2F23ABA4A727F120F3917FF9E65F02E28",
+    "sha256": "38168F7AE9F911A3A31E3E4A64F9D132E68CA3D5D8CF72D10C71658176CD7EA8",
     "matching_files": 15
   }
 ]

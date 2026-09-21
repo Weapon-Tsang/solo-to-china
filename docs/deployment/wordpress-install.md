@@ -1,4 +1,4 @@
-> Current release candidate: Parent 0.33.7 / Child 0.13.1 / Tools 0.26.0. The commercial coupon B release changes the Parent Theme only; preserve the installed Child Theme and Tools Plugin when their versions already match. Follow [the upgrade-specific deployment and rollback checklist](frontend-upgrade-v1.md) for backup, caching and rollback. Older release narratives below are historical.
+> Current release candidate: Parent 0.33.8 / Child 0.13.1 / Tools 0.26.0. This Parent Theme adds guarded CMS media refresh for published posts and a private receipt route. Preserve the installed Child Theme and Tools Plugin when their versions already match. See [the CMS media refresh handoff](../handoff/cms-media-refresh-0.33.8.md) and [the deployment and rollback checklist](frontend-upgrade-v1.md). Older release narratives below are historical.
 
 # WordPress Install Handoff
 
