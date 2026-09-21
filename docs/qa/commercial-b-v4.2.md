@@ -12,4 +12,12 @@ Hotel, flight, train, transfer, attraction, and tour offers use the site owner's
 | Theme combinations | Parent + Child + Tools (9400) passed the runtime checks. Parent-only (9401) gallery and Tools-disabled (9402) long-guide page returned 200 with the icon trio and fixed copy, without the old notice. |
 | Visual previews | `output/playwright/commercial-b-desktop.png`, `commercial-b-mobile.png`, and `commercial-b-mobile-320.png` show the final hotel ticket. The same directory contains flight, attractions, planner, and static-banner variants. Gallery: `http://127.0.0.1:9400/design-system/#gallery-commercial`. |
 
-The discount figures are the site owner's requested display copy. Provider landing pages were not checked for redemption eligibility. No production deployment or CMS draft rewrite was performed.
+The discount figures are the site owner's requested display copy. Provider landing pages were not checked for redemption eligibility. No CMS draft rewrite was performed.
+
+## Production deployment (2026-09-22)
+
+- Committed as `fd4ee155f0f010bd539c49486460c8878810b612`, fast-forward merged and pushed to `origin/main`. The temporary release branch was deleted; `origin/main` is the only remote branch.
+- Uploaded `dist/solo-to-china-theme.zip` in WordPress Admin and used the replace-installed-version flow. WordPress reported a successful upgrade from Parent `0.33.6` to `0.33.7`; `SoloToChina Child` remained active.
+- Public homepage returned 200, loaded `main.css?ver=0.33.7`, and omitted the old commission sentence. Public Parent `style.css` reported `Version: 0.33.7`; the new coupon-edge SVGs and Great Wall/Zhangjiajie PNGs returned 200. The public CSS included the coupon-edge and postmark rules.
+- Published WordPress posts were absent from the public REST listing, and the authenticated draft list did not finish loading in the in-app browser. A production draft card was therefore not visually verified. Local gallery screenshots remain the visual preview evidence.
+- `dist/rollback-solo-to-china-0.33.6.zip` was generated from the previous repository commit for rollback. It was not a byte-for-byte backup of the live pre-upgrade theme.
