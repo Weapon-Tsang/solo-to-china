@@ -826,7 +826,7 @@ label:focus-visible {
 
 .stc-content {
 	margin: 0 auto;
-	max-width: 920px;
+	max-width: 1200px;
 	padding: 72px 32px;
 }
 
@@ -1378,28 +1378,24 @@ label:focus-visible {
 
 .stc-post-list {
 	display: grid;
-	gap: 18px;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+	column-gap: 32px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	row-gap: 40px;
 }
 
 .stc-post-card {
-	background: #fff;
-	border: 1px solid var(--stc-line);
-	border-radius: var(--stc-radius);
-	overflow: hidden;
+	min-width: 0;
 }
 
 .stc-post-card__link {
-	display: grid;
-	gap: 14px;
-	min-height: 100%;
-	padding: 22px;
+	display: block;
+	min-width: 0;
 }
 
 .stc-post-card__media {
-	aspect-ratio: 4 / 5;
+	aspect-ratio: 16 / 9;
+	border-radius: 8px;
 	display: block;
-	margin: -22px -22px 0;
 	overflow: hidden;
 }
 
@@ -1411,45 +1407,27 @@ label:focus-visible {
 	width: 100%;
 }
 
-.stc-post-card__meta {
-	align-items: center;
-	color: var(--stc-muted);
-	display: flex;
-	flex-wrap: wrap;
-	font-size: 13px;
-	font-weight: 700;
-	gap: 10px;
-	line-height: 1.4;
-}
-
-.stc-post-card__type {
-	background: #eef6f2;
-	border: 1px solid #cfe0d8;
-	border-radius: 999px;
-	color: var(--stc-green);
-	display: inline-flex;
-	padding: 5px 9px;
-}
-
-.stc-post-card--attraction-guide .stc-post-card__type {
-	background: #fff6e8;
-	border-color: #ead7b9;
-	color: var(--stc-gold);
-}
-
-.stc-post-card--survival-kit .stc-post-card__type {
-	background: #fff1ef;
-	border-color: #f1cbc7;
-	color: var(--stc-red);
-}
-
 .stc-post-card h2 {
-	font-size: 22px;
-	line-height: 1.2;
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1.25;
 	margin: 0;
+	overflow-wrap: break-word;
 }
 
-.stc-post-card p,
+.stc-post-card__media + h2 {
+	margin-top: 16px;
+}
+
+.stc-post-card p {
+	color: var(--stc-muted);
+	font-size: 15px;
+	line-height: 1.5;
+	margin: 10px 0 0;
+	overflow-wrap: break-word;
+}
+
 .stc-content__header p {
 	color: var(--stc-muted);
 	line-height: 1.6;
@@ -1457,15 +1435,58 @@ label:focus-visible {
 }
 
 .stc-post-card__cta {
-	align-self: end;
 	color: var(--stc-red);
+	display: inline-block;
 	font-size: 14px;
-	font-weight: 800;
+	font-weight: 600;
+	line-height: 1.5;
+	margin-top: 12px;
+}
+
+.stc-post-card__link:hover .stc-post-card__cta,
+.stc-post-card__link:focus-visible .stc-post-card__cta {
+	text-decoration: underline;
+	text-underline-offset: 3px;
 }
 
 .stc-latest-guides {
 	display: grid;
 	gap: 22px;
+	max-width: 1200px;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+	.stc-content {
+		padding-inline: 28px;
+	}
+
+	.stc-latest-guides {
+		padding-inline: 28px;
+	}
+
+	.stc-post-list {
+		column-gap: 24px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 639px) {
+	.stc-content {
+		padding: 48px 20px;
+	}
+
+	.stc-latest-guides {
+		padding-inline: 20px;
+	}
+
+	.stc-post-list {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 32px;
+	}
+
+	.stc-post-card h2 {
+		font-size: 22px;
+	}
 }
 
 .stc-latest-guides__header {

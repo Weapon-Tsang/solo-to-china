@@ -172,7 +172,7 @@ if (Test-Path -LiteralPath $PackageScriptPath -PathType Leaf) {
             $Failures.Add("Package script does not include the Child Theme artifact token: $ChildPackageToken")
         }
     }
-    if (-not $PackageScript.Contains("Theme version: 0.33.8") -or (-not $PackageScript.Contains("Child Theme version: 0.13.1")) -or (-not $PackageScript.Contains("Plugin version: 0.26.0"))) {
+    if (-not $PackageScript.Contains("Theme version: 0.33.9") -or (-not $PackageScript.Contains("Child Theme version: 0.13.1")) -or (-not $PackageScript.Contains("Plugin version: 0.26.0"))) {
         $Failures.Add("Package script does not write artifact versions to the release manifest.")
     }
 }
@@ -270,8 +270,8 @@ if (Test-Path -LiteralPath $NewChatHandoffPath -PathType Leaf) {
 $ThemeStylePath = Join-Path $Root "wp-content/themes/solo-to-china/style.css"
 if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
     $ThemeStyle = Get-Content -LiteralPath $ThemeStylePath -Raw
-    if (-not $ThemeStyle.Contains("Version: 0.33.8")) {
-		$Failures.Add("Theme stylesheet header version is not 0.33.8.")
+    if (-not $ThemeStyle.Contains("Version: 0.33.9")) {
+		$Failures.Add("Theme stylesheet header version is not 0.33.9.")
     }
     if (-not $ThemeStyle.Contains("Requires at least: 6.5")) {
         $Failures.Add("Theme stylesheet header is missing the minimum WordPress version.")
@@ -284,7 +284,7 @@ if (Test-Path -LiteralPath $ThemeStylePath -PathType Leaf) {
 $ThemeReadmePath = Join-Path $Root "wp-content/themes/solo-to-china/README.md"
 if (Test-Path -LiteralPath $ThemeReadmePath -PathType Leaf) {
     $ThemeReadme = Get-Content -LiteralPath $ThemeReadmePath -Raw
-    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.33.8"))) {
+    if ((-not $ThemeReadme.Contains("Current version")) -or (-not $ThemeReadme.Contains("0.33.9"))) {
         $Failures.Add("Theme README does not document the current theme version.")
     }
     if (-not $ThemeReadme.Contains("The theme should not own tool business logic")) {
@@ -349,11 +349,20 @@ if ((Test-Path -LiteralPath $HeaderPath -PathType Leaf) -and (Test-Path -Literal
     if (-not $Functions.Contains("wp_get_attachment_image") -or (-not $Functions.Contains("'stc-guide-card-2x'"))) {
         $Failures.Add("WordPress guide cards do not request the responsive Retina image size.")
     }
+    if ($Functions.Contains("stc-post-card__meta") -or $Functions.Contains("stc-post-card__type")) {
+        $Failures.Add("Guide card renderer still outputs removed metadata or badge markup.")
+    }
+    if ($Functions.Contains('wp_trim_words( $excerpt, 28 )')) {
+        $Failures.Add("Guide card renderer still truncates the WordPress excerpt.")
+    }
+    if (-not $Functions.Contains("(max-width: 639px) calc(100vw - 40px)")) {
+        $Failures.Add("Guide card images are missing responsive sizes aligned with the mobile grid.")
+    }
     if (-not $Functions.Contains("stc_render_guide_card_media")) {
         $Failures.Add("Theme functions are missing the shared high-resolution guide card media renderer.")
     }
-    if (-not $Functions.Contains("'0.33.8'")) {
-		$Failures.Add("Theme asset version is not 0.33.8.")
+    if (-not $Functions.Contains("'0.33.9'")) {
+		$Failures.Add("Theme asset version is not 0.33.9.")
     }
     foreach ($SitePageToken in @("STC_SITE_PAGE_MIGRATION_VERSION", "stc_static_page_content", "stc_static_page_metadata", "stc_static_page_fallback", "admin_init", "wp_page_for_privacy_policy", "stc_get_trip_planner_url", "https://www.trip.com/t/bCPFQ85ZHW2")) {
         if (-not $Functions.Contains($SitePageToken)) {
@@ -913,11 +922,14 @@ if (Test-Path -LiteralPath $ThemeCssPath -PathType Leaf) {
     if (-not $ThemeCss.Contains(".search-submit") -or (-not $ThemeCss.Contains("max-width: none"))) {
         $Failures.Add("Theme CSS is missing mobile search form stacking.")
     }
-    if (-not $ThemeCss.Contains(".stc-post-card__meta")) {
-        $Failures.Add("Theme CSS is missing Guide card metadata styling.")
+    if ($ThemeCss.Contains(".stc-post-card__meta") -or $ThemeCss.Contains(".stc-post-card__type")) {
+        $Failures.Add("Theme CSS still styles removed Guide card metadata or badges.")
     }
-    if (-not $ThemeCss.Contains(".stc-post-card__type")) {
-        $Failures.Add("Theme CSS is missing Guide card type badge styling.")
+    if (-not $ThemeCss.Contains("aspect-ratio: 16 / 9") -or -not $ThemeCss.Contains(".stc-post-card__image")) {
+        $Failures.Add("Guide cards are missing 16:9 responsive featured image styling.")
+    }
+    if (-not $ThemeCss.Contains("grid-template-columns: repeat(3, minmax(0, 1fr))") -or -not $ThemeCss.Contains("grid-template-columns: repeat(2, minmax(0, 1fr))")) {
+        $Failures.Add("Guide lists are missing the desktop or tablet editorial grid.")
     }
     if (-not $ThemeCss.Contains(".stc-post-card__cta")) {
         $Failures.Add("Theme CSS is missing Guide card CTA styling.")
