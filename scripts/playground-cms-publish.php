@@ -17,9 +17,12 @@ function stc_playground_cms_clone( $value ) {
 	return json_decode( wp_json_encode( $value ), true );
 }
 
-function stc_playground_cms_request( $method, $route, $package ) {
+function stc_playground_cms_request( $method, $route, $package, $headers = array() ) {
 	$request = new WP_REST_Request( $method, $route );
 	$request->set_header( 'content-type', 'application/json' );
+	foreach ( $headers as $name => $value ) {
+		$request->set_header( $name, $value );
+	}
 	$request->set_body( wp_json_encode( $package ) );
 	return rest_do_request( $request );
 }
@@ -314,6 +317,36 @@ function stc_playground_verify_cms_publish_path() {
 	stc_playground_cms_assert( 409 === $blocked_refresh->get_status()
 		&& 'PUBLISHED_REFRESH_NOT_MEDIA_ONLY' === $blocked_refresh->get_data()['code'],
 		'Published media refresh accepted an article title rewrite.' );
+	$editorial = stc_playground_cms_clone( $refresh );
+	$paragraph_index = stc_playground_cms_block_index( $editorial['page']['blocks'], 'paragraph' );
+	stc_playground_cms_assert( $paragraph_index >= 0, 'Editorial refresh fixture has no paragraph.' );
+	$editorial['page']['blocks'][ $paragraph_index ]['data']['content'] = 'Revised route after editorial review.';
+	$unscoped = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $editorial );
+	stc_playground_cms_assert( 409 === $unscoped->get_status()
+		&& 'PUBLISHED_REFRESH_NOT_MEDIA_ONLY' === $unscoped->get_data()['code'],
+		'Published article text changed without an editorial scope.' );
+	$baseline = hash( 'sha256', get_post_field( 'post_modified_gmt', $post_id ) . '|' . get_post_meta( $post_id, '_stc_page_payload_hash', true ) );
+	$content_hash = hash( 'sha256', get_post_field( 'post_content', $post_id ) );
+	delete_post_meta( $post_id, '_stc_page_payload' ); // Simulate a legacy post with only its receipt hash.
+	$headers = array( 'x-stc-refresh-scope' => 'editorial', 'x-stc-receipt-fingerprint' => str_repeat( '0', 64 ),
+		'x-stc-prior-content-sha256' => $content_hash );
+	$stale = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $editorial, $headers );
+	stc_playground_cms_assert( 409 === $stale->get_status()
+		&& 'PUBLISHED_REFRESH_BASELINE_CHANGED' === $stale->get_data()['code'],
+		'Editorial refresh ignored a stale receipt fingerprint.' );
+	$headers['x-stc-receipt-fingerprint'] = $baseline;
+	$headers['x-stc-prior-content-sha256'] = str_repeat( '0', 64 );
+	$stale_content = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $editorial, $headers );
+	stc_playground_cms_assert( 409 === $stale_content->get_status()
+		&& 'POST_EXTERNALLY_MODIFIED' === $stale_content->get_data()['code'],
+		'Editorial refresh ignored a changed published body.' );
+	$headers['x-stc-prior-content-sha256'] = $content_hash;
+	$editorial_response = stc_playground_cms_request( 'PUT', '/stc/v1/cms-articles/' . $post_id, $editorial, $headers );
+	stc_playground_cms_assert( 200 === $editorial_response->get_status()
+		&& 'publish' === $editorial_response->get_data()['status']
+		&& false !== strpos( get_post_field( 'post_content', $post_id ), 'Revised route after editorial review.' )
+		&& get_post_meta( $post_id, '_stc_page_payload', true ),
+		'Guarded editorial refresh failed to repair a legacy baseline and update the published body.' );
 	wp_update_post( array( 'ID' => $post_id, 'post_status' => 'draft' ) );
 
 	update_option( 'stc_playground_cms_publish_verified', array( 'post_id' => $post_id, 'block_count' => count( $blocks ), 'contract_checksum' => stc_cms_component_contract_checksum(), 'preview_url' => $ticket_data['preview_url'] ), false );

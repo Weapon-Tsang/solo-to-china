@@ -1,4 +1,4 @@
-> Current release candidate: Parent 0.33.9 / Child 0.13.1 / Tools 0.26.0. This Parent Theme includes the guarded CMS media refresh and the editorial guide-list UI. Preserve the installed Child Theme and Tools Plugin when their versions already match. See [the CMS media refresh handoff](../handoff/cms-media-refresh-0.33.8.md), [the guide-list acceptance report](../qa/editorial-list-ui-2026-09-22.md), and [the deployment and rollback checklist](frontend-upgrade-v1.md). Older release narratives below are historical.
+> Current release candidate: Parent 0.33.10 / Child 0.13.1 / Tools 0.26.0. This Parent Theme includes guarded legacy published editorial refresh. Preserve the installed Child Theme and Tools Plugin when their versions already match. See [the CMS media refresh handoff](../handoff/cms-media-refresh-0.33.8.md), [the guide-list acceptance report](../qa/editorial-list-ui-2026-09-22.md), and [the deployment and rollback checklist](frontend-upgrade-v1.md). Older release narratives below are historical.
 
 # WordPress Install Handoff
 

@@ -1114,13 +1114,36 @@ function stc_cms_resolve_target_post_id( $package, $route_post_id = 0 ) {
  * @param array<string, mixed> $package Replacement package.
  * @return true|WP_Error
  */
-function stc_cms_validate_published_media_refresh( $post_id, $package ) {
+function stc_cms_validate_published_media_refresh( $post_id, $package, $refresh = array() ) {
 	$stored_draft_id = (string) get_post_meta( $post_id, '_stc_cms_draft_id', true );
 	$new_draft_id    = isset( $package['publication']['cms_draft_id'] ) ? (string) $package['publication']['cms_draft_id'] : '';
 	$stored_page_id  = (string) get_post_meta( $post_id, '_stc_cms_page_id', true );
 	if ( '' === $stored_draft_id || '' === $stored_page_id || ! hash_equals( $stored_draft_id, $new_draft_id )
 		|| ! hash_equals( $stored_page_id, (string) $package['page']['metadata']['pageId'] ) ) {
 		return stc_cms_publish_error( 'PUBLISHED_REFRESH_IDENTITY_MISMATCH', __( 'The published post is owned by a different CMS page.', 'solo-to-china' ), 409 );
+	}
+	if ( 'editorial' === ( $refresh['scope'] ?? '' ) ) {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return stc_cms_publish_error( 'rest_forbidden', __( 'Publishing capability is required for an editorial refresh.', 'solo-to-china' ), 403 );
+		}
+		$expected = strtolower( (string) ( $refresh['baseline'] ?? '' ) );
+		$old_hash = strtolower( (string) get_post_meta( $post_id, '_stc_page_payload_hash', true ) );
+		$modified = (string) get_post_field( 'post_modified_gmt', $post_id );
+		$actual   = hash( 'sha256', $modified . '|' . $old_hash );
+		if ( ! preg_match( '/^[a-f0-9]{64}$/', $expected ) || ! preg_match( '/^[a-f0-9]{64}$/', $old_hash )
+			|| ! hash_equals( $actual, $expected ) ) {
+			return stc_cms_publish_error( 'PUBLISHED_REFRESH_BASELINE_CHANGED', __( 'The published article changed after the editorial refresh was planned.', 'solo-to-china' ), 409 );
+		}
+		$content_hash = strtolower( (string) ( $refresh['content_hash'] ?? '' ) );
+		if ( ! preg_match( '/^[a-f0-9]{64}$/', $content_hash )
+			|| ! hash_equals( hash( 'sha256', (string) get_post_field( 'post_content', $post_id ) ), $content_hash ) ) {
+			return stc_cms_publish_error( 'POST_EXTERNALLY_MODIFIED', __( 'The published article content changed after the editorial refresh preflight.', 'solo-to-china' ), 409 );
+		}
+		if ( (string) get_the_title( $post_id ) !== (string) $package['page']['metadata']['title']
+			|| (string) get_post_field( 'post_name', $post_id ) !== sanitize_title( (string) $package['page']['metadata']['slug'] ) ) {
+			return stc_cms_publish_error( 'PUBLISHED_REFRESH_IDENTITY_MISMATCH', __( 'Editorial refresh cannot change the published title or slug.', 'solo-to-china' ), 409 );
+		}
+		return true;
 	}
 	$old_page = json_decode( (string) get_post_meta( $post_id, '_stc_page_payload', true ), true );
 	if ( ! is_array( $old_page ) || empty( $old_page['blocks'] ) ) {
@@ -1361,14 +1384,14 @@ function stc_cms_finalize_schema( $schema, $post_id, $page ) {
  * @param int                  $route_post_id Optional PUT route post ID.
  * @return WP_REST_Response|WP_Error
  */
-function stc_cms_upsert_article( $package, $route_post_id = 0 ) {
+function stc_cms_upsert_article( $package, $route_post_id = 0, $refresh = array() ) {
 	$draft_id = isset( $package['publication']['cms_draft_id'] ) ? (string) $package['publication']['cms_draft_id'] : '';
 	$lock     = stc_cms_acquire_write_lock( (string) $package['page']['metadata']['pageId'] . '|' . $draft_id, 10 );
 	if ( ! $lock ) {
 		return stc_cms_publish_error( 'CMS_WRITE_BUSY', __( 'Another delivery for this CMS page is still in progress. Retry this request.', 'solo-to-china' ), 409 );
 	}
 	try {
-		return stc_cms_upsert_article_locked( $package, $route_post_id );
+		return stc_cms_upsert_article_locked( $package, $route_post_id, $refresh );
 	} finally {
 		stc_cms_release_write_lock( $lock );
 	}
@@ -1442,7 +1465,7 @@ function stc_cms_delete_write_lock_value( $key, $value ) {
  * @param int                  $route_post_id Optional PUT route post ID.
  * @return WP_REST_Response|WP_Error
  */
-function stc_cms_upsert_article_locked( $package, $route_post_id = 0 ) {
+function stc_cms_upsert_article_locked( $package, $route_post_id = 0, $refresh = array() ) {
 	$references = stc_cms_validate_wordpress_references( $package );
 	if ( is_wp_error( $references ) ) {
 		return $references;
@@ -1457,7 +1480,7 @@ function stc_cms_upsert_article_locked( $package, $route_post_id = 0 ) {
 	}
 	if ( $target_id ) {
 		if ( 'publish' === $package['publication']['status'] ) {
-			$media_check = stc_cms_validate_published_media_refresh( $target_id, $package );
+			$media_check = stc_cms_validate_published_media_refresh( $target_id, $package, $refresh );
 			if ( is_wp_error( $media_check ) ) {
 				return $media_check;
 			}
@@ -1543,7 +1566,12 @@ function stc_rest_upsert_cms_article( $request ) {
 		return $result;
 	}
 	$route_post_id = (int) $request->get_param( 'post_id' );
-	return stc_cms_upsert_article( $package, $route_post_id );
+	$refresh = array(
+		'scope'        => sanitize_key( (string) $request->get_header( 'x-stc-refresh-scope' ) ),
+		'baseline'     => (string) $request->get_header( 'x-stc-receipt-fingerprint' ),
+		'content_hash' => (string) $request->get_header( 'x-stc-prior-content-sha256' ),
+	);
+	return stc_cms_upsert_article( $package, $route_post_id, $refresh );
 }
 
 /**
