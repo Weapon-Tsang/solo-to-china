@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.33.10' );
+define( 'STC_THEME_VERSION', '0.33.11' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -40,6 +40,10 @@ function stc_theme_setup() {
 	);
 }
 add_action( 'after_setup_theme', 'stc_theme_setup' );
+
+// WordPress localizes archive type prefixes from the site's admin language.
+// Public archive headings use the category, tag, author, or date name itself.
+add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
 
 /**
  * Add deterministic server-rendered IDs to content H2 elements.

@@ -2,7 +2,7 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.33.10`.
+Current version: `0.33.11`.
 
 ## Responsibility
 

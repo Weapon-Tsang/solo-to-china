@@ -137,11 +137,14 @@ $AttractionSlug = "forbidden-city-first-time-visitor-guide"
 $SurvivalHtml = Get-FixtureHtml $SurvivalSlug
 $CityHtml = Get-FixtureHtml $CitySlug
 $AttractionHtml = Get-FixtureHtml $AttractionSlug
+$CityArchiveHtml = Get-FixtureHtml "category/city-guides"
 $GalleryHtml = Get-FixtureHtml "design-system"
 $PlannerHtml = Get-FixtureHtml "planner"
 $SurvivalPost = Get-FixturePost $SurvivalSlug
 $CityPost = Get-FixturePost $CitySlug
 $AttractionPost = Get-FixturePost $AttractionSlug
+
+Assert-Runtime ([regex]::IsMatch($CityArchiveHtml, '<h1>\s*<span>City Guides</span>\s*</h1>|<h1>\s*City Guides\s*</h1>', 'IgnoreCase')) "City Guides archive heading includes a localized WordPress prefix."
 
 $StaticPageSlugs = @("about", "contact", "privacy-policy", "terms-of-use", "affiliate-disclosure", "disclaimer")
 $StaticPageHtml = @{}

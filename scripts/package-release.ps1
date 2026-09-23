@@ -59,7 +59,7 @@ $PluginHash = (Get-FileHash -LiteralPath $PluginZip -Algorithm SHA256).Hash
     "ZIP contents are authoritative; verify source tree cleanliness before production installation.",
     "Registry: 1.4.1; Content Contract: 2.1.0; Publish Package: 1.0.0",
     "",
-    "Theme version: 0.33.10",
+    "Theme version: 0.33.11",
     "Theme: solo-to-china-theme.zip",
     "Theme SHA256: $ThemeHash",
     "",
