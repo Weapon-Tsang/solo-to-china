@@ -225,11 +225,11 @@ function stc_playground_component_gallery_content( $media_block ) {
 	$content .= '<!-- wp:group {"className":"stc-gallery-example stc-gallery-example--affiliate_promotion_card","layout":{"type":"constrained"}} --><div class="wp-block-group stc-gallery-example stc-gallery-example--affiliate_promotion_card"><!-- wp:shortcode -->[stc_affiliate_promotion_card affiliate_asset_id="trip-campaign" provider="Trip.com" asset_type="PROMOTION" product_category="HOTEL" title="Review the current campaign" description="Confirm campaign dates and provider terms before booking." cta_label="View promotion" target_url="https://www.trip.com/" disclosure="Paid link" scope_type="COUNTRY" scope_key="china" slot_key="gallery-promotion-1" placement="end_resource" strategy_version="commercial-v1"]<!-- /wp:shortcode --></div><!-- /wp:group -->';
 	$content .= '<!-- wp:heading --><h2>Commercial B coupon tickets - local preview</h2><!-- /wp:heading -->';
 	$offer_fixtures = array(
-		array( 'HOTEL', 'Hotels & Homes', 'Up to 20% OFF', 'First booking deal. Terms apply.', 'https://www.trip.com/hotels/' ),
+		array( 'HOTEL', 'Hotels & Homes', 'Up to 55% OFF', 'First booking deal. Terms apply.', 'https://www.trip.com/hotels/' ),
 		array( 'FLIGHT', 'Flights', '10% OFF', 'Review the fare terms before booking.', 'https://www.trip.com/flights/' ),
 		array( 'TRAIN', 'Trains', '10% OFF', 'Check the route and ticket terms.', 'https://www.trip.com/trains/' ),
-		array( 'AIRPORT_TRANSFER', 'Airport Transfers', '15% OFF', 'Check the pickup details and terms.', 'https://www.trip.com/' ),
-		array( 'ATTRACTION', 'Attractions & Tickets', '10% OFF', 'Check entry conditions before booking.', 'https://www.trip.com/' ),
+		array( 'AIRPORT_TRANSFER', 'Airport Transfers', '10% OFF', 'Check the pickup details and terms.', 'https://www.trip.com/' ),
+		array( 'ATTRACTION', 'Attractions & Tickets', 'Up to 35% OFF', 'Check entry conditions before booking.', 'https://www.trip.com/' ),
 		array( 'TOUR_ACTIVITY', 'Tours & Tickets', '10% OFF', 'Check what is included before booking.', 'https://www.trip.com/' ),
 		array( 'PLANNER', 'Trip Planning', '', 'Shape a day-by-day route for your trip.', 'https://www.trip.com/t/bCPFQ85ZHW2' ),
 	);

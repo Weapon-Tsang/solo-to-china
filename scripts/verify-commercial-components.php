@@ -111,10 +111,10 @@ $explicit_offer = $booking;
 $explicit_offer['product_category'] = 'HOTEL';
 $explicit_offer['title'] = 'Hotels & Homes';
 $explicit_offer['description'] = 'First booking deal. Terms apply.';
-$explicit_offer['price_text'] = 'Up to 20% OFF';
+$explicit_offer['price_text'] = 'Up to 55% OFF';
 $offer_html = stc_render_affiliate_booking_card_component( $explicit_offer );
-stc_test( false !== strpos( $offer_html, 'stc-commercial-component__offer-prefix">Up to</span>' ) && false !== strpos( $offer_html, 'stc-commercial-component__offer-amount">20% OFF</strong>' ), 'Hotel offer headline is wrong.' );
-stc_test( false !== strpos( $offer_html, 'Limited offer' ) && false !== strpos( $offer_html, 'New users' ), 'B-ticket badge or new-user qualifier is missing.' );
+stc_test( false !== strpos( $offer_html, 'stc-commercial-component__offer-prefix">Up to</span>' ) && false !== strpos( $offer_html, 'stc-commercial-component__offer-amount">55% OFF</strong>' ), 'Hotel offer headline is wrong.' );
+stc_test( false !== strpos( $offer_html, 'Limited offer' ) && false !== strpos( $offer_html, 'New user' ), 'B-ticket badge or new-user qualifier is missing.' );
 stc_test( false !== strpos( $offer_html, 'Claim bonus' ), 'B-ticket button copy is missing.' );
 stc_test( false !== strpos( $offer_html, 'Hotels &amp; Homes' ), 'Human-facing category label is missing.' );
 foreach ( array( 'FLIGHT' => 'Flights', 'HOTEL' => 'Hotels', 'TRAIN' => 'Tickets' ) as $icon_category => $icon_label ) {
@@ -138,7 +138,7 @@ $tour['description'] = 'Check current tour_activity details and availability bef
 $tour_html = stc_render_affiliate_booking_card_component( $tour );
 stc_test( false !== strpos( $tour_html, 'Explore more of China for less- your next adventure awaits.' ) && false === strpos( $tour_html, 'tour_activity details' ), 'The B-reference final copy did not replace historical filler.' );
 
-$expected_headlines = array( 'FLIGHT' => '10% OFF', 'TRAIN' => '10% OFF', 'AIRPORT_TRANSFER' => '15% OFF', 'ATTRACTION' => '10% OFF', 'TOUR_ACTIVITY' => '10% OFF' );
+$expected_headlines = array( 'FLIGHT' => '10% OFF', 'TRAIN' => '10% OFF', 'AIRPORT_TRANSFER' => '10% OFF', 'ATTRACTION' => '35% OFF', 'TOUR_ACTIVITY' => '10% OFF' );
 foreach ( $expected_headlines as $category => $headline ) {
 	$ticket = $booking;
 	$ticket['product_category'] = $category;

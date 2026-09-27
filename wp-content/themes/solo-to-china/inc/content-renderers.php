@@ -157,11 +157,11 @@ function stc_commercial_display_description( $data ) {
 /** B-ticket headlines fixed by the requested product category. */
 function stc_commercial_ticket_offer( $category ) {
 	$offers = array(
-		'HOTEL'            => array( 'Up to', '20% OFF', 'New users' ),
+		'HOTEL'            => array( 'Up to', '55% OFF', 'New user' ),
 		'FLIGHT'           => array( '', '10% OFF', '' ),
 		'TRAIN'            => array( '', '10% OFF', '' ),
-		'AIRPORT_TRANSFER' => array( '', '15% OFF', '' ),
-		'ATTRACTION'       => array( '', '10% OFF', '' ),
+		'AIRPORT_TRANSFER' => array( '', '10% OFF', '' ),
+		'ATTRACTION'       => array( 'Up to', '35% OFF', 'New user' ),
 		'TOUR_ACTIVITY'    => array( '', '10% OFF', '' ),
 	);
 	return isset( $offers[ $category ] ) ? $offers[ $category ] : array();
