@@ -1,0 +1,86 @@
+{
+  "environment": "Local WordPress Playground 6.8.3, Child Theme, Chromium in-app browser, 2026-09-27",
+  "route": "/city-guides/",
+  "views": [
+    {
+      "contentWidth": 305,
+      "firstImageTop": 201.59375,
+      "headerFieldWidth": 0,
+      "headerHeight": 64,
+      "headerSearchVisible": false,
+      "inlineSearchVisible": true,
+      "searchHeight": 48,
+      "viewport": 320
+    },
+    {
+      "contentWidth": 360,
+      "firstImageTop": 201.59375,
+      "headerFieldWidth": 0,
+      "headerHeight": 64,
+      "headerSearchVisible": false,
+      "inlineSearchVisible": true,
+      "searchHeight": 48,
+      "viewport": 375
+    },
+    {
+      "contentWidth": 375,
+      "firstImageTop": 201.59375,
+      "headerFieldWidth": 0,
+      "headerHeight": 64,
+      "headerSearchVisible": false,
+      "inlineSearchVisible": true,
+      "searchHeight": 48,
+      "viewport": 390
+    },
+    {
+      "contentWidth": 415,
+      "firstImageTop": 201.59375,
+      "headerFieldWidth": 0,
+      "headerHeight": 64,
+      "headerSearchVisible": false,
+      "inlineSearchVisible": true,
+      "searchHeight": 48,
+      "viewport": 430
+    },
+    {
+      "contentWidth": 753,
+      "firstImageTop": 214.390625,
+      "headerFieldWidth": 0,
+      "headerHeight": 68,
+      "headerSearchVisible": false,
+      "inlineSearchVisible": true,
+      "searchHeight": 48,
+      "viewport": 768
+    },
+    {
+      "contentWidth": 1009,
+      "firstImageTop": 222.390625,
+      "headerFieldWidth": 0,
+      "headerHeight": 72,
+      "headerSearchVisible": false,
+      "inlineSearchVisible": true,
+      "searchHeight": 48,
+      "viewport": 1024
+    },
+    {
+      "contentWidth": 1265,
+      "firstImageTop": 162.390625,
+      "headerFieldWidth": 240,
+      "headerHeight": 72,
+      "headerSearchVisible": true,
+      "inlineSearchVisible": false,
+      "searchHeight": 0,
+      "viewport": 1280
+    },
+    {
+      "contentWidth": 1425,
+      "firstImageTop": 162.390625,
+      "headerFieldWidth": 240,
+      "headerHeight": 72,
+      "headerSearchVisible": true,
+      "inlineSearchVisible": false,
+      "searchHeight": 0,
+      "viewport": 1440
+    }
+  ]
+}

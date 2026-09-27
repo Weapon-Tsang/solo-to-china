@@ -21,6 +21,7 @@ $attractions = stc_get_site_collection( 'attraction-guides' );
 ?>
 
 <main id="main">
+	<div class="stc-home-search"><?php stc_render_search_form( 'stc-search-form--inline' ); ?></div>
 	<section class="stc-hero">
 		<?php stc_render_theme_image( 'hero-home', '', true ); ?>
 		<div class="stc-hero__content">

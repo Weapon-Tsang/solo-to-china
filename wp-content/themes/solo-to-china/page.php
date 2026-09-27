@@ -244,21 +244,25 @@ $core_pages = [
 ];
 $core_pages = array_merge( $core_pages, stc_static_page_metadata() );
 
-$page                = $core_pages[ $slug ] ?? null;
-$guide_landing_slugs = [ 'survival-kit', 'city-guides', 'attraction-guides' ];
+$core_page                = $core_pages[ $slug ] ?? null;
 $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', 'affiliate-disclosure', 'disclaimer' ];
+$is_guide_collection = in_array( $slug, [ 'city-guides', 'attraction-guides' ], true );
 ?>
 
 <main id="main" class="stc-main">
-	<?php if ( $page ) : ?>
+	<?php if ( $core_page ) : ?>
+		<?php if ( $is_guide_collection ) : ?>
+			<header class="stc-collection-heading"><h1 id="stc-collection-title"><?php echo esc_html( $core_page['title'] ); ?></h1><div class="stc-collection-heading__search"><?php stc_render_search_form( 'stc-search-form--inline' ); ?></div></header>
+			<?php stc_render_core_page_latest_guides( $slug, ! empty( $core_page['items'] ) ); ?>
+		<?php else : ?>
 		<section class="stc-page-hero stc-page-hero--visual stc-page-hero--<?php echo esc_attr( $slug ); ?>">
 			<?php if ( in_array( $slug, $static_page_slugs, true ) ) : ?>
-				<nav class="stc-static-page__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'solo-to-china' ); ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'solo-to-china' ); ?></a><span aria-hidden="true">/</span><span aria-current="page"><?php echo esc_html( $page['title'] ); ?></span></nav>
+				<nav class="stc-static-page__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'solo-to-china' ); ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'solo-to-china' ); ?></a><span aria-hidden="true">/</span><span aria-current="page"><?php echo esc_html( $core_page['title'] ); ?></span></nav>
 			<?php else : ?>
 				<p><?php esc_html_e( 'SoloToChina', 'solo-to-china' ); ?></p>
 			<?php endif; ?>
-			<h1><?php echo esc_html( $page['title'] ); ?></h1>
-			<span><?php echo esc_html( $page['copy'] ); ?></span>
+			<h1><?php echo esc_html( $core_page['title'] ); ?></h1>
+			<span><?php echo esc_html( $core_page['copy'] ); ?></span>
 			<?php if ( 'planner' === $slug ) : ?>
 				<div class="stc-planner-hero__actions">
 					<a class="stc-button stc-planner-hero__cta" href="<?php echo esc_url( stc_get_trip_planner_url() ); ?>" target="_blank" rel="sponsored nofollow noopener noreferrer" data-stc-planner-cta>
@@ -281,9 +285,9 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 						<li><span>03</span><div><strong>Shanghai</strong><small>Old City &middot; The Bund</small></div></li>
 					</ol>
 				</div>
-			<?php elseif ( ! empty( $page['share'] ) ) : ?>
+			<?php elseif ( ! empty( $core_page['share'] ) ) : ?>
 				<div class="stc-page-actions">
-					<?php stc_render_share_this_page( array( 'title' => $page['title'], 'description' => $page['copy'] ) ); ?>
+					<?php stc_render_share_this_page( array( 'title' => $core_page['title'], 'description' => $core_page['copy'] ) ); ?>
 				</div>
 			<?php endif; ?>
 			<?php if ( 'survival-kit' === $slug ) : ?>
@@ -292,7 +296,9 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 				<span class="stc-page-hero__mark" aria-hidden="true">Q / A</span>
 			<?php endif; ?>
 		</section>
+		<?php endif; ?>
 
+		<?php if ( ! $is_guide_collection || ! empty( $core_page['items'] ) ) : ?>
 		<div class="stc-page-primary">
 		<?php if ( 'survival-kit' === $slug ) : ?>
 			<section class="stc-page-section stc-survival-index" aria-labelledby="stc-survival-index-title">
@@ -304,7 +310,7 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 					<p><?php esc_html_e( 'Work through these in order, then keep the fallback for each one. The goal is not a perfect setup—it is avoiding any single point of failure.', 'solo-to-china' ); ?></p>
 				</div>
 				<nav class="stc-survival-topic-grid" aria-label="<?php esc_attr_e( 'Survival Kit topics', 'solo-to-china' ); ?>">
-					<?php foreach ( $page['items'] as $item ) : ?>
+					<?php foreach ( $core_page['items'] as $item ) : ?>
 						<a class="stc-survival-topic-card" href="#<?php echo esc_attr( $item['id'] ); ?>">
 							<span class="stc-survival-topic-card__number"><?php echo esc_html( $item['number'] ); ?></span>
 							<?php stc_render_survival_icon( $item['icon'] ); ?>
@@ -327,7 +333,7 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 					<p><?php esc_html_e( 'App support, fees, connectivity, and entry policies can change. Recheck time-sensitive details with the named provider or official authority shortly before departure.', 'solo-to-china' ); ?></p>
 				</header>
 				<div class="stc-survival-playbook__list">
-					<?php foreach ( $page['items'] as $item ) : ?>
+					<?php foreach ( $core_page['items'] as $item ) : ?>
 						<article id="<?php echo esc_attr( $item['id'] ); ?>" class="stc-survival-guide-card">
 							<header class="stc-survival-guide-card__header">
 								<div class="stc-survival-guide-card__identity">
@@ -372,12 +378,12 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 			<?php
 			$guide_grid_id    = 'city-guides' === $slug ? 'stc-city-guide-grid' : 'stc-attraction-guide-grid';
 			$guide_grid_label = 'city-guides' === $slug ? 'Cities' : 'Attractions';
-			$remaining_guides = max( 0, count( $page['items'] ) - 4 );
+			$remaining_guides = max( 0, count( $core_page['items'] ) - 4 );
 			?>
-			<section class="stc-page-section">
+			<section class="stc-page-section stc-collection-navigation" aria-label="<?php echo esc_attr( $guide_grid_label ); ?>">
 				<div class="stc-guide-grid-shell" data-stc-guide-grid-shell data-stc-guide-label="<?php echo esc_attr( $guide_grid_label ); ?>">
 				<div id="<?php echo esc_attr( $guide_grid_id ); ?>" class="stc-card-grid <?php echo esc_attr( 'city-guides' === $slug ? 'stc-card-grid--cities' : 'stc-card-grid--attractions' ); ?>" data-stc-guide-grid>
-					<?php foreach ( $page['items'] as $item ) : ?>
+					<?php foreach ( $core_page['items'] as $item ) : ?>
 						<article class="stc-image-card stc-image-card--<?php echo esc_attr( $item['class'] ); ?>">
 							<?php stc_render_guide_card_media( $item['image'], $item['title'] ); ?>
 							<?php if ( ! empty( $item['tag'] ) ) : ?>
@@ -392,12 +398,14 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 						</article>
 					<?php endforeach; ?>
 				</div>
+					<?php if ( $remaining_guides > 0 ) : ?>
 					<div class="stc-guide-grid-reveal">
 						<button type="button" hidden data-stc-guide-reveal aria-controls="<?php echo esc_attr( $guide_grid_id ); ?>" aria-expanded="false">
 							<span data-stc-guide-reveal-label><?php echo esc_html( sprintf( '+%d More %s', $remaining_guides, $guide_grid_label ) ); ?></span>
 							<svg class="stc-guide-grid-reveal__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 9 5 5 5-5"/></svg>
 						</button>
 					</div>
+					<?php endif; ?>
 				</div>
 			</section>
 		<?php elseif ( in_array( $slug, $static_page_slugs, true ) ) : ?>
@@ -443,7 +451,7 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 		<?php elseif ( 'faq' === $slug ) : ?>
 			<?php
 			$faq_groups = [];
-			foreach ( $page['items'] as $item ) {
+			foreach ( $core_page['items'] as $item ) {
 				$faq_groups[ $item['category'] ][] = $item;
 			}
 			?>
@@ -498,8 +506,9 @@ $static_page_slugs   = [ 'about', 'contact', 'privacy-policy', 'terms-of-use', '
 			</section>
 		<?php endif; ?>
 		</div>
+		<?php endif; ?>
 
-		<?php if ( in_array( $slug, $guide_landing_slugs, true ) ) : ?>
+		<?php if ( 'survival-kit' === $slug ) : ?>
 			<?php stc_render_core_page_latest_guides( $slug ); ?>
 		<?php endif; ?>
 	<?php else : ?>

@@ -11,6 +11,7 @@
             if (restore) { toggle.focus(); }
         }
         toggle.addEventListener('click', function () { set(toggle.getAttribute('aria-expanded') !== 'true', false); });
+		document.addEventListener('stc:search-open', function () { set(false, false); });
         document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { set(false, true); } });
         nav.addEventListener('click', function (event) { if (media.matches && event.target.closest('a')) { set(false, false); } });
         media.addEventListener('change', function () { if (!media.matches) { set(false, false); } });

@@ -46,6 +46,12 @@ body {
 	letter-spacing: -0.025em;
 }
 
+.stc-collection-view .stc-brand__name { font-size: 1.375rem; line-height: 1.1; }
+@media (max-width: 639px) {
+	.stc-collection-view .stc-header { min-block-size: 4rem; }
+	.stc-collection-view .stc-menu-toggle { width: 44px; height: 44px; }
+}
+
 .home .stc-brand--image {
 	border-radius: 0;
 	box-shadow: none;

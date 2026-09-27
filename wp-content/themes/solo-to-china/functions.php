@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.33.11' );
+define( 'STC_THEME_VERSION', '0.33.12' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -22,6 +22,7 @@ require_once get_template_directory() . '/inc/entity-links.php';
 require_once get_template_directory() . '/inc/site-collections.php';
 require_once get_template_directory() . '/inc/experience-assets.php';
 require_once get_template_directory() . '/inc/experience-components.php';
+require_once get_template_directory() . '/inc/search.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -44,6 +45,13 @@ add_action( 'after_setup_theme', 'stc_theme_setup' );
 // WordPress localizes archive type prefixes from the site's admin language.
 // Public archive headings use the category, tag, author, or date name itself.
 add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+
+add_filter( 'body_class', function ( $classes ) {
+	if ( is_archive() || ( is_home() && ! is_front_page() ) || is_page( [ 'city-guides', 'attraction-guides' ] ) ) {
+		$classes[] = 'stc-collection-view';
+	}
+	return $classes;
+} );
 
 /**
  * Add deterministic server-rendered IDs to content H2 elements.
@@ -116,6 +124,13 @@ function stc_enqueue_assets() {
 		STC_THEME_VERSION,
 		true
 	);
+	wp_enqueue_script(
+		'stc-search',
+		get_template_directory_uri() . '/assets/js/search.js',
+		[ 'stc-main' ],
+		STC_THEME_VERSION . '.' . filemtime( get_template_directory() . '/assets/js/search.js' ),
+		true
+	);
 
 	if ( ! defined( 'STC_CMS_SCOPED_PREVIEW' ) && preg_match( '/stc_(affiliate|hotel|ticket_cta|booking|esim|transport|commercial)|stc-affiliate/', stc_page_asset_content() ) ) {
 	wp_enqueue_script(
@@ -133,6 +148,16 @@ function stc_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'stc_enqueue_assets' );
+
+function stc_enqueue_search_style() {
+	wp_enqueue_style(
+		'stc-search',
+		get_template_directory_uri() . '/assets/css/search.css',
+		[ 'stc-main' ],
+		STC_THEME_VERSION . '.' . filemtime( get_template_directory() . '/assets/css/search.css' )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'stc_enqueue_search_style', 30 );
 
 function stc_primary_navigation_items() {
 	return [
@@ -519,7 +544,7 @@ function stc_render_faq_chevron() {
 	echo '</svg>';
 }
 
-function stc_render_guide_card( $post_id = null ) {
+function stc_render_guide_card( $post_id = null, $priority_image = false ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
 
 	if ( ! $post_id ) {
@@ -530,16 +555,20 @@ function stc_render_guide_card( $post_id = null ) {
 	$excerpt = get_the_excerpt( $post_id );
 	$media   = '';
 	if ( has_post_thumbnail( $post_id ) ) {
+		$image_attributes = [
+			'class'    => 'stc-post-card__image',
+			'loading'  => $priority_image ? 'eager' : 'lazy',
+			'decoding' => 'async',
+			'sizes'    => '(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) calc((100vw - 80px) / 2), (max-width: 1199px) calc((100vw - 128px) / 3), 357px',
+		];
+		if ( $priority_image ) {
+			$image_attributes['fetchpriority'] = 'high';
+		}
 		$media = wp_get_attachment_image(
 			get_post_thumbnail_id( $post_id ),
 			'stc-guide-card-2x',
 			false,
-			[
-				'class'    => 'stc-post-card__image',
-				'loading'  => 'lazy',
-				'decoding' => 'async',
-				'sizes'    => '(max-width: 639px) calc(100vw - 40px), (max-width: 1023px) calc((100vw - 80px) / 2), (max-width: 1199px) calc((100vw - 128px) / 3), 357px',
-			]
+			$image_attributes
 		);
 	}
 
@@ -653,7 +682,7 @@ function stc_core_page_latest_guides_config( $slug ) {
 	return $config[ $slug ] ?? null;
 }
 
-function stc_render_core_page_latest_guides( $slug ) {
+function stc_render_core_page_latest_guides( $slug, $has_navigation = false ) {
 	$config = stc_core_page_latest_guides_config( $slug );
 
 	if ( ! $config ) {
@@ -664,7 +693,7 @@ function stc_render_core_page_latest_guides( $slug ) {
 		[
 			'category_name'       => $config['category'],
 			'ignore_sticky_posts' => true,
-			'no_found_rows'       => true,
+			'no_found_rows'       => 'survival-kit' === $slug,
 			'post_status'         => 'publish',
 			'post_type'           => 'post',
 			'posts_per_page'      => 6,
@@ -672,7 +701,33 @@ function stc_render_core_page_latest_guides( $slug ) {
 	);
 
 	$category     = get_category_by_slug( $config['category'] );
-	$archive_link = $category ? get_category_link( $category ) : home_url( '/category/' . $config['category'] . '/' );
+	$archive_link = $category ? get_category_link( $category ) : '';
+	$is_collection = in_array( $slug, [ 'city-guides', 'attraction-guides' ], true );
+	if ( $is_collection ) {
+		echo '<section class="stc-collection-articles" aria-labelledby="stc-collection-title">';
+		if ( $query->have_posts() ) {
+			echo '<div class="stc-post-list">';
+			$image_prioritized = false;
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$priority_image = ! $image_prioritized && has_post_thumbnail( get_the_ID() );
+				stc_render_guide_card( get_the_ID(), $priority_image );
+				$image_prioritized = $image_prioritized || $priority_image;
+			}
+			echo '</div>';
+			if ( $archive_link && $query->found_posts > $query->post_count ) {
+				echo '<p class="stc-collection-articles__more"><a href="' . esc_url( $archive_link ) . '">' . esc_html( sprintf( __( 'View all %s', 'solo-to-china' ), $config['category'] === 'city-guides' ? 'City Guides' : 'Attraction Guides' ) ) . ' <span aria-hidden="true">&rarr;</span></a></p>';
+			}
+		} else {
+			echo '<p class="stc-collection-articles__empty">' . esc_html( $config['empty'] ) . '</p>';
+			if ( ! $has_navigation ) {
+				echo '<p><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Back to home', 'solo-to-china' ) . '</a></p>';
+			}
+		}
+		echo '</section>';
+		wp_reset_postdata();
+		return;
+	}
 
 	echo '<section class="stc-page-section stc-latest-guides" aria-labelledby="stc-latest-guides-title">';
 	echo '<div class="stc-latest-guides__header">';
@@ -680,7 +735,9 @@ function stc_render_core_page_latest_guides( $slug ) {
 	echo '<p>' . esc_html__( 'Fresh practical guides', 'solo-to-china' ) . '</p>';
 	echo '<h2 id="stc-latest-guides-title">' . esc_html( $config['label'] ) . '</h2>';
 	echo '</div>';
-	echo '<a href="' . esc_url( $archive_link ) . '">' . esc_html__( 'Browse all', 'solo-to-china' ) . '</a>';
+	if ( $archive_link ) {
+		echo '<a href="' . esc_url( $archive_link ) . '">' . esc_html__( 'Browse all', 'solo-to-china' ) . '</a>';
+	}
 	echo '</div>';
 
 	if ( $query->have_posts() ) {

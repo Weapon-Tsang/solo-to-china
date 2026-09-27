@@ -1,0 +1,18 @@
+{
+  "environment": "Isolated WordPress Playground 6.8.3, PHP 8.3, SQLite, localhost:9481, 300 synthetic published posts plus existing fixture posts",
+  "method": "Python urllib complete HTTP response timing; 30 distinct two-term searches and 30 repetitions of the same term; p95 is sample rank 29 of 30. Distinct queries are not a cold process or cold database test.",
+  "distinctQueries": { "samples": 30, "p50Ms": 712.6, "p95Ms": 779.8, "maxMs": 1930.8, "httpStatus": 200, "cardsPerPage": 1 },
+  "repeatedQuery": { "samples": 30, "p50Ms": 712.9, "p95Ms": 761.3, "maxMs": 780.6, "httpStatus": 200, "cardsPerPage": 12 },
+  "contextBaseline": {
+    "home": { "samples": 15, "p50Ms": 718.1, "p95Ms": 739.7 },
+    "zeroResultSearch": { "samples": 15, "p50Ms": 693.9, "p95Ms": 706.8 },
+    "threeHundredResultSearch": { "samples": 15, "p50Ms": 737.9, "p95Ms": 802.9 }
+  },
+  "resultCount": 300,
+  "pageSize": 12,
+  "lastPage": 25,
+  "incrementalAssetsGzipBytes": { "searchJavaScript": 725, "searchCSS": 1725 },
+  "targetP95Ms": 500,
+  "targetMetInThisEnvironment": false,
+  "phpDatabaseMemoryMetrics": "Not captured; no database profiler was enabled in the isolated preview."
+}

@@ -9,18 +9,24 @@ get_header();
 ?>
 
 <main id="main" class="stc-main">
-	<section class="stc-content">
+	<section class="stc-content stc-content--archive">
 		<?php if ( have_posts() ) : ?>
 			<header class="stc-content__header">
 				<h1><?php echo esc_html( get_the_archive_title() ?: get_bloginfo( 'name' ) ); ?></h1>
+				<div class="stc-archive-search"><?php stc_render_search_form( 'stc-search-form--inline' ); ?></div>
 			</header>
 
 			<div class="stc-post-list">
 				<?php
+				$image_prioritized = false;
 				while ( have_posts() ) :
 					the_post();
+					$priority_image = ! $image_prioritized && has_post_thumbnail( get_the_ID() );
 					?>
-					<?php stc_render_guide_card(); ?>
+					<?php
+					stc_render_guide_card( null, $priority_image );
+					$image_prioritized = $image_prioritized || $priority_image;
+					?>
 				<?php endwhile; ?>
 			</div>
 

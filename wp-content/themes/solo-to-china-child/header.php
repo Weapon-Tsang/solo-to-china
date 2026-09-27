@@ -17,16 +17,18 @@
 <header class="stc-header">
 	<a class="stc-brand<?php echo is_front_page() ? ' stc-brand--image' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'SoloToChina Home', 'solo-to-china-child' ); ?>">
 		<?php if ( is_front_page() ) : ?>
-			<img class="stc-brand__logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/solotochina-logo-white.png' ); ?>" width="533" height="515" alt="" decoding="async" fetchpriority="high">
+			<img class="stc-brand__logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/solotochina-logo-white.png' ); ?>" width="533" height="515" alt="" decoding="async">
 		<?php else : ?>
 			<span class="stc-brand__name">SoloToChina</span>
 		<?php endif; ?>
 	</a>
+	<?php stc_child_render_primary_navigation(); ?>
+	<?php stc_render_header_search(); ?>
 	<button class="stc-menu-toggle" type="button" aria-expanded="false" aria-controls="stc-primary-nav" data-open-label="<?php esc_attr_e( 'Open menu', 'solo-to-china-child' ); ?>" data-close-label="<?php esc_attr_e( 'Close menu', 'solo-to-china-child' ); ?>">
 		<span class="stc-menu-toggle__line"></span>
 		<span class="stc-menu-toggle__line"></span>
 		<span class="stc-menu-toggle__line"></span>
 		<span class="screen-reader-text"><?php esc_html_e( 'Open menu', 'solo-to-china-child' ); ?></span>
 	</button>
-	<?php stc_child_render_primary_navigation(); ?>
 </header>
+<?php stc_render_search_dialog(); ?>

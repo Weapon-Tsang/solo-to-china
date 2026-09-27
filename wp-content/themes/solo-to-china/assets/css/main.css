@@ -2728,3 +2728,54 @@ html:not(.stc-js) .stc-share__trigger, html:not(.stc-js) .stc-menu-toggle { disp
  html:not(.stc-js) .stc-nav { max-height:none; height:auto; opacity:1; visibility:visible; pointer-events:auto; transform:none; overflow:visible; box-shadow:none; }
  html:not(.stc-js) .stc-header { position:relative; height:auto; max-height:none; }
 }
+
+/* Article-first collection pages and archives. */
+.stc-collection-heading,
+.stc-collection-articles,
+.stc-content--archive {
+	box-sizing: border-box;
+	margin-inline: auto;
+	max-width: 1200px;
+	padding-inline: 32px;
+}
+.stc-collection-heading { padding-top: 28px; }
+.stc-collection-heading h1,
+.stc-content--archive .stc-content__header h1 {
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 2rem;
+	line-height: 1.2;
+	letter-spacing: 0;
+	margin: 0;
+	overflow-wrap: break-word;
+}
+.stc-collection-articles { padding-top: 24px; }
+.stc-content--archive { padding-block: 28px 64px; }
+.stc-content--archive .stc-content__header { margin-bottom: 24px; }
+.stc-collection-articles__more { margin: 24px 0 0; }
+.stc-collection-articles__more a,
+.stc-collection-articles__empty + p a { color: var(--stc-green); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.stc-collection-articles__empty { color: var(--stc-muted); margin: 0; }
+.stc-archive-description { margin-top: 32px; max-width: 70ch; }
+.stc-collection-articles + .stc-page-primary .stc-page-section { padding-top: 40px; }
+.stc-collection-view .stc-menu-toggle { min-width: 44px; min-height: 44px; }
+@media (min-width: 640px) and (max-width: 1023px) {
+	.stc-collection-heading,
+	.stc-collection-articles,
+	.stc-content--archive { padding-inline: 28px; }
+	.stc-collection-heading { padding-top: 24px; }
+	.stc-content--archive { padding-top: 24px; }
+}
+@media (max-width: 639px) {
+	.stc-collection-heading,
+	.stc-collection-articles,
+	.stc-content--archive { padding-inline: 20px; }
+	.stc-collection-heading { padding-top: 20px; }
+	.stc-collection-heading h1,
+	.stc-content--archive .stc-content__header h1 { font-size: 1.75rem; }
+	.stc-content--archive { padding-block: 20px 48px; }
+	.stc-collection-view .stc-header { min-height: 64px; padding-block: 0; }
+	.stc-collection-view .stc-header { grid-template-columns: minmax(0, 1fr) 44px; gap: 8px; }
+	.stc-collection-view .stc-brand { min-width: 0; }
+	.stc-collection-view .stc-brand__name { overflow-wrap: anywhere; }
+	.stc-collection-view .stc-menu-toggle { width: 44px; height: 44px; }
+}

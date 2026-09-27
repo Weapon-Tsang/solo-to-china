@@ -1,0 +1,14 @@
+{
+  "article": {
+    "h1": ["Forbidden City: First-Time Visitor Guide"],
+    "share": 1,
+    "toc": 8,
+    "copyStatus": "Copied"
+  },
+  "fallback": [
+    {
+      "title": "Local fixture 01 guide",
+      "link": "http://127.0.0.1:9471/fe01-local-3-01/"
+    }
+  ]
+}

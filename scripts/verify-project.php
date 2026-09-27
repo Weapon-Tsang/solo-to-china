@@ -172,7 +172,7 @@ if (is_file($packageScriptPath)) {
             $failures[] = "Package script does not include the Child Theme artifact token: {$childPackageToken}";
         }
     }
-    if (strpos($packageScript, 'Theme version: 0.33.7') === false || strpos($packageScript, 'Child Theme version: 0.13.1') === false || strpos($packageScript, 'Plugin version: 0.26.0') === false) {
+    if (strpos($packageScript, 'Theme version: 0.33.12') === false || strpos($packageScript, 'Child Theme version: 0.13.2') === false || strpos($packageScript, 'Plugin version: 0.26.0') === false) {
         $failures[] = 'Package script does not write artifact versions to the release manifest.';
     }
 }
@@ -354,7 +354,7 @@ $childThemeFunctionsPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo
 $childThemeDesignSystemPath = $root . DIRECTORY_SEPARATOR . 'wp-content/themes/solo-to-china-child/assets/css/design-system.css';
 if (is_file($childThemeStylePath)) {
     $childThemeStyle = file_get_contents($childThemeStylePath);
-    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.13.1', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
+    foreach (['Theme Name: SoloToChina Child', 'Template: solo-to-china', 'Version: 0.13.2', 'Text Domain: solo-to-china-child'] as $childHeaderToken) {
         if (strpos($childThemeStyle, $childHeaderToken) === false) {
             $failures[] = "Child Theme stylesheet header is missing: {$childHeaderToken}";
         }
@@ -497,7 +497,7 @@ if (is_file($pageTemplatePath)) {
             $failures[] = "Guide landing pages are missing shared four-card fold markup: {$guideLandingToken}";
         }
     }
-    foreach (['$guide_landing_slugs', 'stc-planner--page', 'stc-planner__icon', 'stc-planner__art', 'stc-planner-hero__cta', 'data-stc-planner-cta', 'stc-planner-hero__preview', 'stc-planner__steps', 'Generate my AI itinerary', 'stc-faq--page', 'stc-faq__answer-link'] as $utilityPageToken) {
+    foreach (['stc-planner--page', 'stc-planner__icon', 'stc-planner__art', 'stc-planner-hero__cta', 'data-stc-planner-cta', 'stc-planner-hero__preview', 'stc-planner__steps', 'Generate my AI itinerary', 'stc-faq--page', 'stc-faq__answer-link'] as $utilityPageToken) {
         if (strpos($pageTemplate, $utilityPageToken) === false) {
             $failures[] = "Core page template is missing utility-page presentation token: {$utilityPageToken}";
         }
@@ -509,8 +509,8 @@ if (is_file($pageTemplatePath)) {
     }
     $primaryContentIndex = strpos($pageTemplate, 'stc-page-primary');
     $latestGuidesIndex = strpos($pageTemplate, 'stc_render_core_page_latest_guides');
-    if ($primaryContentIndex === false || $latestGuidesIndex === false || $latestGuidesIndex <= $primaryContentIndex) {
-        $failures[] = 'Core landing page does not keep primary content before latest posts.';
+    if ($primaryContentIndex === false || $latestGuidesIndex === false || $latestGuidesIndex >= $primaryContentIndex || strpos($pageTemplate, "'survival-kit' === \$slug") === false) {
+        $failures[] = 'Guide collections must render posts before entity navigation while Survival Kit keeps its existing latest-post section.';
     }
 }
 

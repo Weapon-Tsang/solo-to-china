@@ -1,0 +1,203 @@
+SoloToChina｜前端增量阶段 FE-01：栏目集合页首屏精简
+完整提示词＋执行指令｜v1.0｜2026-09-27
+
+本次只执行前端FE-01。不是CMS阶段01，也不替代CMS任何阶段。
+目标：让City Guides、Attraction Guides及对应文章归档页首先呈现可浏览的文章，不再被重复品牌、巨型标题、副标题、分享按钮和空白区占满。
+保留一处紧凑、可见、准确的栏目H1；保留顶部全站Logo/站名，不把页面改成没有身份或没有栏目方向的匿名图片流。
+本阶段只做栏目首屏与受影响的展示修复；搜索在下一独立前端阶段FE-02实现。本阶段不放没有功能的搜索框/占位按钮。
+
+【使用方式与工作区边界】
+本消息本身就是当前前端增量阶段的完整提示词＋执行指令，不需要用户解压、建目录、提供旧任务包或把CMS加入工作区。
+唯一实施仓库：当前打开的 Weapon-Tsang/solo-to-china 前端仓库（若remote是历史别名，先确认真实归属）。
+本任务与正在进行的CMS阶段01完全独立。不得修改、暂停或部署CMS，不读取CMS业务数据库，不进入相邻CMS源码目录，不改CMS阶段编号或进度。可以与CMS开发分别进行，但测试端口、容器名称和数据目录必须隔离，禁止killall node、按端口杀不属于本轮的进程或对共享环境docker compose down。
+这里“前端仓库”包括该仓库的WordPress父主题、子主题及必要的公开站服务端PHP，不是只允许改CSS。需要搜索查询逻辑时，也应在这个WordPress前端仓库内完成，而不是请求CMS实现。
+只改本阶段必要文件；不重做上一版已验收的16:9卡片、衬线标题、无标签/日期/作者展示等成果。已有功能先复验，正确的保留。
+
+【开工核对】
+先读适用AGENTS.md、README、现有handoff及相关架构；仓库若有现成设计skill，只读取本任务相关规则，不安装新插件/skill，不把“设计优化”扩大为全站重写。
+核对并记录：git根目录、remote、branch、HEAD、git status --short、未提交文件归属、父/子主题版本、实际启用模板与CSS加载顺序、现有本地WordPress/浏览器测试入口。
+不自动pull、reset、clean、stash、checkout覆盖或重克隆。允许为核对版本只读fetch，但不得把已存在的用户修改当作垃圾清理。
+代码定位线索来自2026-09-27读取到的远端main：86d6eccc0838fe0a896247a385087b774d7e6736。只是阅读基线，不代表用户本地或生产已部署这个提交；始终以实际工作树为准，不切回旧SHA。
+当前已看到父主题STC_THEME_VERSION=0.33.11，子主题STC_CHILD_VERSION=0.13.1；不要用任务文档版本冒充应用版本。父主题functions.php已有get_the_archive_title_prefix空前缀过滤器，不重复修复已正确的“分类：”问题，也不改全站/后台语言来掩盖它。
+先给简短执行计划，随后完成本轮可执行开发和测试，不停留在建议。
+
+【共同不变项与权限】
+保持：全站品牌、首页主体设计、文章详情H1/正文/图注/分享能力、已有商业组件与链接、移动菜单、页脚、TOC、公开工具、当前CMS发布合同及媒体用途。
+本轮不实现：CMS封面选图、AI生图/翻译、WebP生产流水线、来源采集、路线骨架、人工补图后台、R2、向量搜索或外部搜索订阅。
+只允许前端仓库本地实现、依赖常规读取、隔离WordPress/合成数据测试和受限匿名公开GET。检查脚本与npm生命周期钩子，防止隐含部署/生产写/付费调用。
+默认禁止：commit、push、merge、部署、切生产主题、升级生产插件、生产数据库写/导出、真实模型调用、DNS/WAF/云资源修改。具有登录凭据不等于授权使用生产数据。
+不得擅自添加大量UI库、网络字体、外部图标字体、第三方搜索服务或分析脚本；使用现有设计token、系统字体、轻量本地图标。
+不得篡改CMS合同schema、generated artifacts或文章数据以通过UI/搜索测试。仅记录真正的外部依赖，不制造需要CMS配合的伪依赖。
+未经明确许可不改变已有文章URL、canonical、发布日期、作者、分类数据、发布状态；本任务允许调整栏目页显示H1和新搜索页的必要robots行为，不能误解成允许修改文章正文H1或全站SEO配置。
+
+【自动建档与停止协议】
+由Codex自行在已核实前端仓库内创建/增量维护 docs/codex-frontend-upgrade/，用户不手工操作目录。
+保存：当前阶段完整原文、STATUS.md、本阶段acceptance报告、脱敏screenshots/测量数据、必要DEPENDENCIES.md；目录不可经符号链接逃到CMS或生产目录。已有报告先比对并保留，不覆盖成空模板。
+STATUS记录当前阶段、代码身份、逐项需求/测试状态、证据路径、未提交文件、待验问题、下一建议阶段及current_authorized_step。
+每一项测试区分：静态、PHP真实执行、mock/fixture浏览器、真实本地WordPress、生产匿名观测。没有环境或没有跑过不能写PASS，尤其HTML静态截图不能代替WordPress真实查询。
+遇旧版本成果，验证代码/测试身份后复用；接近上下文限制就存检查点并停止，下一新对话继续同一份TXT，不删掉未做要求。
+本阶段完成或受阻都要：复测→审查diff/秘密/越界→写报告和STATUS→current_authorized_step=NONE→phase_end_stop=true→仅清理本轮测试进程→停止。
+本地硬要求失败记BLOCKED；环境缺失记PENDING_ENV并列出可用替代证据，不声明完整验收通过。新阶段开始需要用户在新对话发对应TXT，不通过子agent/后台任务自动继续。
+报告逐项说明：CMS modified、commit、push、deploy、production write、paid model call是否发生；依据真实结果填写，不能预填虚假“否”。
+
+【已读代码入口——先在当前工作树核实】
+wp-content/themes/solo-to-china/page.php：city-guides、attraction-guides配置share=true；公共Hero输出品牌段落、H1、copy，并调用stc_render_share_this_page；后面另渲染集合网格和stc_render_core_page_latest_guides。
+wp-content/themes/solo-to-china/archive.php：输出SoloToChina guides、archive H1和description。
+wp-content/themes/solo-to-china/index.php：默认列表回退模板。
+wp-content/themes/solo-to-china/functions.php：stc_render_guide_card、导航与archive前缀过滤器；当前卡片已无日期标签，但图片loading曾固定lazy。
+wp-content/themes/solo-to-china/inc/site-collections.php：集合项只保留已有真实攻略链接；没有匹配项时可能返回空数组。
+wp-content/themes/solo-to-china/header.php 与 solo-to-china-child/header.php：父子各有header，实际启用子主题时只改父header不会生效。
+父assets/css/main.css、子assets/css/site.css、design-system.css、article.css及enqueue条件：WordPress page也可能满足is_singular，需检查文章样式是否覆盖栏目页。
+stc_render_core_page_latest_guides定义位置按符号查找，不按记忆猜文件。
+这些是定位线索，不是线上已复现诊断。用户截图可作为before参考；没有截图文件也能按以下文字要求测试，不要求用户再上传。
+
+==============================
+A. 页面范围与删除规则
+==============================
+
+COL-001｜核对真实页面类型与所有入口【硬要求】
+列出并测试 /city-guides/、/attraction-guides/，对应分类归档实际URL（不得硬编码category base）、普通文章列表和相关分页。
+区别静态栏目落地页page.php与分类archive.php，两者当前都可能存在。菜单进入和Browse all进入要分别验证，不可只修一个路径。
+不合并、重定向或删除现有路由；重复URL的SEO治理另记，不借本轮改站点路由。
+不要仅用is_archive判断，因为City/Attraction落地页通常是WordPress page。
+验收：FC-01、FC-02、FC-03。
+
+COL-002｜删除栏目冗余内容，DOM不再输出【硬要求】
+City Guides、Attraction Guides及纯文章归档页，不再输出：
+1. 内容区重复的SoloToChina / SoloToChina guides品牌小标题；
+2. 固定栏目营销副标题，例如City hubs for planning...、City strategy guides...；
+3. 栏目集合页Share按钮及其隐藏面板、空actions容器；
+4. 与当前栏目同义的Fresh practical guides、Latest City Guides/Latest Attraction Guides重复标题组；
+5. 巨型装饰Hero、只为装饰保留的背景图/渐变/水印、无内容的占位高度。
+必须条件化停止render，不是display:none，也不是页面加载后JS删DOM；CSS伪元素背景也要清理对应作用域。
+不可用全局删除所有.stc-page-hero、所有header或所有.stc-share来实现。
+验收：FC-04、FC-05、FC-06。
+
+COL-003｜保留唯一紧凑栏目H1和全站导航身份【硬要求】
+栏目正文保留一处可见H1：City Guides或Attraction Guides，归档使用真实term名称，不加“分类：/Category:”前缀。
+移动默认28px、line-height:1.2、Georgia或现有衬线字体；桌面32px、line-height:1.2。用rem等尊重用户字号，数值均为默认16px root下的CSS px。
+不要为了同一行把长term挤成小字或截断；允许自然换行。
+顶部全站品牌链接、菜单、Skip to content保留。全局品牌不是此处应删除的重复信息。
+H1属于布局文字，不删除数据库title、term description或SEO摘要；栏目固定subtitle停止显示即可。自定义长term说明不是新Hero，默认不占列表前导；非样板且有实际价值的说明可移到列表后，不从数据库删除。
+验收：FC-04、FC-07、FC-08。
+
+COL-004｜分享删除必须限定集合页【硬要求】
+City/Attraction落地页、纯分类/标签/文章列表不渲染页面分享控件；站内搜索结果也不应新加分享。
+单篇攻略Share this page、复制链接、原生分享/社交fallback保留并复测；不删除公共share函数或全站JS事件。
+Survival Kit/FAQ/Tools等可能是有实用正文的页面，不凭“也用了page.php”就删除内容或分享。本阶段不重设计这些页。
+当页面是CMS渲染的实际攻略而非固定集合页时，以真实页面角色判断；不能用URL子串/contains('guide')误删。
+验收：FC-05、FC-09。
+
+COL-005｜移除重复Browse all，但保留到完整库存的真实路径【硬要求】
+删除列表首屏里额外占一行的Browse all大入口，不保留同目标/本页自链。
+若落地页仅显示最新N篇，而Browse all确实通往更多文章，必须把“View all City Guides →”或等价轻量链接移到文章列表底部，或保留现有真实分页；不能为省高度令剩余文章不可达。
+不同内容区域需要语义标题时用紧凑标题，不生成重复的巨型Latest标题；唯一列表可用aria-labelledby引用栏目H1而不再加同义H2。
+保留主导航、分类链接、分页和可爬取<a href>；不得改成只靠JS点击。
+验收：FC-06、FC-10。
+
+==============================
+B. 内容优先的紧凑布局
+==============================
+
+COL-006｜确定列表优先顺序【硬要求】
+City/Attraction落地页优先：全站header → 紧凑栏目H1 → 实际文章列表 → 分页/完整列表入口 → 有真实内容的城市/景点导航集合（如需要）。
+不要让大幅城市导航卡片在文章列表之前重新占满数屏；可以把现有有效实体导航移至文章列表后，保留链接和语义，不新造城市数据。
+当前文章列表为空而实体导航非空时，可直接呈现实有导航并给简短状态；两者均空时显示一条简短空态与有效返回路径，不显示大块空白或假文章。
+重复文章与精选/实体导航按实际用途分别处理，不随意删真实内容。
+验收：FC-10、FC-11、FC-12。
+
+COL-007｜空集合不输出空容器与留白【硬要求】
+page['items']为空时，不输出空section、grid-shell、reveal容器和不存在意义的More按钮；避免section padding、父容器gap、min-height仍留下空带。
+文章列表为空时同理；真实有内容时正常输出。不用negative margin把空白盖住，不用固定高度/overflow:hidden藏问题。
+核查margin collapse、grid gap、父子主题叠加和article.css的is_singular加载影响；记录最终computed styles。
+验收：FC-11、FC-12、FC-13。
+
+COL-008｜明确间距与容器【硬要求／设计基准】
+移动<640px：主内容左右20px；header之后到H1顶部20px；H1之后到首张文章图24px。本阶段没有搜索，不能预留一个空搜索高度。
+640–1023px：左右28px；栏目顶部24px；内容按已实现的两列卡片。
+>=1024px：左右至少32px、沿用最大1200px内容区；栏目顶部28px；标题后24px；沿用三列。
+H1区域不设置vh、min-height、固定Hero高度或大型上下padding；纯栏目页仅用内容自然高度。
+保留既有卡片图片16:9、8px圆角、系统衬线标题、Read guide →；不固定卡片高度，不为凑首屏裁文章标题。
+搜索下一阶段加入后，H1→表单12px、表单高48px、表单→列表24px；只是接口约定，本阶段不输出空占位。
+验收：FC-07、FC-13、FC-14。
+
+COL-009｜顶部header不再过高，但不重做全站品牌【设计基准＋无障碍硬要求】
+移动header在默认字号下目标64px高，品牌文本约22px、line-height:1.1；汉堡可点区域至少44×44px，菜单图形约22–24px。
+优先保留现有正确高度；仅当当前padding/min-height造成明显过高才在确认作用域内调整。不改Logo文件，不新增字体，不把header做成第二个大Hero。
+为FE-02右侧搜索入口预留布局能力，但现在不添加空按钮。320px和长菜单情况下不能水平溢出。
+页头若sticky，保留正确的内容偏移与anchor scroll-margin，避免首图/标题被遮挡。
+首页有独立Logo/透明header视觉变体时保持设计，仅修公共尺寸/布局必须影响的部分并截图回归；不强制所有页头改成同一种大白框。
+验收：FC-14、FC-15、FC-17。
+
+COL-010｜列表封面与文章卡片只做回归，不改内容策略【硬要求】
+截图中带大标题的拼图仍来自已选featured image，本阶段不OCR、不翻译、不替换、不生成图片、不修改featuredMediaId；相关问题留CMS阶段02。
+确认真实<img src>、width/height、实际srcset和sizes仍正确；保持无图fallback，不抓正文第一张冒充。
+此前标题和摘要长度可能较长：不新增AI短文案调用、不覆盖文章正式标题/摘要。本次不以省高度为由把卡片内容粗暴截成半个词或重写。
+验收：FC-14、FC-16、FC-20。
+
+COL-011｜压缩首屏后复核图片加载【硬要求】
+首张卡片现在可能成为LCP，核查stc_render_guide_card曾固定loading=lazy的实际行为。
+允许给renderer增加向后兼容的可选上下文参数，或复用现有优化：首屏候选不盲目强制lazy；下面的卡片保持lazy；不把所有图eager/high或全量preload。
+有多张首屏图时按布局考虑，不能“HTML第一张必LCP”。首页原Hero与列表首图竞争时只给实际主要候选优先级，不把Logo和所有卡片均设high。
+记录实际请求瀑布/浏览器观察；没有测得LCP就标not_measured，不凭fetchpriority属性宣称分数通过。
+验收：FC-18、FC-19。
+
+COL-012｜保留URL、SEO数据及模板兼容【硬要求】
+不删栏目页面、不改变slug/category base、canonical、robots、sitemap、文章JSON-LD或后台语言。
+显示栏目标题和去除重复subtitle属于本轮明确布局变化；不套用旧“不得修改任何H1”而拒绝正常栏目压缩。文章详情H1/正文仍禁止修改。
+父/子主题变化按仓库架构选择最小实现，避免复制整个page.php后长期分叉；不得只在未启用父header改动却宣称线上生效。
+分页页同样紧凑，保留完整文章访问。删除空容器后aria-labelledby必须指向存在的节点。
+验收：FC-02、FC-03、FC-08、FC-20。
+
+COL-013｜可量化首屏目标【工程目标】
+在匿名、scrollY=0、默认字体、无WP管理工具栏、至少一张有效封面、菜单关闭的本地浏览器测量；CSS viewport不包含手机状态栏/Safari地址栏，不从截图物理像素直接推CSS值。
+本阶段在375×812、390×844、430×932中：首张文章图top目标<=180 CSS px，且首图完整可见、标题起始也在首屏。下一FE-02加入表单后top目标<=240 CSS px。
+记录header bottom、H1 top/bottom、各空隙、first article top/image bottom及差值。不能用绝对定位、负margin、裁字、隐藏内容或压低可点尺寸来凑指标。
+320×568及200%文字放大只要求可重排、无丢失、可操作，不强迫仍达首图top数值。无法达到工程目标写出准确差距、原因与修复，不暗改目标。
+验收：FC-13、FC-14、FC-21。
+
+COL-014｜真实测试与证据【硬要求】
+真实本地WordPress分别运行落地页和分类归档；图片用合成fixture/已获准样本，不修改生产。至少覆盖0、1、多篇、较长英文标题、无图、实体集合为空/非空、分页。
+视口：320、375、390、430、768、1024、1440；至少保存390px的City/Attraction/分类页、1440px集合页、空集合与文章详情分享回归截图。
+PHP语法/现有构建/contract tests照常；响应式与焦点测试需浏览器，不能只用grep。
+用户截图仅before参考；只报实际运行结果，不把生成静态HTML当真实WordPress通过。
+验收：FC-01～FC-22逐项。
+
+==============================
+C. 验收矩阵
+==============================
+| ID | 操作／输入 | 通过条件 |
+| FC-01 | City/Attraction两个落地页 | 显示紧凑H1和实际文章，无巨型栏目Hero |
+| FC-02 | 同类别archive、菜单入口、完整列表入口 | 两种模板均紧凑；实际URL不变 |
+| FC-03 | 分类分页第2页 | 有效链接、不同结果、紧凑页头，无错误自链 |
+| FC-04 | 查看服务器原始HTML | 无重复品牌/固定subtitle/同义Latest组；一处可见栏目H1 |
+| FC-05 | 集合页及文章详情对照 | 集合页无Share及隐藏面板；文章分享仍可用 |
+| FC-06 | Browse all确实指向更多文章 | 顶部冗余入口移除，底部/分页仍可到全部文章 |
+| FC-07 | 默认字号与长栏目名 | 28/32px基准自然排版，无巨型标题或截词 |
+| FC-08 | metadata和数据库对照 | 不删除term描述、发布日期、文章H1或改全站语言 |
+| FC-09 | Survival Kit、FAQ、Tools、普通单篇 | 实用内容/分享不被集合页条件误删 |
+| FC-10 | 实体集合有内容且文章有内容 | 文章优先，实体有效导航保留于后部，无假链接 |
+| FC-11 | 实体集合为空、文章有内容 | 不输出空section/grid/reveal，不留大padding |
+| FC-12 | 文章0/1/多篇与全部为空 | 空态紧凑、单篇列宽不拉满；无假文章 |
+| FC-13 | computed styles及首图坐标 | 无叠加空隙、vh/min-height遗留；保存定量证据 |
+| FC-14 | 375/390/430移动视口 | 首图top<=180px为本阶段目标，16:9且标题起始可见 |
+| FC-15 | 320px页头、sticky与锚点 | 导航无溢出，可点区域合格，内容不被盖住 |
+| FC-16 | 无featured image、长标题和摘要 | fallback可用，正文数据不变，无新AI/选图请求 |
+| FC-17 | 首页、移动菜单和页脚 | 品牌/菜单/布局未回退 |
+| FC-18 | 首屏和下方图片请求 | 首屏主要候选不强制lazy，非全图eager/preload |
+| FC-19 | 首页已有Hero＋卡片 | 不错误争抢所有high优先级；LCP证据分层 |
+| FC-20 | 卡片、文章、商业、TOC、contract回归 | 原有功能和数据未破坏，CMS无改动 |
+| FC-21 | 200%文字放大、320px重排、键盘 | 无遮挡/水平溢出/丢失操作，语义引用有效 |
+| FC-22 | 父子主题生效与差异清单 | 实际加载链正确，测试证据不混用源码和线上版本 |
+
+==============================
+D. 本轮执行与停止
+==============================
+逐项实施COL-001～014并执行FC-01～22；已有正确功能只回归，不整站重写。用户不需要先运行旧v1.0列表任务。
+本地硬要求全过且工程目标达到才报PASS_LOCAL；环境缺失、旧故障与新增故障分别列出。
+自动写：docs/codex-frontend-upgrade/phases/FE-01.txt、acceptance/FE-01.md、STATUS.md及证据。
+报告：改了哪些模板/条件/CSS；删除的精确DOM；首图前后坐标；各测试实际结果；截图路径；git diff --stat与status；没有修改CMS/提交/推送/部署的真实状态。
+完成或受阻都停止，不实施FE-02搜索，不提交推送部署。
+通过时结尾必须写：
+“前端FE-01栏目首屏精简已完成本地验收，本轮已停止。请新开基于同一solo-to-china前端仓库的Codex对话，发送《SoloToChina_前端增量02_站内搜索_Codex_v1.0.txt》全文。CMS阶段01继续在原CMS工作区进行；本轮没有授权提交、推送或部署。”
+受阻时提醒新开前端对话继续本文件的未完成项，不能声称通过。

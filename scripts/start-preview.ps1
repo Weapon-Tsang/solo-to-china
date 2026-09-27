@@ -31,7 +31,7 @@ $Blueprint = Join-Path $PSScriptRoot $BlueprintName
 $ParentTheme = Join-Path $Root "wp-content/themes/solo-to-china"
 $ChildTheme = Join-Path $Root "wp-content/themes/solo-to-china-child"
 $ToolsPlugin = Join-Path $Root "wp-content/plugins/solo-to-china-tools"
-$LocalCredentialDirectory = Join-Path $Root "output/v3-preview"
+$LocalCredentialDirectory = Join-Path $Root "output/v3-preview-$Port"
 New-Item -ItemType Directory -Force -Path $LocalCredentialDirectory | Out-Null
 $LocalCredentialFile = Join-Path $LocalCredentialDirectory "wp-application-password.txt"
 if (Test-Path -LiteralPath $LocalCredentialFile) { Remove-Item -LiteralPath $LocalCredentialFile }
