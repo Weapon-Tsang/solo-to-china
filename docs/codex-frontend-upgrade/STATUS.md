@@ -1,11 +1,11 @@
 # FE-01 / FE-02 生产主题上线检查点（2026-09-27，当前有效）
 
-- 源码已提交：`1c42a40f354899ba0e424a3590a3b1e880efff1e`，父主题 `0.33.12`、子主题 `0.13.2`；上线前 `origin/main` 为 `aa5e414d96939caaa70900e40e5b0180340ff7e7`，包含发布检查点文档。后续状态更新仅改文档，不改变制品。
+- 源码已提交：`1c42a40f354899ba0e424a3590a3b1e880efff1e`，父主题 `0.33.12`、子主题 `0.13.2`；源码和发布记录已正常推送至 `origin/main`。后续状态更新仅改文档，不改变制品。
 - 已从该提交导出完整父/子主题 ZIP 与管理员回填库，逐文件与提交核对通过。准确 SHA、位置和结果见 [本次发布执行记录](acceptance/FE-01-FE-02-release-20260927.md)。旧 `dist` 保留。
-- 用户随后明确要求跳过备份并直接在已登录的 WordPress 后台覆盖上线。父主题 `0.33.12`、子主题 `0.13.2` 已经通过 ZIP 覆盖成功；站点健康读回版本及活动子主题。首页、两个栏目、一篇文章和 `Chongqing` 搜索已做浏览器 smoke，搜索页仍为 noindex，普通页面为 index/follow。目标 MariaDB schema、正文投影、固定文章集合及回填尚未验证或执行；没有 SSH/面板的受控 PHP/SQL 执行入口。细节见本次发布执行记录的 follow-up。
+- 用户随后明确要求跳过备份并直接在已登录的 WordPress 后台覆盖上线。父主题 `0.33.12`、子主题 `0.13.2` 已经通过 ZIP 覆盖成功；站点健康读回版本及活动子主题。GCP `us-west1-b` 实例已核实为目标 WordPress 主机，真实 MariaDB 10.11 上两张搜索表和 schema 标记已建立；固定的 12 篇公开文章先 5 篇 canary、再 7 篇回填，最终 12/12 `CURRENT`。正文词、12 结果、0 结果、栏目和 SEO 已在公开页面做 smoke。精确 ID、校验值和边界见本次发布执行记录的第二次 follow-up。
 - 本地 `verify-project.ps1`、JS 语法、暂存差异检查通过；PHP CLI 在 PATH 不存在，沿用此前同一搜索实现的 WASM/SQLite 验证，版本字段改动未做目标 PHP/数据库验证。
 - performance_decision: `ACCEPTED_DEVIATION_BY_USER`；历史 Playground/WASM/SQLite HTTP P95 约 `671.3ms`，500ms 旧目标仍为 `FAIL_TARGET`，本轮没有专项重测。
-- current_authorized_step: `CONTROLLED_SERVER_EXECUTION_REQUIRED_FOR_SEARCH_BACKFILL`；没有活动生产维护或迁移进程。主题文件已上线，完整 FE-02 正文搜索迁移尚未验收；远端只有 `main`，无安全清理候选。
+- current_authorized_step: `NONE`；phase_end_stop: `true`。没有活动生产维护或迁移进程。远端只有 `main`，无安全清理候选；真机、并发注错和新的性能测量未做，不能把这些未测范围写成通过。
 
 ---
 
