@@ -28,7 +28,6 @@ $attractions = stc_get_site_collection( 'attraction-guides' );
 			<h1>China,<br>clearly planned</h1>
 			<p>Practical guides and useful tools for your first solo trip to China.</p>
 			<a class="stc-button stc-button--primary" href="<?php echo esc_url( home_url( '/survival-kit/' ) ); ?>">Start with the essentials <span aria-hidden="true">&rarr;</span></a>
-			<a class="stc-hero__secondary" href="<?php echo esc_url( home_url( '/tools/find-this-place/' ) ); ?>">Find a place from a photo &rarr;</a>
 		</div>
 	</section>
 

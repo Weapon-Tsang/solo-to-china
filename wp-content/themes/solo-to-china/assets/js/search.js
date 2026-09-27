@@ -8,12 +8,55 @@
 	var motion = null;
 	var closing = false;
 	var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+	var mobile = window.matchMedia('(max-width: 840px)');
+	var viewport = window.visualViewport;
+	var openingHeight = 0;
+	var positionFrame = 0;
+
+	function motionFrames() {
+		var origin = trigger.getBoundingClientRect();
+		// offset geometry stays untransformed while the dialog animates.
+		var x = origin.left + origin.width / 2 - dialog.offsetLeft - dialog.offsetWidth / 2;
+		var y = origin.top + origin.height / 2 - dialog.offsetTop - dialog.offsetHeight / 2;
+		var scale = Math.min(origin.width / dialog.offsetWidth, origin.height / dialog.offsetHeight);
+		return [
+			{ transform: 'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')', opacity: 0 },
+			{ transform: 'translate(0,0) scale(1)', opacity: 1 }
+		];
+	}
+
+	function positionDialog() {
+		positionFrame = 0;
+		if (!dialog.open) { return; }
+		if (mobile.matches) {
+			var height = viewport ? viewport.height : window.innerHeight;
+			var offset = viewport ? viewport.offsetTop : 0;
+			dialog.style.setProperty('--stc-search-height', Math.max(0, height - 32) + 'px');
+			var desiredTop = openingHeight / 3 - dialog.offsetHeight / 2;
+			var top = Math.max(16, Math.min(desiredTop, height - dialog.offsetHeight - 16));
+			dialog.style.setProperty('--stc-search-top', offset + top + 'px');
+		} else {
+			dialog.style.removeProperty('--stc-search-height');
+			dialog.style.removeProperty('--stc-search-top');
+		}
+		if (motion) { motion.effect.setKeyframes(motionFrames()); }
+	}
+
+	function queuePosition() {
+		if (dialog.open && !positionFrame) { positionFrame = window.requestAnimationFrame(positionDialog); }
+	}
+	window.addEventListener('resize', queuePosition);
+	if (viewport) {
+		viewport.addEventListener('resize', queuePosition);
+		viewport.addEventListener('scroll', queuePosition);
+	}
 
 	function closeSearch() {
 		if (!dialog.open || closing) { return; }
 		closing = true;
 		dialog.classList.remove('is-visible');
 		if (motion && !reduced.matches) {
+			motion.effect.setKeyframes(motionFrames());
 			motion.onfinish = function () { dialog.close(); };
 			motion.reverse();
 		} else { dialog.close(); }
@@ -26,18 +69,12 @@
 		document.dispatchEvent(new Event('stc:search-open'));
 		opener = trigger;
 		closing = false;
-		var origin = trigger.getBoundingClientRect();
+		openingHeight = viewport ? viewport.height : window.innerHeight;
 		dialog.showModal();
 		document.body.classList.add('stc-search-open');
-		var bounds = dialog.getBoundingClientRect();
+		positionDialog();
 		if (!reduced.matches && typeof dialog.animate === 'function') {
-			var x = origin.left + origin.width / 2 - bounds.left - bounds.width / 2;
-			var y = origin.top + origin.height / 2 - bounds.top - bounds.height / 2;
-			var scale = Math.min(origin.width / bounds.width, origin.height / bounds.height);
-			motion = dialog.animate([
-				{ transform: 'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')', opacity: 0 },
-				{ transform: 'translate(0,0) scale(1)', opacity: 1 }
-			], { duration: 320, easing: 'cubic-bezier(.22,.68,0,1)', fill: 'both' });
+			motion = dialog.animate(motionFrames(), { duration: 320, easing: 'cubic-bezier(.22,.68,0,1)', fill: 'both' });
 		}
 		dialog.classList.add('is-visible');
 		field.focus({ preventScroll: true });
@@ -57,6 +94,10 @@
 		}
 	});
 	dialog.addEventListener('close', function () {
+		window.cancelAnimationFrame(positionFrame);
+		positionFrame = 0;
+		dialog.style.removeProperty('--stc-search-height');
+		dialog.style.removeProperty('--stc-search-top');
 		if (motion) { motion.cancel(); motion = null; }
 		closing = false;
 		dialog.classList.remove('is-visible');
