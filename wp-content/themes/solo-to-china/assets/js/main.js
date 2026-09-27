@@ -4,7 +4,7 @@
 	function stcMobileNav() {
         var header = document.querySelector('.stc-header'), toggle = document.querySelector('.stc-menu-toggle'), nav = document.querySelector('.stc-nav');
         if (!header || !toggle || !nav) { return; }
-        var media = matchMedia('(max-width: 840px)');
+        var media = matchMedia('(max-width: 1279px)');
         function set(open, restore) {
             header.classList.toggle('is-menu-open', open); toggle.setAttribute('aria-expanded', String(open));
             var label = toggle.querySelector('.screen-reader-text'); if (label) { label.textContent = open ? 'Close menu' : 'Open menu'; }
@@ -15,6 +15,8 @@
         document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { set(false, true); } });
         nav.addEventListener('click', function (event) { if (media.matches && event.target.closest('a')) { set(false, false); } });
         media.addEventListener('change', function () { if (!media.matches) { set(false, false); } });
+        document.addEventListener('click', function (event) { if (!header.contains(event.target)) { set(false, false); } });
+        window.addEventListener('pageshow', function () { set(false, false); });
     }
 
 	function stcClampText(value, maxLength) {
