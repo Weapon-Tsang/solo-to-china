@@ -1,11 +1,11 @@
-# FE-01 / FE-02 发布执行检查点（2026-09-27，当前有效）
+# FE-01 / FE-02 生产主题上线检查点（2026-09-27，当前有效）
 
-- 源码已提交：`1c42a40f354899ba0e424a3590a3b1e880efff1e`，父主题 `0.33.12`、子主题 `0.13.2`；发布检查点文档提交 `703eece7a441e8c6322d82c68393be37eeb6690f`。已正常推送至 `origin/main` 并读回该 SHA；后续状态更新仅改文档，不改变制品。
+- 源码已提交：`1c42a40f354899ba0e424a3590a3b1e880efff1e`，父主题 `0.33.12`、子主题 `0.13.2`；上线前 `origin/main` 为 `aa5e414d96939caaa70900e40e5b0180340ff7e7`，包含发布检查点文档。后续状态更新仅改文档，不改变制品。
 - 已从该提交导出完整父/子主题 ZIP 与管理员回填库，逐文件与提交核对通过。准确 SHA、位置和结果见 [本次发布执行记录](acceptance/FE-01-FE-02-release-20260927.md)。旧 `dist` 保留。
-- 生产部署、备份、schema、回填、维护和分支删除均未执行。已通过现有 WordPress 后台只读核实目标运行栈；缺 SSH/面板的服务器文件、SQL 与可恢复备份入口，目标 MariaDB 兼容测试尚未做。GitHub webhook、Actions 工作流与规则集均为 0，推送后公开主题版本仍未变化。
+- 用户随后明确要求跳过备份并直接在已登录的 WordPress 后台覆盖上线。父主题 `0.33.12`、子主题 `0.13.2` 已经通过 ZIP 覆盖成功；站点健康读回版本及活动子主题。首页、两个栏目、一篇文章和 `Chongqing` 搜索已做浏览器 smoke，搜索页仍为 noindex，普通页面为 index/follow。目标 MariaDB schema、正文投影、固定文章集合及回填尚未验证或执行；没有 SSH/面板的受控 PHP/SQL 执行入口。细节见本次发布执行记录的 follow-up。
 - 本地 `verify-project.ps1`、JS 语法、暂存差异检查通过；PHP CLI 在 PATH 不存在，沿用此前同一搜索实现的 WASM/SQLite 验证，版本字段改动未做目标 PHP/数据库验证。
 - performance_decision: `ACCEPTED_DEVIATION_BY_USER`；历史 Playground/WASM/SQLite HTTP P95 约 `671.3ms`，500ms 旧目标仍为 `FAIL_TARGET`，本轮没有专项重测。
-- current_authorized_step: `PRODUCTION_CONNECTION_REQUIRED`；没有活动生产维护或迁移进程。本检查点不代表正式交付完成。
+- current_authorized_step: `CONTROLLED_SERVER_EXECUTION_REQUIRED_FOR_SEARCH_BACKFILL`；没有活动生产维护或迁移进程。主题文件已上线，完整 FE-02 正文搜索迁移尚未验收；远端只有 `main`，无安全清理候选。
 
 ---
 
