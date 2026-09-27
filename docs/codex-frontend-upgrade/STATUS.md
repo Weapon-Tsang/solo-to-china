@@ -1,4 +1,15 @@
-# FE-02 最终收尾：性能偏差已接受（2026-09-27，当前有效）
+# FE-01 / FE-02 发布执行检查点（2026-09-27，当前有效）
+
+- 源码已提交：`1c42a40f354899ba0e424a3590a3b1e880efff1e`，父主题 `0.33.12`、子主题 `0.13.2`。`origin/main` 在检查时仍为 `86d6eccc0838fe0a896247a385087b774d7e6736`；尚未推送。
+- 已从该提交导出完整父/子主题 ZIP 与管理员回填库，逐文件与提交核对通过。准确 SHA、位置和结果见 [本次发布执行记录](acceptance/FE-01-FE-02-release-20260927.md)。旧 `dist` 保留。
+- 生产部署、备份、schema、回填、维护和分支删除均未执行。公开页面当前仍显示旧父/子版本；生产管理会话、目标数据库与可恢复备份入口未接通。主线推送可能存在仓库外部署 webhook，尚未排除，故未触发推送。
+- 本地 `verify-project.ps1`、JS 语法、暂存差异检查通过；PHP CLI 在 PATH 不存在，沿用此前同一搜索实现的 WASM/SQLite 验证，版本字段改动未做目标 PHP/数据库验证。
+- performance_decision: `ACCEPTED_DEVIATION_BY_USER`；历史 Playground/WASM/SQLite HTTP P95 约 `671.3ms`，500ms 旧目标仍为 `FAIL_TARGET`，本轮没有专项重测。
+- current_authorized_step: `PRODUCTION_CONNECTION_REQUIRED`；没有活动生产维护或迁移进程。本检查点不代表正式交付完成。
+
+---
+
+# FE-02 最终收尾：性能偏差已接受（2026-09-27，历史检查点）
 
 - result: LOCAL_CORE_PASS_PERFORMANCE_ACCEPTED_RELEASE_PLAN_READY
 - search_local_core: **PASS_LOCAL_REUSED**。产品代码和既有原始证据未变；核心正文、公开权限、分页、真实查询错误及 SQLite 并发/恢复证据复用，不宣称本轮重新测试。
