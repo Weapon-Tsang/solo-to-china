@@ -298,7 +298,7 @@ $is_guide_collection = in_array( $slug, [ 'city-guides', 'attraction-guides' ], 
 		</section>
 		<?php endif; ?>
 
-		<?php if ( ! $is_guide_collection || ! empty( $core_page['items'] ) ) : ?>
+		<?php if ( ! $is_guide_collection || ( ! empty( $core_page['items'] ) && ! stc_collection_filter_state( $slug )['active'] ) ) : ?>
 		<div class="stc-page-primary">
 		<?php if ( 'survival-kit' === $slug ) : ?>
 			<section class="stc-page-section stc-survival-index" aria-labelledby="stc-survival-index-title">

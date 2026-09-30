@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'STC_THEME_VERSION', '0.33.18' );
+define( 'STC_THEME_VERSION', '0.33.19' );
 define( 'STC_SITE_PAGE_MIGRATION_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/component-registry.php';
@@ -23,6 +23,7 @@ require_once get_template_directory() . '/inc/site-collections.php';
 require_once get_template_directory() . '/inc/experience-assets.php';
 require_once get_template_directory() . '/inc/experience-components.php';
 require_once get_template_directory() . '/inc/search.php';
+require_once get_template_directory() . '/inc/collection-filters.php';
 
 function stc_theme_setup() {
 	add_theme_support( 'title-tag' );
@@ -688,6 +689,10 @@ function stc_render_core_page_latest_guides( $slug, $has_navigation = false ) {
 	if ( ! $config ) {
 		return;
 	}
+	if ( in_array( $slug, [ 'city-guides', 'attraction-guides' ], true ) ) {
+		stc_render_filtered_collection( $slug );
+		return;
+	}
 
 	$query = new WP_Query(
 		[
@@ -702,32 +707,6 @@ function stc_render_core_page_latest_guides( $slug, $has_navigation = false ) {
 
 	$category     = get_category_by_slug( $config['category'] );
 	$archive_link = $category ? get_category_link( $category ) : '';
-	$is_collection = in_array( $slug, [ 'city-guides', 'attraction-guides' ], true );
-	if ( $is_collection ) {
-		echo '<section class="stc-collection-articles" aria-labelledby="stc-collection-title">';
-		if ( $query->have_posts() ) {
-			echo '<div class="stc-post-list">';
-			$image_prioritized = false;
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$priority_image = ! $image_prioritized && has_post_thumbnail( get_the_ID() );
-				stc_render_guide_card( get_the_ID(), $priority_image );
-				$image_prioritized = $image_prioritized || $priority_image;
-			}
-			echo '</div>';
-			if ( $archive_link && $query->found_posts > $query->post_count ) {
-				echo '<p class="stc-collection-articles__more"><a href="' . esc_url( $archive_link ) . '">' . esc_html( sprintf( __( 'View all %s', 'solo-to-china' ), $config['category'] === 'city-guides' ? 'City Guides' : 'Attraction Guides' ) ) . ' <span aria-hidden="true">&rarr;</span></a></p>';
-			}
-		} else {
-			echo '<p class="stc-collection-articles__empty">' . esc_html( $config['empty'] ) . '</p>';
-			if ( ! $has_navigation ) {
-				echo '<p><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Back to home', 'solo-to-china' ) . '</a></p>';
-			}
-		}
-		echo '</section>';
-		wp_reset_postdata();
-		return;
-	}
 
 	echo '<section class="stc-page-section stc-latest-guides" aria-labelledby="stc-latest-guides-title">';
 	echo '<div class="stc-latest-guides__header">';

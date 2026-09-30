@@ -1,7 +1,7 @@
 <?php
 /** Shared editorial collection configuration. Missing published guides are omitted. */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
-function stc_get_site_collection( $collection ) {
+function stc_get_site_collection_items( $collection ) {
 $collections = array();
 $collections['city-guides'] = [
 	[ 'name' => 'Beijing', 'copy' => 'History & culture', 'class' => 'beijing', 'image' => 'card-beijing-hd.webp' ],
@@ -24,7 +24,11 @@ $collections['attraction-guides'] = [
 ];
 
     $items = isset( $collections[$collection] ) ? $collections[$collection] : array();
-    $items = apply_filters( 'stc_site_collection', $items, $collection );
+    return apply_filters( 'stc_site_collection', $items, $collection );
+}
+
+function stc_get_site_collection( $collection ) {
+    $items = stc_get_site_collection_items( $collection );
     $result = array();
     foreach ( $items as $item ) {
         $key = isset( $item['entity_key'] ) ? $item['entity_key'] : $item['class'];

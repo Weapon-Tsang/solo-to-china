@@ -2,7 +2,9 @@
 
 Project-owned WordPress Parent Theme for SoloToChina.
 
-Current version: `0.33.12`.
+Current version: `0.33.19`.
+
+City Guides and Attraction Guides offer compact, searchable WordPress tag filters. Selected tags match together across the whole collection, with pagination. Cities appear before topics, using the shared city configuration and published CMS city identities; each group keeps alphabetical tag order. Native GET forms also work without JavaScript.
 
 ## Responsibility
 
